@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { Link } from "react-router"
 
-export const HomePage = () => {
+export function HomePage() {
   return (
     <div>
       Home Page
