@@ -6,8 +6,14 @@ import type { RootState } from "./index";
 export const selectModelIdsByProjectId = createSelector(
   (projectId: number) => projectId,
   (projectId) => (state: RootState) => {
-    const projects = projectApi.endpoints.getProjects.select()(state)?.data;
-    const project = projects?.find((p) => p.id === projectId);
+    // Try to get the project from the cache
+    let project = projectApi.endpoints.getProject.select(projectId.toString())(state)?.data;
+    if (!project) {
+      
+      // If not found, try to get it from the list of projects
+      const projects = projectApi.endpoints.getProjects.select()(state)?.data;
+      project = projects?.find(p => p.id === projectId);
+    }
     return project?.models?.map((model) => model.id) || [];
   }
 )

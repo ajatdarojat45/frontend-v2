@@ -8,7 +8,7 @@ export const projectApi = createApi({
 
   // Define tag types for cache invalidation
   tagTypes: ['Projects'],
-  
+
   endpoints: (build) => ({
 
     // Get all projects
@@ -19,6 +19,14 @@ export const projectApi = createApi({
       providesTags: [{ type: 'Projects', id: 'LIST' }],
     }),
 
+    // Get a single project by ID
+    getProject: build.query<Project, string>({
+      query: (id) => `/projects/${id}`,
+
+      // Provides a list of Projects-type tags for cache invalidation
+      providesTags: (_, __, id) => [{ type: 'Projects', id }],
+    }),
+
     // Create a new project
     createProject: build.mutation<Project, Partial<Project>>({
       query: (body) => ({
@@ -26,7 +34,7 @@ export const projectApi = createApi({
         method: 'POST',
         body,
       }),
-      
+
       // Invalidates all Project-type queries providing the `LIST` id - after all, depending of the sort order,
       // that newly created project could show up in any lists.
       invalidatesTags: [{ type: 'Projects', id: 'LIST' }],
@@ -36,4 +44,8 @@ export const projectApi = createApi({
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useGetProjectsQuery, useCreateProjectMutation } = projectApi
+export const {
+  useGetProjectsQuery,
+  useGetProjectQuery,
+  useCreateProjectMutation
+} = projectApi
