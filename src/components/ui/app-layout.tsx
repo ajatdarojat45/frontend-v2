@@ -2,7 +2,7 @@ import type React from "react"
 
 type AppLayoutProps = {
   title: string
-  action: React.ReactNode
+  action?: React.ReactNode
   sidebar: React.ReactNode
   children: React.ReactNode
 }
@@ -21,7 +21,7 @@ export function AppLayout({ title, action, sidebar, children }: AppLayoutProps) 
 
         <h1 className="text-lg font-bold">{title}</h1>
 
-        {action}
+        {action ?? <div />}
       </header>
 
       <main className="flex flex-1">
