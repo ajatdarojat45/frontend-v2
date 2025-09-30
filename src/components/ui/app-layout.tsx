@@ -25,7 +25,7 @@ export function AppLayout({ title, action, sidebar, children }: AppLayoutProps) 
       </header>
 
       <main className="flex flex-1">
-        <aside className="w-96 bg-black/95 text-white">
+        <aside className="w-64 md:w-72  bg-black/95 text-white">
           {sidebar}
         </aside>
         <div className="flex-1 bg-stone-200">
