@@ -12,7 +12,7 @@ export function AppLayout({ title, action, sidebar, children }: AppLayoutProps) 
     <div className="min-h-screen flex flex-col">
 
       {/* Header */}
-      <header className="h-16 bg-indigo-900 text-white flex items-center justify-between px-4">
+      <header className="h-16 bg-black border-b border-b-stone-600 text-white flex items-center justify-between px-4">
 
         {/* TODO: Chorus Logo, update it later */}
         <svg width="161" height="28" viewBox="0 0 161 28" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -25,10 +25,10 @@ export function AppLayout({ title, action, sidebar, children }: AppLayoutProps) 
       </header>
 
       <main className="flex flex-1">
-        <aside className="w-96 bg-indigo-950 text-white">
+        <aside className="w-96 bg-black/95 text-white">
           {sidebar}
         </aside>
-        <div className="flex-1 bg-slate-400">
+        <div className="flex-1 bg-stone-200">
           {children}
         </div>
       </main>
