@@ -37,7 +37,7 @@ export function ProjectCard(props: ProjectCardProps) {
           <p>{simulationCount} simulations</p>
         </div>
 
-        <img className="w-32 object-cover" src={modelImg} alt="Model Illustration" />
+        <img className="w-24 object-cover" src={modelImg} alt="Model Illustration" />
       </CardContent>
     </Card>
   )
