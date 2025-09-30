@@ -14,4 +14,4 @@ All notable changes to this project will be documented in this file. See [standa
 * integrate Redux Toolkit for state management; add project API and update HomePage and EditorPage components ([58ddc87](https://github.com/ajatdarojat45/frontend-v2/commit/58ddc87f8c754549d8a7631d8b3005fc616176b7))
 * update aliases in components.json; create Input component and style utility; remove unused directories ([3163220](https://github.com/ajatdarojat45/frontend-v2/commit/3163220399e6b4e242ece9e008fe160c30f392b1))
 
-## 0.0.0 (2025-09-30)
+## 0.0.0 (2025-09-29)
