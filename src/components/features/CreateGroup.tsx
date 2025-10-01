@@ -56,7 +56,13 @@ export function CreateGroup({ onCreate }: CreateGroupProps) {
       </DialogTrigger>
       <DialogContent className="max-w-md">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)}>
+          <form onSubmit={(e) => {
+            // Prevent parent dialog from submitting and closing automatically
+            e.stopPropagation();
+
+            // Call the form submit handler
+            form.handleSubmit(onSubmit)(e);
+          }}>
             <DialogHeader>
               <DialogTitle>Create Group</DialogTitle>
               <DialogDescription>

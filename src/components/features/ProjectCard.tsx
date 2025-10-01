@@ -28,8 +28,8 @@ export function ProjectCard(props: ProjectCardProps) {
 
   return (
     <Card>
-      <CardHeader>
-        <CardTitle>{project.name}</CardTitle>
+      <CardHeader className="overflow-hidden">
+        <CardTitle className="truncate">{project.name}</CardTitle>
       </CardHeader>
       <CardContent className="flex items-end justify-between">
         <div>
@@ -37,7 +37,7 @@ export function ProjectCard(props: ProjectCardProps) {
           <p>{simulationCount} simulations</p>
         </div>
 
-        <img className="w-24 object-cover" src={modelImg} alt="Model Illustration" />
+        <img className="invisible sm:visible w-24 object-cover" src={modelImg} alt="Model Illustration" />
       </CardContent>
     </Card>
   )
