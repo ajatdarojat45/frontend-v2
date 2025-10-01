@@ -17,7 +17,7 @@ import { useParams } from "react-router"
 export function ProjectDetailPage() {
   const dispatch: AppDispatch = useDispatch()
   const { id } = useParams() as { id: string }
-  const { data: project, isLoading, error } = useGetProjectQuery(id)
+  const { data: project, isLoading, error, refetch } = useGetProjectQuery(id)
 
   useEffect(() => {
     if (project && project.models.length > 0) {
@@ -87,7 +87,7 @@ export function ProjectDetailPage() {
             </CardTitle>
             <CardDescription>Associated models for this project</CardDescription>
             <CardAction>
-              <UploadModel />
+              <UploadModel projectId={id} onSuccess={refetch} />
             </CardAction>
           </CardHeader>
           <CardContent>

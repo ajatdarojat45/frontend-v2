@@ -11,11 +11,13 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { useForm } from 'react-hook-form'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from "zod"
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form"
 import { cn } from "@/libs/style"
+import { formatBytes } from "@/helpers/file"
+import { http } from "@/libs/http"
 
 const UploadModelSchema = z.object({
   name: z.string().min(3, { message: "Name must be at least 3 characters." }),
@@ -31,7 +33,14 @@ const UploadModelSchema = z.object({
 
 type UploadModelData = z.infer<typeof UploadModelSchema>
 
-export function UploadModel() {
+
+type UploadModelProps = {
+  projectId: string
+  onSuccess?: () => void
+}
+export function UploadModel({ projectId, onSuccess }: UploadModelProps) {
+  const [open, setOpen] = useState(false);
+
   const fileInputRef = useRef<HTMLInputElement | null>(null)
   const form = useForm({
     resolver: zodResolver(UploadModelSchema),
@@ -41,19 +50,64 @@ export function UploadModel() {
     }
   })
 
-  const onSubmit = (data: UploadModelData) => {
-    console.log(data)
-  }
+  const onSubmit = async (data: UploadModelData) => {
+    try {
+      // 1. get file slot /files
+      const { data: fileSlot } = await http.get('/files')
+      console.log(fileSlot, "<<< fileSlot");
 
-  function formatBytes(bytes: number) {
-    if (!bytes) return '0 B'
-    const sizes = ['B', 'KB', 'MB', 'GB', 'TB']
-    const i = Math.floor(Math.log(bytes) / Math.log(1024))
-    return `${parseFloat((bytes / Math.pow(1024, i)).toFixed(2))} ${sizes[i]}`
+      // 2. upload file to that slot
+      const formData = new FormData();
+      formData.append('file', data.file, data.file.name);
+      const { data: uploadResult } = await http.post(fileSlot.uploadUrl, formData, {
+        withCredentials: false
+      })
+      console.log(uploadResult, "<<< uploadResult");
+
+      // 3. delete file slot
+      const { data: deleteResult } = await http.delete('/files', {
+        params: {
+          slot: fileSlot.id
+        },
+        withCredentials: false
+      })
+      console.log(deleteResult, "<<< deleteResult");
+
+      // 4. geometry check by upload id
+      const { data: createGeometryCheckResult } = await http({
+        method: "POST",
+        url: '/geometryCheck',
+        params: {
+          fileUploadId: uploadResult.id
+        }
+      });
+      console.log(createGeometryCheckResult, "<<< createGeometryCheckResult");
+
+      // FYI:
+      // somehow, the legacy code use `GET /geometryCheck` to check the result with polling every 2 seconds
+      // also they call the endpoint `GET /geometryCheck/result?taskId=x` to get the final result
+      // then i check the backend code, seems the process of geomeryCheck is synchronous and no need to polling
+      // so after calling `POST /geometryCheck` we can directly use the result to create the model
+
+      const { data: modelCreateResult } = await http({
+        method: "POST",
+        url: '/models',
+        params: {
+          name: data.name,
+          projectId: projectId,
+          sourceFileId: createGeometryCheckResult.outputModelId
+        }
+      });
+      console.log(modelCreateResult, "<<< modelCreateResult");
+      onSuccess?.()
+      setOpen(false);
+    } catch (error) {
+      console.error("Error uploading model:", error);
+    }
   }
 
   return (
-    <Dialog>
+    <Dialog onOpenChange={setOpen} open={open}>
       <DialogTrigger asChild>
         <Button variant="outline">Upload Model</Button>
       </DialogTrigger>
@@ -114,7 +168,7 @@ export function UploadModel() {
                             className="absolute inset-0 opacity-0 cursor-pointer h-full w-full"
                             onChange={e => {
                               const f = e.target.files && e.target.files.length > 0 ? e.target.files[0] : undefined
-                              
+
                               field.onChange(f)
                             }}
                           />
