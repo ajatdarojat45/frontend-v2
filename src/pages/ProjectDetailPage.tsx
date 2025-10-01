@@ -1,7 +1,9 @@
 import { ModelCard } from "@/components/features/ModelCard"
+import { UploadModel } from "@/components/features/UploadModel"
 import { Alert, AlertTitle } from "@/components/ui/alert"
 import { AppLayout } from "@/components/ui/app-layout"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Loading } from "@/components/ui/loading"
 import type { AppDispatch } from "@/store"
 import { useGetProjectQuery } from "@/store/projectApi"
@@ -84,6 +86,9 @@ export function ProjectDetailPage() {
               Models ({project.models?.length || 0})
             </CardTitle>
             <CardDescription>Associated models for this project</CardDescription>
+            <CardAction>
+              <UploadModel />
+            </CardAction>
           </CardHeader>
           <CardContent>
             {project.models && project.models.length > 0 ? (
