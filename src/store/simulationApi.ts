@@ -19,9 +19,20 @@ export const simulationApi = createApi({
       providesTags: (_, __, arg) => [{ type: 'Simulations', id: arg }],
     }),
 
+    createSimulation: build.mutation<Simulation, Partial<Simulation>>({
+      query: (body) => ({
+        url: '/simulations',
+        method: 'POST',
+        body,
+      }),
+
+      // Invalidates Simulations-type tags to refetch relevant queries
+      invalidatesTags: (_, __, arg) => [{ type: 'Simulations', id: arg.modelId }],
+    }),
+
   }),
 })
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useGetSimulationsByModelIdQuery } = simulationApi
+export const { useGetSimulationsByModelIdQuery, useCreateSimulationMutation } = simulationApi

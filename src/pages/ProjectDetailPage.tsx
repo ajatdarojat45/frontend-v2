@@ -4,28 +4,14 @@ import { Alert, AlertTitle } from "@/components/ui/alert"
 import { AppLayout } from "@/components/ui/app-layout"
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Loading } from "@/components/ui/loading"
-import type { AppDispatch } from "@/store"
 import { useGetProjectQuery } from "@/store/projectApi"
-import { simulationApi } from "@/store/simulationApi"
 import { AlertCircleIcon, CalendarIcon, ClockIcon, FolderIcon, UsersIcon } from "lucide-react"
 import type React from "react"
-import { useEffect } from "react"
-import { useDispatch } from "react-redux"
 import { useParams } from "react-router"
 
 export function ProjectDetailPage() {
-  const dispatch: AppDispatch = useDispatch()
   const { id } = useParams() as { id: string }
   const { data: project, isLoading, error, refetch } = useGetProjectQuery(id)
-
-  useEffect(() => {
-    if (project && project.models.length > 0) {
-      project.models.forEach(model => {
-        dispatch(simulationApi.endpoints.getSimulationsByModelId.initiate(model.id))
-      })
-    }
-  }, [project])
-
 
   let content: React.ReactNode = null;
 

@@ -1,15 +1,15 @@
 import type { Model } from "@/types/model";
 import { Button } from "@/components/ui/button";
-import { useSelector } from "react-redux";
-import { selectSimulationCountByModelId } from "@/store/simulationSelector";
 import { AudioLinesIcon } from "lucide-react";
+import { useGetSimulationsByModelIdQuery } from "@/store/simulationApi";
+import { Link } from "react-router";
 
 type ModelCardProps = {
   model: Model;
 }
 
 export function ModelCard({ model }: ModelCardProps) {
-  const simulationCount = useSelector(selectSimulationCountByModelId(model.id));
+  const { data: simulations } = useGetSimulationsByModelIdQuery(model.id);
 
   return (
     <div
@@ -29,7 +29,7 @@ export function ModelCard({ model }: ModelCardProps) {
       {/* Center-right: meta info */}
       <div className="flex flex-col gap-2 items-center md:items-start text-slate-500 text-lg min-w-[220px]">
         <div className="flex items-center gap-2">
-          <span>Contains {simulationCount} simulations</span>
+          <span>Contains {simulations?.length || 0} simulations</span>
         </div>
         <div className="flex items-center gap-2">
           <span>Created in {new Date(model.createdAt).toLocaleString(undefined, { month: 'short', day: 'numeric' })}</span>
@@ -41,7 +41,9 @@ export function ModelCard({ model }: ModelCardProps) {
 
       {/* Right: CTA */}
       <div className="flex items-center">
-        <Button variant="outline">Open model</Button>
+        <Button asChild variant="outline">
+          <Link to={'/editor/' + model.id}>Open model</Link>
+        </Button>
       </div>
     </div>
   )
