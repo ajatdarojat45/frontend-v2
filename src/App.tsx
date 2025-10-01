@@ -1,18 +1,14 @@
-import { Provider as ReduxProvider } from 'react-redux'
-import { BrowserRouter, Route, Routes } from 'react-router'
-import { Toaster } from "@/components/ui/sonner"
-import { HomePage } from './pages/HomePage'
-import { EditorPage } from './pages/EditorPage'
-import { ProjectDetailPage } from './pages/ProjectDetailPage'
-import { store } from './store'
+import { Provider as ReduxProvider } from "react-redux";
+import { BrowserRouter, Route, Routes } from "react-router";
+import { Toaster } from "@/components/ui/sonner";
+import { HomePage } from "./pages/HomePage";
+import { EditorPage } from "./pages/EditorPage";
+import { ProjectDetailPage } from "./pages/ProjectDetailPage";
+import { store } from "./store";
 function App() {
   return (
     <ReduxProvider store={store}>
-      <Toaster
-        position="top-center"
-        richColors
-        duration={5000}
-      />
+      <Toaster position="top-center" richColors duration={5000} />
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<HomePage />} />
@@ -21,7 +17,7 @@ function App() {
         </Routes>
       </BrowserRouter>
     </ReduxProvider>
-  )
+  );
 }
 
-export default App
+export default App;

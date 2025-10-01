@@ -1,9 +1,9 @@
-import { useForm } from 'react-hook-form'
-import { useEffect, useState } from 'react'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
+import { useForm } from "react-hook-form";
+import { useEffect, useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 
-import { Button } from '@/components/ui/button'
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogClose,
@@ -13,61 +13,68 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog'
-import { Input } from '@/components/ui/input'
-import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form'
-import { PlusIcon } from 'lucide-react'
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import {
+  Form,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+} from "@/components/ui/form";
+import { PlusIcon } from "lucide-react";
 
 const CreateGroupSchema = z.object({
-  name: z.string().min(3, { message: 'Name must be at least 3 characters.' })
-})
+  name: z.string().min(3, { message: "Name must be at least 3 characters." }),
+});
 
-type CreateGroupData = z.infer<typeof CreateGroupSchema>
+type CreateGroupData = z.infer<typeof CreateGroupSchema>;
 
 type CreateGroupProps = {
-  onCreate: (data: CreateGroupData) => void
-}
+  onCreate: (data: CreateGroupData) => void;
+};
 export function CreateGroup({ onCreate }: CreateGroupProps) {
   // Managing the dialog open state
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
 
   const form = useForm<CreateGroupData>({
     resolver: zodResolver(CreateGroupSchema),
-    defaultValues: { name: '' }
-  })
+    defaultValues: { name: "" },
+  });
 
   // Reset form when dialog is closed
   useEffect(() => {
-    if (!open) form.reset()
-  }, [open])
+    if (!open) form.reset();
+  }, [open]);
 
   const onSubmit = (data: CreateGroupData) => {
-    onCreate(data)
-    setOpen(false)
-  }
+    onCreate(data);
+    setOpen(false);
+  };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className='w-full mt-2'>
+        <Button className="w-full mt-2">
           <PlusIcon />
           Create Group
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-md">
         <Form {...form}>
-          <form onSubmit={(e) => {
-            // Prevent parent dialog from submitting and closing automatically
-            e.stopPropagation();
+          <form
+            onSubmit={(e) => {
+              // Prevent parent dialog from submitting and closing automatically
+              e.stopPropagation();
 
-            // Call the form submit handler
-            form.handleSubmit(onSubmit)(e);
-          }}>
+              // Call the form submit handler
+              form.handleSubmit(onSubmit)(e);
+            }}
+          >
             <DialogHeader>
               <DialogTitle>Create Group</DialogTitle>
-              <DialogDescription>
-                Create a new group to organize projects.
-              </DialogDescription>
+              <DialogDescription>Create a new group to organize projects.</DialogDescription>
             </DialogHeader>
 
             <div className="space-y-4 my-6">
@@ -96,5 +103,5 @@ export function CreateGroup({ onCreate }: CreateGroupProps) {
         </Form>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

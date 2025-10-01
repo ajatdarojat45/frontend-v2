@@ -1,31 +1,37 @@
-import { ModelCard } from "@/components/features/ModelCard"
-import { UploadModel } from "@/components/features/UploadModel"
-import { Alert, AlertTitle } from "@/components/ui/alert"
-import { AppLayout } from "@/components/ui/app-layout"
-import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Loading } from "@/components/ui/loading"
-import type { AppDispatch } from "@/store"
-import { useGetProjectQuery } from "@/store/projectApi"
-import { simulationApi } from "@/store/simulationApi"
-import { AlertCircleIcon, CalendarIcon, ClockIcon, FolderIcon, UsersIcon } from "lucide-react"
-import type React from "react"
-import { useEffect } from "react"
-import { useDispatch } from "react-redux"
-import { useParams } from "react-router"
+import { ModelCard } from "@/components/features/ModelCard";
+import { UploadModel } from "@/components/features/UploadModel";
+import { Alert, AlertTitle } from "@/components/ui/alert";
+import { AppLayout } from "@/components/ui/app-layout";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Loading } from "@/components/ui/loading";
+import type { AppDispatch } from "@/store";
+import { useGetProjectQuery } from "@/store/projectApi";
+import { simulationApi } from "@/store/simulationApi";
+import { AlertCircleIcon, CalendarIcon, ClockIcon, FolderIcon, UsersIcon } from "lucide-react";
+import type React from "react";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { useParams } from "react-router";
 
 export function ProjectDetailPage() {
-  const dispatch: AppDispatch = useDispatch()
-  const { id } = useParams() as { id: string }
-  const { data: project, isLoading, error, refetch } = useGetProjectQuery(id)
+  const dispatch: AppDispatch = useDispatch();
+  const { id } = useParams() as { id: string };
+  const { data: project, isLoading, error, refetch } = useGetProjectQuery(id);
 
   useEffect(() => {
     if (project && project.models.length > 0) {
-      project.models.forEach(model => {
-        dispatch(simulationApi.endpoints.getSimulationsByModelId.initiate(model.id))
-      })
+      project.models.forEach((model) => {
+        dispatch(simulationApi.endpoints.getSimulationsByModelId.initiate(model.id));
+      });
     }
-  }, [project])
-
+  }, [project]);
 
   let content: React.ReactNode = null;
 
@@ -65,11 +71,13 @@ export function ProjectDetailPage() {
               </div>
               <div className="flex items-center gap-2">
                 <CalendarIcon className="h-4 w-4 text-muted-foreground" />
-                <span className="font-medium">Created:</span> {new Date(project.createdAt).toLocaleDateString()}
+                <span className="font-medium">Created:</span>{" "}
+                {new Date(project.createdAt).toLocaleDateString()}
               </div>
               <div className="flex items-center gap-2">
                 <ClockIcon className="h-4 w-4 text-muted-foreground" />
-                <span className="font-medium">Updated:</span> {new Date(project.updatedAt).toLocaleDateString()}
+                <span className="font-medium">Updated:</span>{" "}
+                {new Date(project.updatedAt).toLocaleDateString()}
               </div>
               <div className="flex items-center gap-2">
                 <span className="font-medium">ID:</span> {project.id}
@@ -92,7 +100,9 @@ export function ProjectDetailPage() {
           <CardContent>
             {project.models && project.models.length > 0 ? (
               <div className="space-y-6">
-                {project.models.map((model) => <ModelCard key={model.id} model={model} />)}
+                {project.models.map((model) => (
+                  <ModelCard key={model.id} model={model} />
+                ))}
               </div>
             ) : (
               <p className="text-muted-foreground">No models associated with this project.</p>
@@ -104,10 +114,7 @@ export function ProjectDetailPage() {
   }
 
   return (
-    <AppLayout
-      title={project ? project.name : "Project Detail"}
-      sidebar={<h1>Sidebar</h1>}
-    >
+    <AppLayout title={project ? project.name : "Project Detail"} sidebar={<h1>Sidebar</h1>}>
       {content}
     </AppLayout>
   );
