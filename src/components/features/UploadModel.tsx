@@ -1,3 +1,10 @@
+import { AudioLinesIcon } from "lucide-react"
+import { useForm } from 'react-hook-form'
+import { useEffect, useRef, useState } from 'react'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from "zod"
+import { toast } from "sonner"
+
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -10,10 +17,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
-import { useForm } from 'react-hook-form'
-import { useRef, useState } from 'react'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from "zod"
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form"
 import { cn } from "@/libs/style"
 import { formatBytes } from "@/helpers/file"
@@ -40,6 +43,7 @@ type UploadModelProps = {
 }
 export function UploadModel({ projectId, onSuccess }: UploadModelProps) {
   const [open, setOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const fileInputRef = useRef<HTMLInputElement | null>(null)
   const form = useForm({
@@ -52,6 +56,7 @@ export function UploadModel({ projectId, onSuccess }: UploadModelProps) {
 
   const onSubmit = async (data: UploadModelData) => {
     try {
+      setIsSubmitting(true)
       // 1. get file slot /files
       const { data: fileSlot } = await http.get('/files')
       console.log(fileSlot, "<<< fileSlot");
@@ -99,12 +104,24 @@ export function UploadModel({ projectId, onSuccess }: UploadModelProps) {
         }
       });
       console.log(modelCreateResult, "<<< modelCreateResult");
-      onSuccess?.()
+
       setOpen(false);
+      onSuccess?.()
+      toast.success("Model uploaded successfully.");
     } catch (error) {
-      console.error("Error uploading model:", error);
+      toast.error("Error uploading model. Please try again.");
+    } finally {
+      setIsSubmitting(false)
     }
   }
+
+  useEffect(() => {
+    // reset form when dialog is closed
+    if (!open) {
+      form.reset()
+      if (fileInputRef.current?.value) fileInputRef.current.value = ''
+    }
+  }, [open])
 
   return (
     <Dialog onOpenChange={setOpen} open={open}>
@@ -129,7 +146,7 @@ export function UploadModel({ projectId, onSuccess }: UploadModelProps) {
                   <FormItem>
                     <FormLabel>Name</FormLabel>
                     <FormControl>
-                      <Input placeholder="Model Name" {...field} />
+                      <Input placeholder="Model Name" {...field} disabled={isSubmitting} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -147,17 +164,21 @@ export function UploadModel({ projectId, onSuccess }: UploadModelProps) {
                         <label
                           htmlFor="file-drop"
                           className={
-                            cn("relative flex flex-col items-center justify-center h-48 border-2 border-dashed rounded-lg bg-muted/50 transition-colors cursor-pointer", {
+                            cn("relative flex flex-col items-center justify-center h-64 border-2 border-dashed rounded-lg bg-muted/50 transition-colors cursor-pointer", {
                               'border-destructive': fieldState.error,
                               'bg-red-50': fieldState.error,
                               'hidden': field.value
                             })
                           }
                         >
+                          {/* file icon */}
+                          <div className="w-12 h-12 mb-3 flex items-center justify-center bg-muted rounded-md">
+                            <AudioLinesIcon />
+                          </div>
                           <span className={cn('font-medium', { 'text-destructive': fieldState.error, })}>
                             Drop your .obj or .dxf file here
                           </span>
-                          <span className={cn("text-xs text-muted-foreground mt-1", { 'text-destructive': fieldState.error, })}>
+                          <span className={cn("text-xs text-muted-foreground", { 'text-destructive': fieldState.error, })}>
                             or click to select a file
                           </span>
                           <input
@@ -173,34 +194,53 @@ export function UploadModel({ projectId, onSuccess }: UploadModelProps) {
                             }}
                           />
                         </label>
-                        {field.value && <div className="mt-3 p-3 border rounded-md bg-muted/30 flex items-center justify-between">
-                          <div>
-                            <div className="font-medium">{field.value.name}</div>
-                            <div className="text-xs text-muted-foreground">{formatBytes(field.value.size)}</div>
-                          </div>
-                          <div className="flex items-center gap-3">
-                            <button
-                              type="button"
-                              className="px-3 py-1 border rounded-md text-sm bg-white"
-                              onClick={() => fileInputRef.current?.click()}
-                            >
-                              Change
-                            </button>
-                            <button
-                              type="button"
-                              className="text-sm text-destructive underline"
-                              onClick={() => {
-                                // Reset file input value to allow re-uploading the same file if needed
-                                if (fileInputRef.current?.value) fileInputRef.current.value = ''
+                        {field.value && (
+                          <div
+                            className={cn(
+                              "p-3 border rounded-md bg-muted/30 h-64 flex flex-col justify-center items-center gap-3",
+                              {
+                                'opacity-50 pointer-events-none': isSubmitting,
+                              }
+                            )}
+                          >
+                            {/* file icon */}
+                            <div className="w-12 h-12 flex items-center justify-center bg-muted rounded-md">
+                              <AudioLinesIcon />
+                            </div>
 
-                                // Reset field value
-                                field.onChange(undefined)
-                              }}
-                            >
-                              Remove
-                            </button>
+                            {/* metadata */}
+                            <div className="text-center">
+                              <div className="font-medium">{field.value.name}</div>
+                              <div className="text-xs text-muted-foreground">{formatBytes(field.value.size)}</div>
+                            </div>
+
+                            {/* actions row */}
+                            <div className="flex items-center gap-3">
+                              <button
+                                type="button"
+                                className="px-3 py-1 border rounded-md text-sm bg-white"
+                                onClick={() => fileInputRef.current?.click()}
+                                aria-label="Change file"
+                              >
+                                Change
+                              </button>
+                              <button
+                                type="button"
+                                className="text-sm text-destructive underline"
+                                onClick={() => {
+                                  // Reset file input value to allow re-uploading the same file if needed
+                                  if (fileInputRef.current?.value) fileInputRef.current.value = ''
+
+                                  // Reset field value
+                                  field.onChange(undefined)
+                                }}
+                                aria-label="Remove file"
+                              >
+                                Remove
+                              </button>
+                            </div>
                           </div>
-                        </div>}
+                        )}
                       </div>
                     </FormControl>
                     <FormMessage />
@@ -210,10 +250,12 @@ export function UploadModel({ projectId, onSuccess }: UploadModelProps) {
             </div>
 
             <DialogFooter>
-              <DialogClose onClick={() => form.reset()} asChild>
-                <Button variant="outline">Cancel</Button>
+              <DialogClose asChild>
+                <Button disabled={isSubmitting} variant="outline">Cancel</Button>
               </DialogClose>
-              <Button type="submit">Save changes</Button>
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? 'Uploading...' : 'Upload'}
+              </Button>
             </DialogFooter>
           </form>
         </Form>

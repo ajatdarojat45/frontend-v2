@@ -2,6 +2,7 @@ import type { Model } from "@/types/model";
 import { Button } from "@/components/ui/button";
 import { useSelector } from "react-redux";
 import { selectSimulationCountByModelId } from "@/store/simulationSelector";
+import { AudioLinesIcon } from "lucide-react";
 
 type ModelCardProps = {
   model: Model;
@@ -17,17 +18,7 @@ export function ModelCard({ model }: ModelCardProps) {
     >
       {/* Left: waveform icon */}
       <div className="flex-shrink-0 flex items-center justify-center">
-        <svg width="84" height="48" viewBox="0 0 84 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id={`g-${model.id}`} x1="0" x2="1" y1="0" y2="0">
-              <stop offset="0%" stopColor="#6366F1" />
-              <stop offset="100%" stopColor="#8B5CF6" />
-            </linearGradient>
-          </defs>
-          <g stroke={`url(#g-${model.id})`} strokeWidth="6" strokeLinecap="round">
-            <path d="M6 24v-8m10 8v-16m10 16v-6m10 6v-20m10 20v-8m10 8v-12m10 12v-4" />
-          </g>
-        </svg>
+        <AudioLinesIcon size={64} />
       </div>
 
       {/* Center: model name */}
