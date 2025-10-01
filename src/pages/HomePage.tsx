@@ -1,18 +1,19 @@
 import { CreateProject } from "@/components/features/CreateProject"
+import { GroupPicker } from "@/components/features/GroupPicker"
 import { ProjectCard } from "@/components/features/ProjectCard"
 import { Alert, AlertTitle } from "@/components/ui/alert"
 import { AppLayout } from "@/components/ui/app-layout"
-import { Button } from "@/components/ui/button"
 import { Loading } from "@/components/ui/loading"
-import { useCreateProjectMutation, useGetProjectsQuery } from "@/store/projectApi"
+import { useGetProjectsQuery } from "@/store/projectApi"
+import { selectProjectsByActiveGroup } from "@/store/projectSelector"
 import { AlertCircleIcon } from "lucide-react"
 import type React from "react"
+import { useSelector } from "react-redux"
 import { Link } from "react-router"
 
 export function HomePage() {
-  const { data: projects, isLoading, error } = useGetProjectsQuery()
-  const [createProject] = useCreateProjectMutation()
-
+  const { isLoading, error } = useGetProjectsQuery()
+  const projects = useSelector(selectProjectsByActiveGroup)
 
   let content: React.ReactNode = null;
 
@@ -48,7 +49,8 @@ export function HomePage() {
   return (
     <AppLayout
       title="Projects"
-      action={<CreateProject />}
+      left={<GroupPicker />}
+      right={<CreateProject />}
       sidebar={<h1>Sidebar</h1>}
     >
       {content}
