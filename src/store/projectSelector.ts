@@ -18,3 +18,17 @@ export const selectModelIdsByProjectId = createSelector(
   }
 )
 
+// Selector to get unique groups from all projects
+export const selectGroupsFromProjects = createSelector(
+  (state: RootState) => projectApi.endpoints.getProjects.select()(state)?.data,
+  (projects) => {
+    if (!projects) return [];
+    const groupsSet = new Set<string>();
+    projects.forEach(project => {
+      if (project.group) {
+        groupsSet.add(project.group);
+      }
+    });
+    return Array.from(groupsSet);
+  }
+)
