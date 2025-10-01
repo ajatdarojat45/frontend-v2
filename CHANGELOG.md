@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.3](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.2...v0.0.3) (2025-10-01)
+
+
+### Features
+
+* add CreateGroup component and integrate it into CreateProject for dynamic group creation ([a8a326d](https://github.com/ajatdarojat45/frontend-v2/commit/a8a326df253d0ad92ca2259245d37183f08d3f17))
+* add CreateProject component with form validation and group selection ([b27bb50](https://github.com/ajatdarojat45/frontend-v2/commit/b27bb50b713d6cbb1384c26f0595aa9edbf9698e))
+* add UploadModel component for 3D model uploads with validation ([1c6f04f](https://github.com/ajatdarojat45/frontend-v2/commit/1c6f04fe9123e539310c93a9d43b87b9f30b317b))
+* enhance UploadModel component with file upload logic and integrate into ProjectDetailPage ([19053d0](https://github.com/ajatdarojat45/frontend-v2/commit/19053d0987b4ba3aee00306f95e6d60c5f24c927))
+* implement ModelCard component and integrate it into ProjectDetailPage; fix simulation count ([8d34c1e](https://github.com/ajatdarojat45/frontend-v2/commit/8d34c1ec1404a4e25ef32efd420a1851901af1d4))
+* integrate AudioLinesIcon into ModelCard and UploadModel components; enhance file upload UI with loading state ([35cf3bf](https://github.com/ajatdarojat45/frontend-v2/commit/35cf3bf01de5b9e35975d19c6a858a96159f5a5c))
+
 ### [0.0.2](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.1...v0.0.2) (2025-09-30)
 
 
