@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 
+import { CreateGroup } from './CreateGroup'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -43,10 +44,21 @@ export function CreateProject() {
   const [open, setOpen] = useState(false)
   const [createProject, { isLoading }] = useCreateProjectMutation()
 
-  const groups = useSelector(selectGroupsFromProjects)
+  // Controlling the Select open state to close it when a new group is created
+  const [selectOpen, setSelectOpen] = useState(false)
 
+  // We need to manage groups state here because we want to update it when a new group is created
+  // So we can't just use the selector directly in the Select component
+  const [groups, setGroups] = useState<string[]>([])
+
+  // Fill groups state with unique groups from projects
+  const groupAggregates = useSelector(selectGroupsFromProjects)
   useEffect(() => {
-    // Reset form when dialog is closed
+    setGroups(groupAggregates)
+  }, [groupAggregates])
+
+  // Reset form when dialog is closed
+  useEffect(() => {
     if (!open) {
       form.reset()
     }
@@ -60,6 +72,21 @@ export function CreateProject() {
     } catch (error) {
       toast.error('Failed to create project')
     }
+  }
+
+  const handleCreateGroup = (data: { name: string }) => {
+    setSelectOpen(false)
+
+    // Add the new group to the groups state
+    if (!groups.includes(data.name)) {
+      setGroups([...groups, data.name])
+    }
+    toast.success(`Group "${data.name}" selected`)
+
+    // Delay setting the form value to ensure the Select has closed
+    setTimeout(() => {
+      form.setValue('group', data.name)
+    }, 500);
   }
 
   return (
@@ -118,8 +145,10 @@ export function CreateProject() {
                     <FormLabel>Group</FormLabel>
                     <Select
                       onValueChange={(val) => field.onChange(val === 'NONE' ? '' : val)}
-                      defaultValue={field.value}
+                      value={field.value}
                       disabled={isLoading}
+                      open={selectOpen}
+                      onOpenChange={setSelectOpen}
                     >
                       <FormControl>
                         <SelectTrigger className='w-full'>
@@ -131,6 +160,9 @@ export function CreateProject() {
                         {groups.map((group) => (
                           <SelectItem key={group} value={group}>{group}</SelectItem>
                         ))}
+
+                        {/* Create Group */}
+                        <CreateGroup onCreate={handleCreateGroup} />
                       </SelectContent>
                     </Select>
                     <FormMessage />
