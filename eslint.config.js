@@ -20,10 +20,18 @@ export default defineConfig([
     ],
     plugins: {
       prettier: prettierPlugin,
-      "no-unused-vars": ["error", { argsIgnorePattern: "^_", varsIgnorePattern: "^_" }],
     },
     rules: {
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        {
+          argsIgnorePattern: "^_",
+          varsIgnorePattern: "^_",
+          caughtErrorsIgnorePattern: "^_",
+        },
+      ],
       "prettier/prettier": "error",
+      "react-refresh/only-export-components": "off",
     },
     languageOptions: {
       ecmaVersion: 2020,
