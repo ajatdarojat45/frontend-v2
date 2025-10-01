@@ -126,7 +126,7 @@ export function UploadModel({ projectId, onSuccess }: UploadModelProps) {
       form.reset();
       if (fileInputRef.current?.value) fileInputRef.current.value = "";
     }
-  }, [open]);
+  }, [open, form]);
 
   return (
     <Dialog onOpenChange={setOpen} open={open}>
@@ -168,13 +168,14 @@ export function UploadModel({ projectId, onSuccess }: UploadModelProps) {
                       <div>
                         <label
                           htmlFor="file-drop"
-                          className={
-                            cn("relative flex flex-col items-center justify-center h-64 border-2 border-dashed rounded-lg transition-colors cursor-pointer", {
-                              'border-destructive': fieldState.error,
-                              'bg-red-50': fieldState.error,
-                              'hidden': field.value
-                            })
-                          }
+                          className={cn(
+                            "relative flex flex-col items-center justify-center h-64 border-2 border-dashed rounded-lg transition-colors cursor-pointer",
+                            {
+                              "border-destructive": fieldState.error,
+                              "bg-red-50": fieldState.error,
+                              hidden: field.value,
+                            },
+                          )}
                         >
                           {/* file icon */}
                           <div className="w-12 h-12 mb-3 flex items-center justify-center bg-muted rounded-md">
@@ -234,7 +235,7 @@ export function UploadModel({ projectId, onSuccess }: UploadModelProps) {
                             <div className="flex items-center gap-3">
                               <Button
                                 type="button"
-                                variant='secondary'
+                                variant="secondary"
                                 onClick={() => fileInputRef.current?.click()}
                                 size="sm"
                               >
@@ -242,8 +243,8 @@ export function UploadModel({ projectId, onSuccess }: UploadModelProps) {
                               </Button>
                               <Button
                                 type="button"
-                                size='sm'
-                                variant='destructive'
+                                size="sm"
+                                variant="destructive"
                                 onClick={() => {
                                   // Reset file input value to allow re-uploading the same file if needed
                                   if (fileInputRef.current?.value) fileInputRef.current.value = "";

@@ -48,7 +48,7 @@ export function ModelCard({ model }: ModelCardProps) {
       {/* Right: CTA */}
       <div className="flex items-center">
         <Button asChild variant="outline">
-          <Link to={'/editor/' + model.id}>Open model</Link>
+          <Link to={"/editor/" + model.id}>Open model</Link>
         </Button>
       </div>
     </div>

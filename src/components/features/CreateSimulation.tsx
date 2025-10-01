@@ -1,10 +1,9 @@
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { useEffect, useState } from "react";
 
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
-import { useEffect, useState } from 'react'
-
-import { Button } from '@/components/ui/button'
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogClose,
@@ -14,40 +13,47 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog'
-import { Input } from '@/components/ui/input'
-import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form'
-import { Textarea } from '@/components/ui/textarea'
-import { useCreateSimulationMutation } from '@/store/simulationApi'
-import { toast } from 'sonner'
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import {
+  Form,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+} from "@/components/ui/form";
+import { Textarea } from "@/components/ui/textarea";
+import { useCreateSimulationMutation } from "@/store/simulationApi";
+import { toast } from "sonner";
 
 const CreateSimulationSchema = z.object({
-  name: z.string().min(3, { message: 'Name must be at least 3 characters.' }),
+  name: z.string().min(3, { message: "Name must be at least 3 characters." }),
   description: z.string().optional(),
-})
+});
 
-type CreateSimulationData = z.infer<typeof CreateSimulationSchema>
+type CreateSimulationData = z.infer<typeof CreateSimulationSchema>;
 
 type CreateSimulationProps = {
   modelId: number;
-}
+};
 export function CreateSimulation({ modelId }: CreateSimulationProps) {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
   const form = useForm<CreateSimulationData>({
     resolver: zodResolver(CreateSimulationSchema),
     defaultValues: {
-      name: '',
-      description: '',
+      name: "",
+      description: "",
     },
-  })
-  const [createSimulation] = useCreateSimulationMutation()
+  });
+  const [createSimulation] = useCreateSimulationMutation();
 
   // Reset form when dialog closes
   useEffect(() => {
     if (!open) {
-      form.reset()
+      form.reset();
     }
-  }, [open])
+  }, [open, form]);
 
   const handleSubmit = async (data: CreateSimulationData) => {
     try {
@@ -56,15 +62,15 @@ export function CreateSimulation({ modelId }: CreateSimulationProps) {
         modelId,
         layerIdByMaterialId: {},
         solverSettings: {
-          simulationSettings: {}
-        }
-      }).unwrap()
-      toast.success('Simulation created successfully')
-      setOpen(false)
-    } catch (error) {
-      toast.error('Failed to create simulation')
+          simulationSettings: {},
+        },
+      }).unwrap();
+      toast.success("Simulation created successfully");
+      setOpen(false);
+    } catch {
+      toast.error("Failed to create simulation");
     }
-  }
+  };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -76,9 +82,7 @@ export function CreateSimulation({ modelId }: CreateSimulationProps) {
           <form onSubmit={form.handleSubmit(handleSubmit)}>
             <DialogHeader>
               <DialogTitle>Create Simulation</DialogTitle>
-              <DialogDescription>
-                Create a new simulation for your project.
-              </DialogDescription>
+              <DialogDescription>Create a new simulation for your project.</DialogDescription>
             </DialogHeader>
 
             <div className="space-y-4 my-6">
@@ -121,5 +125,5 @@ export function CreateSimulation({ modelId }: CreateSimulationProps) {
         </Form>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

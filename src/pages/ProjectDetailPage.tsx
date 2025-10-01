@@ -1,17 +1,24 @@
-import { ModelCard } from "@/components/features/ModelCard"
-import { UploadModel } from "@/components/features/UploadModel"
-import { Alert, AlertTitle } from "@/components/ui/alert"
-import { AppLayout } from "@/components/ui/app-layout"
-import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Loading } from "@/components/ui/loading"
-import { useGetProjectQuery } from "@/store/projectApi"
-import { AlertCircleIcon, CalendarIcon, ClockIcon, FolderIcon, UsersIcon } from "lucide-react"
-import type React from "react"
-import { useParams } from "react-router"
+import { ModelCard } from "@/components/features/ModelCard";
+import { UploadModel } from "@/components/features/UploadModel";
+import { Alert, AlertTitle } from "@/components/ui/alert";
+import { AppLayout } from "@/components/ui/app-layout";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Loading } from "@/components/ui/loading";
+import { useGetProjectQuery } from "@/store/projectApi";
+import { AlertCircleIcon, CalendarIcon, ClockIcon, FolderIcon, UsersIcon } from "lucide-react";
+import type React from "react";
+import { useParams } from "react-router";
 
 export function ProjectDetailPage() {
-  const { id } = useParams() as { id: string }
-  const { data: project, isLoading, error, refetch } = useGetProjectQuery(id)
+  const { id } = useParams() as { id: string };
+  const { data: project, isLoading, error, refetch } = useGetProjectQuery(id);
 
   let content: React.ReactNode = null;
 

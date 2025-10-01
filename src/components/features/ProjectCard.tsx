@@ -24,7 +24,7 @@ export function ProjectCard(props: ProjectCardProps) {
         dispatch(simulationApi.endpoints.getSimulationsByModelId.initiate(model.id));
       });
     }
-  }, [project]);
+  }, [project, dispatch]);
 
   return (
     <Card>

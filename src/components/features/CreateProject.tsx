@@ -75,7 +75,7 @@ export function CreateProject() {
     if (!open) {
       form.reset();
     }
-  }, [open]);
+  }, [open, form]);
 
   const handleSubmit = async (data: CreateProjectData) => {
     try {
