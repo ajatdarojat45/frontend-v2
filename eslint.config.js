@@ -20,6 +20,7 @@ export default defineConfig([
     ],
     plugins: {
       prettier: prettierPlugin,
+      "no-unused-vars": ["error", { argsIgnorePattern: "^_", varsIgnorePattern: "^_" }],
     },
     rules: {
       "prettier/prettier": "error",
