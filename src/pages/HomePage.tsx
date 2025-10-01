@@ -1,3 +1,4 @@
+import { CreateProject } from "@/components/features/CreateProject"
 import { ProjectCard } from "@/components/features/ProjectCard"
 import { Alert, AlertTitle } from "@/components/ui/alert"
 import { AppLayout } from "@/components/ui/app-layout"
@@ -47,11 +48,7 @@ export function HomePage() {
   return (
     <AppLayout
       title="Projects"
-      action={
-        <Button onClick={() => createProject({ name: "New Project", description: "Project Description", group: "Project Group" })} variant='secondary'>
-          Create new project
-        </Button>
-      }
+      action={<CreateProject />}
       sidebar={<h1>Sidebar</h1>}
     >
       {content}
