@@ -1,11 +1,11 @@
-import { AudioLinesIcon } from "lucide-react"
-import { useForm } from 'react-hook-form'
-import { useEffect, useRef, useState } from 'react'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from "zod"
-import { toast } from "sonner"
+import { AudioLinesIcon } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { useEffect, useRef, useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { toast } from "sonner";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogClose,
@@ -15,12 +15,19 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form"
-import { cn } from "@/libs/style"
-import { formatBytes } from "@/helpers/file"
-import { http } from "@/libs/http"
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import {
+  Form,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+} from "@/components/ui/form";
+import { cn } from "@/libs/style";
+import { formatBytes } from "@/helpers/file";
+import { http } from "@/libs/http";
 
 const UploadModelSchema = z.object({
   name: z.string().min(3, { message: "Name must be at least 3 characters." }),
@@ -28,63 +35,61 @@ const UploadModelSchema = z.object({
   file: z
     .instanceof(File, { message: "Please upload a file." })
     .refine((file: File) => file.size <= 5_000_000, { message: "Max file size is 5MB." })
-    .refine(
-      (file: File) => /\.(obj|dxf)$/i.test(file.name),
-      { message: "Only .obj or .dxf files are accepted." }
-    ),
-})
+    .refine((file: File) => /\.(obj|dxf)$/i.test(file.name), {
+      message: "Only .obj or .dxf files are accepted.",
+    }),
+});
 
-type UploadModelData = z.infer<typeof UploadModelSchema>
-
+type UploadModelData = z.infer<typeof UploadModelSchema>;
 
 type UploadModelProps = {
-  projectId: string
-  onSuccess?: () => void
-}
+  projectId: string;
+  onSuccess?: () => void;
+};
 export function UploadModel({ projectId, onSuccess }: UploadModelProps) {
   const [open, setOpen] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const fileInputRef = useRef<HTMLInputElement | null>(null)
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
   const form = useForm({
     resolver: zodResolver(UploadModelSchema),
     defaultValues: {
-      name: '',
-      file: undefined
-    }
-  })
+      name: "",
+      file: undefined,
+    },
+  });
 
   const onSubmit = async (data: UploadModelData) => {
     try {
-      setIsSubmitting(true)
+      setIsSubmitting(true);
       // 1. get file slot /files
-      const { data: fileSlot } = await http.get('/files')
+      const { data: fileSlot } = await http.get("/files");
       console.log(fileSlot, "<<< fileSlot");
 
       // 2. upload file to that slot
       const formData = new FormData();
-      formData.append('file', data.file, data.file.name);
+      formData.append("file", data.file, data.file.name);
       const { data: uploadResult } = await http.post(fileSlot.uploadUrl, formData, {
-        withCredentials: false
-      })
+        withCredentials: false,
+      });
       console.log(uploadResult, "<<< uploadResult");
 
       // 3. delete file slot
-      const { data: deleteResult } = await http.delete('/files', {
+      const { data: deleteResult } = await http.delete("/files", {
         params: {
-          slot: fileSlot.id
+          slot: fileSlot.id,
         },
-        withCredentials: false
-      })
+        withCredentials: false,
+      });
       console.log(deleteResult, "<<< deleteResult");
 
       // 4. geometry check by upload id
       const { data: createGeometryCheckResult } = await http({
         method: "POST",
-        url: '/geometryCheck',
+        url: "/geometryCheck",
         params: {
-          fileUploadId: uploadResult.id
-        }
+          fileUploadId: uploadResult.id,
+        },
       });
       console.log(createGeometryCheckResult, "<<< createGeometryCheckResult");
 
@@ -96,32 +101,32 @@ export function UploadModel({ projectId, onSuccess }: UploadModelProps) {
 
       const { data: modelCreateResult } = await http({
         method: "POST",
-        url: '/models',
+        url: "/models",
         params: {
           name: data.name,
           projectId: projectId,
-          sourceFileId: createGeometryCheckResult.outputModelId
-        }
+          sourceFileId: createGeometryCheckResult.outputModelId,
+        },
       });
       console.log(modelCreateResult, "<<< modelCreateResult");
 
       setOpen(false);
-      onSuccess?.()
+      onSuccess?.();
       toast.success("Model uploaded successfully.");
-    } catch (error) {
+    } catch (_) {
       toast.error("Error uploading model. Please try again.");
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
 
   useEffect(() => {
     // reset form when dialog is closed
     if (!open) {
-      form.reset()
-      if (fileInputRef.current?.value) fileInputRef.current.value = ''
+      form.reset();
+      if (fileInputRef.current?.value) fileInputRef.current.value = "";
     }
-  }, [open])
+  }, [open]);
 
   return (
     <Dialog onOpenChange={setOpen} open={open}>
@@ -175,10 +180,16 @@ export function UploadModel({ projectId, onSuccess }: UploadModelProps) {
                           <div className="w-12 h-12 mb-3 flex items-center justify-center bg-muted rounded-md">
                             <AudioLinesIcon />
                           </div>
-                          <span className={cn('font-medium', { 'text-destructive': fieldState.error, })}>
+                          <span
+                            className={cn("font-medium", { "text-destructive": fieldState.error })}
+                          >
                             Drop your .obj or .dxf file here
                           </span>
-                          <span className={cn("text-xs text-muted-foreground", { 'text-destructive': fieldState.error, })}>
+                          <span
+                            className={cn("text-xs text-muted-foreground", {
+                              "text-destructive": fieldState.error,
+                            })}
+                          >
                             or click to select a file
                           </span>
                           <input
@@ -187,10 +198,13 @@ export function UploadModel({ projectId, onSuccess }: UploadModelProps) {
                             type="file"
                             accept=".obj,.dxf"
                             className="absolute inset-0 opacity-0 cursor-pointer h-full w-full"
-                            onChange={e => {
-                              const f = e.target.files && e.target.files.length > 0 ? e.target.files[0] : undefined
+                            onChange={(e) => {
+                              const f =
+                                e.target.files && e.target.files.length > 0
+                                  ? e.target.files[0]
+                                  : undefined;
 
-                              field.onChange(f)
+                              field.onChange(f);
                             }}
                           />
                         </label>
@@ -199,8 +213,8 @@ export function UploadModel({ projectId, onSuccess }: UploadModelProps) {
                             className={cn(
                               "p-3 border rounded-md h-64 flex flex-col justify-center items-center gap-3",
                               {
-                                'opacity-50 pointer-events-none': isSubmitting,
-                              }
+                                "opacity-50 pointer-events-none": isSubmitting,
+                              },
                             )}
                           >
                             {/* file icon */}
@@ -211,7 +225,9 @@ export function UploadModel({ projectId, onSuccess }: UploadModelProps) {
                             {/* metadata */}
                             <div className="text-center">
                               <div className="font-medium">{field.value.name}</div>
-                              <div className="text-xs text-muted-foreground">{formatBytes(field.value.size)}</div>
+                              <div className="text-xs text-muted-foreground">
+                                {formatBytes(field.value.size)}
+                              </div>
                             </div>
 
                             {/* actions row */}
@@ -230,10 +246,10 @@ export function UploadModel({ projectId, onSuccess }: UploadModelProps) {
                                 variant='destructive'
                                 onClick={() => {
                                   // Reset file input value to allow re-uploading the same file if needed
-                                  if (fileInputRef.current?.value) fileInputRef.current.value = ''
+                                  if (fileInputRef.current?.value) fileInputRef.current.value = "";
 
                                   // Reset field value
-                                  field.onChange(undefined)
+                                  field.onChange(undefined);
                                 }}
                               >
                                 Remove
@@ -251,15 +267,17 @@ export function UploadModel({ projectId, onSuccess }: UploadModelProps) {
 
             <DialogFooter>
               <DialogClose asChild>
-                <Button disabled={isSubmitting} variant="outline">Cancel</Button>
+                <Button disabled={isSubmitting} variant="outline">
+                  Cancel
+                </Button>
               </DialogClose>
               <Button type="submit" disabled={isSubmitting}>
-                {isSubmitting ? 'Uploading...' : 'Upload'}
+                {isSubmitting ? "Uploading..." : "Upload"}
               </Button>
             </DialogFooter>
           </form>
         </Form>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

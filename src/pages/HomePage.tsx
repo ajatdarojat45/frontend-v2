@@ -1,19 +1,19 @@
-import { CreateProject } from "@/components/features/CreateProject"
-import { GroupPicker } from "@/components/features/GroupPicker"
-import { ProjectCard } from "@/components/features/ProjectCard"
-import { Alert, AlertTitle } from "@/components/ui/alert"
-import { AppLayout } from "@/components/ui/app-layout"
-import { Loading } from "@/components/ui/loading"
-import { useGetProjectsQuery } from "@/store/projectApi"
-import { selectProjectsByActiveGroup } from "@/store/projectSelector"
-import { AlertCircleIcon } from "lucide-react"
-import type React from "react"
-import { useSelector } from "react-redux"
-import { Link } from "react-router"
+import { CreateProject } from "@/components/features/CreateProject";
+import { GroupPicker } from "@/components/features/GroupPicker";
+import { ProjectCard } from "@/components/features/ProjectCard";
+import { Alert, AlertTitle } from "@/components/ui/alert";
+import { AppLayout } from "@/components/ui/app-layout";
+import { Loading } from "@/components/ui/loading";
+import { useGetProjectsQuery } from "@/store/projectApi";
+import { selectProjectsByActiveGroup } from "@/store/projectSelector";
+import { AlertCircleIcon } from "lucide-react";
+import type React from "react";
+import { useSelector } from "react-redux";
+import { Link } from "react-router";
 
 export function HomePage() {
-  const { isLoading, error } = useGetProjectsQuery()
-  const projects = useSelector(selectProjectsByActiveGroup)
+  const { isLoading, error } = useGetProjectsQuery();
+  const projects = useSelector(selectProjectsByActiveGroup);
 
   let content: React.ReactNode = null;
 
@@ -37,7 +37,7 @@ export function HomePage() {
   } else {
     content = (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
-        {projects.map(project => (
+        {projects.map((project) => (
           <Link key={project.id} to={`/projects/${project.id}`}>
             <ProjectCard project={project} />
           </Link>

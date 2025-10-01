@@ -6,7 +6,7 @@ import { Link } from "react-router";
 
 type ModelCardProps = {
   model: Model;
-}
+};
 
 export function ModelCard({ model }: ModelCardProps) {
   const { data: simulations } = useGetSimulationsByModelIdQuery(model.id);
@@ -32,7 +32,13 @@ export function ModelCard({ model }: ModelCardProps) {
           <span>Contains {simulations?.length || 0} simulations</span>
         </div>
         <div className="flex items-center gap-2">
-          <span>Created in {new Date(model.createdAt).toLocaleString(undefined, { month: 'short', day: 'numeric' })}</span>
+          <span>
+            Created in{" "}
+            {new Date(model.createdAt).toLocaleString(undefined, {
+              month: "short",
+              day: "numeric",
+            })}
+          </span>
         </div>
         <div className="flex items-center gap-2">
           <span className="text-pink-400">Contains .geo file</span>
@@ -46,5 +52,5 @@ export function ModelCard({ model }: ModelCardProps) {
         </Button>
       </div>
     </div>
-  )
+  );
 }

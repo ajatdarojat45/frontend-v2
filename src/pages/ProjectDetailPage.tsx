@@ -51,11 +51,13 @@ export function ProjectDetailPage() {
               </div>
               <div className="flex items-center gap-2">
                 <CalendarIcon className="h-4 w-4 text-muted-foreground" />
-                <span className="font-medium">Created:</span> {new Date(project.createdAt).toLocaleDateString()}
+                <span className="font-medium">Created:</span>{" "}
+                {new Date(project.createdAt).toLocaleDateString()}
               </div>
               <div className="flex items-center gap-2">
                 <ClockIcon className="h-4 w-4 text-muted-foreground" />
-                <span className="font-medium">Updated:</span> {new Date(project.updatedAt).toLocaleDateString()}
+                <span className="font-medium">Updated:</span>{" "}
+                {new Date(project.updatedAt).toLocaleDateString()}
               </div>
               <div className="flex items-center gap-2">
                 <span className="font-medium">ID:</span> {project.id}
@@ -78,7 +80,9 @@ export function ProjectDetailPage() {
           <CardContent>
             {project.models && project.models.length > 0 ? (
               <div className="space-y-6">
-                {project.models.map((model) => <ModelCard key={model.id} model={model} />)}
+                {project.models.map((model) => (
+                  <ModelCard key={model.id} model={model} />
+                ))}
               </div>
             ) : (
               <p className="text-muted-foreground">No models associated with this project.</p>
@@ -90,10 +94,7 @@ export function ProjectDetailPage() {
   }
 
   return (
-    <AppLayout
-      title={project ? project.name : "Project Detail"}
-      sidebar={<h1>Sidebar</h1>}
-    >
+    <AppLayout title={project ? project.name : "Project Detail"} sidebar={<h1>Sidebar</h1>}>
       {content}
     </AppLayout>
   );
