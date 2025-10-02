@@ -46,7 +46,7 @@ export function CreateSimulation({ modelId }: CreateSimulationProps) {
       description: "",
     },
   });
-  const [createSimulation] = useCreateSimulationMutation();
+  const [createSimulation, { isLoading }] = useCreateSimulationMutation();
 
   // Reset form when dialog closes
   useEffect(() => {
@@ -93,7 +93,7 @@ export function CreateSimulation({ modelId }: CreateSimulationProps) {
                   <FormItem>
                     <FormLabel>Name</FormLabel>
                     <FormControl>
-                      <Input placeholder="Simulation name" {...field} />
+                      <Input disabled={isLoading} placeholder="Simulation name" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -107,7 +107,11 @@ export function CreateSimulation({ modelId }: CreateSimulationProps) {
                   <FormItem>
                     <FormLabel>Description</FormLabel>
                     <FormControl>
-                      <Textarea placeholder="Short simulation description" {...field} />
+                      <Textarea
+                        disabled={isLoading}
+                        placeholder="Short simulation description"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -117,9 +121,13 @@ export function CreateSimulation({ modelId }: CreateSimulationProps) {
 
             <DialogFooter>
               <DialogClose asChild>
-                <Button variant="outline">Cancel</Button>
+                <Button disabled={isLoading} variant="outline">
+                  Cancel
+                </Button>
               </DialogClose>
-              <Button type="submit">Create</Button>
+              <Button disabled={isLoading} type="submit">
+                {isLoading ? "Creating..." : "Create"}
+              </Button>
             </DialogFooter>
           </form>
         </Form>

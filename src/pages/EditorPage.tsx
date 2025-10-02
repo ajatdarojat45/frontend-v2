@@ -1,10 +1,9 @@
 import { CreateSimulation } from "@/components/features/CreateSimulation";
 import { EmptySimulation } from "@/components/features/EmptySimulation";
 import { AppLayout } from "@/components/ui/app-layout";
-import { Button } from "@/components/ui/button";
 import { useGetSimulationsByModelIdQuery } from "@/store/simulationApi";
 import { useEffect } from "react";
-import { Link, useNavigate, useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 
 export function EditorPage() {
   const navigate = useNavigate();
@@ -40,9 +39,11 @@ export function EditorPage() {
       }
       right={<CreateSimulation modelId={+modelId} />}
     >
-      <Button variant="outline" asChild>
-        <Link to="/">Back to Home</Link>
-      </Button>
+      <div className="h-full w-full flex items-center justify-center text-4xl text-teal-800">
+        Editor Page with <br />
+        model ID: {modelId} <br />
+        simulation ID: {simulationId}
+      </div>
     </AppLayout>
   );
 }
