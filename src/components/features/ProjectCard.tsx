@@ -8,23 +8,23 @@ import type { AppDispatch } from "@/store";
 import { selectSimulationCountByProjectId } from "@/store/simulationSelector";
 
 type ProjectCardProps = {
-  project: Project
+  project: Project;
 };
 export function ProjectCard(props: ProjectCardProps) {
   const { project } = props;
 
-  const dispatch: AppDispatch = useDispatch()
+  const dispatch: AppDispatch = useDispatch();
 
-  const simulationCount = useSelector(selectSimulationCountByProjectId(project.id))
+  const simulationCount = useSelector(selectSimulationCountByProjectId(project.id));
 
   useEffect(() => {
     if (project.models.length > 0) {
       // Fetch simulations for the first model as an example
-      project.models.forEach(model => {
-        dispatch(simulationApi.endpoints.getSimulationsByModelId.initiate(model.id))
-      })
+      project.models.forEach((model) => {
+        dispatch(simulationApi.endpoints.getSimulationsByModelId.initiate(model.id));
+      });
     }
-  }, [project])
+  }, [project]);
 
   return (
     <Card>
@@ -37,9 +37,12 @@ export function ProjectCard(props: ProjectCardProps) {
           <p>{simulationCount} simulations</p>
         </div>
 
-        <img className="invisible sm:visible w-24 object-cover" src={modelImg} alt="Model Illustration" />
+        <img
+          className="invisible sm:visible w-24 object-cover"
+          src={modelImg}
+          alt="Model Illustration"
+        />
       </CardContent>
     </Card>
-  )
-
+  );
 }

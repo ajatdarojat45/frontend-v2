@@ -10,7 +10,7 @@ const projectSlice = createSlice({
       state.activeGroup = action.payload;
     },
   },
-})
+});
 
 export const { setActiveGroup } = projectSlice.actions;
 

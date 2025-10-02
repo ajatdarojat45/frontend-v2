@@ -6,7 +6,7 @@ import { AudioLinesIcon } from "lucide-react";
 
 type ModelCardProps = {
   model: Model;
-}
+};
 
 export function ModelCard({ model }: ModelCardProps) {
   const simulationCount = useSelector(selectSimulationCountByModelId(model.id));
@@ -32,7 +32,13 @@ export function ModelCard({ model }: ModelCardProps) {
           <span>Contains {simulationCount} simulations</span>
         </div>
         <div className="flex items-center gap-2">
-          <span>Created in {new Date(model.createdAt).toLocaleString(undefined, { month: 'short', day: 'numeric' })}</span>
+          <span>
+            Created in{" "}
+            {new Date(model.createdAt).toLocaleString(undefined, {
+              month: "short",
+              day: "numeric",
+            })}
+          </span>
         </div>
         <div className="flex items-center gap-2">
           <span className="text-pink-400">Contains .geo file</span>
@@ -44,5 +50,5 @@ export function ModelCard({ model }: ModelCardProps) {
         <Button variant="outline">Open model</Button>
       </div>
     </div>
-  )
+  );
 }

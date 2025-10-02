@@ -17,5 +17,5 @@ export function EditorPage() {
         <Link to="/">Back to Home</Link>
       </Button>
     </AppLayout>
-  )
+  );
 }
