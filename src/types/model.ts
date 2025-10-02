@@ -9,15 +9,14 @@ export interface Model {
   updatedAt: string;
 }
 
-
 export interface ModelDetail {
-  hasGeo: boolean
-  id: number
-  modelName: string
-  modelUploadId: number
-  modelUrl: string
-  projectId: number
-  projectName: string
-  projectTag: string
-  simulationCount: number
+  hasGeo: boolean;
+  id: number;
+  modelName: string;
+  modelUploadId: number;
+  modelUrl: string;
+  projectId: number;
+  projectName: string;
+  projectTag: string;
+  simulationCount: number;
 }

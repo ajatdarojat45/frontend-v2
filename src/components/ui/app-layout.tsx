@@ -34,13 +34,13 @@ export function AppLayout({ title, left, right, sidebar, children }: AppLayoutPr
 
           {sidebar}
         </aside>
-        <div className="flex-1 bg-stone-200 border-l border-l-stone-600">
-          <header className="h-16 bg-black flex items-center justify-between px-4">
+        <div className="flex-1 bg-stone-200 border-l border-l-stone-600 flex flex-col">
+          <header className="h-16 bg-black flex items-center justify-between px-4 flex-shrink-0">
             <div className="w-1/3 flex jusstify-start">{left}</div>
             <h1 className="text-white text-lg font-bold">{title}</h1>
             <div className="w-1/3 flex justify-end">{right}</div>
           </header>
-          {children}
+          <div className="flex-1 overflow-hidden">{children}</div>
         </div>
       </main>
     </div>

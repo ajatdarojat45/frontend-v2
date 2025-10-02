@@ -1,20 +1,20 @@
-import { useModelLoader } from '@/hooks/useModelLoader'
+import { useModelLoader } from "@/hooks/useModelLoader";
 
 interface ModelRendererProps {
-  modelId: number
+  modelId: number;
 }
 
 export function ModelRenderer({ modelId }: ModelRendererProps) {
-  const { getCurrentModel, currentModelId } = useModelLoader()
+  const { getCurrentModel, currentModelId } = useModelLoader();
 
   if (currentModelId !== modelId) {
-    return null
+    return null;
   }
 
-  const modelData = getCurrentModel()
+  const modelData = getCurrentModel();
   if (!modelData) {
-    return null
+    return null;
   }
 
-  return <primitive object={modelData.object3D} />
+  return <primitive object={modelData.object3D} />;
 }

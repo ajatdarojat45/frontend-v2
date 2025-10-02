@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { useSelector } from "react-redux";
 import { selectSimulationCountByModelId } from "@/store/simulationSelector";
 import { AudioLinesIcon } from "lucide-react";
+import { Link } from "react-router";
 
 type ModelCardProps = {
   model: Model;
@@ -47,7 +48,9 @@ export function ModelCard({ model }: ModelCardProps) {
 
       {/* Right: CTA */}
       <div className="flex items-center">
-        <Button variant="outline">Open model</Button>
+        <Button variant="outline" asChild>
+          <Link to={`/editor/${model.id}`}>Open model</Link>
+        </Button>
       </div>
     </div>
   );

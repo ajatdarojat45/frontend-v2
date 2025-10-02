@@ -18,7 +18,7 @@ import { AlertCircleIcon, CalendarIcon, ClockIcon, FolderIcon, UsersIcon } from 
 import type React from "react";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { Link, useParams } from "react-router";
+import { useParams } from "react-router";
 
 export function ProjectDetailPage() {
   const dispatch: AppDispatch = useDispatch();
