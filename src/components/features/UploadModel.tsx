@@ -126,7 +126,7 @@ export function UploadModel({ projectId, onSuccess }: UploadModelProps) {
       form.reset();
       if (fileInputRef.current?.value) fileInputRef.current.value = "";
     }
-  }, [open]);
+  }, [open, form]);
 
   return (
     <Dialog onOpenChange={setOpen} open={open}>
@@ -169,7 +169,7 @@ export function UploadModel({ projectId, onSuccess }: UploadModelProps) {
                         <label
                           htmlFor="file-drop"
                           className={cn(
-                            "relative flex flex-col items-center justify-center h-64 border-2 border-dashed rounded-lg bg-muted/50 transition-colors cursor-pointer",
+                            "relative flex flex-col items-center justify-center h-64 border-2 border-dashed rounded-lg transition-colors cursor-pointer",
                             {
                               "border-destructive": fieldState.error,
                               "bg-red-50": fieldState.error,
@@ -212,7 +212,7 @@ export function UploadModel({ projectId, onSuccess }: UploadModelProps) {
                         {field.value && (
                           <div
                             className={cn(
-                              "p-3 border rounded-md bg-muted/30 h-64 flex flex-col justify-center items-center gap-3",
+                              "p-3 border rounded-md h-64 flex flex-col justify-center items-center gap-3",
                               {
                                 "opacity-50 pointer-events-none": isSubmitting,
                               },
@@ -233,17 +233,18 @@ export function UploadModel({ projectId, onSuccess }: UploadModelProps) {
 
                             {/* actions row */}
                             <div className="flex items-center gap-3">
-                              <button
+                              <Button
                                 type="button"
-                                className="px-3 py-1 border rounded-md text-sm bg-white"
+                                variant="secondary"
                                 onClick={() => fileInputRef.current?.click()}
-                                aria-label="Change file"
+                                size="sm"
                               >
                                 Change
-                              </button>
-                              <button
+                              </Button>
+                              <Button
                                 type="button"
-                                className="text-sm text-destructive underline"
+                                size="sm"
+                                variant="destructive"
                                 onClick={() => {
                                   // Reset file input value to allow re-uploading the same file if needed
                                   if (fileInputRef.current?.value) fileInputRef.current.value = "";
@@ -251,10 +252,9 @@ export function UploadModel({ projectId, onSuccess }: UploadModelProps) {
                                   // Reset field value
                                   field.onChange(undefined);
                                 }}
-                                aria-label="Remove file"
                               >
                                 Remove
-                              </button>
+                              </Button>
                             </div>
                           </div>
                         )}

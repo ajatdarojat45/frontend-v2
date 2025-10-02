@@ -13,7 +13,7 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/projects/:id" element={<ProjectDetailPage />} />
-          <Route path="/editor" element={<EditorPage />} />
+          <Route path="/editor/:modelId/:simulationId?" element={<EditorPage />} />
         </Routes>
       </BrowserRouter>
     </ReduxProvider>
