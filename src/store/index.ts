@@ -3,17 +3,19 @@ import { projectApi } from "./projectApi";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import { simulationApi } from "./simulationApi";
 import { projectReducer } from "./projectSlice";
+import { modelApi } from './modelApi'
 
 export const store = configureStore({
   reducer: {
     [projectApi.reducerPath]: projectApi.reducer,
     [simulationApi.reducerPath]: simulationApi.reducer,
     project: projectReducer,
+    [modelApi.reducerPath]: modelApi.reducer,
   },
 
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(projectApi.middleware, simulationApi.middleware),
-});
+    getDefaultMiddleware().concat(projectApi.middleware, simulationApi.middleware, modelApi.middleware),
+})
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<typeof store.getState>;
