@@ -11,76 +11,52 @@ export function EditorPage() {
   const { id } = useParams() as { id: string }
   const { data: model, isLoading, error } = useGetModelQuery(id)
 
-  if (error) {
-    return (
-      <AppLayout
-        title="Editor"
-        action={
-          <Button asChild>
-            <Link to="/">Back to Home</Link>
-          </Button>
-        }
-        sidebar={<h1>Tools</h1>}
-      >
+  const renderContent = () => {
+    if (error) {
+      return (
         <div className="flex flex-col items-center justify-center h-full min-h-[300px]">
           <Alert variant="destructive" className="max-w-sm">
             <AlertCircleIcon />
             <AlertTitle>Error loading model</AlertTitle>
           </Alert>
         </div>
-      </AppLayout>
-    )
-  }
+      )
+    }
 
-  if (isLoading) {
-    return (
-      <AppLayout
-        title="Editor"
-        action={
-          <Button asChild>
-            <Link to="/">Back to Home</Link>
-          </Button>
-        }
-        sidebar={<h1>Tools</h1>}
-      >
+    if (isLoading) {
+      return (
         <div className="flex flex-col items-center justify-center h-full min-h-[300px]">
-          <Loading message="Loading model..." />
+          <Loading message="Loading viewport" />
         </div>
-      </AppLayout>
-    )
-  }
+      )
+    }
 
-  if (!model) {
-    return (
-      <AppLayout
-        title="Editor"
-        action={
-          <Button asChild>
-            <Link to="/">Back to Home</Link>
-          </Button>
-        }
-        sidebar={<h1>Tools</h1>}
-      >
+    if (!model) {
+      return (
         <div className="flex flex-col items-center justify-center h-full min-h-[300px]">
           <div>No model found</div>
         </div>
-      </AppLayout>
+      )
+    }
+
+    return (
+      <div className="h-full">
+        <ViewportCanvas modelUrl={model.modelUrl} modelId={model.id} />
+      </div>
     )
   }
 
   return (
     <AppLayout
-      title={`Editor - ${model.modelName}`}
+      title={model ? `Editor - ${model.modelName}` : "Editor"}
       action={
         <Button asChild>
           <Link to="/">Back to Home</Link>
         </Button>
       }
-      sidebar={<div/>}
+      sidebar={model ? <div/> : <h1>Tools</h1>}
     >
-      <div className="h-full">
-        <ViewportCanvas modelUrl={model.modelUrl} modelId={model.id} />
-      </div>
+      {renderContent()}
     </AppLayout>
   );
 }

@@ -11,13 +11,21 @@ export const modelApi = createApi({
 
     getModel: build.query<ModelDetail, string>({
       query: (id) => `/models/${id}`,
-
       providesTags: (_, __, id) => [{ type: 'Models', id }],
+    }),
+
+    fetchModelFile: build.query<ArrayBuffer, string>({
+      query: (modelUrl) => ({
+        url: modelUrl,
+        responseHandler: (response) => response.arrayBuffer(),
+      }),
+      providesTags: (_, __, modelUrl) => [{ type: 'Models', id: `file-${modelUrl}` }],
     }),
 
   }),
 })
 
 export const {
-  useGetModelQuery
+  useGetModelQuery,
+  useFetchModelFileQuery
 } = modelApi

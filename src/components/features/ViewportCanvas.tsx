@@ -1,8 +1,10 @@
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls, Grid, GizmoHelper, GizmoViewport } from '@react-three/drei'
 import * as THREE from 'three'
 import { Button } from '@/components/ui/button'
+import { useModelLoader } from '@/hooks/useModelLoader'
+import { ModelRenderer } from './ModelRenderer'
 
 interface ViewportCanvasProps {
   modelUrl?: string
@@ -11,6 +13,14 @@ interface ViewportCanvasProps {
 
 export function ViewportCanvas({ modelUrl, modelId }: ViewportCanvasProps) {
   const [cameraType, setCameraType] = useState<'perspective' | 'orthographic'>('perspective')
+  const { loadModelFromUrl, isModelLoaded, isLoading, error } = useModelLoader()
+
+  useEffect(() => {
+    if (modelUrl && modelId && !isModelLoaded(modelId)) {
+      loadModelFromUrl(modelId, modelUrl)
+        .catch(console.error)
+    }
+  }, [modelUrl, modelId, loadModelFromUrl, isModelLoaded])
 
   const toggleCameraType = () => {
     setCameraType(prev => prev === 'perspective' ? 'orthographic' : 'perspective')
@@ -18,6 +28,18 @@ export function ViewportCanvas({ modelUrl, modelId }: ViewportCanvasProps) {
 
   return (
     <div className="w-full h-full relative min-h-[300px] overflow-hidden">
+      {isLoading(modelId) && (
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20 bg-black bg-opacity-50 text-white px-4 py-2 rounded">
+          Loading model...
+        </div>
+      )}
+
+      {error && (
+        <div className="absolute top-4 left-4 z-20 bg-red-500 text-white px-4 py-2 rounded">
+          Error: {error}
+        </div>
+      )}
+
       <Button
         onClick={toggleCameraType}
         variant="outline"
@@ -70,6 +92,8 @@ export function ViewportCanvas({ modelUrl, modelId }: ViewportCanvasProps) {
             >
             <GizmoViewport axisColors={['red', 'green', 'blue']} labelColor="black" />
         </GizmoHelper>
+
+        {modelId && <ModelRenderer modelId={modelId} />}
       </Canvas>
     </div>
   )

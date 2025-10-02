@@ -4,6 +4,7 @@ import { setupListeners } from "@reduxjs/toolkit/query";
 import { simulationApi } from "./simulationApi";
 import { projectReducer } from "./projectSlice";
 import { modelApi } from './modelApi'
+import modelReducer from './modelSlice'
 
 export const store = configureStore({
   reducer: {
@@ -11,10 +12,16 @@ export const store = configureStore({
     [simulationApi.reducerPath]: simulationApi.reducer,
     project: projectReducer,
     [modelApi.reducerPath]: modelApi.reducer,
+    model: modelReducer,
   },
 
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(projectApi.middleware, simulationApi.middleware, modelApi.middleware),
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: ['model/storeRhinoFile'],
+        ignoredPaths: ['model.rhinoFiles'],
+      },
+    }).concat(projectApi.middleware, simulationApi.middleware, modelApi.middleware),
 })
 
 // Infer the `RootState` and `AppDispatch` types from the store itself

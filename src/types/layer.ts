@@ -13,15 +13,30 @@ export interface LayerInfo {
 export interface RhinoFileData {
   modelId: number
   fileName: string
-  rawData: ArrayBuffer // Raw 3dm file data
-  object3D: THREE.Object3D // Parsed ThreeJS object
-  layers: LayerInfo[] // Organized layer structure
+  rawData: ArrayBuffer
+  object3D: THREE.Object3D
+  layers: LayerInfo[]
   loadedAt: number
 }
 
 export interface LayerState {
-  rhinoFiles: Record<number, RhinoFileData> // keyed by model ID
+  rhinoFiles: Record<number, RhinoFileData>
   currentModelId: number | null
   loading: boolean
   error: string | null
+}
+
+export interface RhinoLayerData {
+index: number
+name: string
+color: string
+visible: boolean
+fullPath: string
+parentIndex: number
+}
+
+export interface RhinoObjectAttribute {
+id: string
+layerIndex: number
+name: string
 }
