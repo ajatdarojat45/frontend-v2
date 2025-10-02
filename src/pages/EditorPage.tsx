@@ -1,4 +1,5 @@
 import { CreateSimulation } from "@/components/features/CreateSimulation";
+import { EmptySimulation } from "@/components/features/EmptySimulation";
 import { AppLayout } from "@/components/ui/app-layout";
 import { Button } from "@/components/ui/button";
 import { useGetSimulationsByModelIdQuery } from "@/store/simulationApi";
@@ -23,15 +24,21 @@ export function EditorPage() {
     <AppLayout
       title="Editor"
       sidebar={
-        <div>
-          <CreateSimulation modelId={+modelId} />
-          <pre className="w-full">
-            Model ID: {modelId}
-            <br />
-            Simulation ID: {simulationId}
-          </pre>
+        <div className="h-full">
+          {
+            // If there's a simulationId, show the simulation editor
+            simulationId ? (
+              <div className="w-full h-full flex flex-col">
+                You're editing simulation {simulationId}
+              </div>
+            ) : (
+              // If no simulations exist, show the empty state
+              <EmptySimulation modelId={+modelId} />
+            )
+          }
         </div>
       }
+      right={<CreateSimulation modelId={+modelId} />}
     >
       <Button variant="outline" asChild>
         <Link to="/">Back to Home</Link>
