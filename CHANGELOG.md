@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.4](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.3...v0.0.4) (2025-10-02)
+
+### Features
+
+- add Prettier integration to ESLint configuration for improved code formatting ([1c552ec](https://github.com/ajatdarojat45/frontend-v2/commit/1c552ecd3fe74a1c58851a56504dc80c85e85fe9))
+- implement GroupPicker component and integrate it into HomePage for group selection ([af71078](https://github.com/ajatdarojat45/frontend-v2/commit/af710784a5c6574011a8945950d9f0ad8b2edfd4))
+
+### Bug Fixes
+
+- add no-unused-vars plugin configuration to ESLint for improved linting ([45d03f9](https://github.com/ajatdarojat45/frontend-v2/commit/45d03f9085280a158c527fc779e24d1f44a1f7ad))
+- update no-unused-vars rule configuration for improved TypeScript linting ([8892f74](https://github.com/ajatdarojat45/frontend-v2/commit/8892f743f182bd5ae07104ce81a9aea9893052b5))
+
 ### [0.0.3](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.2...v0.0.3) (2025-10-01)
 
 ### Features
