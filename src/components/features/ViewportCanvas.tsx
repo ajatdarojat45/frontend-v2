@@ -73,15 +73,19 @@ export function ViewportCanvas({ modelUrl, modelId }: ViewportCanvasProps) {
         <pointLight position={[10, 10, 10]} />
         <axesHelper args={[50 / 2]} />
         <Grid
-          position={[0, 0, -0.00005]}
+          position={[0, 0, 0]}
           rotation={[Math.PI / 2, 0, 0]}
           args={[50, 50]}
           cellSize={1}
           cellThickness={0.7}
           cellColor="#5B6D6D"
           sectionSize={5}
-          sectionThickness={1}
+          sectionThickness={1.2}
           sectionColor="#5B6D6D"
+          infiniteGrid={false}
+          fadeDistance={100}
+          fadeStrength={1}
+          side={2}
         />
         <OrbitControls
           enablePan={true}
