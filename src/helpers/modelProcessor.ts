@@ -18,8 +18,8 @@ export async function processModelFromUrl(
     const firstFile = extractedFiles[0];
 
     const [rhinoDoc, object3D] = await Promise.all([
-      parseFileAsRhinoDoc(firstFile.data),
-      parseFileAsThreeObject(firstFile.data),
+      parseFileAsRhinoDoc(firstFile.data.slice()),
+      parseFileAsThreeObject(firstFile.data.slice()),
     ]);
 
     const layers = await createLayerStructure(object3D, rhinoDoc);
@@ -50,8 +50,8 @@ export async function processModelFromData(
 ): Promise<RhinoFileData> {
   try {
     const [rhinoDoc, object3D] = await Promise.all([
-      parseFileAsRhinoDoc(fileData),
-      parseFileAsThreeObject(fileData),
+      parseFileAsRhinoDoc(fileData.slice()),
+      parseFileAsThreeObject(fileData.slice()),
     ]);
 
     const layers = await createLayerStructure(object3D, rhinoDoc);
