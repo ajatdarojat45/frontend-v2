@@ -1,17 +1,19 @@
-import { ProjectCard } from "@/components/features/ProjectCard"
-import { Alert, AlertTitle } from "@/components/ui/alert"
-import { AppLayout } from "@/components/ui/app-layout"
-import { Button } from "@/components/ui/button"
-import { Loading } from "@/components/ui/loading"
-import { useCreateProjectMutation, useGetProjectsQuery } from "@/store/projectApi"
-import { AlertCircleIcon } from "lucide-react"
-import type React from "react"
-import { Link } from "react-router"
+import { ProjectForm } from "@/components/features/ProjectForm";
+import { GroupPicker } from "@/components/features/GroupPicker";
+import { ProjectCard } from "@/components/features/ProjectCard";
+import { Alert, AlertTitle } from "@/components/ui/alert";
+import { AppLayout } from "@/components/ui/app-layout";
+import { Loading } from "@/components/ui/loading";
+import { useGetProjectsQuery } from "@/store/projectApi";
+import { selectProjectsByActiveGroup } from "@/store/projectSelector";
+import { AlertCircleIcon } from "lucide-react";
+import type React from "react";
+import { useSelector } from "react-redux";
+import { Link } from "react-router";
 
 export function HomePage() {
-  const { data: projects, isLoading, error } = useGetProjectsQuery()
-  const [createProject] = useCreateProjectMutation()
-
+  const { isLoading, error } = useGetProjectsQuery();
+  const projects = useSelector(selectProjectsByActiveGroup);
 
   let content: React.ReactNode = null;
 
@@ -35,7 +37,7 @@ export function HomePage() {
   } else {
     content = (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
-        {projects.map(project => (
+        {projects.map((project) => (
           <Link key={project.id} to={`/projects/${project.id}`}>
             <ProjectCard project={project} />
           </Link>
@@ -47,11 +49,8 @@ export function HomePage() {
   return (
     <AppLayout
       title="Projects"
-      action={
-        <Button onClick={() => createProject({ name: "New Project", description: "Project Description", group: "Project Group" })} variant='secondary'>
-          Create new project
-        </Button>
-      }
+      left={<GroupPicker />}
+      right={<ProjectForm />}
       sidebar={<h1>Sidebar</h1>}
     >
       {content}

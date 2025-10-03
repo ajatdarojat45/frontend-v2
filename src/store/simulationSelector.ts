@@ -7,8 +7,9 @@ import { selectModelIdsByProjectId } from "./projectSelector";
 // Selector to get the count of simulations for a given modelId
 export const selectSimulationCountByModelId = (modelId: number) =>
   createSelector(
-    (state: RootState) => simulationApi.endpoints.getSimulationsByModelId.select(modelId)(state)?.data,
-    (simulations) => Array.isArray(simulations) ? simulations.length : 0
+    (state: RootState) =>
+      simulationApi.endpoints.getSimulationsByModelId.select(modelId)(state)?.data,
+    (simulations) => (Array.isArray(simulations) ? simulations.length : 0),
   );
 
 // Selector to get the total simulation count for a given projectId
@@ -21,6 +22,8 @@ export const selectSimulationCountByProjectId = createSelector(
       total += selectSimulationCountByModelId(modelId)(state);
     }
     return total;
-  }
-)
+  },
+);
 
+// Selector to get the active simulation from the state
+export const selectActiveSimulation = (state: RootState) => state.simulation.activeSimulation;
