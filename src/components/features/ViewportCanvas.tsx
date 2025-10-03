@@ -8,13 +8,17 @@ import type { ViewportCanvasProps } from "@/types/modelViewport";
 
 export function ViewportCanvas({ modelUrl, modelId }: ViewportCanvasProps) {
   const [cameraType, setCameraType] = useState<"perspective" | "orthographic">("perspective");
-  const { loadModelFromUrl, isModelLoaded, isLoading, error } = useModelLoader();
+  const { loadModelFromUrl, isModelLoaded, isLoading, error, setActiveModel } = useModelLoader();
 
   useEffect(() => {
-    if (modelUrl && modelId && !isModelLoaded(modelId)) {
-      loadModelFromUrl(modelId, modelUrl).catch(console.error);
+    if (modelUrl && modelId) {
+      if (!isModelLoaded(modelId)) {
+        loadModelFromUrl(modelId, modelUrl).catch(console.error);
+      } else {
+        setActiveModel(modelId);
+      }
     }
-  }, [modelUrl, modelId, loadModelFromUrl, isModelLoaded]);
+  }, [modelUrl, modelId, loadModelFromUrl, isModelLoaded, setActiveModel]);
 
   const toggleCameraType = () => {
     setCameraType((prev) => (prev === "perspective" ? "orthographic" : "perspective"));
