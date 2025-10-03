@@ -77,6 +77,7 @@ export function ProjectCard(props: ProjectCardProps) {
               <ProjectForm
                 defaultValues={project}
                 id={project.id}
+                groupOnly
                 trigger={
                   <DropdownMenuItem
                     onSelect={(e) => e.preventDefault()}

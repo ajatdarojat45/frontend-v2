@@ -49,8 +49,9 @@ type ProjectFormProps = {
   id?: number;
   defaultValues?: Partial<ProjectFormData>;
   trigger?: React.ReactNode;
+  groupOnly?: boolean; // If true, only show the group select field
 };
-export function ProjectForm({ id, defaultValues, trigger }: ProjectFormProps) {
+export function ProjectForm({ id, defaultValues, trigger, groupOnly }: ProjectFormProps) {
   const form = useForm<ProjectFormData>({
     resolver: zodResolver(ProjectFormSchema),
     defaultValues: defaultValues ?? {
@@ -139,37 +140,41 @@ export function ProjectForm({ id, defaultValues, trigger }: ProjectFormProps) {
             </DialogHeader>
 
             <div className="space-y-4 my-6">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Name</FormLabel>
-                    <FormControl>
-                      <Input disabled={isLoading} placeholder="Project name" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              {!groupOnly && (
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Name</FormLabel>
+                      <FormControl>
+                        <Input disabled={isLoading} placeholder="Project name" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
 
-              <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Description</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        {...field}
-                        placeholder="Short project description"
-                        disabled={isLoading}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              {!groupOnly && (
+                <FormField
+                  control={form.control}
+                  name="description"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Description</FormLabel>
+                      <FormControl>
+                        <Textarea
+                          {...field}
+                          placeholder="Short project description"
+                          disabled={isLoading}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
 
               <FormField
                 control={form.control}
@@ -214,7 +219,7 @@ export function ProjectForm({ id, defaultValues, trigger }: ProjectFormProps) {
                 </Button>
               </DialogClose>
               <Button disabled={isLoading} type="submit">
-                {isLoading ? (isEdit ? "Updating..." : "Creating...") : label}
+                {isLoading ? "Submitting..." : "Submit"}
               </Button>
             </DialogFooter>
           </form>
