@@ -28,8 +28,8 @@ export function EditorPage() {
       }
 
       // If no simulationId or invalid simulationId, redirect to the first simulation
-      const firstSimulation = simulations[0];
-      dispatch(setActiveSimulation(firstSimulation));
+      const { id: firstSimulationId } = simulations[0];
+      navigate(`/editor/${modelId}/${firstSimulationId}`, { replace: true });
     }
   }, [simulations, simulationId, modelId, navigate, dispatch]);
 
