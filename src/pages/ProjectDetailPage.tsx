@@ -88,7 +88,7 @@ export function ProjectDetailPage() {
             {project.models && project.models.length > 0 ? (
               <div className="space-y-6">
                 {project.models.map((model) => (
-                  <ModelCard key={model.id} model={model} />
+                  <ModelCard key={model.id} projectId={id} model={model} />
                 ))}
               </div>
             ) : (

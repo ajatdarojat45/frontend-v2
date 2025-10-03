@@ -3,13 +3,22 @@ import { Button } from "@/components/ui/button";
 import { AudioLinesIcon } from "lucide-react";
 import { useGetSimulationsByModelIdQuery } from "@/store/simulationApi";
 import { Link } from "react-router";
+import { useDeleteModelMutation } from "@/store/modelApi";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
+import { useDispatch } from "react-redux";
+import type { AppDispatch } from "@/store";
+import { projectApi } from "@/store/projectApi";
+import { toast } from "sonner";
 
 type ModelCardProps = {
   model: Model;
+  projectId: string;
 };
 
-export function ModelCard({ model }: ModelCardProps) {
+export function ModelCard({ model, projectId }: ModelCardProps) {
+  const dispatch: AppDispatch = useDispatch();
   const { data: simulations } = useGetSimulationsByModelIdQuery(model.id);
+  const [deleteModel] = useDeleteModelMutation();
 
   return (
     <div
@@ -46,10 +55,28 @@ export function ModelCard({ model }: ModelCardProps) {
       </div>
 
       {/* Right: CTA */}
-      <div className="flex items-center">
+      <div className="flex flex-col gap-3 items-center">
         <Button asChild variant="outline">
           <Link to={"/editor/" + model.id}>Open model</Link>
         </Button>
+        <ConfirmDialog
+          onConfirm={async () => {
+            try {
+              await deleteModel(model.id).unwrap();
+
+              // Invalidate project tag so RTK Query will refetch any queries that provide this tag
+              dispatch(projectApi.util.invalidateTags([{ type: "Projects", id: projectId }]));
+
+              toast.success("Model deleted successfully");
+            } catch {
+              toast.error("Failed to delete model");
+            }
+          }}
+          title="Delete model"
+          description="This action cannot be undone."
+          confirmLabel="Delete"
+          confirmVariant="destructive"
+        />
       </div>
     </div>
   );
