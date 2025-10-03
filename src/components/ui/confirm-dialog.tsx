@@ -93,28 +93,19 @@ export function ConfirmDialog({
           </Button>
         )}
       </AlertDialogTrigger>
-
-      <AlertDialogContent
-        onPointerDown={(e) => e.stopPropagation()}
-        onClick={(e) => e.stopPropagation()}
-      >
+      <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>{title}</AlertDialogTitle>
           {description ? <AlertDialogDescription>{description}</AlertDialogDescription> : null}
         </AlertDialogHeader>
 
         <AlertDialogFooter>
-          <AlertDialogCancel disabled={isProcessing} onClick={(e) => e.stopPropagation()}>
-            {cancelLabel}
-          </AlertDialogCancel>
+          <AlertDialogCancel disabled={isProcessing}>{cancelLabel}</AlertDialogCancel>
 
           {/* Use a regular Button for the confirm action so Radix doesn't auto-close
               the dialog before our async handler finishes. */}
           <Button
-            onClick={(e) => {
-              e.stopPropagation();
-              handleConfirm();
-            }}
+            onClick={handleConfirm}
             disabled={isProcessing || disabled}
             aria-busy={isProcessing}
             variant={confirmVariant}

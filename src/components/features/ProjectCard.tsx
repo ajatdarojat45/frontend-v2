@@ -50,12 +50,10 @@ export function ProjectCard(props: ProjectCardProps) {
       <CardHeader className="overflow-hidden relative">
         <CardTitle className="truncate">{project.name}</CardTitle>
 
-        <CardAction>
+        {/* stopPropagation on dropdown open, to avoid event bubbling which cause navigation to detail project */}
+        <CardAction onClick={(e) => e.stopPropagation()}>
           <DropdownMenu>
-            <DropdownMenuTrigger
-              className="cursor-pointer absolute right-0 px-4"
-              onClick={(e) => e.stopPropagation()}
-            >
+            <DropdownMenuTrigger className="cursor-pointer absolute right-0 px-4">
               <EllipsisVerticalIcon />
             </DropdownMenuTrigger>
             <DropdownMenuContent>
