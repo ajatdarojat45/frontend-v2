@@ -3,12 +3,14 @@ import { projectApi } from "./projectApi";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import { simulationApi } from "./simulationApi";
 import { projectReducer } from "./projectSlice";
+import { simulationReducer } from "./simulationSlice";
 
 export const store = configureStore({
   reducer: {
     [projectApi.reducerPath]: projectApi.reducer,
     [simulationApi.reducerPath]: simulationApi.reducer,
     project: projectReducer,
+    simulation: simulationReducer,
   },
 
   middleware: (getDefaultMiddleware) =>

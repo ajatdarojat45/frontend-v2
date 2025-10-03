@@ -26,6 +26,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { useCreateSimulationMutation } from "@/store/simulationApi";
 import { toast } from "sonner";
+import { useNavigate } from "react-router";
 
 const CreateSimulationSchema = z.object({
   name: z.string().min(3, { message: "Name must be at least 3 characters." }),
@@ -38,6 +39,7 @@ type CreateSimulationProps = {
   modelId: number;
 };
 export function CreateSimulation({ modelId }: CreateSimulationProps) {
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const form = useForm<CreateSimulationData>({
     resolver: zodResolver(CreateSimulationSchema),
@@ -57,7 +59,7 @@ export function CreateSimulation({ modelId }: CreateSimulationProps) {
 
   const handleSubmit = async (data: CreateSimulationData) => {
     try {
-      await createSimulation({
+      const result = await createSimulation({
         ...data,
         modelId,
         layerIdByMaterialId: {},
@@ -65,6 +67,7 @@ export function CreateSimulation({ modelId }: CreateSimulationProps) {
           simulationSettings: {},
         },
       }).unwrap();
+      navigate(`/editor/${modelId}/${result.id}`);
       toast.success("Simulation created successfully");
       setOpen(false);
     } catch {

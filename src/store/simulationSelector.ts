@@ -24,3 +24,6 @@ export const selectSimulationCountByProjectId = createSelector(
     return total;
   },
 );
+
+// Selector to get the active simulation from the state
+export const selectActiveSimulation = (state: RootState) => state.simulation.activeSimulation;
