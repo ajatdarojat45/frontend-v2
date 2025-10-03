@@ -218,8 +218,8 @@ export function ProjectForm({ id, defaultValues, trigger, groupOnly }: ProjectFo
                   Cancel
                 </Button>
               </DialogClose>
-              <Button disabled={isLoading} type="submit">
-                {isLoading ? "Submitting..." : "Submit"}
+              <Button disabled={isLoading || groupOnly} type="submit">
+                {isLoading ? "Submitting..." : "Submit"} {groupOnly && "(need backend adjustment)"}
               </Button>
             </DialogFooter>
           </form>
