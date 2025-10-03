@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.5](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.4...v0.0.5) (2025-10-03)
+
+### Features
+
+- add EmptySimulation component for handling no simulations state in EditorPage ([fc7fb04](https://github.com/ajatdarojat45/frontend-v2/commit/fc7fb04efd27727240a4a05c4e4f94a2229b7c4d))
+- add groupOnly prop to ProjectForm for conditional field rendering ([f8531b2](https://github.com/ajatdarojat45/frontend-v2/commit/f8531b23c7f0411b003940d14fbf5ea43304a61f))
+- add model deletion functionality and integrate alert dialog components ([851d17e](https://github.com/ajatdarojat45/frontend-v2/commit/851d17ec3dbf96e7112ad712e8b5845a9b545891))
+- add project deletion functionality and integrate dropdown menu for actions ([ae18483](https://github.com/ajatdarojat45/frontend-v2/commit/ae18483994bc020e7fba7d980efb37c9fa2a9e5f))
+- add redirect for invalid simulationId in EditorPage ([d8e47af](https://github.com/ajatdarojat45/frontend-v2/commit/d8e47afaf77991cb9dbdf546434a6b4753704e9d))
+- Create simulation ([ce4cb39](https://github.com/ajatdarojat45/frontend-v2/commit/ce4cb392e78b81a0f393d8b144444a471b4607e0))
+- enhance CreateSimulation component with loading state and update EditorPage layout ([c8517bf](https://github.com/ajatdarojat45/frontend-v2/commit/c8517bff784730a5fbe82ae2ff885377f5ab21be))
+- Handle not found page ([4822380](https://github.com/ajatdarojat45/frontend-v2/commit/48223802b7d4b6a3edb033f7fb35ac6cd3a7cd21))
+- implement SimulationPicker component and integrate active simulation management in EditorPage ([554d520](https://github.com/ajatdarojat45/frontend-v2/commit/554d5205a6bfd0f2453bbea4767daaf335954eb0))
+- integrate ProjectForm for project creation and editing in HomePage ([25745a5](https://github.com/ajatdarojat45/frontend-v2/commit/25745a5442d03ca3de677dbeb297f3606bbb5ab6))
+
+### Bug Fixes
+
+- disable submit button when groupOnly prop is true ([91e0660](https://github.com/ajatdarojat45/frontend-v2/commit/91e0660c260e7587c3d773b4cc938e26c7dbc8cb))
+- prevent event bubbling on dropdown and dialog interactions ([8013cd5](https://github.com/ajatdarojat45/frontend-v2/commit/8013cd516e66053d4707a089adecb5c2bb51ef65))
+- redirect to first simulation and set it as active when no valid simulationId is provided ([e6c8b68](https://github.com/ajatdarojat45/frontend-v2/commit/e6c8b6822ef130d78cfb16afe724c62367fa4d6d))
+- update dependencies in form reset effects and improve code consistency ([4b88837](https://github.com/ajatdarojat45/frontend-v2/commit/4b88837f69f3d7b5da61fdb1c4019fb977f43a5e))
+
 ### [0.0.4](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.3...v0.0.4) (2025-10-02)
 
 ### Features
