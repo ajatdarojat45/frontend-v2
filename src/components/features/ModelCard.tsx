@@ -1,16 +1,37 @@
 import type { Model } from "@/types/model";
 import { Button } from "@/components/ui/button";
-import { useSelector } from "react-redux";
-import { selectSimulationCountByModelId } from "@/store/simulationSelector";
 import { AudioLinesIcon } from "lucide-react";
+import { useGetSimulationsByModelIdQuery } from "@/store/simulationApi";
 import { Link } from "react-router";
+import { useDeleteModelMutation } from "@/store/modelApi";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
+import { useDispatch } from "react-redux";
+import type { AppDispatch } from "@/store";
+import { projectApi } from "@/store/projectApi";
+import { toast } from "sonner";
 
 type ModelCardProps = {
   model: Model;
+  projectId: string;
 };
 
-export function ModelCard({ model }: ModelCardProps) {
-  const simulationCount = useSelector(selectSimulationCountByModelId(model.id));
+export function ModelCard({ model, projectId }: ModelCardProps) {
+  const dispatch: AppDispatch = useDispatch();
+  const { data: simulations } = useGetSimulationsByModelIdQuery(model.id);
+  const [deleteModel] = useDeleteModelMutation();
+
+  const handleDeleteModel = async () => {
+    try {
+      await deleteModel(model.id).unwrap();
+
+      // Invalidate project tag so RTK Query will refetch any queries that provide this tag
+      dispatch(projectApi.util.invalidateTags([{ type: "Projects", id: projectId }]));
+
+      toast.success("Model deleted successfully");
+    } catch {
+      toast.error("Failed to delete model");
+    }
+  };
 
   return (
     <div
@@ -30,7 +51,7 @@ export function ModelCard({ model }: ModelCardProps) {
       {/* Center-right: meta info */}
       <div className="flex flex-col gap-2 items-center md:items-start text-slate-500 text-lg min-w-[220px]">
         <div className="flex items-center gap-2">
-          <span>Contains {simulationCount} simulations</span>
+          <span>Contains {simulations?.length || 0} simulations</span>
         </div>
         <div className="flex items-center gap-2">
           <span>
@@ -47,10 +68,17 @@ export function ModelCard({ model }: ModelCardProps) {
       </div>
 
       {/* Right: CTA */}
-      <div className="flex items-center">
-        <Button variant="outline" asChild>
-          <Link to={`/editor/${model.id}`}>Open model</Link>
+      <div className="flex flex-col gap-3 items-center">
+        <Button asChild variant="outline">
+          <Link to={"/editor/" + model.id}>Open model</Link>
         </Button>
+        <ConfirmDialog
+          onConfirm={handleDeleteModel}
+          title="Delete model"
+          description="This action cannot be undone."
+          confirmLabel="Delete model"
+          confirmVariant="destructive"
+        />
       </div>
     </div>
   );

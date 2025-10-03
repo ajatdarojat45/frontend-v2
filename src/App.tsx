@@ -1,5 +1,5 @@
 import { Provider as ReduxProvider } from "react-redux";
-import { BrowserRouter, Route, Routes } from "react-router";
+import { Navigate, BrowserRouter, Route, Routes } from "react-router";
 import { Toaster } from "@/components/ui/sonner";
 import { HomePage } from "./pages/HomePage";
 import { EditorPage } from "./pages/EditorPage";
@@ -13,7 +13,10 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/projects/:id" element={<ProjectDetailPage />} />
-          <Route path="/editor/:id" element={<EditorPage />} />
+          <Route path="/editor/:modelId/:simulationId?" element={<EditorPage />} />
+
+          {/* Not Found */}
+          <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </BrowserRouter>
     </ReduxProvider>

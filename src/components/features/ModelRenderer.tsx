@@ -1,8 +1,5 @@
 import { useModelLoader } from "@/hooks/useModelLoader";
-
-interface ModelRendererProps {
-  modelId: number;
-}
+import type { ModelRendererProps } from "@/types/modelViewport";
 
 export function ModelRenderer({ modelId }: ModelRendererProps) {
   const { getCurrentModel, currentModelId } = useModelLoader();

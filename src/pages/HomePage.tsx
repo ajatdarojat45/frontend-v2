@@ -1,4 +1,4 @@
-import { CreateProject } from "@/components/features/CreateProject";
+import { ProjectForm } from "@/components/features/ProjectForm";
 import { GroupPicker } from "@/components/features/GroupPicker";
 import { ProjectCard } from "@/components/features/ProjectCard";
 import { Alert, AlertTitle } from "@/components/ui/alert";
@@ -50,7 +50,7 @@ export function HomePage() {
     <AppLayout
       title="Projects"
       left={<GroupPicker />}
-      right={<CreateProject />}
+      right={<ProjectForm />}
       sidebar={<h1>Sidebar</h1>}
     >
       {content}

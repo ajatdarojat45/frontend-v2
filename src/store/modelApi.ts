@@ -8,6 +8,14 @@ export const modelApi = createApi({
   tagTypes: ["Models"],
 
   endpoints: (build) => ({
+    deleteModel: build.mutation<void, number>({
+      query: (modelId) => ({
+        url: `/models/${modelId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: (_, __, id) => [{ type: "Models", id: id }],
+    }),
+
     getModel: build.query<ModelDetail, string>({
       query: (id) => `/models/${id}`,
       providesTags: (_, __, id) => [{ type: "Models", id }],
@@ -23,4 +31,4 @@ export const modelApi = createApi({
   }),
 });
 
-export const { useGetModelQuery, useFetchModelFileQuery } = modelApi;
+export const { useDeleteModelMutation, useGetModelQuery, useFetchModelFileQuery } = modelApi;

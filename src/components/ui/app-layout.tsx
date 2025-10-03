@@ -15,7 +15,7 @@ export function AppLayout({ title, left, right, sidebar, children }: AppLayoutPr
       {/* Header */}
 
       <main className="flex flex-1">
-        <aside className="w-64 md:w-72 lg:w-80  bg-black/95 text-white">
+        <aside className="w-64 md:w-72 lg:w-80  bg-black/95">
           <Link to="/" className="h-16 flex border-b border-b-stone-600 items-center px-4">
             {/* TODO: Chorus Logo, update it later */}
             <svg

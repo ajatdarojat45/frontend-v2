@@ -1,56 +1,63 @@
-import { ViewportCanvas } from "@/components/features/ViewportCanvas";
+import { CreateSimulation } from "@/components/features/CreateSimulation";
+import { EmptySimulation } from "@/components/features/EmptySimulation";
+import { SimulationPicker } from "@/components/features/SimulationPicker";
+import { ModelViewer } from "@/components/features/ModelViewer";
 import { AppLayout } from "@/components/ui/app-layout";
-import { useParams } from "react-router";
-import { useGetModelQuery } from "@/store/modelApi";
-import { Loading } from "@/components/ui/loading";
-import { Alert, AlertTitle } from "@/components/ui/alert";
-import { AlertCircleIcon } from "lucide-react";
+import { useGetSimulationsByModelIdQuery } from "@/store/simulationApi";
+import { setActiveSimulation } from "@/store/simulationSlice";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate, useParams } from "react-router";
 
 export function EditorPage() {
-  const { id } = useParams() as { id: string };
-  const { data: model, isLoading, error } = useGetModelQuery(id);
+  const navigate = useNavigate();
+  const { modelId, simulationId } = useParams() as { modelId: string; simulationId?: string };
+  const { data: simulations } = useGetSimulationsByModelIdQuery(+modelId);
+  const dispatch = useDispatch();
 
-  const renderContent = () => {
-    if (error) {
-      return (
-        <div className="flex flex-col items-center justify-center h-full min-h-[300px]">
-          <Alert variant="destructive" className="max-w-sm">
-            <AlertCircleIcon />
-            <AlertTitle>Error loading model</AlertTitle>
-          </Alert>
-        </div>
-      );
+  // If no simulationId is provided, redirect to the first simulation
+  // Once the simulations are created, the effect will run again
+  useEffect(() => {
+    if (simulations && simulations.length > 0) {
+      // If simulationId is provided, find the active simulation and set it in the store
+      if (simulationId) {
+        const activeSimulation = simulations.find((sim) => sim.id === +simulationId);
+        if (activeSimulation) {
+          dispatch(setActiveSimulation(activeSimulation));
+          return;
+        }
+      }
+
+      // If no simulationId or invalid simulationId, redirect to the first simulation
+      const { id: firstSimulationId } = simulations[0];
+      navigate(`/editor/${modelId}/${firstSimulationId}`, { replace: true });
     }
-
-    if (isLoading) {
-      return (
-        <div className="flex flex-col items-center justify-center h-full min-h-[300px]">
-          <Loading message="Loading viewport" />
-        </div>
-      );
-    }
-
-    if (!model) {
-      return (
-        <div className="flex flex-col items-center justify-center h-full min-h-[300px]">
-          <div>No model found</div>
-        </div>
-      );
-    }
-
-    return (
-      <div className="h-full" style={{ height: "calc(100vh - 4rem)" }}>
-        <ViewportCanvas modelUrl={model.modelUrl} modelId={model.id} />
-      </div>
-    );
-  };
+  }, [simulations, simulationId, modelId, navigate, dispatch]);
 
   return (
     <AppLayout
-      title={model ? `Editor - ${model.modelName}` : "Editor"}
-      sidebar={model ? <div /> : <h1>Tools</h1>}
+      title="Editor"
+      sidebar={
+        <div className="h-full">
+          {
+            // If there's a simulationId, show the simulation editor
+            simulationId ? (
+              <div className="w-full h-full flex flex-col p-4">
+                <SimulationPicker modelId={+modelId} simulationId={+simulationId} />
+                You're editing simulation {simulationId}
+              </div>
+            ) : (
+              // If no simulations exist, show the empty state
+              <EmptySimulation modelId={+modelId} />
+            )
+          }
+        </div>
+      }
+      right={<CreateSimulation modelId={+modelId} />}
     >
-      {renderContent()}
+      <div className="h-full w-full">
+        <ModelViewer modelId={modelId} />
+      </div>
     </AppLayout>
   );
 }

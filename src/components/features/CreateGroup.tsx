@@ -46,7 +46,7 @@ export function CreateGroup({ onCreate }: CreateGroupProps) {
   // Reset form when dialog is closed
   useEffect(() => {
     if (!open) form.reset();
-  }, [open]);
+  }, [open, form]);
 
   const onSubmit = (data: CreateGroupData) => {
     onCreate(data);

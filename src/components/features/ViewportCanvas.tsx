@@ -4,11 +4,7 @@ import { OrbitControls, Grid, GizmoHelper, GizmoViewport } from "@react-three/dr
 import { Button } from "@/components/ui/button";
 import { useModelLoader } from "@/hooks/useModelLoader";
 import { ModelRenderer } from "./ModelRenderer";
-
-interface ViewportCanvasProps {
-  modelUrl?: string;
-  modelId?: number;
-}
+import type { ViewportCanvasProps } from "@/types/modelViewport";
 
 export function ViewportCanvas({ modelUrl, modelId }: ViewportCanvasProps) {
   const [cameraType, setCameraType] = useState<"perspective" | "orthographic">("perspective");
@@ -45,7 +41,7 @@ export function ViewportCanvas({ modelUrl, modelId }: ViewportCanvasProps) {
         onClick={toggleCameraType}
         variant="outline"
         size="sm"
-        className="absolute top-2 right-2 z-10 bg-gray-800 text-white border-gray-600 hover:bg-gray-700 text-xs sm:text-sm"
+        className="absolute top-2 right-2 z-10 cursor-pointer hover:bg-accent"
       >
         <span className="hidden sm:inline">
           {cameraType === "perspective" ? "Perspective" : "Orthographic"}
@@ -53,10 +49,18 @@ export function ViewportCanvas({ modelUrl, modelId }: ViewportCanvasProps) {
         <span className="sm:hidden">{cameraType === "perspective" ? "Persp" : "Ortho"}</span>
       </Button>
       <Canvas
+        key={cameraType}
         camera={{
           position: [-10, -10, 10],
           fov: 75,
           up: [0, 0, 1],
+          ...(cameraType === "orthographic" && {
+            zoom: 1,
+            left: -10,
+            right: 10,
+            top: 10,
+            bottom: -10,
+          }),
         }}
         orthographic={cameraType === "orthographic"}
         style={{ background: "#596B6B" }}
