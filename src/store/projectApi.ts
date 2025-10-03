@@ -38,9 +38,25 @@ export const projectApi = createApi({
       // that newly created project could show up in any lists.
       invalidatesTags: [{ type: "Projects", id: "LIST" }],
     }),
+    // Delete a project
+    deleteProject: build.mutation<Project, string>({
+      query: (id) => ({
+        url: `/projects/${id}`,
+        method: "DELETE",
+      }),
+
+      // Invalidates all Project-type queries providing the `LIST` id - after all, depending of the sort order,
+      // that newly created project could show up in any lists.
+      invalidatesTags: [{ type: "Projects", id: "LIST" }],
+    }),
   }),
 });
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useGetProjectsQuery, useGetProjectQuery, useCreateProjectMutation } = projectApi;
+export const {
+  useGetProjectsQuery,
+  useGetProjectQuery,
+  useCreateProjectMutation,
+  useDeleteProjectMutation,
+} = projectApi;

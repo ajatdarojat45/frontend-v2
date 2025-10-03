@@ -20,6 +20,19 @@ export function ModelCard({ model, projectId }: ModelCardProps) {
   const { data: simulations } = useGetSimulationsByModelIdQuery(model.id);
   const [deleteModel] = useDeleteModelMutation();
 
+  const handleDeleteModel = async () => {
+    try {
+      await deleteModel(model.id).unwrap();
+
+      // Invalidate project tag so RTK Query will refetch any queries that provide this tag
+      dispatch(projectApi.util.invalidateTags([{ type: "Projects", id: projectId }]));
+
+      toast.success("Model deleted successfully");
+    } catch {
+      toast.error("Failed to delete model");
+    }
+  };
+
   return (
     <div
       key={model.id}
@@ -60,21 +73,10 @@ export function ModelCard({ model, projectId }: ModelCardProps) {
           <Link to={"/editor/" + model.id}>Open model</Link>
         </Button>
         <ConfirmDialog
-          onConfirm={async () => {
-            try {
-              await deleteModel(model.id).unwrap();
-
-              // Invalidate project tag so RTK Query will refetch any queries that provide this tag
-              dispatch(projectApi.util.invalidateTags([{ type: "Projects", id: projectId }]));
-
-              toast.success("Model deleted successfully");
-            } catch {
-              toast.error("Failed to delete model");
-            }
-          }}
+          onConfirm={handleDeleteModel}
           title="Delete model"
           description="This action cannot be undone."
-          confirmLabel="Delete"
+          confirmLabel="Delete model"
           confirmVariant="destructive"
         />
       </div>
