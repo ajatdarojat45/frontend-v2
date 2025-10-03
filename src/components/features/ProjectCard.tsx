@@ -16,6 +16,7 @@ import { EllipsisVerticalIcon } from "lucide-react";
 import { useDeleteProjectMutation } from "@/store/projectApi";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { toast } from "sonner";
+import { ProjectForm } from "./ProjectForm";
 
 type ProjectCardProps = {
   project: Project;
@@ -73,7 +74,18 @@ export function ProjectCard(props: ProjectCardProps) {
                   </DropdownMenuItem>
                 }
               />
-              <DropdownMenuItem>Change Group</DropdownMenuItem>
+              <ProjectForm
+                defaultValues={project}
+                id={project.id}
+                trigger={
+                  <DropdownMenuItem
+                    onSelect={(e) => e.preventDefault()}
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    Change Group
+                  </DropdownMenuItem>
+                }
+              />
             </DropdownMenuContent>
           </DropdownMenu>
         </CardAction>

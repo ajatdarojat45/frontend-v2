@@ -38,6 +38,22 @@ export const projectApi = createApi({
       // that newly created project could show up in any lists.
       invalidatesTags: [{ type: "Projects", id: "LIST" }],
     }),
+
+    // Update a project
+    updateProject: build.mutation<Project, Partial<Project> & Pick<Project, "id">>({
+      query: ({ id, ...body }) => ({
+        url: `/projects/${id}`,
+        method: "PATCH",
+        body,
+      }),
+
+      // Invalidates the specific Project-type query with the given id
+      invalidatesTags: (_, __, { id }) => [
+        { type: "Projects", id: "LIST" },
+        { type: "Projects", id },
+      ],
+    }),
+
     // Delete a project
     deleteProject: build.mutation<Project, string>({
       query: (id) => ({
@@ -58,5 +74,6 @@ export const {
   useGetProjectsQuery,
   useGetProjectQuery,
   useCreateProjectMutation,
+  useUpdateProjectMutation,
   useDeleteProjectMutation,
 } = projectApi;

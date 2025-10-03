@@ -34,28 +34,38 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
-import { useCreateProjectMutation } from "@/store/projectApi";
+import { useCreateProjectMutation, useUpdateProjectMutation } from "@/store/projectApi";
 import { Textarea } from "@/components/ui/textarea";
 
-const CreateProjectSchema = z.object({
+const ProjectFormSchema = z.object({
   name: z.string().min(3, { message: "Name must be at least 3 characters." }),
   description: z.string().optional(),
   group: z.string().optional(),
 });
 
-type CreateProjectData = z.infer<typeof CreateProjectSchema>;
+type ProjectFormData = z.infer<typeof ProjectFormSchema>;
 
-export function CreateProject() {
-  const form = useForm<CreateProjectData>({
-    resolver: zodResolver(CreateProjectSchema),
-    defaultValues: {
+type ProjectFormProps = {
+  id?: number;
+  defaultValues?: Partial<ProjectFormData>;
+  trigger?: React.ReactNode;
+};
+export function ProjectForm({ id, defaultValues, trigger }: ProjectFormProps) {
+  const form = useForm<ProjectFormData>({
+    resolver: zodResolver(ProjectFormSchema),
+    defaultValues: defaultValues ?? {
       name: "",
       description: "",
       group: "",
     },
   });
   const [open, setOpen] = useState(false);
-  const [createProject, { isLoading }] = useCreateProjectMutation();
+  const [createProject, { isLoading: isCreating }] = useCreateProjectMutation();
+  const [updateProject, { isLoading: isUpdating }] = useUpdateProjectMutation();
+
+  const isLoading = isCreating || isUpdating;
+  const isEdit = !!id;
+  const label = isEdit ? "Edit" : "Create";
 
   // Controlling the Select open state to close it when a new group is created
   const [selectOpen, setSelectOpen] = useState(false);
@@ -77,13 +87,22 @@ export function CreateProject() {
     }
   }, [open, form]);
 
-  const handleSubmit = async (data: CreateProjectData) => {
+  const handleSubmit = async (data: ProjectFormData) => {
     try {
-      await createProject(data).unwrap();
-      toast.success("Project created successfully");
+      if (isEdit) {
+        await updateProject({ id, ...data }).unwrap();
+        toast.success("Project updated successfully");
+      } else {
+        await createProject(data).unwrap();
+        toast.success("Project created successfully");
+      }
       setOpen(false);
     } catch (_) {
-      toast.error("Failed to create project");
+      if (isEdit) {
+        toast.error("Failed to update project");
+      } else {
+        toast.error("Failed to create project");
+      }
     }
   };
 
@@ -105,15 +124,17 @@ export function CreateProject() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">Create Project</Button>
+        {trigger ?? <Button variant="outline">{label} Project</Button>}
       </DialogTrigger>
       <DialogContent className="max-w-md">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleSubmit)}>
             <DialogHeader>
-              <DialogTitle>Create Project</DialogTitle>
+              <DialogTitle>{label} Project</DialogTitle>
               <DialogDescription>
-                Create a new project to organize your models and simulations.
+                {isEdit
+                  ? "Edit your project details."
+                  : "Create a new project to organize your models and simulations."}
               </DialogDescription>
             </DialogHeader>
 
@@ -193,7 +214,7 @@ export function CreateProject() {
                 </Button>
               </DialogClose>
               <Button disabled={isLoading} type="submit">
-                Create
+                {isLoading ? (isEdit ? "Updating..." : "Creating...") : label}
               </Button>
             </DialogFooter>
           </form>
