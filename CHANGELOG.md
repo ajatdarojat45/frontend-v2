@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.6](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.5...v0.0.6) (2025-10-04)
+
+### Features
+
+- add simulation methods with relevant links and documentation ([5f3cd22](https://github.com/ajatdarojat45/frontend-v2/commit/5f3cd22280c409602abbae157303cf94e20b3365))
+- create 3d viewport with helper ([d469723](https://github.com/ajatdarojat45/frontend-v2/commit/d469723109efda3d745ce28102456360b0fdb964))
+- extract file from modelUrl to be parse with rhino3dm and render ([34724d8](https://github.com/ajatdarojat45/frontend-v2/commit/34724d861264901bca366f6ec3ee72e61705dbbb))
+
+### Bug Fixes
+
+- change open model button to redirect to editor page ([b8d28c0](https://github.com/ajatdarojat45/frontend-v2/commit/b8d28c0f596f7f1f4f24f32508908f3594fc789c))
+- conflict before merging ([320ff38](https://github.com/ajatdarojat45/frontend-v2/commit/320ff3816cfbf7f41c7161d157def8c91b89b7bf))
+- create copy of file that being parsed because of conflict ([22308df](https://github.com/ajatdarojat45/frontend-v2/commit/22308dfdc06c30e2df351fb169101bcdd08cfa06))
+- grid visibility from below angle ([126d236](https://github.com/ajatdarojat45/frontend-v2/commit/126d236077e0a1c65cbbc528cf69c16e65ff5dab))
+- model caching not active during rendering ([fb699fe](https://github.com/ajatdarojat45/frontend-v2/commit/fb699febeead3f6457233f3494e15bcecf0f10ab))
+
 ### [0.0.5](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.4...v0.0.5) (2025-10-03)
 
 ### Features
