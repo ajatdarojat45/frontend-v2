@@ -5,3 +5,5 @@ export const COLORS = {
   DARK: "#1a1d29",
   GRAY: "#64748b",
 } as const;
+
+export const RHINO3DM_PATH = "/node_modules/three/examples/jsm/libs/rhino3dm/";

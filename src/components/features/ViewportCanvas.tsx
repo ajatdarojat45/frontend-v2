@@ -4,6 +4,7 @@ import { OrbitControls, Grid, GizmoHelper, GizmoViewport } from "@react-three/dr
 import { Button } from "@/components/ui/button";
 import { useModelLoader } from "@/hooks/useModelLoader";
 import { ModelRenderer } from "./ModelRenderer";
+import { GeometrySelectionInfo } from "./GeometrySelectionInfo";
 import type { ViewportCanvasProps } from "@/types/modelViewport";
 
 export function ViewportCanvas({ modelUrl, modelId }: ViewportCanvasProps) {
@@ -73,8 +74,13 @@ export function ViewportCanvas({ modelUrl, modelId }: ViewportCanvasProps) {
           gl.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         }}
       >
-        <ambientLight intensity={0.5} />
-        <pointLight position={[10, 10, 10]} />
+        <ambientLight intensity={0.8} />
+        <directionalLight position={[1, 1, 1]} intensity={30} />
+        <directionalLight position={[-1, -1, 1]} intensity={30} />
+        <directionalLight position={[1, -1, 1]} intensity={30} />
+        <directionalLight position={[-1, 1, 1]} intensity={30} />
+        <directionalLight position={[1, 1, -1]} intensity={30} />
+        <directionalLight position={[-1, 1, -1]} intensity={20} />
         <axesHelper args={[50 / 2]} />
         <Grid
           position={[0, 0, 0]}
@@ -108,6 +114,11 @@ export function ViewportCanvas({ modelUrl, modelId }: ViewportCanvasProps) {
 
         {modelId && <ModelRenderer modelId={modelId} />}
       </Canvas>
+
+      {/* Selection Info Panel */}
+      <div className="absolute bottom-4 left-4 z-10">
+        <GeometrySelectionInfo />
+      </div>
     </div>
   );
 }
