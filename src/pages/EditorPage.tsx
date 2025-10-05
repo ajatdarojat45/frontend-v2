@@ -7,7 +7,8 @@ import { useGetSimulationsByModelIdQuery } from "@/store/simulationApi";
 import { setActiveSimulation } from "@/store/simulationSlice";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate, useParams } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
+import { Button } from "@/components/ui/button";
 
 export function EditorPage() {
   const navigate = useNavigate();
@@ -42,9 +43,12 @@ export function EditorPage() {
           {
             // If there's a simulationId, show the simulation editor
             simulationId ? (
-              <div className="w-full h-full flex flex-col p-4">
+              <div className="w-full h-full flex flex-col justify-between p-4">
                 <SimulationPicker modelId={+modelId} simulationId={+simulationId} />
                 You're editing simulation {simulationId}
+                <Button asChild variant="secondary">
+                  <Link to="result">View Result</Link>
+                </Button>
               </div>
             ) : (
               // If no simulations exist, show the empty state

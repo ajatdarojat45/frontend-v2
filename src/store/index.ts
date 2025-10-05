@@ -6,12 +6,14 @@ import { projectReducer } from "./projectSlice";
 import { simulationReducer } from "./simulationSlice";
 import { modelApi } from "./modelApi";
 import modelReducer from "./modelSlice";
+import { auralizationApi } from "./auralizationSlice";
 
 export const store = configureStore({
   reducer: {
     [projectApi.reducerPath]: projectApi.reducer,
     [simulationApi.reducerPath]: simulationApi.reducer,
     [modelApi.reducerPath]: modelApi.reducer,
+    [auralizationApi.reducerPath]: auralizationApi.reducer,
     project: projectReducer,
     simulation: simulationReducer,
     model: modelReducer,
@@ -20,10 +22,17 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
-        ignoredActions: ["model/storeRhinoFile"],
-        ignoredPaths: ["model.rhinoFiles"],
+        ignoredActions: ["model/storeRhinoFile", "auralizationApi/executeQuery/fulfilled"],
+        // Ignore the entire auralizationApi reducer path so binary ArrayBuffer responses
+        // stored by RTK Query won't trigger the serializable-state middleware.
+        ignoredPaths: ["model.rhinoFiles", auralizationApi.reducerPath],
       },
-    }).concat(projectApi.middleware, simulationApi.middleware, modelApi.middleware),
+    }).concat(
+      projectApi.middleware,
+      simulationApi.middleware,
+      modelApi.middleware,
+      auralizationApi.middleware,
+    ),
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
