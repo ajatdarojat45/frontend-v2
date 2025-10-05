@@ -9,15 +9,18 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Loading } from "@/components/ui/loading";
 
-export function ImpulseResponsePlayer({ simulationId }: { simulationId: string }) {
+type ImpulseResponsePlayerProps = {
+  simulationId: number;
+};
+export function ImpulseResponsePlayer({ simulationId }: ImpulseResponsePlayerProps) {
   const {
     data: impulseResponse,
     isLoading,
     isError,
-  } = useGetImpulseResponseBySimulationIdQuery(+simulationId);
+  } = useGetImpulseResponseBySimulationIdQuery(simulationId);
   const wsRef = useRef<WaveSurfer>(null);
 
-  const { data: simulation } = useGetSimulationQuery(+simulationId);
+  const { data: simulation } = useGetSimulationQuery(simulationId);
 
   // Create a blob URL for the audio data
   const audioUrl = useMemo(() => {
