@@ -8,11 +8,13 @@ import {
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loading } from "@/components/ui/loading";
 import { useGetAuralizationsBySimulationIdQuery } from "@/store/auralizationApi";
+import type { Auralization } from "@/types/auralization";
 
 type ConvolvedSoundsProps = {
   simulationId: number;
+  onSelect: (value: Auralization) => void;
 };
-export function ConvolvedSounds({ simulationId }: ConvolvedSoundsProps) {
+export function ConvolvedSounds({ simulationId, onSelect }: ConvolvedSoundsProps) {
   const {
     data: auralizations,
     isLoading,
@@ -39,8 +41,15 @@ export function ConvolvedSounds({ simulationId }: ConvolvedSoundsProps) {
     );
   }
 
+  const handleSelect = (value: string) => {
+    const selected = auralizations.find((a) => a.id.toString() === value);
+    if (selected) {
+      onSelect(selected);
+    }
+  };
+
   return (
-    <Select onValueChange={(value) => console.log("Selected audio ID:", value)} value="1">
+    <Select onValueChange={handleSelect}>
       <SelectTrigger className="bg-white w-full">
         <SelectValue placeholder="Select audio" />
       </SelectTrigger>
