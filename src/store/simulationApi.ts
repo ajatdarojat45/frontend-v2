@@ -42,6 +42,7 @@ export const simulationApi = createApi({
 // auto-generated based on the defined endpoints
 export const {
   useGetSimulationsByModelIdQuery,
+  useLazyGetSimulationsByModelIdQuery,
   useGetSimulationQuery,
   useCreateSimulationMutation,
 } = simulationApi;
