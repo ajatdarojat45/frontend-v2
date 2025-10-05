@@ -6,7 +6,7 @@ import { projectReducer } from "./projectSlice";
 import { simulationReducer } from "./simulationSlice";
 import { modelApi } from "./modelApi";
 import modelReducer from "./modelSlice";
-import { auralizationApi } from "./auralizationSlice";
+import { auralizationApi } from "./auralizationApi";
 
 export const store = configureStore({
   reducer: {

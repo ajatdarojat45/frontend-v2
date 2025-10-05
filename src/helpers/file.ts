@@ -8,3 +8,11 @@ export function formatBytes(bytes: number) {
 export function formatFilename(name: string) {
   return name.replace(/\s+/g, "-").toLowerCase();
 }
+
+export function cleanExt(filename: string) {
+  return filename.replace(/\.[^/.]+$/, "");
+}
+
+export function getFileExt(filename: string) {
+  return filename.split(".").pop() || "";
+}
