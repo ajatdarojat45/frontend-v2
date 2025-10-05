@@ -89,7 +89,7 @@ export function ConvolvedSoundPlayer({ auralization, simulationId }: ConvolvedSo
       </ItemContent>
       {audioUrl && (
         <ItemActions className="justify-end">
-          <AudioPlayer src={audioUrl} className="!p-0 !h-auto !shadow-none w-96" />
+          <AudioPlayer src={audioUrl} className="!p-0 !h-9 !shadow-none w-96" />
         </ItemActions>
       )}
       {!audioUrl && (
