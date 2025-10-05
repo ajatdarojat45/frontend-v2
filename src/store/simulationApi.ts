@@ -7,7 +7,7 @@ export const simulationApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_API_URL }),
 
   // Define tag types for cache invalidation
-  tagTypes: ["Simulations"],
+  tagTypes: ["Simulations", "SimulationsByModel"],
 
   endpoints: (build) => ({
     // Get all simulations
@@ -15,6 +15,13 @@ export const simulationApi = createApi({
       query: (modelId) => `/simulations?modelId=${modelId}`,
 
       // Provides a list of Simulations-type tags for cache invalidation
+      providesTags: (_, __, arg) => [{ type: "SimulationsByModel", id: arg }],
+    }),
+
+    getSimulation: build.query<Simulation, number>({
+      query: (simulationId) => `/simulations/${simulationId}`,
+
+      // Provides a single Simulations-type tag for cache invalidation
       providesTags: (_, __, arg) => [{ type: "Simulations", id: arg }],
     }),
 
@@ -26,11 +33,16 @@ export const simulationApi = createApi({
       }),
 
       // Invalidates Simulations-type tags to refetch relevant queries
-      invalidatesTags: (_, __, arg) => [{ type: "Simulations", id: arg.modelId }],
+      invalidatesTags: (_, __, arg) => [{ type: "SimulationsByModel", id: arg.modelId }],
     }),
   }),
 });
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useGetSimulationsByModelIdQuery, useCreateSimulationMutation } = simulationApi;
+export const {
+  useGetSimulationsByModelIdQuery,
+  useLazyGetSimulationsByModelIdQuery,
+  useGetSimulationQuery,
+  useCreateSimulationMutation,
+} = simulationApi;
