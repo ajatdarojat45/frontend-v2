@@ -7,6 +7,7 @@ import WavesurferPlayer from "@wavesurfer/react";
 import type WaveSurfer from "wavesurfer.js";
 import { Loading } from "@/components/ui/loading";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { AudioPlayer } from "react-audio-play";
 
 export function ResultPage() {
   const { modelId, simulationId } = useParams() as { modelId: string; simulationId: string };
@@ -22,8 +23,7 @@ export function ResultPage() {
         </div>
       }
     >
-      <div className="h-full w-full">
-        <h2 className="text-2xl font-bold">Simulation Result</h2>
+      <div className="h-full w-full p-8">
         <PlayImpulseResponse simulationId={simulationId} />
       </div>
     </AppLayout>
@@ -63,35 +63,33 @@ function PlayImpulseResponse({ simulationId }: { simulationId: string }) {
   }
 
   return (
-    <div className="w-1/3 flex flex-col gap-4">
+    <div className="w-full flex flex-col gap-4">
+      <h1 className="text-2xl">Impulse Response</h1>
       <WavesurferPlayer
         height={100}
         waveColor="darkseagreen"
         url={audioUrl}
         onReady={(ws) => (wsRef.current = ws)}
       />
-      <audio
-        src={audioUrl}
-        controls
-        className="w-full"
-        controlsList="nodownload noplaybackrate nofullscreen"
-        onPlay={() => wsRef.current?.play()}
-        onPause={() => wsRef.current?.pause()}
-        onEnded={(e) => {
-          wsRef.current?.stop();
+      <div className="flex">
+        <AudioPlayer
+          src={audioUrl}
+          width="100%"
+          onPlay={() => wsRef.current?.play()}
+          onPause={() => wsRef.current?.pause()}
+          onEnd={() => {
+            wsRef.current?.stop();
 
-          // Reset both the wavesurfer and the audio element to the start
-          wsRef.current?.seekTo(0);
-          e.currentTarget.currentTime = 0;
-        }}
-      >
-        Your browser does not support the audio element.
-      </audio>
-      <Button asChild className="w-full">
-        <a href={audioUrl} download>
-          Download
-        </a>
-      </Button>
+            // Reset both the wavesurfer and the audio element to the start
+            wsRef.current?.seekTo(0);
+          }}
+        />
+        <Button asChild className="h-14 rounded-none">
+          <a href={audioUrl} download>
+            Download
+          </a>
+        </Button>
+      </div>
     </div>
   );
 }
