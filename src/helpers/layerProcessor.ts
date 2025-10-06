@@ -145,3 +145,69 @@ export function createWireframeForLayer(layer: LayerInfo): THREE.Group {
 
   return wireframeGroup;
 }
+
+export function createEdgeOutlineForLayer(
+  layer: LayerInfo,
+  thresholdAngle: number = 40,
+): THREE.Group {
+  const outlineGroup = new THREE.Group();
+  outlineGroup.name = `${layer.name}_edges`;
+
+  const outlineMaterial = new THREE.LineBasicMaterial({
+    color: layer.color || "#000000",
+    transparent: false,
+    opacity: 1.0,
+    linewidth: 2,
+  });
+
+  layer.meshes.forEach((mesh) => {
+    if (mesh.geometry) {
+      const edgesGeometry = new THREE.EdgesGeometry(mesh.geometry, thresholdAngle);
+      const edgesMesh = new THREE.LineSegments(edgesGeometry, outlineMaterial);
+
+      edgesMesh.position.copy(mesh.position);
+      edgesMesh.rotation.copy(mesh.rotation);
+      edgesMesh.scale.copy(mesh.scale);
+
+      edgesMesh.userData.originalMesh = mesh;
+      edgesMesh.name = `${mesh.name || "mesh"}_edges`;
+
+      outlineGroup.add(edgesMesh);
+    }
+  });
+
+  return outlineGroup;
+}
+
+export function createEdgeOutlineForObject3D(
+  object3D: THREE.Object3D,
+  thresholdAngle: number = 40,
+): THREE.Group {
+  const outlineGroup = new THREE.Group();
+  outlineGroup.name = "model_edges";
+
+  const outlineMaterial = new THREE.LineBasicMaterial({
+    color: "#999999",
+    transparent: false,
+    opacity: 0.8,
+    linewidth: 2,
+  });
+
+  object3D.traverse((child) => {
+    if (child instanceof THREE.Mesh && child.geometry) {
+      const edgesGeometry = new THREE.EdgesGeometry(child.geometry, thresholdAngle);
+      const edgesMesh = new THREE.LineSegments(edgesGeometry, outlineMaterial);
+
+      edgesMesh.position.copy(child.position);
+      edgesMesh.rotation.copy(child.rotation);
+      edgesMesh.scale.copy(child.scale);
+
+      edgesMesh.userData.originalMesh = child;
+      edgesMesh.name = `${child.name || "mesh"}_edges`;
+
+      outlineGroup.add(edgesMesh);
+    }
+  });
+
+  return outlineGroup;
+}

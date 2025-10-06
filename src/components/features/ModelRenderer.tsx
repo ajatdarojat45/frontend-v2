@@ -1,7 +1,8 @@
-import { useRef, useState, useCallback } from "react";
+import { useRef, useState, useCallback, useMemo } from "react";
 import { useThree } from "@react-three/fiber";
 import { useModelLoader } from "@/hooks/useModelLoader";
 import { useGeometrySelection } from "@/hooks/useGeometrySelection";
+import { createEdgeOutlineForObject3D } from "@/helpers/layerProcessor";
 import * as THREE from "three";
 import type { ModelRendererProps } from "@/types/modelViewport";
 
@@ -23,6 +24,15 @@ export function ModelRenderer({ modelId }: ModelRendererProps) {
   const { camera, raycaster, pointer, gl } = useThree();
   const groupRef = useRef<THREE.Group>(null);
   const [hoveredMesh, setHoveredMesh] = useState<THREE.Mesh | null>(null);
+
+  const modelData = getCurrentModel();
+
+  const edgeOutline = useMemo(() => {
+    if (modelData?.object3D && currentModelId === modelId) {
+      return createEdgeOutlineForObject3D(modelData.object3D, 40);
+    }
+    return null;
+  }, [modelData?.object3D, currentModelId, modelId]);
 
   const highlightMesh = useCallback((mesh: THREE.Mesh, color: number) => {
     if (!mesh.material) return;
@@ -175,18 +185,14 @@ export function ModelRenderer({ modelId }: ModelRendererProps) {
     pointer,
   ]);
 
-  if (currentModelId !== modelId) {
-    return null;
-  }
-
-  const modelData = getCurrentModel();
-  if (!modelData) {
+  if (currentModelId !== modelId || !modelData) {
     return null;
   }
 
   return (
     <group ref={groupRef} onPointerMove={handlePointerMove} onClick={handleClick}>
       <primitive object={modelData.object3D} />
+      {edgeOutline && <primitive object={edgeOutline} />}
     </group>
   );
 }
