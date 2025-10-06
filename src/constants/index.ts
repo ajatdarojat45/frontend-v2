@@ -43,3 +43,9 @@ export const SIMULATION_METHODS = {
     documentation: "https://github.com/AaltoRSE/ParallelFDTD/",
   },
 } as const;
+
+export const CHORAS_DOCUMENTATION_URL = {
+  name: "CHORAS",
+  github: "https://github.com/choras-org",
+  documentation: "https://github.com/choras-org",
+} as const;
