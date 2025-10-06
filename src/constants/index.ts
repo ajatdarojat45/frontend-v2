@@ -8,7 +8,7 @@ export const COLORS = {
 
 export const SIMULATION_METHODS = {
   DE: {
-    name: "Differential Equations",
+    name: "Diffusion Equation",
     github: "https://building-acoustics-tu-eindhoven.github.io/acousticDE/index.html",
     documentation: "https://building-acoustics-tu-eindhoven.github.io/acousticDE/index.html",
   },
