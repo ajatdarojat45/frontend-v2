@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.7](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.6...v0.0.7) (2025-10-06)
+
+### Bug Fixes
+
+- excess whitespace in the bottom of editor page ([c4ccc07](https://github.com/ajatdarojat45/frontend-v2/commit/c4ccc0768b6f1bbe7864a7d8defb6e747a65a8bf))
+- viewport resizing by making viewport fixed, so it can ressize with window size ([93c6b09](https://github.com/ajatdarojat45/frontend-v2/commit/93c6b09159121ede2c329c4ac840052f06df538b))
+
 ### [0.0.6](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.5...v0.0.6) (2025-10-04)
 
 ### Features
