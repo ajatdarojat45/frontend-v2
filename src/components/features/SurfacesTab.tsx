@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useSurfaces } from "@/hooks/useSurfaces";
-import { AVAILABLE_MATERIALS } from "@/data/materials";
+import { useGetMaterialsQuery } from "@/store/materialsApi";
 import {
   Select,
   SelectContent,
@@ -12,6 +12,11 @@ import type { SurfaceInfo } from "@/types/material";
 
 export function SurfacesTab() {
   const surfaces = useSurfaces();
+  const {
+    data: materials = [],
+    isLoading: materialsLoading,
+    error: materialsError,
+  } = useGetMaterialsQuery();
   const [materialAssignments, setMaterialAssignments] = useState<Record<string, number>>({});
 
   const handleMaterialAssignment = (surfaceId: string, materialId: string) => {
@@ -31,7 +36,7 @@ export function SurfacesTab() {
 
   const getMaterialName = (materialId?: number) => {
     if (!materialId) return "Default";
-    const material = AVAILABLE_MATERIALS.find((m) => m.id === materialId);
+    const material = materials.find((m) => m.id === materialId);
     return material?.name || "Unknown Material";
   };
 
@@ -86,17 +91,27 @@ export function SurfacesTab() {
                           <SelectItem value="default" className="text-white">
                             Default
                           </SelectItem>
-                          {AVAILABLE_MATERIALS.map((material) => (
-                            <SelectItem
-                              key={material.id}
-                              value={material.id.toString()}
-                              className="text-white"
-                            >
-                              <span className="truncate block" title={material.name}>
-                                {material.name}
-                              </span>
+                          {materialsLoading ? (
+                            <SelectItem value="loading" disabled className="text-gray-400">
+                              Loading materials...
                             </SelectItem>
-                          ))}
+                          ) : materialsError ? (
+                            <SelectItem value="error" disabled className="text-red-400">
+                              Error loading materials
+                            </SelectItem>
+                          ) : (
+                            materials.map((material) => (
+                              <SelectItem
+                                key={material.id}
+                                value={material.id.toString()}
+                                className="text-white"
+                              >
+                                <span className="truncate block" title={material.name}>
+                                  {material.name}
+                                </span>
+                              </SelectItem>
+                            ))
+                          )}
                         </SelectContent>
                       </Select>
                     </td>
