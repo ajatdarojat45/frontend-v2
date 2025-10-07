@@ -36,7 +36,7 @@ export function AppLayout({ title, left, right, sidebar, children }: AppLayoutPr
           <h1 className="text-white text-lg font-bold">{title}</h1>
           <div className="w-1/3 flex justify-end">{right}</div>
         </header>
-        <div className="flex-1 overflow-hidden">{children}</div>
+        <div className="flex-1 h-container overflow-hidden">{children}</div>
       </div>
     </main>
   );
