@@ -46,7 +46,7 @@ export function EditorPage() {
               <div className="w-full h-full flex flex-col p-4">
                 <SimulationPicker modelId={+modelId} simulationId={+simulationId} />
                 You're editing simulation {simulationId}
-                <SidebarTabs modelId={+modelId} simulationId={+simulationId} />
+                <SidebarTabs />
               </div>
             ) : (
               // If no simulations exist, show the empty state

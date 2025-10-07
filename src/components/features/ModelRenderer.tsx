@@ -165,15 +165,6 @@ export function ModelRenderer({ modelId }: ModelRendererProps) {
           }
         });
       }
-
-      console.log("Selected BOX FACE (mesh):", {
-        boxFaceId: mesh.userData.meshId,
-        meshName: mesh.name || `BoxFace_${mesh.userData.meshId}`,
-        position: intersection.point,
-        materialId: mesh.material ? (mesh.material as MaterialWithUuid).uuid : undefined,
-        materialName: mesh.material ? mesh.material : undefined,
-      });
-      console.log(mesh);
     }
   }, [
     selectedGeometry,

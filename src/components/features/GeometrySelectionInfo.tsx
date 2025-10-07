@@ -1,9 +1,24 @@
+import { useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { useGeometrySelection } from "@/hooks/useGeometrySelection";
+import { useSurfaces } from "@/hooks/useSurfaces";
 
 export function GeometrySelectionInfo() {
-  const { selectedGeometry, clearSelection } = useGeometrySelection();
+  const { selectedGeometry } = useGeometrySelection();
+  const surfaces = useSurfaces();
+
+  const selectedSurfaceInfo = useMemo(() => {
+    if (!selectedGeometry) return null;
+
+    const surfaceIndex = surfaces.findIndex((surface) => surface.mesh === selectedGeometry.mesh);
+
+    if (surfaceIndex === -1) return null;
+
+    return {
+      surface: surfaces[surfaceIndex],
+      index: surfaceIndex + 1,
+    };
+  }, [selectedGeometry, surfaces]);
 
   if (!selectedGeometry) {
     return (
@@ -28,18 +43,32 @@ export function GeometrySelectionInfo() {
       <CardContent className="space-y-2">
         <div className="grid grid-cols-2 gap-2 text-sm">
           <div>
-            <span className="font-medium">Box Face:</span>
+            <span className="font-medium">Surface:</span>
           </div>
           <div className="text-muted-foreground">
-            {selectedGeometry.mesh.userData?.meshId
-              ? `Face ${selectedGeometry.mesh.userData.meshId}`
-              : selectedGeometry.mesh.name || "Unnamed"}
+            {selectedSurfaceInfo
+              ? `Surface [${selectedSurfaceInfo.index}]`
+              : selectedGeometry.mesh.name || "Unknown Surface"}
           </div>
 
           <div>
-            <span className="font-medium">Triangle:</span>
+            <span className="font-medium">Face Index:</span>
           </div>
-          <div className="text-muted-foreground">{selectedGeometry.faceIndex} (of 2)</div>
+          <div className="text-muted-foreground">
+            {selectedGeometry.faceIndex}
+            {selectedSurfaceInfo && ` (of ${selectedSurfaceInfo.surface.faceCount})`}
+          </div>
+
+          {selectedSurfaceInfo?.surface.area && (
+            <>
+              <div>
+                <span className="font-medium">Surface Area:</span>
+              </div>
+              <div className="text-muted-foreground">
+                {selectedSurfaceInfo.surface.area.toFixed(2)} units²
+              </div>
+            </>
+          )}
 
           <div>
             <span className="font-medium">Position:</span>
@@ -59,22 +88,6 @@ export function GeometrySelectionInfo() {
               </div>
             </>
           )}
-        </div>
-
-        <div className="flex gap-2 pt-2">
-          <Button variant="outline" size="sm" onClick={clearSelection} className="flex-1">
-            Clear Selection
-          </Button>
-          <Button
-            size="sm"
-            className="flex-1"
-            onClick={() => {
-              // This will be where material assignment happens
-              console.log("Assign material to:", selectedGeometry);
-            }}
-          >
-            Assign Material
-          </Button>
         </div>
       </CardContent>
     </Card>

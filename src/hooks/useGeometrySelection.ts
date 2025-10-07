@@ -1,44 +1,56 @@
-import { useState, useCallback } from "react";
+import { useCallback, useMemo } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import * as THREE from "three";
-
-export interface SelectedGeometry {
-  mesh: THREE.Mesh;
-  faceIndex: number;
-  point: THREE.Vector3;
-  materialId?: string;
-}
+import type { RootState } from "@/store";
+import {
+  selectGeometry as selectGeometryAction,
+  clearSelection as clearSelectionAction,
+  addHighlightedMesh as addHighlightedMeshAction,
+  removeHighlightedMesh as removeHighlightedMeshAction,
+  clearHighlights as clearHighlightsAction,
+} from "@/store/geometrySelectionSlice";
+import type { SelectedGeometry } from "@/store/geometrySelectionSlice";
 
 export function useGeometrySelection() {
-  const [selectedGeometry, setSelectedGeometry] = useState<SelectedGeometry | null>(null);
-  const [highlightedMeshes, setHighlightedMeshes] = useState<Set<THREE.Mesh>>(new Set());
+  const dispatch = useDispatch();
+  const { selectedGeometry, highlightedMeshes } = useSelector(
+    (state: RootState) => state.geometrySelection,
+  );
 
-  const selectGeometry = useCallback((geometry: SelectedGeometry | null) => {
-    setSelectedGeometry(geometry);
-  }, []);
+  const highlightedMeshesSet = useMemo(() => new Set(highlightedMeshes), [highlightedMeshes]);
+
+  const selectGeometry = useCallback(
+    (geometry: SelectedGeometry | null) => {
+      dispatch(selectGeometryAction(geometry));
+    },
+    [dispatch],
+  );
 
   const clearSelection = useCallback(() => {
-    setSelectedGeometry(null);
-  }, []);
+    dispatch(clearSelectionAction());
+  }, [dispatch]);
 
-  const addHighlightedMesh = useCallback((mesh: THREE.Mesh) => {
-    setHighlightedMeshes((prev) => new Set(prev).add(mesh));
-  }, []);
+  const addHighlightedMesh = useCallback(
+    (mesh: THREE.Mesh) => {
+      dispatch(addHighlightedMeshAction(mesh));
+    },
+    [dispatch],
+  );
 
-  const removeHighlightedMesh = useCallback((mesh: THREE.Mesh) => {
-    setHighlightedMeshes((prev) => {
-      const newSet = new Set(prev);
-      newSet.delete(mesh);
-      return newSet;
-    });
-  }, []);
+  const removeHighlightedMesh = useCallback(
+    (mesh: THREE.Mesh) => {
+      dispatch(removeHighlightedMeshAction(mesh));
+    },
+    [dispatch],
+  );
 
   const clearHighlights = useCallback(() => {
-    setHighlightedMeshes(new Set());
-  }, []);
+    dispatch(clearHighlightsAction());
+  }, [dispatch]);
 
   return {
     selectedGeometry,
-    highlightedMeshes,
+    highlightedMeshes: highlightedMeshesSet,
     selectGeometry,
     clearSelection,
     addHighlightedMesh,

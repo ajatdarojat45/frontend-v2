@@ -6,6 +6,7 @@ import { projectReducer } from "./projectSlice";
 import { simulationReducer } from "./simulationSlice";
 import { modelApi } from "./modelApi";
 import modelReducer from "./modelSlice";
+import geometrySelectionReducer from "./geometrySelectionSlice";
 
 export const store = configureStore({
   reducer: {
@@ -15,13 +16,23 @@ export const store = configureStore({
     project: projectReducer,
     simulation: simulationReducer,
     model: modelReducer,
+    geometrySelection: geometrySelectionReducer,
   },
 
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
-        ignoredActions: ["model/storeRhinoFile"],
-        ignoredPaths: ["model.rhinoFiles"],
+        ignoredActions: [
+          "model/storeRhinoFile",
+          "geometrySelection/selectGeometry",
+          "geometrySelection/addHighlightedMesh",
+          "geometrySelection/removeHighlightedMesh",
+        ],
+        ignoredPaths: [
+          "model.rhinoFiles",
+          "geometrySelection.selectedGeometry",
+          "geometrySelection.highlightedMeshes",
+        ],
       },
     }).concat(projectApi.middleware, simulationApi.middleware, modelApi.middleware),
 });
