@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Download } from "lucide-react";
 import { toast } from "sonner";
 
@@ -15,6 +15,10 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useGetSimulationResultQuery } from "@/store/simulationApi";
+import { Loading } from "../ui/loading";
+import { http } from "@/libs/http";
+import { downloadFile, formatFilename } from "@/helpers/file";
 
 type DownloadResultProps = {
   simulationId: number;
@@ -23,6 +27,8 @@ type DownloadResultProps = {
 export function DownloadResult({ simulationId }: DownloadResultProps) {
   const [open, setOpen] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
+
+  const { data: simulationResult, isLoading } = useGetSimulationResultQuery(simulationId);
 
   // Checkbox states
   const [parameters, setParameters] = useState(false);
@@ -37,7 +43,7 @@ export function DownloadResult({ simulationId }: DownloadResultProps) {
     c80: false,
     d50: false,
     ts: false,
-    spl_10_freq: false,
+    spl_t0_freq: false,
   });
 
   // Sub-options for Plots
@@ -59,19 +65,13 @@ export function DownloadResult({ simulationId }: DownloadResultProps) {
   });
 
   const handleDownload = async () => {
-    // Check if at least one option is selected
-    if (!parameters && !plots && !auralizations) {
-      toast.error("Please select at least one option to download");
-      return;
-    }
-
     try {
       setIsDownloading(true);
 
       // Build the output in the required format
       const output: Record<string, (string | number)[]> = {
         xlsx: ["true"],
-        SimulationId: [simulationId],
+        SimulationId: [simulationId], // TODO: if comparison panel is added, this should be SimulationIds of compared simulations
         Parameters: [],
         EDC: [],
         Auralization: [],
@@ -79,7 +79,7 @@ export function DownloadResult({ simulationId }: DownloadResultProps) {
 
       const selectedParams = Object.entries(parameterOptions)
         .filter(([_, selected]) => selected)
-        .map(([key, _]) => (key === "spl_10_freq" ? "spl_t0_freq" : key));
+        .map(([key, _]) => key);
 
       if (selectedParams.length > 0) {
         output.Parameters = selectedParams;
@@ -101,11 +101,16 @@ export function DownloadResult({ simulationId }: DownloadResultProps) {
         output.Auralization = selectedAuralizations;
       }
 
-      // Simulate download process
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      // Request the export
+      const { data } = await http({
+        method: "POST",
+        url: "/exports/custom_export",
+        data: output,
+        responseType: "blob",
+      });
 
-      // Here you would implement the actual download logic
-      console.log("Download options:", output);
+      // Download the file
+      downloadFile(data, formatFilename(`simulation ${simulationId} results.zip`));
 
       toast.success("Download started successfully");
       setOpen(false);
@@ -127,7 +132,7 @@ export function DownloadResult({ simulationId }: DownloadResultProps) {
       c80: false,
       d50: false,
       ts: false,
-      spl_10_freq: false,
+      spl_t0_freq: false,
     });
     setPlotOptions({
       "63Hz": false,
@@ -144,6 +149,19 @@ export function DownloadResult({ simulationId }: DownloadResultProps) {
       csvIR: false,
     });
   };
+
+  const enabledFrequencies = useMemo(() => {
+    const defaultFrequencies = [63, 125, 250, 500, 1000, 2000, 4000, 8000];
+
+    if (!simulationResult || !simulationResult.length) return defaultFrequencies;
+
+    const firstResult = simulationResult[0];
+    if (!firstResult.frequencies) return defaultFrequencies;
+
+    return firstResult.frequencies;
+  }, [simulationResult]);
+
+  if (isLoading) return <Loading />;
 
   return (
     <Dialog
@@ -184,7 +202,7 @@ export function DownloadResult({ simulationId }: DownloadResultProps) {
                     c80: isChecked,
                     d50: isChecked,
                     ts: isChecked,
-                    spl_10_freq: isChecked,
+                    spl_t0_freq: isChecked,
                   });
                 }}
               />
@@ -220,16 +238,16 @@ export function DownloadResult({ simulationId }: DownloadResultProps) {
                 onCheckedChange={(checked) => {
                   const isChecked = !!checked;
                   setPlots(isChecked);
-                  // Check/uncheck all plot options
+                  // Check/uncheck only enabled plot options
                   setPlotOptions({
-                    "63Hz": isChecked,
-                    "125Hz": isChecked,
-                    "250Hz": isChecked,
-                    "500Hz": isChecked,
-                    "1000Hz": isChecked,
-                    "2000Hz": isChecked,
-                    "4000Hz": isChecked,
-                    "8000Hz": isChecked,
+                    "63Hz": isChecked && enabledFrequencies.includes(63),
+                    "125Hz": isChecked && enabledFrequencies.includes(125),
+                    "250Hz": isChecked && enabledFrequencies.includes(250),
+                    "500Hz": isChecked && enabledFrequencies.includes(500),
+                    "1000Hz": isChecked && enabledFrequencies.includes(1000),
+                    "2000Hz": isChecked && enabledFrequencies.includes(2000),
+                    "4000Hz": isChecked && enabledFrequencies.includes(4000),
+                    "8000Hz": isChecked && enabledFrequencies.includes(8000),
                   });
                 }}
               />
@@ -244,6 +262,7 @@ export function DownloadResult({ simulationId }: DownloadResultProps) {
                   <Checkbox
                     id={`plot-${key}`}
                     checked={checked}
+                    disabled={!enabledFrequencies.includes(parseInt(key.replace("Hz", "")))}
                     onCheckedChange={(value) =>
                       setPlotOptions((prev) => ({ ...prev, [key]: !!value }))
                     }
