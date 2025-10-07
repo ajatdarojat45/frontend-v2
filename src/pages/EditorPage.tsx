@@ -39,7 +39,7 @@ export function EditorPage() {
     <AppLayout
       title="Editor"
       sidebar={
-        <div className="h-[calc(100%-4rem)]">
+        <div className="h-full">
           {
             // If there's a simulationId, show the simulation editor
             simulationId ? (
