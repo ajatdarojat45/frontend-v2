@@ -19,14 +19,20 @@ import { useGetSimulationResultQuery } from "@/store/simulationApi";
 import { Loading } from "../ui/loading";
 import { http } from "@/libs/http";
 import { downloadFile, formatFilename } from "@/helpers/file";
+import { cn } from "@/libs/style";
 
 type DownloadResultProps = {
   simulationId: number;
+  mode?: "parameters" | "plots" | "auralizations";
+  triggerLabel?: string;
 };
 
-export function DownloadResult({ simulationId }: DownloadResultProps) {
+export function DownloadResult({ simulationId, mode, triggerLabel }: DownloadResultProps) {
   const [open, setOpen] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
+
+  const allSections = ["parameters", "plots", "auralizations"];
+  const visibleSections = mode ? [mode] : allSections;
 
   const { data: simulationResult, isLoading } = useGetSimulationResultQuery(simulationId);
 
@@ -174,7 +180,7 @@ export function DownloadResult({ simulationId }: DownloadResultProps) {
       <DialogTrigger asChild>
         <Button variant="outline" className="w-full">
           <Download className="h-4 w-4 mr-2" />
-          Download Results
+          {triggerLabel ?? "Download Results"}
         </Button>
       </DialogTrigger>
 
@@ -186,7 +192,7 @@ export function DownloadResult({ simulationId }: DownloadResultProps) {
 
         <div className="space-y-6 my-6">
           {/* Parameters Section */}
-          <div className="space-y-3">
+          <div className={cn("space-y-3", { hidden: !visibleSections.includes("parameters") })}>
             <div className="flex items-center space-x-2">
               <Checkbox
                 id="parameters"
@@ -230,7 +236,7 @@ export function DownloadResult({ simulationId }: DownloadResultProps) {
           </div>
 
           {/* Plots Section */}
-          <div className="space-y-3">
+          <div className={cn("space-y-3", { hidden: !visibleSections.includes("plots") })}>
             <div className="flex items-center space-x-2">
               <Checkbox
                 id="plots"
@@ -276,7 +282,7 @@ export function DownloadResult({ simulationId }: DownloadResultProps) {
           </div>
 
           {/* Auralizations Section */}
-          <div className="space-y-3">
+          <div className={cn("space-y-3", { hidden: !visibleSections.includes("auralizations") })}>
             <div className="flex items-center space-x-2">
               <Checkbox
                 id="auralizations"
