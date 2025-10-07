@@ -1,6 +1,7 @@
 import { CreateSimulation } from "@/components/features/CreateSimulation";
 import { EmptySimulation } from "@/components/features/EmptySimulation";
 import { SimulationPicker } from "@/components/features/SimulationPicker";
+import { ModelViewer } from "@/components/features/ModelViewer";
 import { AppLayout } from "@/components/ui/app-layout";
 import { useGetSimulationsByModelIdQuery } from "@/store/simulationApi";
 import { setActiveSimulation } from "@/store/simulationSlice";
@@ -37,7 +38,7 @@ export function EditorPage() {
     <AppLayout
       title="Editor"
       sidebar={
-        <div className="h-full">
+        <div className="h-[calc(100%-4rem)]">
           {
             // If there's a simulationId, show the simulation editor
             simulationId ? (
@@ -54,10 +55,8 @@ export function EditorPage() {
       }
       right={<CreateSimulation modelId={+modelId} />}
     >
-      <div className="h-full w-full flex items-center justify-center text-4xl text-teal-800">
-        Editor Page with <br />
-        model ID: {modelId} <br />
-        simulation ID: {simulationId}
+      <div className="h-full w-full">
+        <ModelViewer modelId={modelId} />
       </div>
     </AppLayout>
   );

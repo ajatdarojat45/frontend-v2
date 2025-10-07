@@ -15,7 +15,7 @@ export function AppLayout({ title, left, right, sidebar, children }: AppLayoutPr
       {/* Header */}
 
       <main className="flex flex-1">
-        <aside className="w-64 md:w-72 lg:w-80  bg-black/95">
+        <aside className="w-64 md:w-72 lg:w-80 bg-black/95 z-40">
           <Link to="/" className="h-16 flex border-b border-b-stone-600 items-center px-4">
             {/* TODO: Chorus Logo, update it later */}
             <svg
@@ -34,13 +34,13 @@ export function AppLayout({ title, left, right, sidebar, children }: AppLayoutPr
 
           {sidebar}
         </aside>
-        <div className="flex-1 bg-stone-200 border-l border-l-stone-600">
-          <header className="h-16 bg-black flex items-center justify-between px-4">
+        <div className="flex-1 bg-stone-200 border-l border-l-stone-600 flex flex-col">
+          <header className="h-16 bg-black flex items-center justify-between px-4 flex-shrink-0">
             <div className="w-1/3 flex jusstify-start">{left}</div>
             <h1 className="text-white text-lg font-bold">{title}</h1>
             <div className="w-1/3 flex justify-end">{right}</div>
           </header>
-          {children}
+          <div className="flex-1 overflow-hidden">{children}</div>
         </div>
       </main>
     </div>
