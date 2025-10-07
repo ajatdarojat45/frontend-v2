@@ -171,7 +171,9 @@ export function ModelRenderer({ modelId }: ModelRendererProps) {
         meshName: mesh.name || `BoxFace_${mesh.userData.meshId}`,
         position: intersection.point,
         materialId: mesh.material ? (mesh.material as MaterialWithUuid).uuid : undefined,
+        materialName: mesh.material ? mesh.material : undefined,
       });
+      console.log(mesh);
     }
   }, [
     selectedGeometry,
