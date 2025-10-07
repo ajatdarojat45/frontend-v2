@@ -8,7 +8,7 @@ export const COLORS = {
 
 export const SIMULATION_METHODS = {
   DE: {
-    name: "Differential Equations",
+    name: "Diffusion Equation",
     github: "https://building-acoustics-tu-eindhoven.github.io/acousticDE/index.html",
     documentation: "https://building-acoustics-tu-eindhoven.github.io/acousticDE/index.html",
   },
@@ -42,4 +42,10 @@ export const SIMULATION_METHODS = {
     github: "https://github.com/AaltoRSE/ParallelFDTD/",
     documentation: "https://github.com/AaltoRSE/ParallelFDTD/",
   },
+} as const;
+
+export const CHORAS_DOCUMENTATION_URL = {
+  name: "CHORAS",
+  github: "https://github.com/choras-org",
+  documentation: "https://github.com/choras-org",
 } as const;
