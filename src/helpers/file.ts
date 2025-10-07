@@ -4,3 +4,15 @@ export function formatBytes(bytes: number) {
   const i = Math.floor(Math.log(bytes) / Math.log(1024));
   return `${parseFloat((bytes / Math.pow(1024, i)).toFixed(2))} ${sizes[i]}`;
 }
+
+export function formatFilename(name: string) {
+  return name.replace(/\s+/g, "-").toLowerCase();
+}
+
+export function cleanExt(filename: string) {
+  return filename.replace(/\.[^/.]+$/, "");
+}
+
+export function getFileExt(filename: string) {
+  return filename.split(".").pop() || "";
+}
