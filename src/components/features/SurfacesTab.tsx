@@ -1,6 +1,8 @@
-import { useState } from "react";
 import { useSurfaces } from "@/hooks/useSurfaces";
 import { useGetMaterialsQuery } from "@/store/materialsApi";
+import { useDispatch, useSelector } from "react-redux";
+import type { RootState } from "@/store";
+import { assignMaterial, removeMaterialAssignment } from "@/store/materialAssignmentSlice";
 import {
   Select,
   SelectContent,
@@ -11,26 +13,22 @@ import {
 import type { SurfaceInfo } from "@/types/material";
 
 export function SurfacesTab() {
+  const dispatch = useDispatch();
   const surfaces = useSurfaces();
   const {
     data: materials = [],
     isLoading: materialsLoading,
     error: materialsError,
   } = useGetMaterialsQuery();
-  const [materialAssignments, setMaterialAssignments] = useState<Record<string, number>>({});
+  const materialAssignments = useSelector(
+    (state: RootState) => state.materialAssignment.assignments,
+  );
 
-  const handleMaterialAssignment = (surfaceId: string, materialId: string) => {
+  const handleMaterialAssignment = (meshId: string, materialId: string) => {
     if (materialId === "default") {
-      setMaterialAssignments((prev) => {
-        const newAssignments = { ...prev };
-        delete newAssignments[surfaceId];
-        return newAssignments;
-      });
+      dispatch(removeMaterialAssignment(meshId));
     } else {
-      setMaterialAssignments((prev) => ({
-        ...prev,
-        [surfaceId]: parseInt(materialId),
-      }));
+      dispatch(assignMaterial({ meshId, materialId: parseInt(materialId) }));
     }
   };
 
@@ -70,7 +68,8 @@ export function SurfacesTab() {
             </thead>
             <tbody>
               {surfaces.map((surface, index) => {
-                const assignedMaterialId = materialAssignments[surface.id];
+                const meshId = surface.mesh.uuid;
+                const assignedMaterialId = materialAssignments[meshId];
                 return (
                   <tr key={surface.id} className="hover:bg-gray-800/30">
                     <td className="px-3 py-2 text-sm">
@@ -79,7 +78,7 @@ export function SurfacesTab() {
                     <td className="px-3 py-2 w-full">
                       <Select
                         value={assignedMaterialId?.toString() || "default"}
-                        onValueChange={(value) => handleMaterialAssignment(surface.id, value)}
+                        onValueChange={(value) => handleMaterialAssignment(meshId, value)}
                       >
                         <SelectTrigger
                           size="sm"

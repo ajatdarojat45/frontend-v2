@@ -2,10 +2,17 @@ import { useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useGeometrySelection } from "@/hooks/useGeometrySelection";
 import { useSurfaces } from "@/hooks/useSurfaces";
+import { useSelector } from "react-redux";
+import { useGetMaterialsQuery } from "@/store/materialsApi";
+import type { RootState } from "@/store";
 
 export function GeometrySelectionInfo() {
   const { selectedGeometry } = useGeometrySelection();
   const surfaces = useSurfaces();
+  const materialAssignments = useSelector(
+    (state: RootState) => state.materialAssignment.assignments,
+  );
+  const { data: materials = [] } = useGetMaterialsQuery();
 
   const selectedSurfaceInfo = useMemo(() => {
     if (!selectedGeometry) return null;
@@ -78,16 +85,29 @@ export function GeometrySelectionInfo() {
             {selectedGeometry.point.z.toFixed(2)})
           </div>
 
-          {selectedGeometry.materialId && (
-            <>
-              <div>
-                <span className="font-medium">Material ID:</span>
-              </div>
-              <div className="text-muted-foreground font-mono text-xs">
-                {selectedGeometry.materialId.slice(0, 8)}...
-              </div>
-            </>
-          )}
+          <div>
+            <span className="font-medium">Mesh ID:</span>
+          </div>
+          <div className="text-muted-foreground font-mono text-xs">
+            {selectedGeometry.mesh.uuid.slice(0, 8)}...
+          </div>
+
+          <div>
+            <span className="font-medium">Material:</span>
+          </div>
+          <div className="text-muted-foreground text-xs">
+            {(() => {
+              const meshId = selectedGeometry.mesh.uuid;
+              const assignedMaterialId = materialAssignments[meshId];
+              if (!assignedMaterialId) {
+                return "No material selected";
+              }
+              const material = materials.find((m) => m.id === assignedMaterialId);
+              return material
+                ? `${material.name} (ID: ${assignedMaterialId})`
+                : `Material ID: ${assignedMaterialId}`;
+            })()}
+          </div>
         </div>
       </CardContent>
     </Card>
