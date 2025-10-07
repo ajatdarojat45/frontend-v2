@@ -16,3 +16,25 @@ export function cleanExt(filename: string) {
 export function getFileExt(filename: string) {
   return filename.split(".").pop() || "";
 }
+
+export function downloadFile(blob: Blob, filename: string): void {
+  const blobUrl = URL.createObjectURL(blob);
+
+  try {
+    const anchor = document.createElement("a");
+    anchor.href = blobUrl;
+    anchor.download = filename;
+    anchor.rel = "noopener";
+    anchor.style.display = "none";
+    document.body.appendChild(anchor);
+
+    // Some Safari versions require the element to be in the DOM and visible enough to click.
+    anchor.click();
+
+    // Cleanup: remove element and revoke the object URL to release memory.
+    document.body.removeChild(anchor);
+  } finally {
+    // Always revoke, even if click throws.
+    URL.revokeObjectURL(blobUrl);
+  }
+}

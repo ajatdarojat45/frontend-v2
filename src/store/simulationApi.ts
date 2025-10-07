@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import type { Simulation } from "@/types/simulation";
+import type { SimulationResult, Simulation } from "@/types/simulation";
 
 // Define a service using a base URL and expected endpoints
 export const simulationApi = createApi({
@@ -7,7 +7,7 @@ export const simulationApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_API_URL }),
 
   // Define tag types for cache invalidation
-  tagTypes: ["Simulations", "SimulationsByModel"],
+  tagTypes: ["Simulations", "SimulationsByModel", "SimulationResults"],
 
   endpoints: (build) => ({
     // Get all simulations
@@ -35,6 +35,11 @@ export const simulationApi = createApi({
       // Invalidates Simulations-type tags to refetch relevant queries
       invalidatesTags: (_, __, arg) => [{ type: "SimulationsByModel", id: arg.modelId }],
     }),
+
+    getSimulationResult: build.query<SimulationResult[], number>({
+      query: (simulationId) => `/simulations/${simulationId}/result`,
+      providesTags: (_, __, arg) => [{ type: "SimulationResults", id: arg }],
+    }),
   }),
 });
 
@@ -45,4 +50,5 @@ export const {
   useLazyGetSimulationsByModelIdQuery,
   useGetSimulationQuery,
   useCreateSimulationMutation,
+  useGetSimulationResultQuery,
 } = simulationApi;
