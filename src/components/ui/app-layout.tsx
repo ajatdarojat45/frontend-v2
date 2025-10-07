@@ -12,7 +12,7 @@ type AppLayoutProps = {
 export function AppLayout({ title, left, right, sidebar, children }: AppLayoutProps) {
   return (
     <main className="flex min-h-screen">
-      <aside className="w-64 md:w-72 lg:w-80 bg-black/95">
+      <aside className="w-64 md:w-72 lg:w-80 bg-black/95 z-50">
         <Link to="/" className="h-16 flex border-b border-b-stone-600 items-center px-4">
           <svg
             width="161"
