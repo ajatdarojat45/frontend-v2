@@ -123,3 +123,7 @@
 @utility h-container {
   height: calc(100vh - 4rem);
 }
+
+@utility min-h-container {
+  min-height: calc(100vh - 4rem);
+}

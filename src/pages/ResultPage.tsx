@@ -3,6 +3,8 @@ import { Link, useParams } from "react-router";
 import { Button } from "@/components/ui/button";
 import { ResultAuralizations } from "@/components/features/ResultAuralizations";
 import { DownloadResult } from "@/components/features/DownloadResult";
+import { ResultParameters } from "@/components/features/ResultParameters";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export function ResultPage() {
   const { modelId, simulationId } = useParams() as { modelId: string; simulationId: string };
@@ -30,7 +32,18 @@ export function ResultPage() {
         </div>
       }
     >
-      <ResultAuralizations simulationId={+simulationId} />
+      <Tabs defaultValue="parameters">
+        <TabsList>
+          <TabsTrigger value="parameters">Parameters</TabsTrigger>
+          <TabsTrigger value="auralizations">Auralizations</TabsTrigger>
+        </TabsList>
+        <TabsContent value="parameters">
+          <ResultParameters simulationId={+simulationId} />
+        </TabsContent>
+        <TabsContent value="auralizations">
+          <ResultAuralizations simulationId={+simulationId} />
+        </TabsContent>
+      </Tabs>
     </AppLayout>
   );
 }
