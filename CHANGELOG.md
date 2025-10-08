@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.9](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.8...v0.0.9) (2025-10-08)
+
+### Bug Fixes
+
+- click outside modle to reset Geometry Information component ([ea759cc](https://github.com/ajatdarojat45/frontend-v2/commit/ea759cccbf466c2c0a68d49395f5988deae6569e))
+- using rhino userData id as stable id to identified material assigment ([f1955aa](https://github.com/ajatdarojat45/frontend-v2/commit/f1955aad7e7c61ef7435e9058fb94a3c0323e9b5))
+
 ### [0.0.8](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.7...v0.0.8) (2025-10-08)
 
 ### Features
