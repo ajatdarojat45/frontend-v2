@@ -131,7 +131,7 @@ export function SurfacesTab() {
     } else {
       const newAssignments: Record<string, number> = {};
       surfaces.forEach((surface) => {
-        const surfaceKey = surface.id; // Use stable Rhino UUID
+        const surfaceKey = surface.id;
         dispatch(assignMaterial({ meshId: surfaceKey, materialId: parseInt(materialId) }));
         newAssignments[surfaceKey] = parseInt(materialId);
       });
@@ -158,7 +158,7 @@ export function SurfacesTab() {
     if (surfaces.length === 0) return "default";
 
     const assignedMaterials = surfaces.map((surface) => {
-      const surfaceKey = surface.id; // Use stable Rhino UUID
+      const surfaceKey = surface.id;
       return materialAssignments[surfaceKey];
     });
 
@@ -248,7 +248,7 @@ export function SurfacesTab() {
 
               {showIndividualAssignments &&
                 surfaces.map((surface, index) => {
-                  const surfaceKey = surface.id; // Use stable Rhino UUID
+                  const surfaceKey = surface.id;
                   const assignedMaterialId = materialAssignments[surfaceKey];
 
                   return (
