@@ -2,7 +2,6 @@ import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
 interface MaterialAssignmentState {
-  // meshId -> materialId mapping
   assignments: Record<string, number>;
 }
 
@@ -27,10 +26,14 @@ export const materialAssignmentSlice = createSlice({
     clearAllAssignments: (state) => {
       state.assignments = {};
     },
+
+    setAssignments: (state, action: PayloadAction<Record<string, number>>) => {
+      state.assignments = action.payload;
+    },
   },
 });
 
-export const { assignMaterial, removeMaterialAssignment, clearAllAssignments } =
+export const { assignMaterial, removeMaterialAssignment, clearAllAssignments, setAssignments } =
   materialAssignmentSlice.actions;
 
 export default materialAssignmentSlice.reducer;

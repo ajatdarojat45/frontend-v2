@@ -1,13 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useSurfaces } from "@/hooks/useSurfaces";
 import { useGetMaterialsQuery } from "@/store/materialsApi";
+import { useGetSimulationByIdQuery, useUpdateSimulationMutation } from "@/store/simulationApi";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "@/store";
 import {
   assignMaterial,
   removeMaterialAssignment,
   clearAllAssignments,
+  setAssignments,
 } from "@/store/materialAssignmentSlice";
+import { toast } from "sonner";
 import {
   Select,
   SelectContent,
@@ -30,24 +33,104 @@ export function SurfacesTab() {
   const materialAssignments = useSelector(
     (state: RootState) => state.materialAssignment.assignments,
   );
+  const activeSimulation = useSelector((state: RootState) => state.simulation.activeSimulation);
+  const currentModelId = useSelector((state: RootState) => state.model.currentModelId);
+  const { data: simulation, error: simulationError } = useGetSimulationByIdQuery(
+    activeSimulation?.id,
+    {
+      skip: !activeSimulation?.id,
+    },
+  );
+  const [updateSimulation] = useUpdateSimulationMutation();
 
-  const handleMaterialAssignment = (meshId: string, materialId: string) => {
-    if (materialId === "default") {
-      dispatch(removeMaterialAssignment(meshId));
-    } else {
-      dispatch(assignMaterial({ meshId, materialId: parseInt(materialId) }));
+  useEffect(() => {
+    if (simulation?.layerIdByMaterialId) {
+      dispatch(setAssignments(simulation.layerIdByMaterialId));
     }
+  }, [simulation?.layerIdByMaterialId, dispatch]);
+
+  useEffect(() => {
+    if (simulationError) {
+      toast.error("Cannot load simulation data. Material assignments will not be saved.");
+    }
+  }, [simulationError]);
+
+  const updateSimulationData = useCallback(
+    async (assignments?: Record<string, number>) => {
+      if (!activeSimulation?.id) {
+        console.warn("Cannot update simulation: No active simulation");
+        toast.error("No active simulation to update");
+        return;
+      }
+
+      if (!simulation) {
+        console.warn("Cannot update simulation: Simulation data not loaded");
+        toast.error("Simulation data not available");
+        return;
+      }
+
+      if (!currentModelId) {
+        console.warn("Cannot update simulation: No current model ID");
+        toast.error("Model data not available");
+        return;
+      }
+
+      const assignmentsToSave = assignments || materialAssignments;
+
+      const updatePayload = {
+        id: activeSimulation.id,
+        body: {
+          modelId: currentModelId,
+          name: simulation.name,
+          status: simulation.status,
+          hasBeenEdited: true,
+          layerIdByMaterialId: assignmentsToSave,
+        },
+      };
+
+      try {
+        await updateSimulation(updatePayload).unwrap();
+        toast.success("Material assignments saved");
+      } catch (error) {
+        console.error("Failed to update simulation:", error);
+        toast.error("Failed to save material assignment");
+      }
+    },
+    [activeSimulation?.id, simulation, currentModelId, materialAssignments, updateSimulation],
+  );
+
+  const handleMaterialAssignment = async (surfaceKey: string, materialId: string) => {
+    let updatedAssignments: Record<string, number>;
+
+    if (materialId === "default") {
+      dispatch(removeMaterialAssignment(surfaceKey));
+      updatedAssignments = { ...materialAssignments };
+      delete updatedAssignments[surfaceKey];
+    } else {
+      dispatch(assignMaterial({ meshId: surfaceKey, materialId: parseInt(materialId) }));
+      updatedAssignments = { ...materialAssignments, [surfaceKey]: parseInt(materialId) };
+    }
+
+    updateSimulationData(updatedAssignments);
   };
 
-  const handleAssignAllMaterials = (materialId: string) => {
+  const handleAssignAllMaterials = async (materialId: string) => {
+    let updatedAssignments: Record<string, number>;
+
     if (materialId === "default") {
       dispatch(clearAllAssignments());
+      updatedAssignments = {};
     } else {
+      const newAssignments: Record<string, number> = {};
       surfaces.forEach((surface) => {
-        const meshId = surface.mesh.uuid;
-        dispatch(assignMaterial({ meshId, materialId: parseInt(materialId) }));
+        const surfaceKey = surface.meshId.toString();
+        dispatch(assignMaterial({ meshId: surfaceKey, materialId: parseInt(materialId) }));
+        newAssignments[surfaceKey] = parseInt(materialId);
       });
+      updatedAssignments = { ...materialAssignments, ...newAssignments };
     }
+
+    updateSimulationData(updatedAssignments);
   };
 
   const getMaterialName = (materialId?: number) => {
@@ -61,6 +144,24 @@ export function SurfacesTab() {
       return surface.name;
     }
     return `Surface [${index + 1}]`;
+  };
+
+  const getAssignAllValue = () => {
+    if (surfaces.length === 0) return "default";
+
+    const assignedMaterials = surfaces.map((surface) => {
+      const surfaceKey = surface.meshId.toString();
+      return materialAssignments[surfaceKey];
+    });
+
+    const firstMaterial = assignedMaterials[0];
+    const allSame = assignedMaterials.every((materialId) => materialId === firstMaterial);
+
+    if (allSame && firstMaterial !== undefined) {
+      return firstMaterial.toString();
+    }
+
+    return "default";
   };
 
   return (
@@ -100,7 +201,7 @@ export function SurfacesTab() {
                   </button>
                 </td>
                 <td className="px-3 py-2">
-                  <Select onValueChange={handleAssignAllMaterials}>
+                  <Select value={getAssignAllValue()} onValueChange={handleAssignAllMaterials}>
                     <SelectTrigger
                       size="sm"
                       className="w-full bg-gray-700 border-gray-500 text-white [&>span]:truncate [&>span]:block [&>span]:max-w-full"
@@ -109,7 +210,7 @@ export function SurfacesTab() {
                     </SelectTrigger>
                     <SelectContent className="bg-gray-800 border-gray-600">
                       <SelectItem value="default" className="text-white">
-                        Clear All Assignments
+                        All Assignment
                       </SelectItem>
                       {materialsLoading ? (
                         <SelectItem value="loading" disabled className="text-gray-400">
@@ -139,8 +240,9 @@ export function SurfacesTab() {
 
               {showIndividualAssignments &&
                 surfaces.map((surface, index) => {
-                  const meshId = surface.mesh.uuid;
-                  const assignedMaterialId = materialAssignments[meshId];
+                  const surfaceKey = surface.meshId.toString();
+                  const assignedMaterialId = materialAssignments[surfaceKey];
+
                   return (
                     <tr key={surface.id} className="hover:bg-gray-800/30 border-t border-gray-700">
                       <td className="px-3 py-2 text-sm w-1/3">
@@ -149,7 +251,7 @@ export function SurfacesTab() {
                       <td className="px-3 py-2 w-2/3">
                         <Select
                           value={assignedMaterialId?.toString() || "default"}
-                          onValueChange={(value) => handleMaterialAssignment(meshId, value)}
+                          onValueChange={(value) => handleMaterialAssignment(surfaceKey, value)}
                         >
                           <SelectTrigger
                             size="sm"

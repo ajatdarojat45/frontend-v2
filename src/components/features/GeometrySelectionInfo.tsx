@@ -86,19 +86,15 @@ export function GeometrySelectionInfo() {
           </div>
 
           <div>
-            <span className="font-medium">Mesh ID:</span>
-          </div>
-          <div className="text-muted-foreground font-mono text-xs">
-            {selectedGeometry.mesh.uuid.slice(0, 8)}...
-          </div>
-
-          <div>
             <span className="font-medium">Material:</span>
           </div>
           <div className="text-muted-foreground text-xs">
             {(() => {
-              const meshId = selectedGeometry.mesh.uuid;
-              const assignedMaterialId = materialAssignments[meshId];
+              if (!selectedSurfaceInfo?.surface) {
+                return "No material selected";
+              }
+              const surfaceKey = selectedSurfaceInfo.surface.meshId.toString();
+              const assignedMaterialId = materialAssignments[surfaceKey];
               if (!assignedMaterialId) {
                 return "No material selected";
               }

@@ -28,9 +28,37 @@ export const simulationApi = createApi({
       // Invalidates Simulations-type tags to refetch relevant queries
       invalidatesTags: (_, __, arg) => [{ type: "Simulations", id: arg.modelId }],
     }),
+
+    // Get simulation by ID
+    getSimulationById: build.query<Simulation, number>({
+      query: (simulationId) => `/simulations/${simulationId}`,
+
+      // Provides specific simulation tag for cache invalidation
+      providesTags: (_, __, arg) => [{ type: "Simulations", id: arg }],
+    }),
+
+    // Update simulation by ID
+    updateSimulation: build.mutation<Simulation, { id: number; body: Partial<Simulation> }>({
+      query: ({ id, body }) => ({
+        url: `/simulations/${id}`,
+        method: "PUT",
+        body,
+      }),
+
+      // Invalidates specific simulation and list tags
+      invalidatesTags: (_, __, arg) => [
+        { type: "Simulations", id: arg.id },
+        { type: "Simulations", id: arg.body.modelId },
+      ],
+    }),
   }),
 });
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useGetSimulationsByModelIdQuery, useCreateSimulationMutation } = simulationApi;
+export const {
+  useGetSimulationsByModelIdQuery,
+  useCreateSimulationMutation,
+  useGetSimulationByIdQuery,
+  useUpdateSimulationMutation,
+} = simulationApi;
