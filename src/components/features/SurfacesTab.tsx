@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useSurfaces } from "@/hooks/useSurfaces";
 import { useGetMaterialsQuery } from "@/store/materialsApi";
 import { useGetSimulationByIdQuery, useUpdateSimulationMutation } from "@/store/simulationApi";
@@ -36,7 +36,7 @@ export function SurfacesTab() {
   const activeSimulation = useSelector((state: RootState) => state.simulation.activeSimulation);
   const currentModelId = useSelector((state: RootState) => state.model.currentModelId);
   const { data: simulation, error: simulationError } = useGetSimulationByIdQuery(
-    activeSimulation?.id,
+    activeSimulation?.id ?? 0,
     {
       skip: !activeSimulation?.id,
     },
@@ -55,46 +55,54 @@ export function SurfacesTab() {
     }
   }, [simulationError]);
 
+  const debounceTimeoutRef = useRef<NodeJS.Timeout>(null);
+
   const updateSimulationData = useCallback(
     async (assignments?: Record<string, number>) => {
-      if (!activeSimulation?.id) {
-        console.warn("Cannot update simulation: No active simulation");
-        toast.error("No active simulation to update");
-        return;
+      if (debounceTimeoutRef.current) {
+        clearTimeout(debounceTimeoutRef.current);
       }
 
-      if (!simulation) {
-        console.warn("Cannot update simulation: Simulation data not loaded");
-        toast.error("Simulation data not available");
-        return;
-      }
+      debounceTimeoutRef.current = setTimeout(async () => {
+        if (!activeSimulation?.id) {
+          console.warn("Cannot update simulation: No active simulation");
+          toast.error("No active simulation to update");
+          return;
+        }
 
-      if (!currentModelId) {
-        console.warn("Cannot update simulation: No current model ID");
-        toast.error("Model data not available");
-        return;
-      }
+        if (!simulation) {
+          console.warn("Cannot update simulation: Simulation data not loaded");
+          toast.error("Simulation data not available");
+          return;
+        }
 
-      const assignmentsToSave = assignments || materialAssignments;
+        if (!currentModelId) {
+          console.warn("Cannot update simulation: No current model ID");
+          toast.error("Model data not available");
+          return;
+        }
 
-      const updatePayload = {
-        id: activeSimulation.id,
-        body: {
-          modelId: currentModelId,
-          name: simulation.name,
-          status: simulation.status,
-          hasBeenEdited: true,
-          layerIdByMaterialId: assignmentsToSave,
-        },
-      };
+        const assignmentsToSave = assignments || materialAssignments;
 
-      try {
-        await updateSimulation(updatePayload).unwrap();
-        toast.success("Material assignments saved");
-      } catch (error) {
-        console.error("Failed to update simulation:", error);
-        toast.error("Failed to save material assignment");
-      }
+        const updatePayload = {
+          id: activeSimulation.id,
+          body: {
+            modelId: currentModelId,
+            name: simulation.name,
+            status: simulation.status,
+            hasBeenEdited: true,
+            layerIdByMaterialId: assignmentsToSave,
+          },
+        };
+
+        try {
+          await updateSimulation(updatePayload).unwrap();
+          toast.success("Material assignments saved");
+        } catch (error) {
+          console.error("Failed to update simulation:", error);
+          toast.error("Failed to save material assignment");
+        }
+      }, 300);
     },
     [activeSimulation?.id, simulation, currentModelId, materialAssignments, updateSimulation],
   );
