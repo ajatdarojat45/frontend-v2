@@ -42,7 +42,7 @@ export function GeometrySelectionInfo() {
             <div>
               <span className="font-medium">Total Volume:</span>
             </div>
-            <div className="text-muted-foreground">{totalModelVolume.toFixed(2)} units³</div>
+            <div className="text-muted-foreground">{totalModelVolume.toFixed(2)} m³</div>
           </div>
           <p className="text-sm text-muted-foreground mt-3">
             Click on a face in the model to select it for material assignment.
@@ -74,7 +74,7 @@ export function GeometrySelectionInfo() {
                 <span className="font-medium">Surface Area:</span>
               </div>
               <div className="text-muted-foreground">
-                {selectedSurfaceInfo.surface.area.toFixed(2)} units²
+                {selectedSurfaceInfo.surface.area.toFixed(2)} m²
               </div>
             </>
           )}
