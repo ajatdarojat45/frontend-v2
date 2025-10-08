@@ -27,6 +27,8 @@ export async function createLayerStructure(
   });
 
   object3D.traverse((child) => {
+    console.log(child, "<<<");
+
     if (child instanceof THREE.Mesh && child.userData.layerIndex !== undefined) {
       const layerIndex = child.userData.layerIndex;
       const layer = layerMap.get(layerIndex);

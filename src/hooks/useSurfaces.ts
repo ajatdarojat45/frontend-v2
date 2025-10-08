@@ -26,8 +26,11 @@ export function useSurfaces() {
 
         const area = calculateMeshArea(child);
 
+        // Use the stable UUID from Rhino attributes.id (matches backend simulation pipeline)
+        const stableId = child.userData.attributes?.id || child.userData.rhinoId || child.uuid;
+
         const surface: SurfaceInfo = {
-          id: child.uuid,
+          id: stableId,
           name: child.name || `Surface ${meshCounter}`,
           meshId: child.userData.meshId || meshCounter,
           faceCount: Math.floor(faceCount),

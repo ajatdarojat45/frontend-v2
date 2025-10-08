@@ -93,7 +93,7 @@ export function GeometrySelectionInfo() {
               if (!selectedSurfaceInfo?.surface) {
                 return "No material selected";
               }
-              const surfaceKey = selectedSurfaceInfo.surface.meshId.toString();
+              const surfaceKey = selectedSurfaceInfo.surface.id; // Use stable Rhino UUID
               const assignedMaterialId = materialAssignments[surfaceKey];
               if (!assignedMaterialId) {
                 return "No material selected";
