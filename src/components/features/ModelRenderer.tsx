@@ -1,17 +1,191 @@
+import { useRef, useState, useCallback, useMemo } from "react";
+import { useThree } from "@react-three/fiber";
 import { useModelLoader } from "@/hooks/useModelLoader";
+import { useGeometrySelection } from "@/hooks/useGeometrySelection";
+import { createEdgeOutlineForObject3D } from "@/helpers/layerProcessor";
+import * as THREE from "three";
 import type { ModelRendererProps } from "@/types/modelViewport";
+
+type MaterialWithUuid = THREE.Material & { uuid: string };
+
+const HIGHLIGHT_COLOR = 0x006600;
+const HOVER_COLOR = 0x888888;
+const ORIGINAL_COLOR_CACHE = new WeakMap<THREE.Material, number | THREE.Color>();
 
 export function ModelRenderer({ modelId }: ModelRendererProps) {
   const { getCurrentModel, currentModelId } = useModelLoader();
-
-  if (currentModelId !== modelId) {
-    return null;
-  }
+  const {
+    selectedGeometry,
+    selectGeometry,
+    highlightedMeshes,
+    addHighlightedMesh,
+    removeHighlightedMesh,
+  } = useGeometrySelection();
+  const { camera, raycaster, pointer, gl } = useThree();
+  const groupRef = useRef<THREE.Group>(null);
+  const [hoveredMesh, setHoveredMesh] = useState<THREE.Mesh | null>(null);
 
   const modelData = getCurrentModel();
-  if (!modelData) {
+
+  const edgeOutline = useMemo(() => {
+    if (modelData?.object3D && currentModelId === modelId) {
+      return createEdgeOutlineForObject3D(modelData.object3D, 40);
+    }
+    return null;
+  }, [modelData?.object3D, currentModelId, modelId]);
+
+  const highlightMesh = useCallback((mesh: THREE.Mesh, color: number) => {
+    if (!mesh.material) return;
+
+    const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+
+    materials.forEach((material) => {
+      if (!ORIGINAL_COLOR_CACHE.has(material)) {
+        if (
+          material instanceof THREE.MeshStandardMaterial ||
+          material instanceof THREE.MeshBasicMaterial
+        ) {
+          ORIGINAL_COLOR_CACHE.set(material, material.color.getHex());
+        }
+      }
+
+      if (
+        material instanceof THREE.MeshStandardMaterial ||
+        material instanceof THREE.MeshBasicMaterial
+      ) {
+        material.color.setHex(color);
+      }
+    });
+  }, []);
+
+  const restoreOriginalColor = useCallback((mesh: THREE.Mesh) => {
+    if (!mesh.material) return;
+
+    const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+
+    materials.forEach((material) => {
+      const originalColor = ORIGINAL_COLOR_CACHE.get(material);
+      if (originalColor !== undefined) {
+        if (
+          material instanceof THREE.MeshStandardMaterial ||
+          material instanceof THREE.MeshBasicMaterial
+        ) {
+          if (typeof originalColor === "number") {
+            material.color.setHex(originalColor);
+          } else {
+            material.color.copy(originalColor);
+          }
+        }
+      }
+    });
+  }, []);
+
+  const handlePointerMove = useCallback(() => {
+    if (!groupRef.current) return;
+
+    const meshes: THREE.Mesh[] = [];
+    groupRef.current.traverse((child) => {
+      if (child instanceof THREE.Mesh) {
+        meshes.push(child);
+      }
+    });
+
+    raycaster.setFromCamera(pointer, camera);
+    const intersects = raycaster.intersectObjects(meshes);
+
+    if (intersects.length > 0) {
+      const newHoveredMesh = intersects[0].object as THREE.Mesh;
+      if (newHoveredMesh !== hoveredMesh) {
+        if (hoveredMesh && !highlightedMeshes.has(hoveredMesh)) {
+          restoreOriginalColor(hoveredMesh);
+        }
+
+        if (!highlightedMeshes.has(newHoveredMesh)) {
+          highlightMesh(newHoveredMesh, HOVER_COLOR);
+        }
+
+        setHoveredMesh(newHoveredMesh);
+      }
+    } else {
+      if (hoveredMesh && !highlightedMeshes.has(hoveredMesh)) {
+        restoreOriginalColor(hoveredMesh);
+      }
+      setHoveredMesh(null);
+    }
+  }, [
+    hoveredMesh,
+    highlightedMeshes,
+    restoreOriginalColor,
+    highlightMesh,
+    camera,
+    raycaster,
+    pointer,
+    gl,
+  ]);
+
+  const handleClick = useCallback(() => {
+    if (!groupRef.current) return;
+
+    const meshes: THREE.Mesh[] = [];
+    groupRef.current.traverse((child) => {
+      if (child instanceof THREE.Mesh) {
+        meshes.push(child);
+      }
+    });
+
+    raycaster.setFromCamera(pointer, camera);
+    const intersects = raycaster.intersectObjects(meshes);
+
+    if (intersects.length > 0) {
+      const intersection = intersects[0];
+      const mesh = intersection.object as THREE.Mesh;
+
+      if (selectedGeometry?.mesh && selectedGeometry.mesh !== mesh) {
+        removeHighlightedMesh(selectedGeometry.mesh);
+        restoreOriginalColor(selectedGeometry.mesh);
+      }
+
+      highlightMesh(mesh, HIGHLIGHT_COLOR);
+      addHighlightedMesh(mesh);
+
+      selectGeometry({
+        mesh,
+        faceIndex: intersection.faceIndex || 0,
+        point: intersection.point,
+        materialId: mesh.material ? (mesh.material as MaterialWithUuid).uuid : undefined,
+      });
+
+      if (!mesh.userData.meshId) {
+        let meshCount = 0;
+        groupRef.current?.traverse((child) => {
+          if (child instanceof THREE.Mesh) {
+            if (!child.userData.meshId) {
+              child.userData.meshId = ++meshCount;
+            }
+          }
+        });
+      }
+    }
+  }, [
+    selectedGeometry,
+    removeHighlightedMesh,
+    restoreOriginalColor,
+    highlightMesh,
+    addHighlightedMesh,
+    selectGeometry,
+    camera,
+    raycaster,
+    pointer,
+  ]);
+
+  if (currentModelId !== modelId || !modelData) {
     return null;
   }
 
-  return <primitive object={modelData.object3D} />;
+  return (
+    <group ref={groupRef} onPointerMove={handlePointerMove} onClick={handleClick}>
+      <primitive object={modelData.object3D} />
+      {edgeOutline && <primitive object={edgeOutline} />}
+    </group>
+  );
 }

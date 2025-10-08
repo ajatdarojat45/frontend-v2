@@ -49,3 +49,5 @@ export const CHORAS_DOCUMENTATION_URL = {
   github: "https://github.com/choras-org",
   documentation: "https://github.com/choras-org",
 } as const;
+
+export const RHINO3DM_PATH = "/node_modules/three/examples/jsm/libs/rhino3dm/";

@@ -3,12 +3,12 @@ import { Rhino3dmLoader } from "three/examples/jsm/loaders/3DMLoader";
 import rhino3dm from "https://cdn.jsdelivr.net/npm/rhino3dm@8.17.0/rhino3dm.module.js";
 import type { RhinoLayerData, RhinoObjectAttribute } from "@/types/layer";
 import type { RhinoDocument } from "@/types/file";
+import { RHINO3DM_PATH } from "@/constants";
 
 export async function parseFileAsRhinoDoc(fileData: ArrayBuffer): Promise<RhinoDocument> {
   try {
     const rhino = await rhino3dm();
-    const uint8Array = new Uint8Array(fileData);
-    const rhinoDoc = rhino.File3dm.fromByteArray(uint8Array);
+    const rhinoDoc = rhino.File3dm.fromByteArray(new Uint8Array(fileData));
 
     if (!rhinoDoc) {
       throw new Error("Failed to parse 3dm file");
@@ -28,9 +28,7 @@ export async function parseFileAsThreeObject(fileData: ArrayBuffer): Promise<THR
   return new Promise((resolve, reject) => {
     try {
       const loader = new Rhino3dmLoader();
-
-      const wasmPath = "/node_modules/three/examples/jsm/libs/rhino3dm/";
-      loader.setLibraryPath(wasmPath);
+      loader.setLibraryPath(RHINO3DM_PATH);
 
       loader.parse(
         fileData,
@@ -42,41 +40,60 @@ export async function parseFileAsThreeObject(fileData: ArrayBuffer): Promise<THR
 
           object3D.traverse((child) => {
             if (child instanceof THREE.Mesh) {
-              if (!child.material) {
-                child.material = new THREE.MeshStandardMaterial({
-                  color: 0xffffff,
-                  side: THREE.DoubleSide,
-                  transparent: true,
-                  opacity: 0.3,
-                  depthWrite: false,
-                });
-              } else if (child.material instanceof THREE.MeshStandardMaterial) {
-                child.material.transparent = true;
-                child.material.opacity = 0.3;
-                child.material.depthWrite = false;
-                child.material.needsUpdate = true;
-              }
-
-              if (!child.userData.layerIndex) {
-                child.userData.layerIndex = 0;
-              }
+              configureMeshMaterial(child);
+              ensureLayerIndex(child);
             }
           });
 
           resolve(object3D);
         },
         (error: ErrorEvent) => {
-          reject(new Error(`Could not parse 3D model: ${error}`));
+          reject(new Error(`Failed to parse 3D model: ${error}`));
         },
       );
     } catch (error) {
-      reject(
-        new Error(
-          `Failed to initialize 3DM loader: ${error instanceof Error ? error.message : "Unknown error"}`,
-        ),
-      );
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      reject(new Error(`Failed to initialize 3DM loader: ${errorMessage}`));
     }
   });
+}
+
+function configureMeshMaterial(mesh: THREE.Mesh): void {
+  const createStandardMaterial = (color: number) =>
+    new THREE.MeshStandardMaterial({
+      color: color,
+      side: THREE.DoubleSide,
+      transparent: true,
+      opacity: 0.95,
+      depthWrite: true,
+      roughness: 1.0,
+      metalness: 0.0,
+      flatShading: false,
+    });
+
+  if (!mesh.material) {
+    mesh.material = createStandardMaterial(0xcccccc).clone();
+  } else {
+    let color = 0xcccccc;
+    if (
+      mesh.material instanceof THREE.MeshStandardMaterial ||
+      mesh.material instanceof THREE.MeshBasicMaterial
+    ) {
+      color = mesh.material.color.getHex();
+
+      if (color === 0x000000 || color < 0x111111) {
+        color = 0xcccccc;
+      }
+    }
+
+    mesh.material = createStandardMaterial(color).clone();
+  }
+}
+
+function ensureLayerIndex(mesh: THREE.Mesh): void {
+  if (!mesh.userData.layerIndex) {
+    mesh.userData.layerIndex = 0;
+  }
 }
 
 export function extractLayerInfo(rhinoDoc: RhinoDocument): Array<RhinoLayerData> {
