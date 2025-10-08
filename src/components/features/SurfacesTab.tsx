@@ -186,7 +186,7 @@ export function SurfacesTab() {
             <thead>
               <tr>
                 <th className="px-3 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider w-1/2">
-                  Layer
+                  Surface
                 </th>
                 <th className="px-3 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider w-1/2">
                   Material
