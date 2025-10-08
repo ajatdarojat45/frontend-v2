@@ -108,8 +108,6 @@ export function optimizeModelForRendering(
   rhinoFileData: RhinoFileData,
   targetSize: number = 100,
 ): RhinoFileData {
-  const centerOffset = centerModelAtOrigin(rhinoFileData.object3D);
-
   const scaleFactor = scaleModelToFit(rhinoFileData.object3D, targetSize);
 
   rhinoFileData.object3D.traverse((child) => {
@@ -120,7 +118,6 @@ export function optimizeModelForRendering(
   });
 
   rhinoFileData.object3D.userData.optimization = {
-    centerOffset: centerOffset.toArray(),
     scaleFactor,
     optimizedAt: Date.now(),
   };

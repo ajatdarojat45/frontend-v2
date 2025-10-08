@@ -2,6 +2,31 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.9](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.8...v0.0.9) (2025-10-08)
+
+### Bug Fixes
+
+- click outside modle to reset Geometry Information component ([ea759cc](https://github.com/ajatdarojat45/frontend-v2/commit/ea759cccbf466c2c0a68d49395f5988deae6569e))
+- using rhino userData id as stable id to identified material assigment ([f1955aa](https://github.com/ajatdarojat45/frontend-v2/commit/f1955aad7e7c61ef7435e9058fb94a3c0323e9b5))
+
+### [0.0.8](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.7...v0.0.8) (2025-10-08)
+
+### Features
+
+- add CHORAS documentation URL to constants ([3f71d70](https://github.com/ajatdarojat45/frontend-v2/commit/3f71d7097a6d57bb50c0f4aebaaaff7d95754134))
+- add edge line to distinguish selection ([ddbebc8](https://github.com/ajatdarojat45/frontend-v2/commit/ddbebc84687081fe40353b4d60f99281adece7b8))
+- assignment material individual ([eba4fb7](https://github.com/ajatdarojat45/frontend-v2/commit/eba4fb7b5dc755c609d3179a4d0eb3f6b94dba0d))
+- creating sidebar tabs ([389fe19](https://github.com/ajatdarojat45/frontend-v2/commit/389fe19d9bb9d6189945a24dfd1534618b263ad6))
+- fetch materials from API ([f414c1f](https://github.com/ajatdarojat45/frontend-v2/commit/f414c1f513355bb4501cb4ee4eb0771e5bcc8c9f))
+- material viewer tabs ([e9ce84e](https://github.com/ajatdarojat45/frontend-v2/commit/e9ce84eb15b4e98829e0f7b2728155d627f8b7bc))
+- mesh selection highlight ([53693bd](https://github.com/ajatdarojat45/frontend-v2/commit/53693bdfffb0974e8d98b8ff76c93ff25a502258))
+
+### Bug Fixes
+
+- accordion on assign all material ([bfa3fc2](https://github.com/ajatdarojat45/frontend-v2/commit/bfa3fc21d5f9b02fed249fbf40caf48403ddbc1e))
+- add simple debounce for update api call ([0b01aa1](https://github.com/ajatdarojat45/frontend-v2/commit/0b01aa1a9649770e966055ae449341f27ae9d123))
+- assign material actually update the db ([48d9ba6](https://github.com/ajatdarojat45/frontend-v2/commit/48d9ba6234bdca6e52153d4068093397c61a3487))
+
 ### [0.0.7](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.6...v0.0.7) (2025-10-06)
 
 ### Bug Fixes

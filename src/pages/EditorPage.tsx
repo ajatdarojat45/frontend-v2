@@ -1,6 +1,5 @@
 import { CreateSimulation } from "@/components/features/CreateSimulation";
 import { EmptySimulation } from "@/components/features/EmptySimulation";
-import { SimulationPicker } from "@/components/features/SimulationPicker";
 import { ModelViewer } from "@/components/features/ModelViewer";
 import { AppLayout } from "@/components/ui/app-layout";
 import { useGetSimulationsByModelIdQuery } from "@/store/simulationApi";
@@ -8,6 +7,8 @@ import { setActiveSimulation } from "@/store/simulationSlice";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router";
+import { SimulationPicker } from "@/components/features/SimulationPicker";
+import { SidebarTabs } from "@/components/features/SidebarTabs";
 
 export function EditorPage() {
   const navigate = useNavigate();
@@ -45,6 +46,7 @@ export function EditorPage() {
               <div className="w-full h-full flex flex-col p-4">
                 <SimulationPicker modelId={+modelId} simulationId={+simulationId} />
                 You're editing simulation {simulationId}
+                <SidebarTabs />
               </div>
             ) : (
               // If no simulations exist, show the empty state
