@@ -17,6 +17,7 @@ export function ModelRenderer({ modelId }: ModelRendererProps) {
   const {
     selectedGeometry,
     selectGeometry,
+    clearSelection,
     highlightedMeshes,
     addHighlightedMesh,
     removeHighlightedMesh,
@@ -165,6 +166,12 @@ export function ModelRenderer({ modelId }: ModelRendererProps) {
           }
         });
       }
+    } else {
+      if (selectedGeometry?.mesh) {
+        removeHighlightedMesh(selectedGeometry.mesh);
+        restoreOriginalColor(selectedGeometry.mesh);
+      }
+      clearSelection();
     }
   }, [
     selectedGeometry,
@@ -173,6 +180,7 @@ export function ModelRenderer({ modelId }: ModelRendererProps) {
     highlightMesh,
     addHighlightedMesh,
     selectGeometry,
+    clearSelection,
     camera,
     raycaster,
     pointer,
@@ -184,6 +192,11 @@ export function ModelRenderer({ modelId }: ModelRendererProps) {
 
   return (
     <group ref={groupRef} onPointerMove={handlePointerMove} onClick={handleClick}>
+      <mesh position={[0, 0, -1000]} visible={false}>
+        <planeGeometry args={[10000, 10000]} />
+        <meshBasicMaterial transparent opacity={0} />
+      </mesh>
+
       <primitive object={modelData.object3D} />
       {edgeOutline && <primitive object={edgeOutline} />}
     </group>
