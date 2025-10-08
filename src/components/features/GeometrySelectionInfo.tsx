@@ -15,7 +15,7 @@ export function GeometrySelectionInfo() {
   const { data: materials = [] } = useGetMaterialsQuery();
 
   const selectedSurfaceInfo = useMemo(() => {
-    if (!selectedGeometry) return null;
+    if (!selectedGeometry || selectedGeometry.mesh?.visible === false) return null;
 
     const surfaceIndex = surfaces.findIndex((surface) => surface.mesh === selectedGeometry.mesh);
 
@@ -27,14 +27,24 @@ export function GeometrySelectionInfo() {
     };
   }, [selectedGeometry, surfaces]);
 
-  if (!selectedGeometry) {
+  const totalModelVolume = useMemo(() => {
+    return surfaces.reduce((total, surface) => total + (surface.volume || 0), 0);
+  }, [surfaces]);
+
+  if (!selectedGeometry || selectedGeometry.mesh?.visible === false) {
     return (
       <Card className="w-80">
         <CardHeader>
-          <CardTitle className="text-sm">Geometry Selection</CardTitle>
+          <CardTitle className="text-sm">Geometry Information</CardTitle>
         </CardHeader>
-        <CardContent>
-          <p className="text-sm text-muted-foreground">
+        <CardContent className="space-y-2">
+          <div className="grid grid-cols-2 gap-2 text-sm">
+            <div>
+              <span className="font-medium">Total Volume:</span>
+            </div>
+            <div className="text-muted-foreground">{totalModelVolume.toFixed(2)} m³</div>
+          </div>
+          <p className="text-sm text-muted-foreground mt-3">
             Click on a face in the model to select it for material assignment.
           </p>
         </CardContent>
@@ -45,7 +55,7 @@ export function GeometrySelectionInfo() {
   return (
     <Card className="w-80">
       <CardHeader>
-        <CardTitle className="text-sm">Selected Geometry</CardTitle>
+        <CardTitle className="text-sm">Selected Surface</CardTitle>
       </CardHeader>
       <CardContent className="space-y-2">
         <div className="grid grid-cols-2 gap-2 text-sm">
@@ -58,42 +68,26 @@ export function GeometrySelectionInfo() {
               : selectedGeometry.mesh.name || "Unknown Surface"}
           </div>
 
-          <div>
-            <span className="font-medium">Face Index:</span>
-          </div>
-          <div className="text-muted-foreground">
-            {selectedGeometry.faceIndex}
-            {selectedSurfaceInfo && ` (of ${selectedSurfaceInfo.surface.faceCount})`}
-          </div>
-
           {selectedSurfaceInfo?.surface.area && (
             <>
               <div>
                 <span className="font-medium">Surface Area:</span>
               </div>
               <div className="text-muted-foreground">
-                {selectedSurfaceInfo.surface.area.toFixed(2)} units²
+                {selectedSurfaceInfo.surface.area.toFixed(2)} m²
               </div>
             </>
           )}
 
           <div>
-            <span className="font-medium">Position:</span>
-          </div>
-          <div className="text-muted-foreground font-mono text-xs">
-            ({selectedGeometry.point.x.toFixed(2)}, {selectedGeometry.point.y.toFixed(2)},{" "}
-            {selectedGeometry.point.z.toFixed(2)})
-          </div>
-
-          <div>
-            <span className="font-medium">Material:</span>
+            <span className="font-medium">Assigned Material:</span>
           </div>
           <div className="text-muted-foreground text-xs">
             {(() => {
               if (!selectedSurfaceInfo?.surface) {
                 return "No material selected";
               }
-              const surfaceKey = selectedSurfaceInfo.surface.meshId.toString();
+              const surfaceKey = selectedSurfaceInfo.surface.id;
               const assignedMaterialId = materialAssignments[surfaceKey];
               if (!assignedMaterialId) {
                 return "No material selected";

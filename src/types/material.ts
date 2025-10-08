@@ -17,6 +17,14 @@ export interface SurfaceInfo {
   materialId?: number;
   faceCount: number;
   area?: number;
+  volume?: number;
+  boundingBox?: {
+    min: THREE.Vector3;
+    max: THREE.Vector3;
+    size: THREE.Vector3;
+    center: THREE.Vector3;
+  };
+  rhinoMaterialName?: string;
   layerId?: string;
   mesh: THREE.Mesh;
 }
