@@ -4,6 +4,7 @@ import { ImpulseResponsePlayer } from "./ImpulseResponsePlayer";
 import { UploadConvolvedAudio } from "./UploadConvolvedAudio";
 import { useState } from "react";
 import { ConvolvedSoundPlayer } from "./ConvolvedSoundPlayer";
+import { DownloadResult } from "./DownloadResult";
 
 type ResultAuralizationsProps = {
   simulationId: number;
@@ -15,6 +16,12 @@ export function ResultAuralizations({ simulationId }: ResultAuralizationsProps) 
     <div className="h-full w-full p-8 space-y-4">
       <h1 className="text-2xl">Impulse Response</h1>
       <ImpulseResponsePlayer simulationId={simulationId} />
+
+      <DownloadResult
+        triggerLabel="Download Impulse Response"
+        simulationId={simulationId}
+        mode="auralizations"
+      />
 
       <br />
       <h1 className="text-2xl">Convolved Sound</h1>
