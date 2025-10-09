@@ -43,3 +43,5 @@ export const SIMULATION_METHODS = {
     documentation: "https://github.com/AaltoRSE/ParallelFDTD/",
   },
 } as const;
+
+export const FREQUENCY_BANDS = [63, 125, 250, 500, 1000, 2000, 4000, 8000] as const;

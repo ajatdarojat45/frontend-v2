@@ -32,8 +32,8 @@ export function ResultPage() {
         </div>
       }
     >
-      <Tabs defaultValue="parameters">
-        <TabsList>
+      <Tabs defaultValue="parameters" className="mt-8">
+        <TabsList className="mx-auto">
           <TabsTrigger value="parameters">Parameters</TabsTrigger>
           <TabsTrigger value="auralizations">Auralizations</TabsTrigger>
         </TabsList>
