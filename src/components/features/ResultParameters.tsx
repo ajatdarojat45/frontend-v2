@@ -101,7 +101,7 @@ export function ResultParameters({ simulationId }: ResultParametersProps) {
       </div>
 
       <DownloadResult
-        simulationId={+simulation}
+        simulationId={+simulationId}
         mode="parameters"
         triggerLabel="Download Parameters"
       />
