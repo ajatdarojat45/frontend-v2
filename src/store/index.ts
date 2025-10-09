@@ -9,6 +9,7 @@ import modelReducer from "./modelSlice";
 import geometrySelectionReducer from "./geometrySelectionSlice";
 import { materialsApi } from "./materialsApi";
 import materialAssignmentReducer from "./materialAssignmentSlice";
+import { sourceReceiverReducer } from "./sourceReceiverSlice";
 
 export const store = configureStore({
   reducer: {
@@ -21,6 +22,7 @@ export const store = configureStore({
     model: modelReducer,
     geometrySelection: geometrySelectionReducer,
     materialAssignment: materialAssignmentReducer,
+    sourceReceiver: sourceReceiverReducer,
   },
 
   middleware: (getDefaultMiddleware) =>

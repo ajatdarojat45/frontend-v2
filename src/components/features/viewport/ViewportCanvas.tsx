@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useModelLoader } from "@/hooks/useModelLoader";
 import { ModelRenderer } from "./ModelRenderer";
 import { GeometrySelectionInfo } from "./GeometrySelectionInfo";
+import { SourceVisualization } from "./SourceVisualization";
 import type { ViewportCanvasProps } from "@/types/modelViewport";
 
 export function ViewportCanvas({ modelUrl, modelId }: ViewportCanvasProps) {
@@ -118,6 +119,7 @@ export function ViewportCanvas({ modelUrl, modelId }: ViewportCanvasProps) {
           </GizmoHelper>
 
           {modelId && <ModelRenderer modelId={modelId} />}
+          <SourceVisualization />
         </Canvas>
       </div>
 

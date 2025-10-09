@@ -64,7 +64,7 @@ function configureMeshMaterial(mesh: THREE.Mesh): void {
       color: color,
       side: THREE.DoubleSide,
       transparent: true,
-      opacity: 0.95,
+      opacity: 0.1,
       depthWrite: true,
       roughness: 1.0,
       metalness: 0.0,
