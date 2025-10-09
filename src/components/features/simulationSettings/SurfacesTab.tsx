@@ -19,7 +19,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import type { SurfaceInfo } from "@/types/material";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, EllipsisVertical } from "lucide-react";
 
 export function SurfacesTab() {
   const dispatch = useDispatch();
@@ -174,8 +174,11 @@ export function SurfacesTab() {
 
   return (
     <div className="text-white">
-      <div className="mb-4">
+      <div className="mb-4 flex justify-between items-center">
         <h4 className="text-lg font-semibold mb-2">Surfaces</h4>
+        <button>
+          <EllipsisVertical size={20} className="text-gray-400" />
+        </button>
       </div>
 
       {surfaces.length === 0 ? (
