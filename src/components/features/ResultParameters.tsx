@@ -91,6 +91,7 @@ export function ResultParameters({ simulationId }: ResultParametersProps) {
             },
           }}
           series={[
+            // TODO: if comparison panel is added, series data should come from comparison state
             {
               name: simulation.name,
               data: seriesData,
