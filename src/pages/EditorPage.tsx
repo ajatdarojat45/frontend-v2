@@ -1,14 +1,14 @@
 import { CreateSimulation } from "@/components/features/CreateSimulation";
 import { EmptySimulation } from "@/components/features/EmptySimulation";
-import { ModelViewer } from "@/components/features/ModelViewer";
 import { AppLayout } from "@/components/ui/app-layout";
 import { useGetSimulationsByModelIdQuery } from "@/store/simulationApi";
 import { setActiveSimulation } from "@/store/simulationSlice";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router";
-import { SimulationPicker } from "@/components/features/SimulationPicker";
-import { SidebarTabs } from "@/components/features/SidebarTabs";
+import { SimulationPicker } from "@/components/features/simulationSettings/SimulationPicker";
+import { SidebarTabs } from "@/components/features/simulationSettings/SidebarTabs";
+import { ModelViewer } from "@/components/features/viewport/ModelViewer";
 
 export function EditorPage() {
   const navigate = useNavigate();

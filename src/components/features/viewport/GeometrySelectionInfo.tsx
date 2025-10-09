@@ -71,7 +71,7 @@ export function GeometrySelectionInfo() {
           {selectedSurfaceInfo?.surface.area && (
             <>
               <div>
-                <span className="font-medium">Surface Area:</span>
+                <span className="font-medium">Surface area:</span>
               </div>
               <div className="text-muted-foreground">
                 {selectedSurfaceInfo.surface.area.toFixed(2)} m²
@@ -80,7 +80,7 @@ export function GeometrySelectionInfo() {
           )}
 
           <div>
-            <span className="font-medium">Assigned Material:</span>
+            <span className="font-medium">Assigned material:</span>
           </div>
           <div className="text-muted-foreground text-xs">
             {(() => {

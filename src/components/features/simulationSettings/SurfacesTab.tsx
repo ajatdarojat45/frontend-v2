@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/select";
 import type { SurfaceInfo } from "@/types/material";
 import { ChevronRight } from "lucide-react";
+import { SurfaceMaterialList } from "./SurfaceMaterialList";
 
 export function SurfacesTab() {
   const dispatch = useDispatch();
@@ -174,8 +175,9 @@ export function SurfacesTab() {
 
   return (
     <div className="text-white">
-      <div className="mb-4">
+      <div className="mb-4 flex justify-between items-center">
         <h4 className="text-lg font-semibold mb-2">Surfaces</h4>
+        <SurfaceMaterialList />
       </div>
 
       {surfaces.length === 0 ? (
