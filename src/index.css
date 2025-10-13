@@ -43,6 +43,12 @@
 
   /* Custom Variables */
   --width-sidebar: 332px;
+  --color-choras-primary: #4ecdc4;
+  --color-choras-secondary: #667eea;
+  --color-choras-accent: #f093fb;
+  --color-choras-dark: #1a1d29;
+  --color-choras-gray: #64748b;
+  --font-choras: "Questrial", sans-serif;
 }
 
 :root {

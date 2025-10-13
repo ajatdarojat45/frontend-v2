@@ -15,12 +15,13 @@ export function AppLayout({ title, right, sidebar, children }: AppLayoutProps) {
       {/* Header */}
       <header className="h-16 bg-black flex justify-between items-center">
         <Link to="/" className="w-sidebar h-16 pl-6 border-b border-b-stone-600">
-          {/* TODO: choras Logo, update it later */}
           <h1 className="font-[Questrial] uppercase text-white text-[2.5rem] h-16 flex items-center">
             CHORAS
           </h1>
         </Link>
-        <h1 className="text-white text-center text-lg flex-2 font-bold">{title}</h1>
+        <h1 className="text-center font-choras text-choras-primary text-2xl flex-2 font-bold">
+          {title}
+        </h1>
         <div className="w-sidebar shrink-0 flex-1 flex justify-end pr-6">{right}</div>
       </header>
       <main className="flex flex-1">
