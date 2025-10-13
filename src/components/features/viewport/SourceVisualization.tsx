@@ -5,6 +5,7 @@ import { useThree, type ThreeEvent } from "@react-three/fiber";
 import type { RootState } from "@/store";
 import type { Source } from "@/types/simulation";
 import { updateSource, selectSource } from "@/store/sourceReceiverSlice";
+import { useSourceReceiverApi } from "@/hooks/useSourceReceiverApi";
 import {
   OrbitControls as OrbitControlsType,
   TransformControls as TransformControlsType,
@@ -114,6 +115,7 @@ export function SourceVisualization({ orbitControlsRef }: SourceVisualizationPro
   const dispatch = useDispatch();
   const sources = useSelector((state: RootState) => state.sourceReceiver.sources);
   const selectedSource = useSelector((state: RootState) => state.sourceReceiver.selectedSource);
+  const { updateSimulationData } = useSourceReceiverApi();
 
   const handleSourceClick = (sourceId: string, event: ThreeEvent<MouseEvent>) => {
     event.stopPropagation();
@@ -124,6 +126,18 @@ export function SourceVisualization({ orbitControlsRef }: SourceVisualizationPro
     dispatch(updateSource({ id: sourceId, field: "x", value: Number(position.x.toFixed(2)) }));
     dispatch(updateSource({ id: sourceId, field: "y", value: Number(position.y.toFixed(2)) }));
     dispatch(updateSource({ id: sourceId, field: "z", value: Number(position.z.toFixed(2)) }));
+
+    const updatedSources = sources.map((source) =>
+      source.id === sourceId
+        ? {
+            ...source,
+            x: Number(position.x.toFixed(2)),
+            y: Number(position.y.toFixed(2)),
+            z: Number(position.z.toFixed(2)),
+          }
+        : source,
+    );
+    updateSimulationData(updatedSources);
   };
 
   return (

@@ -1,4 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
+import { useEffect } from "react";
 import { SourceReceiversMenu } from "./SourceReceiversMenu";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,7 +17,11 @@ import {
   updateReceiver,
   selectSource,
   selectReceiver,
+  setSources,
+  setReceivers,
 } from "@/store/sourceReceiverSlice";
+import { useSourceReceiverApi } from "@/hooks/useSourceReceiverApi";
+import { toast } from "sonner";
 
 export function SourceReceiversTab() {
   const dispatch = useDispatch();
@@ -25,37 +30,72 @@ export function SourceReceiversTab() {
   const selectedSource = useSelector((state: RootState) => state.sourceReceiver.selectedSource);
   const selectedReceiver = useSelector((state: RootState) => state.sourceReceiver.selectedReceiver);
 
+  const { simulation, simulationError, updateSimulationData, updateReceiversData } =
+    useSourceReceiverApi();
+
+  useEffect(() => {
+    if (simulation?.sources) {
+      dispatch(setSources(simulation.sources));
+    }
+  }, [simulation?.sources, dispatch]);
+
+  // Load receivers from simulation data
+  useEffect(() => {
+    if (simulation?.receivers) {
+      dispatch(setReceivers(simulation.receivers));
+    }
+  }, [simulation?.receivers, dispatch]);
+
+  useEffect(() => {
+    if (simulationError) {
+      toast.error("Cannot load simulation data. Source/Receiver changes will not be saved.");
+    }
+  }, [simulationError]);
+
   const handleAddSource = () => {
     if (sources.length >= 1) return;
 
     const newSource: Source = {
-      id: Date.now().toString(),
+      id: crypto.randomUUID(),
       label: `Source ${sources.length + 1}`,
-      orderNumber: sources.length + 1,
+      orderNumber: sources.length,
       x: 1,
       y: 1,
       z: 1,
     };
     dispatch(addSource(newSource));
+
+    const updatedSources = [...sources, newSource];
+    updateSimulationData(updatedSources);
   };
 
   const handleRemoveSource = (id: string) => {
     dispatch(removeSource(id));
+
+    const updatedSources = sources.filter((source) => source.id !== id);
+    updateSimulationData(updatedSources);
   };
 
   const handleRemoveAllSources = () => {
     dispatch(removeAllSources());
+
+    updateSimulationData([]);
   };
 
   const handleUpdateSource = (id: string, field: "x" | "y" | "z", value: number) => {
     dispatch(updateSource({ id, field, value }));
+
+    const updatedSources = sources.map((source) =>
+      source.id === id ? { ...source, [field]: value } : source,
+    );
+    updateSimulationData(updatedSources);
   };
 
   const handleAddReceiver = () => {
     if (receivers.length >= 1) return;
 
     const newReceiver: Receiver = {
-      id: Date.now().toString(),
+      id: crypto.randomUUID(),
       label: `Receiver ${receivers.length + 1}`,
       orderNumber: receivers.length + 1,
       x: 3,
@@ -64,18 +104,31 @@ export function SourceReceiversTab() {
       isValid: true,
     };
     dispatch(addReceiver(newReceiver));
+
+    const updatedReceivers = [...receivers, newReceiver];
+    updateReceiversData(updatedReceivers);
   };
 
   const handleRemoveReceiver = (id: string) => {
     dispatch(removeReceiver(id));
+
+    const updatedReceivers = receivers.filter((receiver) => receiver.id !== id);
+    updateReceiversData(updatedReceivers);
   };
 
   const handleRemoveAllReceivers = () => {
     dispatch(removeAllReceivers());
+
+    updateReceiversData([]);
   };
 
   const handleUpdateReceiver = (id: string, field: "x" | "y" | "z", value: number) => {
     dispatch(updateReceiver({ id, field, value }));
+
+    const updatedReceivers = receivers.map((receiver) =>
+      receiver.id === id ? { ...receiver, [field]: value } : receiver,
+    );
+    updateReceiversData(updatedReceivers);
   };
 
   const handleSourceClick = (sourceId: string) => {

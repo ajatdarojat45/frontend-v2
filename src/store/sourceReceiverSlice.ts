@@ -68,6 +68,12 @@ const sourceReceiverSlice = createSlice({
     selectReceiver: (state, action: PayloadAction<string | null>) => {
       state.selectedReceiver = action.payload;
     },
+    setSources: (state, action: PayloadAction<Source[]>) => {
+      state.sources = action.payload;
+    },
+    setReceivers: (state, action: PayloadAction<Receiver[]>) => {
+      state.receivers = action.payload;
+    },
   },
 });
 
@@ -82,6 +88,8 @@ export const {
   updateReceiver,
   selectSource,
   selectReceiver,
+  setSources,
+  setReceivers,
 } = sourceReceiverSlice.actions;
 
 export const sourceReceiverReducer = sourceReceiverSlice.reducer;

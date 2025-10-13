@@ -5,6 +5,7 @@ import { useThree, type ThreeEvent } from "@react-three/fiber";
 import type { RootState } from "@/store";
 import type { Receiver } from "@/types/simulation";
 import { updateReceiver, selectReceiver } from "@/store/sourceReceiverSlice";
+import { useSourceReceiverApi } from "@/hooks/useSourceReceiverApi";
 import {
   OrbitControls as OrbitControlsType,
   TransformControls as TransformControlsType,
@@ -114,6 +115,7 @@ export function ReceiverVisualization({ orbitControlsRef }: ReceiverVisualizatio
   const dispatch = useDispatch();
   const receivers = useSelector((state: RootState) => state.sourceReceiver.receivers);
   const selectedReceiver = useSelector((state: RootState) => state.sourceReceiver.selectedReceiver);
+  const { updateReceiversData } = useSourceReceiverApi();
 
   const handleReceiverClick = (receiverId: string, event: ThreeEvent<MouseEvent>) => {
     event.stopPropagation();
@@ -121,9 +123,22 @@ export function ReceiverVisualization({ orbitControlsRef }: ReceiverVisualizatio
   };
 
   const handleTransformEnd = (receiverId: string, position: THREE.Vector3) => {
+    // Update Redux state
     dispatch(updateReceiver({ id: receiverId, field: "x", value: Number(position.x.toFixed(2)) }));
     dispatch(updateReceiver({ id: receiverId, field: "y", value: Number(position.y.toFixed(2)) }));
     dispatch(updateReceiver({ id: receiverId, field: "z", value: Number(position.z.toFixed(2)) }));
+
+    const updatedReceivers = receivers.map((receiver) =>
+      receiver.id === receiverId
+        ? {
+            ...receiver,
+            x: Number(position.x.toFixed(2)),
+            y: Number(position.y.toFixed(2)),
+            z: Number(position.z.toFixed(2)),
+          }
+        : receiver,
+    );
+    updateReceiversData(updatedReceivers);
   };
 
   return (
