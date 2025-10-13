@@ -15,7 +15,7 @@ export function AppLayout({ title, right, sidebar, children }: AppLayoutProps) {
       {/* Header */}
       <header className="h-16 bg-black flex justify-between items-center">
         <Link to="/" className="w-sidebar h-16 pl-6 border-b border-b-stone-600">
-          <h1 className="font-[Questrial] uppercase text-white text-[2.5rem] h-16 flex items-center">
+          <h1 className="font-choras uppercase text-white text-[2.5rem] h-16 flex items-center">
             CHORAS
           </h1>
         </Link>
