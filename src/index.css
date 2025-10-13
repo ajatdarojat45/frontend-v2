@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Questrial&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Questrial&display=swap");
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -49,6 +49,7 @@
   --color-choras-dark: #1a1d29;
   --color-choras-gray: #64748b;
   --font-choras: "Questrial", sans-serif;
+  --font-sans: "Inter", sans-serif;
 }
 
 :root {

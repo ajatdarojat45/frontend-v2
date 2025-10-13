@@ -66,7 +66,7 @@ export function ProjectForm({ id, defaultValues, trigger, groupOnly }: ProjectFo
 
   const isLoading = isCreating || isUpdating;
   const isEdit = !!id;
-  const label = isEdit ? "Edit" : "Create";
+  const label = isEdit ? "Edit" : "Create new";
 
   // Controlling the Select open state to close it when a new group is created
   const [selectOpen, setSelectOpen] = useState(false);
@@ -125,7 +125,11 @@ export function ProjectForm({ id, defaultValues, trigger, groupOnly }: ProjectFo
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        {trigger ?? <Button variant="outline">{label} Project</Button>}
+        {trigger ?? (
+          <Button size="lg" variant="primary">
+            {label} project
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent className="max-w-md">
         <Form {...form}>

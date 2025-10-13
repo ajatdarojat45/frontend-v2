@@ -13,7 +13,7 @@ export function AppLayout({ title, right, sidebar, children }: AppLayoutProps) {
   return (
     <div className="min-h-screen flex flex-col">
       {/* Header */}
-      <header className="h-16 bg-black flex justify-between items-center">
+      <header className="h-16 bg-choras-dark flex justify-between items-center">
         <Link
           to="/"
           className="w-sidebar h-16 pl-6 flex items-center border-b border-b-stone-600 font-choras uppercase text-white text-[2.5rem]"
@@ -26,7 +26,7 @@ export function AppLayout({ title, right, sidebar, children }: AppLayoutProps) {
         <div className="w-sidebar flex-1 flex justify-end pr-6">{right}</div>
       </header>
       <main className="flex flex-1">
-        <aside className="w-sidebar bg-black/95 z-40">{sidebar}</aside>
+        <aside className="w-sidebar bg-choras-dark z-40">{sidebar}</aside>
         <div className="flex-1 bg-stone-200 border-l border-l-stone-600 flex flex-col">
           {children}
         </div>
