@@ -6,12 +6,14 @@ interface SourceReceiverState {
   sources: Source[];
   receivers: Receiver[];
   selectedSource: string | null;
+  selectedReceiver: string | null;
 }
 
 const initialState: SourceReceiverState = {
   sources: [],
   receivers: [],
   selectedSource: null,
+  selectedReceiver: null,
 };
 
 const sourceReceiverSlice = createSlice({
@@ -63,6 +65,9 @@ const sourceReceiverSlice = createSlice({
     selectSource: (state, action: PayloadAction<string | null>) => {
       state.selectedSource = action.payload;
     },
+    selectReceiver: (state, action: PayloadAction<string | null>) => {
+      state.selectedReceiver = action.payload;
+    },
   },
 });
 
@@ -76,6 +81,7 @@ export const {
   removeAllReceivers,
   updateReceiver,
   selectSource,
+  selectReceiver,
 } = sourceReceiverSlice.actions;
 
 export const sourceReceiverReducer = sourceReceiverSlice.reducer;

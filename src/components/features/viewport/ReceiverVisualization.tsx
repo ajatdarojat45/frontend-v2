@@ -3,25 +3,25 @@ import { useRef, useEffect } from "react";
 import { Text, TransformControls } from "@react-three/drei";
 import { useThree, type ThreeEvent } from "@react-three/fiber";
 import type { RootState } from "@/store";
-import type { Source } from "@/types/simulation";
-import { updateSource, selectSource } from "@/store/sourceReceiverSlice";
+import type { Receiver } from "@/types/simulation";
+import { updateReceiver, selectReceiver } from "@/store/sourceReceiverSlice";
 import {
   OrbitControls as OrbitControlsType,
   TransformControls as TransformControlsType,
 } from "three-stdlib";
 import * as THREE from "three";
 
-function SourcePoint({
-  source,
+function ReceiverPoint({
+  receiver,
   isSelected,
-  onSourceClick,
+  onReceiverClick,
   onTransformEnd,
   orbitControlsRef,
 }: {
-  source: Source;
+  receiver: Receiver;
   isSelected: boolean;
-  onSourceClick: (sourceId: string, event: ThreeEvent<MouseEvent>) => void;
-  onTransformEnd: (sourceId: string, position: THREE.Vector3) => void;
+  onReceiverClick: (receiverId: string, event: ThreeEvent<MouseEvent>) => void;
+  onTransformEnd: (receiverId: string, position: THREE.Vector3) => void;
   orbitControlsRef: React.RefObject<OrbitControlsType | null>;
 }) {
   const { gl, scene } = useThree();
@@ -30,18 +30,18 @@ function SourcePoint({
 
   useEffect(() => {
     if (meshRef.current) {
-      meshRef.current.uuid = source.id;
+      meshRef.current.uuid = receiver.id;
     }
-  }, [source.id]);
+  }, [receiver.id]);
 
   return (
     <group>
       <mesh
         ref={meshRef}
-        position={[source.x, source.y, source.z]}
+        position={[receiver.x, receiver.y, receiver.z]}
         onClick={(e) => {
           if (!isSelected) {
-            onSourceClick(source.id, e);
+            onReceiverClick(receiver.id, e);
           }
         }}
         onPointerOver={(e: ThreeEvent<PointerEvent>) => {
@@ -59,25 +59,25 @@ function SourcePoint({
         }}
       >
         <sphereGeometry args={[0.15, 16, 16]} />
-        <meshBasicMaterial color={isSelected ? "#fbbf24" : "#22d3ee"} />
+        <meshBasicMaterial color={isSelected ? "#fbbf24" : "#eab308"} />
       </mesh>
 
       <Text
-        position={[source.x, source.y, source.z + 0.3]}
+        position={[receiver.x, receiver.y, receiver.z + 0.3]}
         fontSize={0.2}
-        color={isSelected ? "#fbbf24" : "#06b6d4"}
+        color={isSelected ? "#fbbf24" : "#eab308"}
         anchorX="center"
         anchorY="middle"
         outlineWidth={0.02}
         outlineColor="#000000"
       >
-        {`S_${source.orderNumber}`}
+        {`R_${receiver.orderNumber}`}
       </Text>
 
       {isSelected && (
         <TransformControls
           ref={transformRef}
-          object={scene.getObjectByProperty("uuid", source.id) as THREE.Object3D}
+          object={scene.getObjectByProperty("uuid", receiver.id) as THREE.Object3D}
           size={0.5}
           mode="translate"
           matrixAutoUpdate={false}
@@ -91,13 +91,13 @@ function SourcePoint({
               orbitControlsRef.current.enabled = true;
             }
 
-            const mesh = scene.getObjectByProperty("uuid", source.id) as THREE.Mesh;
+            const mesh = scene.getObjectByProperty("uuid", receiver.id) as THREE.Mesh;
             if (mesh) {
               const finalX = +mesh.position.x.toFixed(2);
               const finalY = +mesh.position.y.toFixed(2);
               const finalZ = +mesh.position.z.toFixed(2);
 
-              onTransformEnd(source.id, new THREE.Vector3(finalX, finalY, finalZ));
+              onTransformEnd(receiver.id, new THREE.Vector3(finalX, finalY, finalZ));
             }
           }}
         />
@@ -106,34 +106,34 @@ function SourcePoint({
   );
 }
 
-interface SourceVisualizationProps {
+interface ReceiverVisualizationProps {
   orbitControlsRef: React.RefObject<OrbitControlsType | null>;
 }
 
-export function SourceVisualization({ orbitControlsRef }: SourceVisualizationProps) {
+export function ReceiverVisualization({ orbitControlsRef }: ReceiverVisualizationProps) {
   const dispatch = useDispatch();
-  const sources = useSelector((state: RootState) => state.sourceReceiver.sources);
-  const selectedSource = useSelector((state: RootState) => state.sourceReceiver.selectedSource);
+  const receivers = useSelector((state: RootState) => state.sourceReceiver.receivers);
+  const selectedReceiver = useSelector((state: RootState) => state.sourceReceiver.selectedReceiver);
 
-  const handleSourceClick = (sourceId: string, event: ThreeEvent<MouseEvent>) => {
+  const handleReceiverClick = (receiverId: string, event: ThreeEvent<MouseEvent>) => {
     event.stopPropagation();
-    dispatch(selectSource(selectedSource === sourceId ? null : sourceId));
+    dispatch(selectReceiver(selectedReceiver === receiverId ? null : receiverId));
   };
 
-  const handleTransformEnd = (sourceId: string, position: THREE.Vector3) => {
-    dispatch(updateSource({ id: sourceId, field: "x", value: Number(position.x.toFixed(2)) }));
-    dispatch(updateSource({ id: sourceId, field: "y", value: Number(position.y.toFixed(2)) }));
-    dispatch(updateSource({ id: sourceId, field: "z", value: Number(position.z.toFixed(2)) }));
+  const handleTransformEnd = (receiverId: string, position: THREE.Vector3) => {
+    dispatch(updateReceiver({ id: receiverId, field: "x", value: Number(position.x.toFixed(2)) }));
+    dispatch(updateReceiver({ id: receiverId, field: "y", value: Number(position.y.toFixed(2)) }));
+    dispatch(updateReceiver({ id: receiverId, field: "z", value: Number(position.z.toFixed(2)) }));
   };
 
   return (
     <>
-      {sources.map((source) => (
-        <SourcePoint
-          key={source.id}
-          source={source}
-          isSelected={selectedSource === source.id}
-          onSourceClick={handleSourceClick}
+      {receivers.map((receiver) => (
+        <ReceiverPoint
+          key={receiver.id}
+          receiver={receiver}
+          isSelected={selectedReceiver === receiver.id}
+          onReceiverClick={handleReceiverClick}
           onTransformEnd={handleTransformEnd}
           orbitControlsRef={orbitControlsRef}
         />
