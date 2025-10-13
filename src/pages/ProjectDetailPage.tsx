@@ -1,5 +1,6 @@
 import { ModelCard } from "@/components/features/ModelCard";
 import { UploadModel } from "@/components/features/UploadModel";
+import { WelcomeSidebar } from "@/components/features/WelcomeSidebar";
 import { Alert, AlertTitle } from "@/components/ui/alert";
 import { AppLayout } from "@/components/ui/app-layout";
 import {
@@ -101,7 +102,11 @@ export function ProjectDetailPage() {
   }
 
   return (
-    <AppLayout title={project ? project.name : "Project Detail"} sidebar={<h1>Sidebar</h1>}>
+    <AppLayout
+      title={project ? project.name : "Project Detail"}
+      sidebar={<WelcomeSidebar />}
+      right={<UploadModel projectId={id} onSuccess={refetch} />}
+    >
       {content}
     </AppLayout>
   );

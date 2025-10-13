@@ -49,7 +49,7 @@
   --color-choras-dark: #1a1d29;
   --color-choras-gray: #64748b;
   --font-choras: "Questrial", sans-serif;
-  --font-sans: "Inter", sans-serif;
+  --font-inter: "Inter", sans-serif;
 }
 
 :root {
@@ -128,6 +128,10 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+@utility h-container {
+  height: calc(100vh - 4rem);
 }
 
 @utility w-sidebar {

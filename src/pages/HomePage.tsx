@@ -1,5 +1,4 @@
 import { ProjectForm } from "@/components/features/ProjectForm";
-import { GroupPicker } from "@/components/features/GroupPicker";
 import { ProjectCard } from "@/components/features/ProjectCard";
 import { Alert, AlertTitle } from "@/components/ui/alert";
 import { AppLayout } from "@/components/ui/app-layout";
@@ -10,6 +9,7 @@ import { AlertCircleIcon } from "lucide-react";
 import type React from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router";
+import { WelcomeSidebar } from "@/components/features/WelcomeSidebar";
 
 export function HomePage() {
   const { isLoading, error } = useGetProjectsQuery();
@@ -47,12 +47,7 @@ export function HomePage() {
   }
 
   return (
-    <AppLayout
-      title="Projects"
-      left={<GroupPicker />}
-      right={<ProjectForm />}
-      sidebar={<h1>Sidebar</h1>}
-    >
+    <AppLayout title="Projects" right={<ProjectForm />} sidebar={<WelcomeSidebar />}>
       {content}
     </AppLayout>
   );

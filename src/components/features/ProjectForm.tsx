@@ -124,13 +124,7 @@ export function ProjectForm({ id, defaultValues, trigger, groupOnly }: ProjectFo
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        {trigger ?? (
-          <Button size="lg" variant="primary">
-            {label} project
-          </Button>
-        )}
-      </DialogTrigger>
+      <DialogTrigger asChild>{trigger ?? <Button>{label} project</Button>}</DialogTrigger>
       <DialogContent className="max-w-md">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleSubmit)}>

@@ -131,7 +131,7 @@ export function UploadModel({ projectId, onSuccess }: UploadModelProps) {
   return (
     <Dialog onOpenChange={setOpen} open={open}>
       <DialogTrigger asChild>
-        <Button variant="outline">Upload Model</Button>
+        <Button>Upload Model</Button>
       </DialogTrigger>
       <DialogContent className="max-w-md">
         <Form {...form}>

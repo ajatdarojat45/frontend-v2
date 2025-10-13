@@ -3,7 +3,6 @@ import { Link } from "react-router";
 
 type AppLayoutProps = {
   title: string;
-  left?: React.ReactNode;
   right?: React.ReactNode;
   sidebar: React.ReactNode;
   children: React.ReactNode;
