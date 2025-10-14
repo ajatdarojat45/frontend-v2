@@ -5,7 +5,7 @@ import { SourceReceiversTab } from "./SourceReceiversTab";
 export function SidebarTabs() {
   return (
     <div className="h-full w-full relative p-0">
-      <Tabs defaultValue="surfaces" className="h-full w-full" orientation="vertical">
+      <Tabs defaultValue="sources" className="h-full w-full" orientation="vertical">
         <div className="h-full w-full overflow-hidden">
           <TabsContent value="surfaces" className="h-full m-0">
             <SurfacesTab />

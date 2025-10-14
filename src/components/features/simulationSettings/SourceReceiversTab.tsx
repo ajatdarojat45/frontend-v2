@@ -15,6 +15,7 @@ import {
   removeReceiver,
   removeAllReceivers,
   updateReceiver,
+  updateReceiverValidation,
   selectSource,
   selectReceiver,
   setSources,
@@ -22,6 +23,8 @@ import {
 } from "@/store/sourceReceiverSlice";
 import { useSourceReceiverApi } from "@/hooks/useSourceReceiverApi";
 import { toast } from "sonner";
+import { useSurfaces } from "@/hooks/useSurfaces";
+import { validateSourceOrReceiver, getModelBounds } from "@/helpers/sourceReceiverValidation";
 
 export function SourceReceiversTab() {
   const dispatch = useDispatch();
@@ -32,6 +35,23 @@ export function SourceReceiversTab() {
 
   const { simulation, simulationError, updateSimulationData, updateReceiversData } =
     useSourceReceiverApi();
+  const surfaces = useSurfaces();
+
+  const validateReceiver = (receiver: Receiver): Receiver => {
+    const modelBounds = getModelBounds(surfaces);
+    const validation = validateSourceOrReceiver(
+      { x: receiver.x, y: receiver.y, z: receiver.z },
+      modelBounds,
+      sources,
+      surfaces,
+    );
+
+    return {
+      ...receiver,
+      isValid: validation.isValid,
+      validationError: validation.validationError,
+    };
+  };
 
   useEffect(() => {
     if (simulation?.sources) {
@@ -39,12 +59,12 @@ export function SourceReceiversTab() {
     }
   }, [simulation?.sources, dispatch]);
 
-  // Load receivers from simulation data
   useEffect(() => {
-    if (simulation?.receivers) {
-      dispatch(setReceivers(simulation.receivers));
+    if (simulation?.receivers && surfaces.length > 0) {
+      const validatedReceivers = simulation.receivers.map(validateReceiver);
+      dispatch(setReceivers(validatedReceivers));
     }
-  }, [simulation?.receivers, dispatch]);
+  }, [simulation?.receivers, surfaces, dispatch]);
 
   useEffect(() => {
     if (simulationError) {
@@ -103,9 +123,11 @@ export function SourceReceiversTab() {
       z: 1,
       isValid: true,
     };
-    dispatch(addReceiver(newReceiver));
 
-    const updatedReceivers = [...receivers, newReceiver];
+    const validatedReceiver = validateReceiver(newReceiver);
+    dispatch(addReceiver(validatedReceiver));
+
+    const updatedReceivers = [...receivers, validatedReceiver];
     updateReceiversData(updatedReceivers);
   };
 
@@ -125,10 +147,24 @@ export function SourceReceiversTab() {
   const handleUpdateReceiver = (id: string, field: "x" | "y" | "z", value: number) => {
     dispatch(updateReceiver({ id, field, value }));
 
-    const updatedReceivers = receivers.map((receiver) =>
-      receiver.id === id ? { ...receiver, [field]: value } : receiver,
-    );
-    updateReceiversData(updatedReceivers);
+    const currentReceiver = receivers.find((r) => r.id === id);
+    if (currentReceiver) {
+      const updatedReceiver = { ...currentReceiver, [field]: value };
+      const validatedReceiver = validateReceiver(updatedReceiver);
+
+      dispatch(
+        updateReceiverValidation({
+          id,
+          isValid: validatedReceiver.isValid,
+          validationError: validatedReceiver.validationError,
+        }),
+      );
+
+      const updatedReceivers = receivers.map((receiver) =>
+        receiver.id === id ? validatedReceiver : receiver,
+      );
+      updateReceiversData(updatedReceivers);
+    }
   };
 
   const handleSourceClick = (sourceId: string) => {
@@ -269,6 +305,7 @@ export function SourceReceiversTab() {
               </div>
               {receivers.map((receiver) => {
                 const isSelected = selectedReceiver === receiver.id;
+                const hasValidationError = !receiver.isValid && receiver.validationError;
                 return (
                   <div
                     key={receiver.id}
@@ -279,7 +316,9 @@ export function SourceReceiversTab() {
                     className={`text-xs p-2 ${
                       isSelected
                         ? "bg-yellow-500/20 border border-yellow-500/30"
-                        : "hover:bg-gray-700/30"
+                        : hasValidationError
+                          ? "bg-red-500/20 border border-red-500/30"
+                          : "hover:bg-gray-700/30"
                     }`}
                   >
                     <div>
@@ -349,6 +388,11 @@ export function SourceReceiversTab() {
                         />
                       </div>
                     </div>
+                    {hasValidationError && (
+                      <div className="mt-2 text-xs text-red-400 px-1">
+                        Error: {receiver.validationError}
+                      </div>
+                    )}
                   </div>
                 );
               })}

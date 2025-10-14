@@ -62,6 +62,17 @@ const sourceReceiverSlice = createSlice({
         receiver[field] = value;
       }
     },
+    updateReceiverValidation: (
+      state,
+      action: PayloadAction<{ id: string; isValid: boolean; validationError?: string }>,
+    ) => {
+      const { id, isValid, validationError } = action.payload;
+      const receiver = state.receivers.find((receiver) => receiver.id === id);
+      if (receiver) {
+        receiver.isValid = isValid;
+        receiver.validationError = validationError;
+      }
+    },
     selectSource: (state, action: PayloadAction<string | null>) => {
       state.selectedSource = action.payload;
     },
@@ -86,6 +97,7 @@ export const {
   removeReceiver,
   removeAllReceivers,
   updateReceiver,
+  updateReceiverValidation,
   selectSource,
   selectReceiver,
   setSources,
