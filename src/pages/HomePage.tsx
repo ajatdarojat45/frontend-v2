@@ -6,6 +6,7 @@ import { Loading } from "@/components/ui/loading";
 import { useGetProjectsQuery } from "@/store/projectApi";
 import { selectProjectsByActiveGroup } from "@/store/projectSelector";
 import { AlertCircleIcon } from "lucide-react";
+import plusIcon from "@/assets/plus-icon.png";
 import type React from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router";
@@ -52,6 +53,16 @@ export function HomePage() {
                   <ProjectCard project={project} />
                 </Link>
               ))}
+
+              <ProjectForm
+                trigger={
+                  <div className="min-h-[192px] border border-transparent bg-gradient-to-r from-choras-primary from-50% to-choras-secondary bg-clip-border p-0.5 rounded-xl">
+                    <div className="bg-[#e7e7e7] w-full min-h-[190px] py-6 rounded-lg h-full flex-1 flex items-center justify-center">
+                      <img src={plusIcon} alt="Plus" className="w-16 h-16" />
+                    </div>
+                  </div>
+                }
+              />
             </div>
           </>
         ))}
