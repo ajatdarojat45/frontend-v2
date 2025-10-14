@@ -1,22 +1,18 @@
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { SurfacesTab } from "./SurfacesTab";
+import { SourceReceiversTab } from "./SourceReceiversTab";
 
 export function SidebarTabs() {
   return (
     <div className="h-full w-full relative p-0">
-      <Tabs defaultValue="surfaces" className="h-full w-full" orientation="vertical">
+      <Tabs defaultValue="sources" className="h-full w-full" orientation="vertical">
         <div className="h-full w-full overflow-hidden">
           <TabsContent value="surfaces" className="h-full m-0">
             <SurfacesTab />
           </TabsContent>
 
           <TabsContent value="sources" className="h-full m-0">
-            <div className="space-y-4">
-              <h3 className="text-sm font-medium">Sources</h3>
-              <p className="text-sm text-muted-foreground">
-                Source configuration controls will go here.
-              </p>
-            </div>
+            <SourceReceiversTab />
           </TabsContent>
 
           <TabsContent value="settings" className="h-full m-0">
