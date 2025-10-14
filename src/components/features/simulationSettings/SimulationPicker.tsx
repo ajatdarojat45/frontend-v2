@@ -9,7 +9,7 @@ import { useGetSimulationsByModelIdQuery } from "@/store/simulationApi";
 import { useNavigate } from "react-router";
 import { Button } from "@/components/ui/button";
 import { formatDate } from "@/helpers/datetime";
-import { CheckCircleIcon } from "lucide-react";
+import { CheckCircleIcon, FileText, GithubIcon } from "lucide-react";
 import type { Simulation } from "@/types/simulation";
 
 type SimulationPickerProps = {
@@ -32,27 +32,57 @@ export function SimulationPicker({ modelId, simulationId }: SimulationPickerProp
   const activeSimulation = simulations.find((sim) => sim.id === simulationId);
 
   return (
-    <Select
-      // We use the URL to manage the active simulation
-      // When a simulation is selected, navigate to the corresponding URL
-      onValueChange={(id) => navigate(`/editor/${modelId}/${id}`)}
-      // So the value is coming from the URL param
-      value={simulationId?.toString()}
-    >
-      <SelectTrigger className="bg-white w-full">
-        <SelectValue>
-          {activeSimulation && activeSimulation.completedAt && (
-            <CheckCircleIcon className="inline text-green-600" />
-          )}
-          {activeSimulation ? activeSimulation.name : "Select a simulation"}
-        </SelectValue>
-      </SelectTrigger>
-      <SelectContent>
-        {simulations.map((simulation) => (
-          <CustomSelectItem key={simulation.id} simulation={simulation} />
-        ))}
-      </SelectContent>
-    </Select>
+    <div className="space-y-4">
+      <div className="grid grid-cols-3 gap-3 w-full items-center">
+        <label htmlFor="simulation" className="font-medium text-white">
+          Simulation:
+        </label>
+        <div className="col-span-2">
+          <Select
+            onValueChange={(id) => navigate(`/editor/${modelId}/${id}`)}
+            value={simulationId?.toString()}
+          >
+            <SelectTrigger className="bg-white w-full">
+              <SelectValue>
+                {activeSimulation && activeSimulation.completedAt && (
+                  <CheckCircleIcon className="inline text-green-600" />
+                )}
+                {activeSimulation ? activeSimulation.name : "Select a simulation"}
+              </SelectValue>
+            </SelectTrigger>
+            <SelectContent>
+              {simulations.map((simulation) => (
+                <CustomSelectItem key={simulation.id} simulation={simulation} />
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        <label htmlFor="method" className="font-medium text-white">
+          Method:
+        </label>
+        <div className="col-span-2">
+          <Select value="DE" disabled>
+            <SelectTrigger className="bg-white w-full">
+              <SelectValue>DE</SelectValue>
+            </SelectTrigger>
+          </Select>
+        </div>
+      </div>
+      <div className="grid grid-cols-2 gap-6 w-full items-center">
+        <Button variant="outline">
+          <div className="flex items-center gap-2 justify-center">
+            <GithubIcon size={16} />
+            DE Repo
+          </div>
+        </Button>
+        <Button variant="outline">
+          <div className="flex items-center gap-2 justify-center">
+            <FileText size={16} />
+            DE Docs
+          </div>
+        </Button>
+      </div>
+    </div>
   );
 }
 

@@ -46,6 +46,7 @@ export function EditorPage() {
               <div className="w-full h-full flex flex-col p-4">
                 <SimulationPicker modelId={+modelId} simulationId={+simulationId} />
                 You're editing simulation {simulationId}
+                <hr className="border-0.5 py-2" />
                 <SidebarTabs />
               </div>
             ) : (
