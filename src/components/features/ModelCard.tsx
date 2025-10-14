@@ -1,14 +1,13 @@
 import type { Model } from "@/types/model";
-import { Button } from "@/components/ui/button";
-import { AudioLinesIcon } from "lucide-react";
+import { TrashIcon } from "lucide-react";
 import { useGetSimulationsByModelIdQuery } from "@/store/simulationApi";
-import { Link } from "react-router";
 import { useDeleteModelMutation } from "@/store/modelApi";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { useDispatch } from "react-redux";
 import type { AppDispatch } from "@/store";
 import { projectApi } from "@/store/projectApi";
 import { toast } from "sonner";
+import modelImg from "@/assets/model.png";
 
 type ModelCardProps = {
   model: Model;
@@ -34,51 +33,31 @@ export function ModelCard({ model, projectId }: ModelCardProps) {
   };
 
   return (
-    <div
-      key={model.id}
-      className="w-full rounded-lg border border-teal-200 bg-white p-6 flex flex-col md:flex-row items-center justify-between gap-4 shadow-sm"
-    >
-      {/* Left: waveform icon */}
-      <div className="flex-shrink-0 flex items-center justify-center">
-        <AudioLinesIcon size={64} />
-      </div>
-
-      {/* Center: model name */}
-      <div className="flex-1 flex flex-col items-center md:items-start">
-        <h4 className="text-2xl font-semibold text-center md:text-left mb-2">{model.name}</h4>
-      </div>
-
-      {/* Center-right: meta info */}
-      <div className="flex flex-col gap-2 items-center md:items-start text-slate-500 text-lg min-w-[220px]">
-        <div className="flex items-center gap-2">
-          <span>Contains {simulations?.length || 0} simulations</span>
+    <div className="min-h-[200px] border border-transparent bg-gradient-to-r from-choras-primary to-choras-secondary bg-clip-border p-0.5 rounded-xl">
+      <div className="bg-[#e7e7e7] min-h-[198px] p-4 rounded-lg h-full flex flex-col justify-between">
+        <div className="flex justify-between items-start">
+          <h3 className="font-inter font-bold text-sm text-choras-secondary">{model.name}</h3>
+          <ConfirmDialog
+            onConfirm={handleDeleteModel}
+            title="Delete model"
+            description="This action cannot be undone."
+            confirmLabel="Delete model"
+            confirmVariant="destructive"
+            trigger={<TrashIcon className="size-4 text-destructive z-50" />}
+          />
         </div>
-        <div className="flex items-center gap-2">
-          <span>
-            Created in{" "}
-            {new Date(model.createdAt).toLocaleString(undefined, {
-              month: "short",
-              day: "numeric",
-            })}
-          </span>
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="text-pink-400">Contains .geo file</span>
-        </div>
-      </div>
 
-      {/* Right: CTA */}
-      <div className="flex flex-col gap-3 items-center">
-        <Button asChild variant="outline">
-          <Link to={"/editor/" + model.id}>Open model</Link>
-        </Button>
-        <ConfirmDialog
-          onConfirm={handleDeleteModel}
-          title="Delete model"
-          description="This action cannot be undone."
-          confirmLabel="Delete model"
-          confirmVariant="destructive"
-        />
+        <div className="flex items-end justify-between relative">
+          <div className="text-black/50 text-xs space-y-1">
+            <p>{simulations?.length || 0} simulations</p>
+          </div>
+
+          <img
+            className="w-32 h-24 object-cover rounded-lg"
+            src={modelImg}
+            alt="Model Illustration"
+          />
+        </div>
       </div>
     </div>
   );

@@ -44,9 +44,10 @@ type UploadModelData = z.infer<typeof UploadModelSchema>;
 
 type UploadModelProps = {
   projectId: string;
+  trigger?: React.ReactNode;
   onSuccess?: () => void;
 };
-export function UploadModel({ projectId, onSuccess }: UploadModelProps) {
+export function UploadModel({ projectId, trigger, onSuccess }: UploadModelProps) {
   const [open, setOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -130,9 +131,7 @@ export function UploadModel({ projectId, onSuccess }: UploadModelProps) {
 
   return (
     <Dialog onOpenChange={setOpen} open={open}>
-      <DialogTrigger asChild>
-        <Button>Upload Model</Button>
-      </DialogTrigger>
+      <DialogTrigger asChild>{trigger ?? <Button>Upload Model</Button>}</DialogTrigger>
       <DialogContent className="max-w-md">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
