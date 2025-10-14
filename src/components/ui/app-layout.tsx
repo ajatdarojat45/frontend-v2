@@ -2,7 +2,7 @@ import type React from "react";
 import { Link } from "react-router";
 
 type AppLayoutProps = {
-  title: string;
+  title: React.ReactNode | string;
   right?: React.ReactNode;
   sidebar: React.ReactNode;
   children: React.ReactNode;
@@ -19,9 +19,13 @@ export function AppLayout({ title, right, sidebar, children }: AppLayoutProps) {
         >
           CHORAS
         </Link>
-        <h1 className="text-center font-choras text-choras-primary text-2xl flex-2 font-bold">
-          {title}
-        </h1>
+        {typeof title === "string" ? (
+          <h1 className="text-center font-choras text-choras-primary text-2xl flex-2 font-bold">
+            {title}
+          </h1>
+        ) : (
+          title
+        )}
         <div className="w-sidebar flex-1 flex justify-end pr-6">{right}</div>
       </header>
       <main className="flex flex-1">
