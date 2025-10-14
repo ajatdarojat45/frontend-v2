@@ -16,11 +16,11 @@ export function GroupPicker() {
 
   return (
     <Select onValueChange={(value) => dispatch(setActiveGroup(value))} value={activeGroup}>
-      <SelectTrigger className="bg-white">
+      <SelectTrigger className="border-black/75 text-black/75 rounded-sm">
         <SelectValue placeholder="Select a group" />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value="ALL">All Groups</SelectItem>
+        <SelectItem value="ALL">All groups</SelectItem>
         {groups.map((group) => (
           <SelectItem key={group} value={group}>
             {group}

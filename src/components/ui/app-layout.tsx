@@ -26,7 +26,7 @@ export function AppLayout({ title, right, sidebar, children }: AppLayoutProps) {
       </header>
       <main className="flex flex-1">
         <aside className="w-sidebar bg-choras-dark z-40 h-container">{sidebar}</aside>
-        <div className="flex-1 h-container overflow-y-scroll bg-stone-200 border-l border-l-stone-600">
+        <div className="flex-1 h-container overflow-y-scroll bg-[#dcdcdc] border-l border-l-stone-600">
           {children}
         </div>
       </main>

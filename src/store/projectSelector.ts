@@ -1,6 +1,7 @@
 import { createSelector } from "@reduxjs/toolkit/react";
 import { projectApi } from "./projectApi";
 import type { RootState } from "./index";
+import type { GroupProject } from "@/types/project";
 
 // Selector to get all model ids from a projectId
 export const selectModelIdsByProjectId = createSelector(
@@ -41,7 +42,24 @@ export const selectProjectsByActiveGroup = createSelector(
   (state: RootState) => projectApi.endpoints.getProjects.select()(state)?.data,
   (activeGroup, projects) => {
     if (!projects) return [];
-    if (activeGroup === "ALL") return projects;
-    return projects.filter((project) => project.group === activeGroup);
+
+    // Group projects by their group name
+    const results = projects
+      .map((p) => ({ ...p, group: p.group || "Ungrouped" }))
+      .reduce((acc, project) => {
+        const group = acc.find((g) => g.group === project.group);
+        if (group) {
+          group.projects.push(project);
+        } else {
+          acc.push({ group: project.group, projects: [project] });
+        }
+        return acc;
+      }, [] as GroupProject[]);
+
+    // Return all groups if activeGroup is "ALL"
+    if (activeGroup === "ALL") return results;
+
+    // Otherwise, filter by the active group
+    return results.filter((project) => project.group === activeGroup);
   },
 );
