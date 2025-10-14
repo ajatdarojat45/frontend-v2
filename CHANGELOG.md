@@ -2,6 +2,36 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.10](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.9...v0.0.10) (2025-10-14)
+
+### Features
+
+- add plus icon to ProjectForm trigger in HomePage component ([b51a207](https://github.com/ajatdarojat45/frontend-v2/commit/b51a207d5f3a42a0f6ee33af1ecb7aa3f33058b9))
+- add sources & receivers functionality in side tab ([fc8b4e1](https://github.com/ajatdarojat45/frontend-v2/commit/fc8b4e17e50bea52169f64049eb80763824f8d8e))
+- add upload icon to ProjectDetailPage for improved user experience ([a831631](https://github.com/ajatdarojat45/frontend-v2/commit/a831631940b3578258fd7d605184e4d9b2b9fb04))
+- add WelcomeSidebar component and integrate GitHub icon; update button styles in ProjectForm and UploadModel ([a41a6d1](https://github.com/ajatdarojat45/frontend-v2/commit/a41a6d1e6987486053d2082c831d0cc8241a66ca))
+- enhance app layout and styling with sidebar adjustments and font integration ([fc0c6c6](https://github.com/ajatdarojat45/frontend-v2/commit/fc0c6c64ae9d102c9388c628402fa1b16a11398b))
+- enhance EmptySimulation component styling and update SidebarTabs for responsive layout ([1ea5aad](https://github.com/ajatdarojat45/frontend-v2/commit/1ea5aadcca53cb019ce2a50cd222d43ba61221e0))
+- enhance project management features with group selection and improved UI components ([d9f87ea](https://github.com/ajatdarojat45/frontend-v2/commit/d9f87eada6d4292b838ca6be496f86bb797f2ee3))
+- enhance ProjectForm and AppLayout components with improved button styles and labels ([1d1c913](https://github.com/ajatdarojat45/frontend-v2/commit/1d1c9136936f2906059ccab2b3e709f579ab2878))
+- material list with simple search ([96d6af0](https://github.com/ajatdarojat45/frontend-v2/commit/96d6af0360ee031adfc1db9eb100f65bb5e4e20c))
+- refactor ModelCard component to use Card and DropdownMenu for improved UI and delete functionality ([ed7ff51](https://github.com/ajatdarojat45/frontend-v2/commit/ed7ff515a32073b658f4aa6ab19ea0229ab4ac34))
+- select source point feature ([d87e1b1](https://github.com/ajatdarojat45/frontend-v2/commit/d87e1b187eb4bb24235de246bcd518ddb0f2289d))
+- set default values for ProjectForm in HomePage and update group fallback to 'NONE' ([dcac32b](https://github.com/ajatdarojat45/frontend-v2/commit/dcac32b869b62835eda0629eb6f4d656c99b0f58))
+- update app layout header styling and add custom color variables ([c61bd15](https://github.com/ajatdarojat45/frontend-v2/commit/c61bd15581e2b96e01ce317e19e1bc3f54d707d1))
+- update EditorPage title to display model project and name with navigation link ([476a159](https://github.com/ajatdarojat45/frontend-v2/commit/476a159cf89e3b437a32e24c5605e12aba33d15f))
+- update ModelCard and UploadModel components for improved UI and functionality; add model image display and delete confirmation ([0819049](https://github.com/ajatdarojat45/frontend-v2/commit/0819049c00b5615aececb11ec1c46e21484642b0))
+- update ProjectCard to display up to three model images with adjusted positioning and styling ([ec2ed81](https://github.com/ajatdarojat45/frontend-v2/commit/ec2ed81cf49014739ca6b36d8fdda6fa5e03113b))
+- wiring to api for source and receiver ([5633ae8](https://github.com/ajatdarojat45/frontend-v2/commit/5633ae8a3e2d2e34a4a1f4c1b42a4285d9e3129f))
+
+### Bug Fixes
+
+- add validation to update receivers ([c23a053](https://github.com/ajatdarojat45/frontend-v2/commit/c23a053929b100dd59692a987f7c2ce2ca66c443))
+- adjust header layout and improve link structure in AppLayout component ([f73e327](https://github.com/ajatdarojat45/frontend-v2/commit/f73e327243f5be969cce72e8ef842450061f611f))
+- adjust layout properties in AppLayout component for better responsiveness ([1b8d4aa](https://github.com/ajatdarojat45/frontend-v2/commit/1b8d4aa5aabc310f24b1b0978480559b03130520))
+- correct font class for header title in AppLayout component ([72bb849](https://github.com/ajatdarojat45/frontend-v2/commit/72bb849206fd3563a36b1ba09c50eb1767c98cf9))
+- transform control rendered double on group. feat: add render receivers functionality ([e4a8935](https://github.com/ajatdarojat45/frontend-v2/commit/e4a8935486b775f7d9e673c1dd38fc0fdf9783c3))
+
 ### [0.0.9](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.8...v0.0.9) (2025-10-08)
 
 ### Bug Fixes
