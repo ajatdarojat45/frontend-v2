@@ -5,11 +5,12 @@ import { Alert, AlertTitle } from "@/components/ui/alert";
 import { AppLayout } from "@/components/ui/app-layout";
 import { Loading } from "@/components/ui/loading";
 import { useGetProjectQuery } from "@/store/projectApi";
-import { AlertCircleIcon, ChevronLeftIcon, UploadIcon } from "lucide-react";
+import { AlertCircleIcon, ChevronLeftIcon } from "lucide-react";
 import type React from "react";
 import { useParams, Link } from "react-router";
 import modelImg from "@/assets/model.png";
 import { formatDateLong } from "@/helpers/datetime";
+import uploadIcon from "@/assets/upload-icon.png";
 
 export function ProjectDetailPage() {
   const { id } = useParams() as { id: string };
@@ -103,7 +104,7 @@ export function ProjectDetailPage() {
               <div className="min-h-[200px] border border-transparent bg-gradient-to-r from-choras-primary to-choras-secondary bg-clip-border p-0.5 rounded-lg">
                 <div className="bg-[#e7e7e7] min-h-[198px] p-4 rounded-lg h-full flex items-center justify-center">
                   <div className="flex flex-col items-center text-choras-secondary">
-                    <UploadIcon className="h-16 w-16" />
+                    <img src={uploadIcon} alt="Upload Icon" className="h-16 w-16" />
                   </div>
                 </div>
               </div>
