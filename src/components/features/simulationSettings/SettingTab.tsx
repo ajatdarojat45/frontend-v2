@@ -7,6 +7,7 @@ import { ChevronRight } from "lucide-react";
 import { useSimulationSettingsApi } from "@/hooks/useSimulationSettingsApi";
 import type { RootState } from "@/store";
 import type { SimulationSettingsState } from "@/types/simulationSettings";
+import { SettingJsonEditor } from "./SettingJsonEditor";
 
 export function SettingTab() {
   const dispatch = useDispatch();
@@ -80,8 +81,9 @@ export function SettingTab() {
 
   return (
     <div className="text-white">
-      <div className="mb-4">
+      <div className="mb-4 flex justify-between items-center">
         <h4 className="text-lg font-semibold mb-2">Settings</h4>
+        <SettingJsonEditor />
       </div>
 
       <div className="space-y-8">
