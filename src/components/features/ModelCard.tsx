@@ -1,5 +1,5 @@
 import type { Model } from "@/types/model";
-import { TrashIcon } from "lucide-react";
+import { EllipsisVerticalIcon } from "lucide-react";
 import { useGetSimulationsByModelIdQuery } from "@/store/simulationApi";
 import { useDeleteModelMutation } from "@/store/modelApi";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
@@ -8,6 +8,13 @@ import type { AppDispatch } from "@/store";
 import { projectApi } from "@/store/projectApi";
 import { toast } from "sonner";
 import modelImg from "@/assets/model.png";
+import { Card, CardHeader, CardTitle, CardContent, CardAction } from "@/components/ui/card";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 type ModelCardProps = {
   model: Model;
@@ -22,10 +29,7 @@ export function ModelCard({ model, projectId }: ModelCardProps) {
   const handleDeleteModel = async () => {
     try {
       await deleteModel(model.id).unwrap();
-
-      // Invalidate project tag so RTK Query will refetch any queries that provide this tag
       dispatch(projectApi.util.invalidateTags([{ type: "Projects", id: projectId }]));
-
       toast.success("Model deleted successfully");
     } catch {
       toast.error("Failed to delete model");
@@ -33,32 +37,49 @@ export function ModelCard({ model, projectId }: ModelCardProps) {
   };
 
   return (
-    <div className="min-h-[200px] border border-transparent bg-gradient-to-r from-choras-primary to-choras-secondary bg-clip-border p-0.5 rounded-xl">
-      <div className="bg-[#e7e7e7] min-h-[198px] p-4 rounded-lg h-full flex flex-col justify-between">
-        <div className="flex justify-between items-start">
-          <h3 className="font-inter font-bold text-sm text-choras-secondary">{model.name}</h3>
-          <ConfirmDialog
-            onConfirm={handleDeleteModel}
-            title="Delete model"
-            description="This action cannot be undone."
-            confirmLabel="Delete model"
-            confirmVariant="destructive"
-            trigger={<TrashIcon className="size-4 text-destructive z-50" />}
-          />
-        </div>
-
-        <div className="flex items-end justify-between relative">
-          <div className="text-black/50 text-xs space-y-1">
+    <Card className="min-h-[192px] border border-transparent bg-gradient-to-r from-choras-primary from-50% to-choras-secondary bg-clip-border p-0.5">
+      <div className="bg-[#e7e7e7] min-h-[190px] py-6 rounded-lg h-full flex flex-col justify-between">
+        <CardHeader className="overflow-hidden relative px-5">
+          <CardTitle className="truncate font-inter font-bold text-sm text-choras-secondary">
+            {model.name}
+          </CardTitle>
+          <CardAction onClick={(e) => e.stopPropagation()}>
+            <DropdownMenu>
+              <DropdownMenuTrigger className="cursor-pointer absolute right-0 px-4">
+                <EllipsisVerticalIcon className="text-black/50" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <ConfirmDialog
+                  onConfirm={handleDeleteModel}
+                  title="Delete model"
+                  description="This action cannot be undone."
+                  confirmLabel="Delete model"
+                  confirmVariant="destructive"
+                  trigger={
+                    <DropdownMenuItem
+                      onSelect={(e) => e.preventDefault()}
+                      onClick={(e) => e.stopPropagation()}
+                      className="text-red-600"
+                    >
+                      Delete Model
+                    </DropdownMenuItem>
+                  }
+                />
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </CardAction>
+        </CardHeader>
+        <CardContent className="flex items-end justify-between">
+          <div className="text-black/50 text-xs">
             <p>{simulations?.length || 0} simulations</p>
           </div>
-
           <img
             className="w-32 h-24 object-cover rounded-lg"
             src={modelImg}
             alt="Model Illustration"
           />
-        </div>
+        </CardContent>
       </div>
-    </div>
+    </Card>
   );
 }
