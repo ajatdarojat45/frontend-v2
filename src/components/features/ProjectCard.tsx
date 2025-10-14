@@ -102,20 +102,15 @@ export function ProjectCard(props: ProjectCardProps) {
 
           <div className="invisible sm:visible relative w-36 h-24">
             {/* Stack of cards based on model length */}
-            {Array.from({ length: Math.min(project.models.length, 2) }, (_, index) => (
+            {Array.from({ length: Math.min(project.models.length, 3) }, (_, index) => (
               <img
                 key={index}
                 className="absolute w-36 h-24 object-cover rounded-lg"
                 src={modelImg}
                 alt="Model Illustration"
                 style={{
-                  transform: `rotate(${index * 15 - 5}deg) translate(${index * 30 - 30}px, ${index * -2}px)`,
-                  zIndex: index + 1,
+                  transform: `rotate(${index * 15 - 5}deg) translate(${index * (project.models.length > 2 ? 15 : 30) - 30}px, ${index * -2}px)`,
                   boxShadow: `0 ${2 + index * 2}px ${4 + index * 2}px rgba(0, 0, 0, 0.2), 0 ${1 + index}px ${2 + index}px rgba(0, 0, 0, 0.1)`,
-                  filter:
-                    index > 0
-                      ? `brightness(${1 - index * 0.1}) contrast(${1 - index * 0.05})`
-                      : "none",
                 }}
               />
             ))}

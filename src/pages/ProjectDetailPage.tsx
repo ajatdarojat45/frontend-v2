@@ -68,16 +68,15 @@ export function ProjectDetailPage() {
 
           {/* Stack of model images */}
           <div className="relative w-48 h-32">
-            {Array.from({ length: Math.min(project.models?.length || 1, 3) }, (_, index) => (
+            {Array.from({ length: Math.min(project.models?.length, 3) }, (_, index) => (
               <img
                 key={index}
                 className="absolute w-32 h-24 object-cover rounded-lg"
                 src={modelImg}
                 alt="Model Illustration"
                 style={{
-                  transform: `rotate(${index * 8 - 8}deg) translateX(${index * 20}px) translateY(${index * 5}px)`,
-                  zIndex: index + 1,
-                  boxShadow: `0 ${2 + index * 2}px ${4 + index * 2}px rgba(0, 0, 0, 0.2)`,
+                  transform: `rotate(${index * 15 - 5}deg) translate(${index * (project.models.length > 2 ? 15 : 30) - 30}px, ${index * -2}px)`,
+                  boxShadow: `0 ${2 + index * 2}px ${4 + index * 2}px rgba(0, 0, 0, 0.2), 0 ${1 + index}px ${2 + index}px rgba(0, 0, 0, 0.1)`,
                 }}
               />
             ))}
