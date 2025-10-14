@@ -58,7 +58,6 @@ export function EditorPage() {
             simulationId ? (
               <div className="w-full h-full flex flex-col p-4">
                 <SimulationPicker modelId={+modelId} simulationId={+simulationId} />
-                You're editing simulation {simulationId}
                 <SidebarTabs />
               </div>
             ) : (
