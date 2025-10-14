@@ -1,20 +1,16 @@
 import { ModelCard } from "@/components/features/ModelCard";
 import { UploadModel } from "@/components/features/UploadModel";
+import { WelcomeSidebar } from "@/components/features/WelcomeSidebar";
 import { Alert, AlertTitle } from "@/components/ui/alert";
 import { AppLayout } from "@/components/ui/app-layout";
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Loading } from "@/components/ui/loading";
 import { useGetProjectQuery } from "@/store/projectApi";
-import { AlertCircleIcon, CalendarIcon, ClockIcon, FolderIcon, UsersIcon } from "lucide-react";
+import { AlertCircleIcon, ChevronLeftIcon } from "lucide-react";
 import type React from "react";
-import { useParams } from "react-router";
+import { useParams, Link } from "react-router";
+import modelImg from "@/assets/model.png";
+import { formatDateLong } from "@/helpers/datetime";
+import uploadIcon from "@/assets/upload-icon.png";
 
 export function ProjectDetailPage() {
   const { id } = useParams() as { id: string };
@@ -41,67 +37,89 @@ export function ProjectDetailPage() {
     content = <div>No project found</div>;
   } else {
     content = (
-      <div className="space-y-6 p-4">
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <FolderIcon className="h-5 w-5" />
-              {project.name}
-            </CardTitle>
-            <CardDescription>{project.description}</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="flex items-center gap-2">
-                <UsersIcon className="h-4 w-4 text-muted-foreground" />
-                <span className="font-medium">Group:</span> {project.group}
+      <div className="p-6 space-y-8">
+        {/* Back to projects link */}
+        <Link to="/" className="flex font-inter font-bold text-sm items-center gap-2 text-black/75">
+          <ChevronLeftIcon className="h-4 w-4 text-black/75" />
+          back to projects
+        </Link>
+
+        {/* Project Info Section */}
+        <div className="flex justify-between items-start font-inter">
+          <div className="space-y-6">
+            <p className="text-xs text-black/50">
+              {project.description || "Project description not available"}
+            </p>
+
+            <div className="space-y-4 text-sm">
+              <div className="text-black/80">
+                <span className="font-bold">Group:</span> <span>{project.group}</span>
               </div>
-              <div className="flex items-center gap-2">
-                <CalendarIcon className="h-4 w-4 text-muted-foreground" />
-                <span className="font-medium">Created:</span>{" "}
-                {new Date(project.createdAt).toLocaleDateString()}
+              <div className="text-black/80">
+                <span className="font-bold">Created:</span>{" "}
+                <span>{formatDateLong(project.createdAt)}</span>
               </div>
-              <div className="flex items-center gap-2">
-                <ClockIcon className="h-4 w-4 text-muted-foreground" />
-                <span className="font-medium">Updated:</span>{" "}
-                {new Date(project.updatedAt).toLocaleDateString()}
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="font-medium">ID:</span> {project.id}
+              <div className="text-black/80">
+                <span className="font-bold">Updated:</span>{" "}
+                <span>{formatDateLong(project.updatedAt)}</span>
               </div>
             </div>
-          </CardContent>
-        </Card>
+          </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <UsersIcon className="h-5 w-5" />
-              Models ({project.models?.length || 0})
-            </CardTitle>
-            <CardDescription>Associated models for this project</CardDescription>
-            <CardAction>
-              <UploadModel projectId={id} onSuccess={refetch} />
-            </CardAction>
-          </CardHeader>
-          <CardContent>
-            {project.models && project.models.length > 0 ? (
-              <div className="space-y-6">
-                {project.models.map((model) => (
-                  <ModelCard key={model.id} projectId={id} model={model} />
-                ))}
+          {/* Stack of model images */}
+          <div className="relative w-48 h-32">
+            {Array.from({ length: Math.min(project.models?.length, 3) }, (_, index) => (
+              <img
+                key={index}
+                className="absolute w-32 h-24 object-cover rounded-lg"
+                src={modelImg}
+                alt="Model Illustration"
+                style={{
+                  transform: `rotate(${index * 15 - 5}deg) translate(${index * (project.models.length > 2 ? 15 : 30) - 30}px, ${index * -2}px)`,
+                  boxShadow: `0 ${2 + index * 2}px ${4 + index * 2}px rgba(0, 0, 0, 0.2), 0 ${1 + index}px ${2 + index}px rgba(0, 0, 0, 0.1)`,
+                }}
+              />
+            ))}
+          </div>
+        </div>
+
+        <hr className="border-black/25" />
+
+        {/* Models Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {project.models &&
+            project.models.length > 0 &&
+            project.models.map((model) => (
+              <Link key={model.id} to={`/editor/${model.id}`}>
+                <ModelCard key={model.id} model={model} projectId={id} />
+              </Link>
+            ))}
+
+          {/* Upload Model Card - just visual representation */}
+          <UploadModel
+            projectId={id}
+            onSuccess={refetch}
+            trigger={
+              <div className="min-h-[200px] border border-transparent bg-gradient-to-r from-choras-primary to-choras-secondary bg-clip-border p-0.5 rounded-lg">
+                <div className="bg-[#e7e7e7] min-h-[198px] p-4 rounded-lg h-full flex items-center justify-center">
+                  <div className="flex flex-col items-center text-choras-secondary">
+                    <img src={uploadIcon} alt="Upload Icon" className="h-16 w-16" />
+                  </div>
+                </div>
               </div>
-            ) : (
-              <p className="text-muted-foreground">No models associated with this project.</p>
-            )}
-          </CardContent>
-        </Card>
+            }
+          />
+        </div>
       </div>
     );
   }
 
   return (
-    <AppLayout title={project ? project.name : "Project Detail"} sidebar={<h1>Sidebar</h1>}>
+    <AppLayout
+      title={project ? project.name : "Project Detail"}
+      sidebar={<WelcomeSidebar />}
+      right={<UploadModel projectId={id} onSuccess={refetch} />}
+    >
       {content}
     </AppLayout>
   );

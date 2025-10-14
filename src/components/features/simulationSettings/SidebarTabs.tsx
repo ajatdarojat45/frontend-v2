@@ -23,7 +23,7 @@ export function SidebarTabs() {
           </TabsContent>
         </div>
 
-        <TabsList className="fixed left-64 md:left-72 lg:left-80 bottom-0 h-[75%] w-8 p-0 flex-col rounded-r-xl roundedn-l-none z-10 bg-transparent">
+        <TabsList className="fixed left-64 md:left-72 lg:left-[var(--width-sidebar)] bottom-0 h-[75%] w-8 p-0 flex-col rounded-r-xl roundedn-l-none z-10 bg-transparent">
           <TabsTrigger
             value="sources"
             className="w-full data-[state=active]:bg-sidebar-accent data-[state=active]:text-sidebar-foreground text-white flex items-center justify-center bg-sidebar-foreground rounded-l-none rounded-r-xl"
