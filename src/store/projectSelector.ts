@@ -45,7 +45,7 @@ export const selectProjectsByActiveGroup = createSelector(
 
     // Group projects by their group name
     const results = projects
-      .map((p) => ({ ...p, group: p.group || "Ungrouped" }))
+      .map((p) => ({ ...p, group: p.group || "NONE" }))
       .reduce((acc, project) => {
         const group = acc.find((g) => g.group === project.group);
         if (group) {

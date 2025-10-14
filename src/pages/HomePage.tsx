@@ -55,6 +55,7 @@ export function HomePage() {
               ))}
 
               <ProjectForm
+                defaultValues={{ name: "", description: "", group: groupProject.group }}
                 trigger={
                   <div className="min-h-[192px] border border-transparent bg-gradient-to-r from-choras-primary from-50% to-choras-secondary bg-clip-border p-0.5 rounded-xl">
                     <div className="bg-[#e7e7e7] w-full min-h-[190px] py-6 rounded-lg h-full flex-1 flex items-center justify-center">
