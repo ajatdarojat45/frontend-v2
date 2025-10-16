@@ -8,15 +8,29 @@ import { selectProjectsByActiveGroup } from "@/store/projectSelector";
 import { AlertCircleIcon } from "lucide-react";
 import plusIcon from "@/assets/plus-icon.png";
 import type React from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router";
 import { WelcomeSidebar } from "@/components/features/WelcomeSidebar";
 import { GroupPicker } from "@/components/features/GroupPicker";
 import { DeleteGroup } from "@/components/features/DeleteGroup";
+import { syncGroupsFromProjects } from "@/store/projectSlice";
+import { useEffect } from "react";
 
 export function HomePage() {
-  const { isLoading, error } = useGetProjectsQuery();
+  const { data: projects, isLoading, error } = useGetProjectsQuery();
   const groupProjects = useSelector(selectProjectsByActiveGroup);
+  const dispatch = useDispatch();
+
+  // Sync groups from projects to Redux state when projects load
+  useEffect(() => {
+    if (projects) {
+      const groupsFromProjects = projects.filter((p) => p.group).map((p) => p.group as string);
+
+      if (groupsFromProjects.length > 0) {
+        dispatch(syncGroupsFromProjects(groupsFromProjects));
+      }
+    }
+  }, [projects, dispatch]);
 
   let content: React.ReactNode = null;
 

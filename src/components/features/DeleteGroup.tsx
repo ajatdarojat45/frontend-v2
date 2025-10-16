@@ -7,7 +7,8 @@ import {
   useUpdateProjectsByGroupMutation,
 } from "@/store/projectApi";
 import { toast } from "sonner";
-import { deleteGroup } from "@/helpers/groupStorage";
+import { useDispatch } from "react-redux";
+import { removeGroup } from "@/store/projectSlice";
 
 type DeleteGroupProps = {
   group: string;
@@ -17,12 +18,15 @@ export function DeleteGroup({ group }: DeleteGroupProps) {
   const [open, setOpen] = useState(false);
   const [deleteProjectByGroup, { isLoading: isDeleting }] = useDeleteProjectsByGroupMutation();
   const [updateProjectsByGroup, { isLoading: isUpdating }] = useUpdateProjectsByGroupMutation();
+  const dispatch = useDispatch();
 
   const handleUpdateProjects = async () => {
     try {
       console.log(`Update group: ${group}`);
-      deleteGroup(group);
+      // Update projects first (set group to empty)
       await updateProjectsByGroup({ group, newGroup: "" }).unwrap();
+      // Then remove group from Redux state (will sync to localStorage automatically)
+      dispatch(removeGroup(group));
       setOpen(false);
     } catch (error) {
       console.error("Failed to delete group:", error);

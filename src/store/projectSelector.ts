@@ -2,7 +2,6 @@ import { createSelector } from "@reduxjs/toolkit/react";
 import { projectApi } from "./projectApi";
 import type { RootState } from "./index";
 import type { GroupProject } from "@/types/project";
-import { getGroups, saveGroups } from "@/helpers/groupStorage";
 
 // Selector to get all model ids from a projectId
 export const selectModelIdsByProjectId = createSelector(
@@ -19,35 +18,20 @@ export const selectModelIdsByProjectId = createSelector(
   },
 );
 
-// Selector to get unique groups from all projects
-export const selectGroupsFromProjects = createSelector(
-  (state: RootState) => projectApi.endpoints.getProjects.select()(state)?.data,
-  (projects) => {
-    if (!projects) return [];
-    const groupsSet = new Set<string>();
-    projects.forEach((project) => {
-      if (project.group) {
-        groupsSet.add(project.group);
-      }
-    });
-    const newGroups = Array.from(groupsSet);
-    return saveGroups(newGroups);
-  },
-);
-
 // Selector to get the active group from the state
 export const selectActiveGroup = (state: RootState) => state.project.activeGroup;
 
 // Selector to get projects filtered by the active group
 export const selectProjectsByActiveGroup = createSelector(
   (state: RootState) => state.project.activeGroup,
+  (state: RootState) => state.project.groups,
   (state: RootState) => projectApi.endpoints.getProjects.select()(state)?.data,
-  (activeGroup, projects) => {
+  (activeGroup, storedGroups, projects) => {
     if (!projects) return [];
 
-    // Group projects by their group name
+    // Use stored groups from Redux, or fall back to groups from projects
     const groups =
-      getGroups().length > 0 ? getGroups() : projects.filter((p) => p.group).map((p) => p.group);
+      storedGroups.length > 0 ? storedGroups : projects.filter((p) => p.group).map((p) => p.group);
     const uniqueGroups = Array.from(new Set([...groups, "NONE"])).sort((a, b) =>
       a.localeCompare(b),
     );
