@@ -32,9 +32,14 @@ export const selectProjectsByActiveGroup = createSelector(
     // Use stored groups from Redux, or fall back to groups from projects
     const groups =
       storedGroups.length > 0 ? storedGroups : projects.filter((p) => p.group).map((p) => p.group);
-    const uniqueGroups = Array.from(new Set([...groups, "NONE"])).sort((a, b) =>
-      a.localeCompare(b),
-    );
+    const uniqueGroups = Array.from(new Set([...groups, "NONE"])).sort((a, b) => {
+      // Always put "NONE" at the bottom
+      if (a === "NONE") return 1;
+      if (b === "NONE") return -1;
+
+      // Otherwise, sort alphabetically
+      return a.localeCompare(b);
+    });
 
     const results: GroupProject[] = uniqueGroups.map((group) => ({
       group: group,
