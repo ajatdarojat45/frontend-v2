@@ -78,7 +78,7 @@ export function SourceReceiversTab() {
     const newSource: Source = {
       id: crypto.randomUUID(),
       label: `Source ${sources.length + 1}`,
-      orderNumber: sources.length,
+      orderNumber: sources.length + 1,
       x: 1,
       y: 1,
       z: 1,
