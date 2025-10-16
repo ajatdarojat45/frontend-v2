@@ -169,10 +169,16 @@ export function SourceReceiversTab() {
 
   const handleSourceClick = (sourceId: string) => {
     dispatch(selectSource(selectedSource === sourceId ? null : sourceId));
+    if (selectedReceiver) {
+      dispatch(selectReceiver(null));
+    }
   };
 
   const handleReceiverClick = (receiverId: string) => {
     dispatch(selectReceiver(selectedReceiver === receiverId ? null : receiverId));
+    if (selectedSource) {
+      dispatch(selectSource(null));
+    }
   };
 
   return (
@@ -213,9 +219,7 @@ export function SourceReceiversTab() {
                       <div className="flex items-center justify-between mb-1 p-1 rounded cursor-pointer transition-colors">
                         <div className="flex items-center gap-2">
                           <div
-                            className={`flex items-center justify-center w-6 h-6 ${
-                              isSelected ? "bg-yellow-500" : "bg-cyan-500"
-                            } text-black rounded-full text-xs font-medium`}
+                            className={`flex items-center justify-center w-6 h-6 bg-cyan-500 text-black rounded-full text-xs font-medium`}
                           >
                             {source.orderNumber}
                           </div>
@@ -325,9 +329,7 @@ export function SourceReceiversTab() {
                       <div className="flex items-center justify-between mb-1 p-1 rounded cursor-pointer transition-colors">
                         <div className="flex items-center gap-2">
                           <div
-                            className={`flex items-center justify-center w-6 h-6 ${
-                              isSelected ? "bg-yellow-500" : "bg-yellow-500"
-                            } text-black rounded-full text-xs font-medium`}
+                            className={`flex items-center justify-center w-6 h-6 bg-yellow-500 text-black rounded-full text-xs font-medium`}
                           >
                             {receiver.orderNumber}
                           </div>
