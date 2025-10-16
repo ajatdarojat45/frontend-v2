@@ -11,6 +11,7 @@ import {
   removeSource,
   removeAllSources,
   updateSource,
+  updateSourceValidation,
   addReceiver,
   removeReceiver,
   removeAllReceivers,
@@ -53,11 +54,29 @@ export function SourceReceiversTab() {
     };
   };
 
+  const validateSource = (source: Source): Source => {
+    const modelBounds = getModelBounds(surfaces);
+    const validation = validateSourceOrReceiver(
+      { x: source.x, y: source.y, z: source.z },
+      modelBounds,
+      [],
+      surfaces,
+      source.id,
+    );
+
+    return {
+      ...source,
+      isValid: validation.isValid,
+      validationError: validation.validationError,
+    };
+  };
+
   useEffect(() => {
-    if (simulation?.sources) {
-      dispatch(setSources(simulation.sources));
+    if (simulation?.sources && surfaces.length > 0) {
+      const validatedSources = simulation.sources.map(validateSource);
+      dispatch(setSources(validatedSources));
     }
-  }, [simulation?.sources, dispatch]);
+  }, [simulation?.sources, surfaces, dispatch]);
 
   useEffect(() => {
     if (simulation?.receivers && surfaces.length > 0) {
@@ -82,10 +101,13 @@ export function SourceReceiversTab() {
       x: 1,
       y: 1,
       z: 1,
+      isValid: true,
     };
-    dispatch(addSource(newSource));
 
-    const updatedSources = [...sources, newSource];
+    const validatedSource = validateSource(newSource);
+    dispatch(addSource(validatedSource));
+
+    const updatedSources = [...sources, validatedSource];
     updateSimulationData(updatedSources);
   };
 
@@ -105,10 +127,22 @@ export function SourceReceiversTab() {
   const handleUpdateSource = (id: string, field: "x" | "y" | "z", value: number) => {
     dispatch(updateSource({ id, field, value }));
 
-    const updatedSources = sources.map((source) =>
-      source.id === id ? { ...source, [field]: value } : source,
-    );
-    updateSimulationData(updatedSources);
+    const currentSource = sources.find((s) => s.id === id);
+    if (currentSource) {
+      const updatedSource = { ...currentSource, [field]: value };
+      const validatedSource = validateSource(updatedSource);
+
+      dispatch(
+        updateSourceValidation({
+          id,
+          isValid: validatedSource.isValid || true,
+          validationError: validatedSource.validationError,
+        }),
+      );
+
+      const updatedSources = sources.map((source) => (source.id === id ? validatedSource : source));
+      updateSimulationData(updatedSources);
+    }
   };
 
   const handleAddReceiver = () => {
@@ -202,6 +236,7 @@ export function SourceReceiversTab() {
               </div>
               {sources.map((source) => {
                 const isSelected = selectedSource === source.id;
+                const hasValidationError = !source.isValid && source.validationError;
                 return (
                   <div
                     key={source.id}
@@ -212,7 +247,9 @@ export function SourceReceiversTab() {
                     className={`text-xs p-2 ${
                       isSelected
                         ? "bg-yellow-500/20 border border-yellow-500/30"
-                        : "hover:bg-gray-700/30"
+                        : hasValidationError
+                          ? "bg-red-500/20 border border-red-500/30"
+                          : "hover:bg-gray-700/30"
                     }`}
                   >
                     <div>
@@ -283,6 +320,11 @@ export function SourceReceiversTab() {
                         />
                       </div>
                     </div>
+                    {hasValidationError && (
+                      <div className="mt-2 text-xs text-red-400 px-1">
+                        Error: {source.validationError}
+                      </div>
+                    )}
                   </div>
                 );
               })}

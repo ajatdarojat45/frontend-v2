@@ -84,6 +84,8 @@ export interface Source {
   x: number;
   y: number;
   z: number;
+  isValid?: boolean;
+  validationError?: string;
 }
 
 export interface Source2 {
