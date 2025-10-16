@@ -36,7 +36,20 @@ export function HomePage() {
       </div>
     );
   } else if (!groupProjects || groupProjects.length === 0) {
-    content = <div>No projects found</div>;
+    content = (
+      <div className="p-6 h-container relative">
+        <div className="fixed right-8 top-20">
+          <GroupPicker />
+        </div>
+
+        <div className="flex flex-col items-center justify-center h-full">
+          <div className="text-center space-y-4">
+            <h2 className="text-2xl font-inter font-light text-choras-dark">No projects found</h2>
+            <p className="text-black/75">Create your first project to get started</p>
+          </div>
+        </div>
+      </div>
+    );
   } else {
     content = (
       <div className="p-6 relative">
@@ -44,7 +57,7 @@ export function HomePage() {
           <GroupPicker />
         </div>
         {groupProjects.map((groupProject) => (
-          <>
+          <div key={groupProject.group}>
             <h1 className="inline pb-2 text-lg font-inter font-light border-b text-choras-dark border-b-choras-dark">
               {groupProject.group}
 
@@ -72,7 +85,7 @@ export function HomePage() {
                 }
               />
             </div>
-          </>
+          </div>
         ))}
       </div>
     );
