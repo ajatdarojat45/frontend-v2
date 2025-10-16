@@ -7,6 +7,7 @@ interface SourceReceiverState {
   receivers: Receiver[];
   selectedSource: string | null;
   selectedReceiver: string | null;
+  isTransforming: boolean;
 }
 
 const initialState: SourceReceiverState = {
@@ -14,6 +15,7 @@ const initialState: SourceReceiverState = {
   receivers: [],
   selectedSource: null,
   selectedReceiver: null,
+  isTransforming: false,
 };
 
 const sourceReceiverSlice = createSlice({
@@ -85,6 +87,9 @@ const sourceReceiverSlice = createSlice({
     setReceivers: (state, action: PayloadAction<Receiver[]>) => {
       state.receivers = action.payload;
     },
+    setIsTransforming: (state, action: PayloadAction<boolean>) => {
+      state.isTransforming = action.payload;
+    },
   },
 });
 
@@ -102,6 +107,7 @@ export const {
   selectReceiver,
   setSources,
   setReceivers,
+  setIsTransforming,
 } = sourceReceiverSlice.actions;
 
 export const sourceReceiverReducer = sourceReceiverSlice.reducer;

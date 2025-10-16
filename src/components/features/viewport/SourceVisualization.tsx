@@ -4,7 +4,7 @@ import { Text, TransformControls } from "@react-three/drei";
 import { useThree, type ThreeEvent } from "@react-three/fiber";
 import type { RootState } from "@/store";
 import type { Source } from "@/types/simulation";
-import { updateSource, selectSource } from "@/store/sourceReceiverSlice";
+import { updateSource, selectSource, setIsTransforming } from "@/store/sourceReceiverSlice";
 import { useSourceReceiverApi } from "@/hooks/useSourceReceiverApi";
 import {
   OrbitControls as OrbitControlsType,
@@ -25,6 +25,7 @@ function SourcePoint({
   onTransformEnd: (sourceId: string, position: THREE.Vector3) => void;
   orbitControlsRef: React.RefObject<OrbitControlsType | null>;
 }) {
+  const dispatch = useDispatch();
   const { gl, scene } = useThree();
   const meshRef = useRef<THREE.Mesh>(null);
   const transformRef = useRef<TransformControlsType | null>(null);
@@ -83,11 +84,13 @@ function SourcePoint({
           mode="translate"
           matrixAutoUpdate={false}
           onMouseDown={() => {
+            dispatch(setIsTransforming(true));
             if (orbitControlsRef?.current) {
               orbitControlsRef.current.enabled = false;
             }
           }}
           onMouseUp={() => {
+            dispatch(setIsTransforming(false));
             if (orbitControlsRef?.current) {
               orbitControlsRef.current.enabled = true;
             }
