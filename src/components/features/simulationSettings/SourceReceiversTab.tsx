@@ -252,6 +252,7 @@ export function SourceReceiversTab() {
                           onChange={(e) =>
                             handleUpdateSource(source.id, "x", parseFloat(e.target.value) || 0)
                           }
+                          onClick={(e) => e.stopPropagation()}
                           className="flex-1 h-6 text-xs bg-gray-800 border-gray-600 text-white px-1"
                         />
                       </div>
@@ -264,6 +265,7 @@ export function SourceReceiversTab() {
                           onChange={(e) =>
                             handleUpdateSource(source.id, "y", parseFloat(e.target.value) || 0)
                           }
+                          onClick={(e) => e.stopPropagation()}
                           className="flex-1 h-6 text-xs bg-gray-800 border-gray-600 text-white px-1"
                         />
                       </div>
@@ -276,6 +278,7 @@ export function SourceReceiversTab() {
                           onChange={(e) =>
                             handleUpdateSource(source.id, "z", parseFloat(e.target.value) || 0)
                           }
+                          onClick={(e) => e.stopPropagation()}
                           className="flex-1 h-6 text-xs bg-gray-800 border-gray-600 text-white px-1"
                         />
                       </div>
@@ -362,6 +365,7 @@ export function SourceReceiversTab() {
                           onChange={(e) =>
                             handleUpdateReceiver(receiver.id, "x", parseFloat(e.target.value) || 0)
                           }
+                          onClick={(e) => e.stopPropagation()}
                           className="flex-1 h-6 text-xs bg-gray-800 border-gray-600 text-white px-1"
                         />
                       </div>
@@ -374,6 +378,7 @@ export function SourceReceiversTab() {
                           onChange={(e) =>
                             handleUpdateReceiver(receiver.id, "y", parseFloat(e.target.value) || 0)
                           }
+                          onClick={(e) => e.stopPropagation()}
                           className="flex-1 h-6 text-xs bg-gray-800 border-gray-600 text-white px-1"
                         />
                       </div>
@@ -386,6 +391,7 @@ export function SourceReceiversTab() {
                           onChange={(e) =>
                             handleUpdateReceiver(receiver.id, "z", parseFloat(e.target.value) || 0)
                           }
+                          onClick={(e) => e.stopPropagation()}
                           className="flex-1 h-6 text-xs bg-gray-800 border-gray-600 text-white px-1"
                         />
                       </div>
