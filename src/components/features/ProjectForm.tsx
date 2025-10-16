@@ -26,7 +26,6 @@ import {
   FormControl,
   FormMessage,
 } from "@/components/ui/form";
-import { selectGroupsFromProjects } from "@/store/projectSelector";
 import {
   Select,
   SelectTrigger,
@@ -36,6 +35,7 @@ import {
 } from "@/components/ui/select";
 import { useCreateProjectMutation, useUpdateProjectMutation } from "@/store/projectApi";
 import { Textarea } from "@/components/ui/textarea";
+import type { RootState } from "@/store";
 
 const ProjectFormSchema = z.object({
   name: z.string().min(3, { message: "Name must be at least 3 characters." }),
@@ -71,15 +71,8 @@ export function ProjectForm({ id, defaultValues, trigger, groupOnly }: ProjectFo
   // Controlling the Select open state to close it when a new group is created
   const [selectOpen, setSelectOpen] = useState(false);
 
-  // We need to manage groups state here because we want to update it when a new group is created
-  // So we can't just use the selector directly in the Select component
-  const [groups, setGroups] = useState<string[]>([]);
-
-  // Fill groups state with unique groups from projects
-  const groupAggregates = useSelector(selectGroupsFromProjects);
-  useEffect(() => {
-    setGroups(groupAggregates);
-  }, [groupAggregates]);
+  // We get the groups from Redux state directly
+  const groups = useSelector((state: RootState) => state.project.groups);
 
   // Reset form when dialog is closed
   useEffect(() => {
@@ -107,18 +100,11 @@ export function ProjectForm({ id, defaultValues, trigger, groupOnly }: ProjectFo
     }
   };
 
-  const handleCreateGroup = (data: { name: string }) => {
+  const handleCreateGroup = (name: string) => {
     setSelectOpen(false);
-
-    // Add the new group to the groups state
-    if (!groups.includes(data.name)) {
-      setGroups([...groups, data.name]);
-    }
-    toast.success(`Group "${data.name}" selected`);
-
-    // Delay setting the form value to ensure the Select has closed
+    toast.success(`Group "${name}" selected`);
     setTimeout(() => {
-      form.setValue("group", data.name);
+      form.setValue("group", name);
     }, 500);
   };
 

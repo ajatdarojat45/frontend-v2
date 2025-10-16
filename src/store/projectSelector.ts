@@ -18,43 +18,35 @@ export const selectModelIdsByProjectId = createSelector(
   },
 );
 
-// Selector to get unique groups from all projects
-export const selectGroupsFromProjects = createSelector(
-  (state: RootState) => projectApi.endpoints.getProjects.select()(state)?.data,
-  (projects) => {
-    if (!projects) return [];
-    const groupsSet = new Set<string>();
-    projects.forEach((project) => {
-      if (project.group) {
-        groupsSet.add(project.group);
-      }
-    });
-    return Array.from(groupsSet);
-  },
-);
-
 // Selector to get the active group from the state
 export const selectActiveGroup = (state: RootState) => state.project.activeGroup;
 
 // Selector to get projects filtered by the active group
 export const selectProjectsByActiveGroup = createSelector(
   (state: RootState) => state.project.activeGroup,
+  (state: RootState) => state.project.groups,
   (state: RootState) => projectApi.endpoints.getProjects.select()(state)?.data,
-  (activeGroup, projects) => {
+  (activeGroup, storedGroups, projects) => {
     if (!projects) return [];
 
-    // Group projects by their group name
-    const results = projects
-      .map((p) => ({ ...p, group: p.group || "NONE" }))
-      .reduce((acc, project) => {
-        const group = acc.find((g) => g.group === project.group);
-        if (group) {
-          group.projects.push(project);
-        } else {
-          acc.push({ group: project.group, projects: [project] });
-        }
-        return acc;
-      }, [] as GroupProject[]);
+    // Use stored groups from Redux, or fall back to groups from projects
+    const groups =
+      storedGroups.length > 0 ? storedGroups : projects.filter((p) => p.group).map((p) => p.group);
+    const uniqueGroups = Array.from(new Set([...groups, "NONE"])).sort((a, b) => {
+      // Always put "NONE" at the bottom
+      if (a === "NONE") return 1;
+      if (b === "NONE") return -1;
+
+      // Otherwise, sort alphabetically
+      return a.localeCompare(b);
+    });
+
+    const results: GroupProject[] = uniqueGroups.map((group) => ({
+      group: group,
+      projects: projects.filter((project) =>
+        group === "NONE" ? !project.group : project.group === group,
+      ),
+    }));
 
     // Return all groups if activeGroup is "ALL"
     if (activeGroup === "ALL") return results;
