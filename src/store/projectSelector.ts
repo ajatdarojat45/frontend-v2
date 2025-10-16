@@ -2,6 +2,7 @@ import { createSelector } from "@reduxjs/toolkit/react";
 import { projectApi } from "./projectApi";
 import type { RootState } from "./index";
 import type { GroupProject } from "@/types/project";
+import { getGroups, saveGroups } from "@/helpers/groupStorage";
 
 // Selector to get all model ids from a projectId
 export const selectModelIdsByProjectId = createSelector(
@@ -29,7 +30,8 @@ export const selectGroupsFromProjects = createSelector(
         groupsSet.add(project.group);
       }
     });
-    return Array.from(groupsSet);
+    const newGroups = Array.from(groupsSet);
+    return saveGroups(newGroups);
   },
 );
 
@@ -44,17 +46,18 @@ export const selectProjectsByActiveGroup = createSelector(
     if (!projects) return [];
 
     // Group projects by their group name
-    const results = projects
-      .map((p) => ({ ...p, group: p.group || "NONE" }))
-      .reduce((acc, project) => {
-        const group = acc.find((g) => g.group === project.group);
-        if (group) {
-          group.projects.push(project);
-        } else {
-          acc.push({ group: project.group, projects: [project] });
-        }
-        return acc;
-      }, [] as GroupProject[]);
+    const groups =
+      getGroups().length > 0 ? getGroups() : projects.filter((p) => p.group).map((p) => p.group);
+    const uniqueGroups = Array.from(new Set([...groups, "NONE"])).sort((a, b) =>
+      a.localeCompare(b),
+    );
+
+    const results: GroupProject[] = uniqueGroups.map((group) => ({
+      group: group,
+      projects: projects.filter((project) =>
+        group === "NONE" ? !project.group : project.group === group,
+      ),
+    }));
 
     // Return all groups if activeGroup is "ALL"
     if (activeGroup === "ALL") return results;

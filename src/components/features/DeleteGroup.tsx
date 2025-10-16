@@ -7,6 +7,7 @@ import {
   useUpdateProjectsByGroupMutation,
 } from "@/store/projectApi";
 import { toast } from "sonner";
+import { deleteGroup } from "@/helpers/groupStorage";
 
 type DeleteGroupProps = {
   group: string;
@@ -20,6 +21,7 @@ export function DeleteGroup({ group }: DeleteGroupProps) {
   const handleUpdateProjects = async () => {
     try {
       console.log(`Update group: ${group}`);
+      deleteGroup(group);
       await updateProjectsByGroup({ group, newGroup: "" }).unwrap();
       setOpen(false);
     } catch (error) {
@@ -29,12 +31,12 @@ export function DeleteGroup({ group }: DeleteGroupProps) {
   };
   const handleDeleteProjects = async () => {
     try {
-      console.log(`Delete group and all projects: ${group}`);
+      console.log(`Delete all projects: ${group}`);
       await deleteProjectByGroup(group === "NONE" ? "" : group).unwrap();
       setOpen(false);
     } catch (error) {
-      console.error("Failed to delete group and projects:", error);
-      toast.error("Failed to delete group and projects");
+      console.error("Failed to delete projects:", error);
+      toast.error("Failed to delete projects");
     }
   };
 
@@ -71,7 +73,7 @@ export function DeleteGroup({ group }: DeleteGroupProps) {
               onClick={handleDeleteProjects}
               aria-busy={isDeleting}
             >
-              {isDeleting ? "Deleting…" : "Delete Group & Projects"}
+              {isDeleting ? "Deleting…" : "Delete Projects"}
             </Button>
           </div>
         </div>
