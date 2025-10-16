@@ -61,13 +61,13 @@ function SourcePoint({
         }}
       >
         <sphereGeometry args={[0.15, 16, 16]} />
-        <meshBasicMaterial color={isSelected ? "#fbbf24" : "#22d3ee"} />
+        <meshBasicMaterial color={"#22d3ee"} />
       </mesh>
 
       <Text
         position={[source.x, source.y, source.z + 0.3]}
         fontSize={0.2}
-        color={isSelected ? "#fbbf24" : "#06b6d4"}
+        color={"#06b6d4"}
         anchorX="center"
         anchorY="middle"
         outlineWidth={0.02}

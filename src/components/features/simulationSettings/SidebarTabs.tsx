@@ -6,16 +6,16 @@ export function SidebarTabs() {
   return (
     <div className="h-full w-full relative p-0">
       <Tabs defaultValue="sources" className="h-full w-full" orientation="vertical">
-        <div className="h-full w-full overflow-hidden">
-          <TabsContent value="surfaces" className="h-full m-0">
+        <div className="h-full w-full">
+          <TabsContent value="surfaces" className="m-0">
             <SurfacesTab />
           </TabsContent>
 
-          <TabsContent value="sources" className="h-full m-0">
+          <TabsContent value="sources" className="m-0">
             <SourceReceiversTab />
           </TabsContent>
 
-          <TabsContent value="settings" className="h-full m-0">
+          <TabsContent value="settings" className="m-0">
             <div className="space-y-4">
               <h3 className="text-sm font-medium">Settings</h3>
               <p className="text-sm text-muted-foreground">Application settings will go here.</p>

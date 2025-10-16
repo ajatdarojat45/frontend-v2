@@ -52,19 +52,19 @@ export function EditorPage() {
         )
       }
       sidebar={
-        <div className="h-[calc(100%-4rem)]">
-          {
-            // If there's a simulationId, show the simulation editor
-            simulationId ? (
-              <div className="w-full h-full flex flex-col p-4">
+        <div className="h-full flex flex-col">
+          {simulationId ? (
+            <>
+              <div className="p-4 flex-shrink-0">
                 <SimulationPicker modelId={+modelId} simulationId={+simulationId} />
+              </div>
+              <div className="flex-1 overflow-auto px-4 scrollbar-hide">
                 <SidebarTabs />
               </div>
-            ) : (
-              // If no simulations exist, show the empty state
-              <EmptySimulation modelId={+modelId} />
-            )
-          }
+            </>
+          ) : (
+            <EmptySimulation modelId={+modelId} />
+          )}
         </div>
       }
       right={<CreateSimulation modelId={+modelId} />}

@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { SourceReceiversMenu } from "./SourceReceiversMenu";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Trash2 } from "lucide-react";
+import { Trash2, Plus } from "lucide-react";
 import type { Source, Receiver } from "@/types/simulation";
 import type { RootState } from "@/store";
 import {
@@ -92,7 +92,7 @@ export function SourceReceiversTab() {
   }, [simulationError]);
 
   const handleAddSource = () => {
-    if (sources.length >= 1) return;
+    if (sources.length >= 5) return;
 
     const newSource: Source = {
       id: crypto.randomUUID(),
@@ -146,7 +146,7 @@ export function SourceReceiversTab() {
   };
 
   const handleAddReceiver = () => {
-    if (receivers.length >= 1) return;
+    if (receivers.length >= 5) return;
 
     const newReceiver: Receiver = {
       id: crypto.randomUUID(),
@@ -217,23 +217,16 @@ export function SourceReceiversTab() {
 
   return (
     <>
-      <div className="text-white border-b border-gray-600 pb-4">
+      <div className="text-white border-b border-gray-600 pb-4 over">
         <div className="mb-4 flex justify-between items-center">
           <h4 className="text-lg font-semibold mb-2">Sources</h4>
-          <SourceReceiversMenu
-            onAddNew={handleAddSource}
-            onRemoveAll={handleRemoveAllSources}
-            canAdd={sources.length < 1}
-          />
+          <SourceReceiversMenu onRemoveAll={handleRemoveAllSources} />
         </div>
         <div className="space-y-2">
           {sources.length === 0 ? (
             <div className="text-xs text-gray-500 italic py-2">Add new source to start editing</div>
           ) : (
             <>
-              <div className="text-xs text-gray-500 italic py-2">
-                Select Source/Receiver here to edit position
-              </div>
               {sources.map((source) => {
                 const isSelected = selectedSource === source.id;
                 const hasValidationError = !source.isValid && source.validationError;
@@ -331,16 +324,26 @@ export function SourceReceiversTab() {
             </>
           )}
         </div>
+
+        {/* Add New Source Button */}
+        <div className="mt-3">
+          <Button
+            onClick={handleAddSource}
+            disabled={sources.length >= 5}
+            size="sm"
+            className="w-full h-8 text-xs"
+            variant="outline"
+          >
+            <Plus size={14} className="mr-1" />
+            Add New Source {sources.length >= 5 && "(Max 5)"}
+          </Button>
+        </div>
       </div>
 
       <div className="text-white pt-4">
         <div className="mb-4 flex justify-between items-center">
           <h4 className="text-lg font-semibold mb-2">Receivers</h4>
-          <SourceReceiversMenu
-            onAddNew={handleAddReceiver}
-            onRemoveAll={handleRemoveAllReceivers}
-            canAdd={receivers.length < 1}
-          />
+          <SourceReceiversMenu onRemoveAll={handleRemoveAllReceivers} />
         </div>
         <div className="space-y-2">
           {receivers.length === 0 ? (
@@ -349,9 +352,6 @@ export function SourceReceiversTab() {
             </div>
           ) : (
             <>
-              <div className="text-xs text-gray-500 italic py-2">
-                Select Source/Receiver here to edit position
-              </div>
               {receivers.map((receiver) => {
                 const isSelected = selectedReceiver === receiver.id;
                 const hasValidationError = !receiver.isValid && receiver.validationError;
@@ -448,6 +448,20 @@ export function SourceReceiversTab() {
               })}
             </>
           )}
+        </div>
+
+        {/* Add New Receiver Button */}
+        <div className="mt-3">
+          <Button
+            onClick={handleAddReceiver}
+            disabled={receivers.length >= 5}
+            size="sm"
+            className="w-full h-8 text-xs mb-4"
+            variant="outline"
+          >
+            <Plus size={14} className="mr-1" />
+            Add New Receiver {receivers.length >= 5 && "(Max 5)"}
+          </Button>
         </div>
       </div>
     </>
