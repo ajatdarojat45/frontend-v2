@@ -337,7 +337,7 @@ export function SourceReceiversTab() {
             onClick={handleAddSource}
             disabled={sources.length >= 5}
             size="sm"
-            className="w-full h-8 text-xs"
+            className="w-full h-8 text-xs cursor-pointer"
             variant="outline"
           >
             <Plus size={14} className="mr-1" />
@@ -468,7 +468,7 @@ export function SourceReceiversTab() {
             onClick={handleAddReceiver}
             disabled={receivers.length >= 5}
             size="sm"
-            className="w-full h-8 text-xs mb-4"
+            className="w-full h-8 text-xs mb-4 cursor-pointer"
             variant="outline"
           >
             <Plus size={14} className="mr-1" />

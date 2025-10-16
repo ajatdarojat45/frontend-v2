@@ -26,22 +26,34 @@ export function SidebarTabs() {
         <TabsList className="fixed left-64 md:left-72 lg:left-[var(--width-sidebar)] bottom-0 h-[75%] w-8 p-0 flex-col rounded-r-xl roundedn-l-none z-10 bg-transparent">
           <TabsTrigger
             value="sources"
-            className="w-full data-[state=active]:bg-sidebar-accent data-[state=active]:text-sidebar-foreground text-white flex items-center justify-center bg-sidebar-foreground rounded-l-none rounded-r-xl"
-            style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}
+            className="w-full data-[state=active]:bg-choras-dark data-[state=active]:text-choras-primary text-white/50 flex items-center justify-center bg-choras-dark/50 rounded-l-none cursor-pointer pr-4"
+            style={{
+              writingMode: "vertical-rl",
+              textOrientation: "mixed",
+              clipPath: "polygon(0 0, 1% 0, 100% 15%, 100% 85%, 1% 100%, 0 100%)",
+            }}
           >
             Sources/Receiver
           </TabsTrigger>
           <TabsTrigger
             value="surfaces"
-            className="w-full data-[state=active]:bg-sidebar-accent data-[state=active]:text-sidebar-foreground text-white flex items-center justify-center bg-sidebar-foreground rounded-l-none rounded-r-xl"
-            style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}
+            className="w-full data-[state=active]:bg-choras-dark data-[state=active]:text-choras-primary text-white/50 flex items-center justify-center bg-choras-dark/50 rounded-l-none cursor-pointer pr-4"
+            style={{
+              writingMode: "vertical-rl",
+              textOrientation: "mixed",
+              clipPath: "polygon(0 0, 1% 0, 100% 15%, 100% 85%, 1% 100%, 0 100%)",
+            }}
           >
             Surfaces
           </TabsTrigger>
           <TabsTrigger
             value="settings"
-            className="w-full data-[state=active]:bg-sidebar-accent data-[state=active]:text-sidebar-foreground text-white flex items-center justify-center bg-sidebar-foreground rounded-l-none rounded-r-xl"
-            style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}
+            className="w-full data-[state=active]:bg-choras-dark data-[state=active]:text-choras-primary text-white/50 flex items-center justify-center bg-choras-dark/50 rounded-l-none cursor-pointer pr-4"
+            style={{
+              writingMode: "vertical-rl",
+              textOrientation: "mixed",
+              clipPath: "polygon(0 0, 1% 0, 100% 15%, 100% 85%, 1% 100%, 0 100%)",
+            }}
           >
             Settings
           </TabsTrigger>
