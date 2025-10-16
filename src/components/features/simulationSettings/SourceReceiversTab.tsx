@@ -219,7 +219,7 @@ export function SourceReceiversTab() {
     <>
       <div className="text-white border-b border-gray-600 pb-4 over">
         <div className="mb-4 flex justify-between items-center">
-          <h4 className="text-lg font-semibold mb-2">Sources</h4>
+          <h4 className="text-xl text-choras-primary">Sources</h4>
           <SourceReceiversMenu onRemoveAll={handleRemoveAllSources} />
         </div>
         <div className="space-y-2">
@@ -266,15 +266,17 @@ export function SourceReceiversTab() {
                             e.stopPropagation();
                             handleRemoveSource(source.id);
                           }}
-                          className="p-1 h-6 w-6 text-gray-400 hover:text-red-400"
+                          className="p-1 h-6 w-6 text-choras-gray hover:text-red-400"
                         >
                           <Trash2 size={12} />
                         </Button>
                       </div>
                     </div>
                     <div className="flex gap-3">
-                      <div className="flex items-center gap-1 flex-1">
-                        <span className="text-xs text-gray-400">X</span>
+                      <div className="relative flex-1">
+                        <span className="absolute left-2 top-1/2 transform -translate-y-1/2 text-xs text-choras-gray pointer-events-none">
+                          X
+                        </span>
                         <Input
                           type="number"
                           step="0.01"
@@ -283,11 +285,13 @@ export function SourceReceiversTab() {
                             handleUpdateSource(source.id, "x", parseFloat(e.target.value) || 0)
                           }
                           onClick={(e) => e.stopPropagation()}
-                          className="flex-1 h-6 text-xs bg-gray-800 border-gray-600 text-white px-1"
+                          className="h-6 text-xs bg-choras-dark border-choras-gray text-white pl-6 pr-2"
                         />
                       </div>
-                      <div className="flex items-center gap-1 flex-1">
-                        <span className="text-xs text-gray-400">Y</span>
+                      <div className="relative flex-1">
+                        <span className="absolute left-2 top-1/2 transform -translate-y-1/2 text-xs text-choras-gray pointer-events-none">
+                          Y
+                        </span>
                         <Input
                           type="number"
                           step="0.01"
@@ -296,11 +300,13 @@ export function SourceReceiversTab() {
                             handleUpdateSource(source.id, "y", parseFloat(e.target.value) || 0)
                           }
                           onClick={(e) => e.stopPropagation()}
-                          className="flex-1 h-6 text-xs bg-gray-800 border-gray-600 text-white px-1"
+                          className="h-6 text-xs bg-choras-dark border-choras-gray text-white pl-6 pr-2"
                         />
                       </div>
-                      <div className="flex items-center gap-1 flex-1">
-                        <span className="text-xs text-gray-400">Z</span>
+                      <div className="relative flex-1">
+                        <span className="absolute left-2 top-1/2 transform -translate-y-1/2 text-xs text-choras-gray pointer-events-none">
+                          Z
+                        </span>
                         <Input
                           type="number"
                           step="0.01"
@@ -309,7 +315,7 @@ export function SourceReceiversTab() {
                             handleUpdateSource(source.id, "z", parseFloat(e.target.value) || 0)
                           }
                           onClick={(e) => e.stopPropagation()}
-                          className="flex-1 h-6 text-xs bg-gray-800 border-gray-600 text-white px-1"
+                          className="h-6 text-xs bg-choras-dark border-choras-gray text-white pl-6 pr-2"
                         />
                       </div>
                     </div>
@@ -342,7 +348,7 @@ export function SourceReceiversTab() {
 
       <div className="text-white pt-4">
         <div className="mb-4 flex justify-between items-center">
-          <h4 className="text-lg font-semibold mb-2">Receivers</h4>
+          <h4 className="text-xl text-choras-primary">Receivers</h4>
           <SourceReceiversMenu onRemoveAll={handleRemoveAllReceivers} />
         </div>
         <div className="space-y-2">
@@ -391,15 +397,17 @@ export function SourceReceiversTab() {
                             e.stopPropagation();
                             handleRemoveReceiver(receiver.id);
                           }}
-                          className="p-1 h-6 w-6 text-gray-400 hover:text-red-400"
+                          className="p-1 h-6 w-6 text-choras-gray hover:text-red-400"
                         >
                           <Trash2 size={12} />
                         </Button>
                       </div>
                     </div>
                     <div className="flex gap-3">
-                      <div className="flex items-center gap-1 flex-1">
-                        <span className="text-xs text-gray-400">X</span>
+                      <div className="relative flex-1">
+                        <span className="absolute left-2 top-1/2 transform -translate-y-1/2 text-xs text-choras-gray pointer-events-none">
+                          X
+                        </span>
                         <Input
                           type="number"
                           step="0.01"
@@ -408,11 +416,13 @@ export function SourceReceiversTab() {
                             handleUpdateReceiver(receiver.id, "x", parseFloat(e.target.value) || 0)
                           }
                           onClick={(e) => e.stopPropagation()}
-                          className="flex-1 h-6 text-xs bg-gray-800 border-gray-600 text-white px-1"
+                          className="h-6 text-xs bg-choras-dark border-choras-gray text-white pl-6 pr-2"
                         />
                       </div>
-                      <div className="flex items-center gap-1 flex-1">
-                        <span className="text-xs text-gray-400">Y</span>
+                      <div className="relative flex-1">
+                        <span className="absolute left-2 top-1/2 transform -translate-y-1/2 text-xs text-choras-gray pointer-events-none">
+                          Y
+                        </span>
                         <Input
                           type="number"
                           step="0.01"
@@ -421,11 +431,13 @@ export function SourceReceiversTab() {
                             handleUpdateReceiver(receiver.id, "y", parseFloat(e.target.value) || 0)
                           }
                           onClick={(e) => e.stopPropagation()}
-                          className="flex-1 h-6 text-xs bg-gray-800 border-gray-600 text-white px-1"
+                          className="h-6 text-xs bg-choras-dark border-choras-gray text-white pl-6 pr-2"
                         />
                       </div>
-                      <div className="flex items-center gap-1 flex-1">
-                        <span className="text-xs text-gray-400">Z</span>
+                      <div className="relative flex-1">
+                        <span className="absolute left-2 top-1/2 transform -translate-y-1/2 text-xs text-choras-gray pointer-events-none">
+                          Z
+                        </span>
                         <Input
                           type="number"
                           step="0.01"
@@ -434,7 +446,7 @@ export function SourceReceiversTab() {
                             handleUpdateReceiver(receiver.id, "z", parseFloat(e.target.value) || 0)
                           }
                           onClick={(e) => e.stopPropagation()}
-                          className="flex-1 h-6 text-xs bg-gray-800 border-gray-600 text-white px-1"
+                          className="h-6 text-xs bg-choras-dark border-choras-gray text-white pl-6 pr-2"
                         />
                       </div>
                     </div>
