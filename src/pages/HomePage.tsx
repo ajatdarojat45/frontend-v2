@@ -12,6 +12,7 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router";
 import { WelcomeSidebar } from "@/components/features/WelcomeSidebar";
 import { GroupPicker } from "@/components/features/GroupPicker";
+import { DeleteGroup } from "@/components/features/DeleteGroup";
 
 export function HomePage() {
   const { isLoading, error } = useGetProjectsQuery();
@@ -46,6 +47,8 @@ export function HomePage() {
           <>
             <h1 className="inline pb-2 text-lg font-inter font-light border-b text-choras-dark border-b-choras-dark">
               {groupProject.group}
+
+              <DeleteGroup group={groupProject.group} />
             </h1>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 border-b border-b-black/25 mt-5 pb-8 mb-6">
               {groupProject.projects.map((project) => (
@@ -55,7 +58,11 @@ export function HomePage() {
               ))}
 
               <ProjectForm
-                defaultValues={{ name: "", description: "", group: groupProject.group }}
+                defaultValues={{
+                  name: "",
+                  description: "",
+                  group: groupProject.group === "NONE" ? "" : groupProject.group,
+                }}
                 trigger={
                   <div className="min-h-[192px] border border-transparent bg-gradient-to-r from-choras-primary from-50% to-choras-secondary bg-clip-border p-0.5 rounded-xl">
                     <div className="bg-[#e7e7e7] w-full min-h-[190px] py-6 rounded-lg h-full flex-1 flex items-center justify-center">
