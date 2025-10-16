@@ -17,7 +17,8 @@ export interface ValidationResult {
   validationError?: string;
 }
 
-const PROXIMITY_THRESHOLD = 0.5;
+const PROXIMITY_THRESHOLD = 0.2;
+const SPHERE_RADIUS = 0.13;
 
 export function validateSourceOrReceiver(
   point: Point3D,
@@ -26,11 +27,25 @@ export function validateSourceOrReceiver(
   surfaces: SurfaceInfo[],
   excludeSourceId?: string,
 ): ValidationResult {
+  if (
+    point.x - SPHERE_RADIUS <= modelBounds.min.x ||
+    point.x >= modelBounds.max.x - SPHERE_RADIUS ||
+    point.y - SPHERE_RADIUS <= modelBounds.min.y ||
+    point.y >= modelBounds.max.y - SPHERE_RADIUS ||
+    point.z - SPHERE_RADIUS <= modelBounds.min.z ||
+    point.z >= modelBounds.max.z - SPHERE_RADIUS
+  ) {
+    return {
+      isValid: false,
+      validationError: "outside the model bounds",
+    };
+  }
+
   for (const surface of surfaces) {
     if (surface.boundingBox && isPointTooCloseToSurface(point, surface)) {
       return {
         isValid: false,
-        validationError: "the receiver is too close to the surface",
+        validationError: "too close to the surface",
       };
     }
   }
@@ -43,23 +58,9 @@ export function validateSourceOrReceiver(
     if (isPointTooCloseToPoint(point, source)) {
       return {
         isValid: false,
-        validationError: "the receiver is too close to a source",
+        validationError: "too close to a source",
       };
     }
-  }
-
-  if (
-    point.x < modelBounds.min.x ||
-    point.x > modelBounds.max.x ||
-    point.y < modelBounds.min.y ||
-    point.y > modelBounds.max.y ||
-    point.z < modelBounds.min.z ||
-    point.z > modelBounds.max.z
-  ) {
-    return {
-      isValid: false,
-      validationError: "the receiver is outside the model",
-    };
   }
 
   return { isValid: true };

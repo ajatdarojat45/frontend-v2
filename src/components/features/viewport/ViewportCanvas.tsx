@@ -122,9 +122,9 @@ export function ViewportCanvas({ modelUrl, modelId }: ViewportCanvasProps) {
             <GizmoViewport axisColors={["red", "green", "blue"]} labelColor="black" />
           </GizmoHelper>
 
+          {modelId && <ModelRenderer modelId={modelId} />}
           <SourceVisualization orbitControlsRef={orbitControlsRef} />
           <ReceiverVisualization orbitControlsRef={orbitControlsRef} />
-          {modelId && <ModelRenderer modelId={modelId} />}
         </Canvas>
       </div>
 
