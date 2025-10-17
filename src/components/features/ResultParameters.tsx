@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { useGetSimulationQuery, useGetSimulationResultQuery } from "@/store/simulationApi";
+import { useGetSimulationByIdQuery, useGetSimulationResultQuery } from "@/store/simulationApi";
 import { Loading } from "@/components/ui/loading";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useState } from "react";
@@ -15,7 +15,7 @@ type ResultParametersProps = {
 export function ResultParameters({ simulationId }: ResultParametersProps) {
   const [selectedParameter, setSelectedParameter] = useState<keyof Parameters>("edt");
   const { data: results, isLoading, error } = useGetSimulationResultQuery(simulationId);
-  const { data: simulation } = useGetSimulationQuery(simulationId);
+  const { data: simulation } = useGetSimulationByIdQuery(simulationId);
 
   if (isLoading) return <Loading />;
 
