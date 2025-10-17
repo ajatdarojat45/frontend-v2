@@ -18,13 +18,6 @@ export const simulationApi = createApi({
       providesTags: (_, __, arg) => [{ type: "SimulationsByModel", id: arg }],
     }),
 
-    getSimulation: build.query<Simulation, number>({
-      query: (simulationId) => `/simulations/${simulationId}`,
-
-      // Provides a single Simulations-type tag for cache invalidation
-      providesTags: (_, __, arg) => [{ type: "Simulations", id: arg }],
-    }),
-
     createSimulation: build.mutation<Simulation, Partial<Simulation>>({
       query: (body) => ({
         url: "/simulations",
@@ -66,7 +59,6 @@ export const simulationApi = createApi({
 export const {
   useGetSimulationsByModelIdQuery,
   useLazyGetSimulationsByModelIdQuery,
-  useGetSimulationQuery,
   useCreateSimulationMutation,
   useGetSimulationByIdQuery,
   useUpdateSimulationMutation,
