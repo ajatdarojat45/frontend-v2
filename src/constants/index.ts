@@ -6,46 +6,10 @@ export const COLORS = {
   GRAY: "#64748b",
 } as const;
 
-export const SIMULATION_METHODS = {
-  DE: {
-    name: "Diffusion Equation",
-    github: "https://building-acoustics-tu-eindhoven.github.io/acousticDE/index.html",
-    documentation: "https://building-acoustics-tu-eindhoven.github.io/acousticDE/index.html",
-  },
-  DG: {
-    name: "Discontinuous Galerkin",
-    github: "https://dg-roomacoustics.readthedocs.io/en/latest/",
-    documentation: "https://dg-roomacoustics.readthedocs.io/en/latest/",
-  },
-  PRA: {
-    name: "Pyroomacoustics",
-    github: "https://pyroomacoustics.readthedocs.io/en/pypi-release/",
-    documentation: "https://pyroomacoustics.readthedocs.io/en/pypi-release/",
-  },
-  DEISM: {
-    name: "Diffraction Enhanced Image Source Method",
-    github: "https://deism.readthedocs.io/en/latest/",
-    documentation: "https://deism.readthedocs.io/en/latest/",
-  },
-  SPPS: {
-    name: "SPPS",
-    github: "https://i-simpa.univ-gustave-eiffel.fr/",
-    documentation: "https://i-simpa.univ-gustave-eiffel.fr/",
-  },
-  DON: {
-    name: "DeepONet",
-    github: "https://github.com/dtu-act/deeponet-acoustic-wave-prop",
-    documentation: "https://github.com/dtu-act/deeponet-acoustic-wave-prop",
-  },
-  PFDTD: {
-    name: "ParallelFDTD",
-    github: "https://github.com/AaltoRSE/ParallelFDTD/",
-    documentation: "https://github.com/AaltoRSE/ParallelFDTD/",
-  },
-} as const;
-
 export const CHORAS_DOCUMENTATION_URL = {
   name: "CHORAS",
   github: "https://github.com/choras-org",
   documentation: "https://github.com/choras-org",
 } as const;
+
+export const RHINO3DM_PATH = "/node_modules/three/examples/jsm/libs/rhino3dm/";

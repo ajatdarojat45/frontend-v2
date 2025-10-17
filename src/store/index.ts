@@ -7,6 +7,10 @@ import { simulationReducer } from "./simulationSlice";
 import { modelApi } from "./modelApi";
 import modelReducer from "./modelSlice";
 import { auralizationApi } from "./auralizationApi";
+import geometrySelectionReducer from "./geometrySelectionSlice";
+import { materialsApi } from "./materialsApi";
+import materialAssignmentReducer from "./materialAssignmentSlice";
+import { sourceReceiverReducer } from "./sourceReceiverSlice";
 
 export const store = configureStore({
   reducer: {
@@ -14,24 +18,40 @@ export const store = configureStore({
     [simulationApi.reducerPath]: simulationApi.reducer,
     [modelApi.reducerPath]: modelApi.reducer,
     [auralizationApi.reducerPath]: auralizationApi.reducer,
+    [materialsApi.reducerPath]: materialsApi.reducer,
     project: projectReducer,
     simulation: simulationReducer,
     model: modelReducer,
+    geometrySelection: geometrySelectionReducer,
+    materialAssignment: materialAssignmentReducer,
+    sourceReceiver: sourceReceiverReducer,
   },
 
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
-        ignoredActions: ["model/storeRhinoFile", "auralizationApi/executeQuery/fulfilled"],
+        ignoredActions: [
+          "model/storeRhinoFile",
+          "geometrySelection/selectGeometry",
+          "geometrySelection/addHighlightedMesh",
+          "geometrySelection/removeHighlightedMesh",
+          "auralizationApi/executeQuery/fulfilled",
+        ],
         // Ignore the entire auralizationApi reducer path so binary ArrayBuffer responses
         // stored by RTK Query won't trigger the serializable-state middleware.
-        ignoredPaths: ["model.rhinoFiles", auralizationApi.reducerPath],
+        ignoredPaths: [
+          "model.rhinoFiles",
+          "geometrySelection.selectedGeometry",
+          "geometrySelection.highlightedMeshes",
+          auralizationApi.reducerPath,
+        ],
       },
     }).concat(
       projectApi.middleware,
       simulationApi.middleware,
       modelApi.middleware,
       auralizationApi.middleware,
+      materialsApi.middleware,
     ),
 });
 
