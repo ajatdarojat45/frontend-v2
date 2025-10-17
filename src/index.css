@@ -125,6 +125,7 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
@@ -132,6 +133,10 @@
 
 @utility h-container {
   height: calc(100vh - 4rem);
+}
+
+@utility min-h-container {
+  min-height: calc(100vh - 4rem);
 }
 
 @utility w-sidebar {
@@ -145,6 +150,8 @@
   }
 
   /* Hide scrollbar for IE, Edge and Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }
