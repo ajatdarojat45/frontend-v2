@@ -7,6 +7,7 @@ interface SourceReceiverState {
   receivers: Receiver[];
   selectedSource: string | null;
   selectedReceiver: string | null;
+  isTransforming: boolean;
 }
 
 const initialState: SourceReceiverState = {
@@ -14,6 +15,7 @@ const initialState: SourceReceiverState = {
   receivers: [],
   selectedSource: null,
   selectedReceiver: null,
+  isTransforming: false,
 };
 
 const sourceReceiverSlice = createSlice({
@@ -73,6 +75,17 @@ const sourceReceiverSlice = createSlice({
         receiver.validationError = validationError;
       }
     },
+    updateSourceValidation: (
+      state,
+      action: PayloadAction<{ id: string; isValid: boolean; validationError?: string }>,
+    ) => {
+      const { id, isValid, validationError } = action.payload;
+      const source = state.sources.find((source) => source.id === id);
+      if (source) {
+        source.isValid = isValid;
+        source.validationError = validationError;
+      }
+    },
     selectSource: (state, action: PayloadAction<string | null>) => {
       state.selectedSource = action.payload;
     },
@@ -85,6 +98,9 @@ const sourceReceiverSlice = createSlice({
     setReceivers: (state, action: PayloadAction<Receiver[]>) => {
       state.receivers = action.payload;
     },
+    setIsTransforming: (state, action: PayloadAction<boolean>) => {
+      state.isTransforming = action.payload;
+    },
   },
 });
 
@@ -93,6 +109,7 @@ export const {
   removeSource,
   removeAllSources,
   updateSource,
+  updateSourceValidation,
   addReceiver,
   removeReceiver,
   removeAllReceivers,
@@ -102,6 +119,7 @@ export const {
   selectReceiver,
   setSources,
   setReceivers,
+  setIsTransforming,
 } = sourceReceiverSlice.actions;
 
 export const sourceReceiverReducer = sourceReceiverSlice.reducer;

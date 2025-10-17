@@ -1,4 +1,4 @@
-import { selectActiveGroup, selectGroupsFromProjects } from "@/store/projectSelector";
+import { selectActiveGroup } from "@/store/projectSelector";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Select,
@@ -8,9 +8,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { setActiveGroup } from "@/store/projectSlice";
+import type { RootState } from "@/store";
 
 export function GroupPicker() {
-  const groups = useSelector(selectGroupsFromProjects);
+  const groups = useSelector((state: RootState) => state.project.groups);
   const dispatch = useDispatch();
   const activeGroup = useSelector(selectActiveGroup);
 

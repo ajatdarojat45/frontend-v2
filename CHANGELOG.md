@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.11](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.10...v0.0.11) (2025-10-16)
+
+### Features
+
+- add group management functions for project deletion and storage ([0725f27](https://github.com/ajatdarojat45/frontend-v2/commit/0725f278fa4b2ccbb20e15933192ed066e9aab3f))
+- add projectsCount prop to DeleteGroup component for improved project management ([b9ba864](https://github.com/ajatdarojat45/frontend-v2/commit/b9ba8643bf61970af1540af4d183a7d307c92682))
+- implement DeleteGroup component with project deletion functionality ([084e547](https://github.com/ajatdarojat45/frontend-v2/commit/084e547ba500c56eb0201cf6ea198d675bea0890))
+- integrate Redux for group management and remove localStorage dependency ([c779caa](https://github.com/ajatdarojat45/frontend-v2/commit/c779caadf3fe11d8e9c898201a15f522767c292f))
+
+### Bug Fixes
+
+- add handle propagation in all input source receivers ([8d0f250](https://github.com/ajatdarojat45/frontend-v2/commit/8d0f2503bac8365c9ee81a09d242346d71f8465c))
+- add validation to source too, not just receivers ([7632aa6](https://github.com/ajatdarojat45/frontend-v2/commit/7632aa64aefeea9f87c4d50427b8fe55f8e56b1b))
+- conflict validation outside model and close to surface ([11e8379](https://github.com/ajatdarojat45/frontend-v2/commit/11e83793669d7baabfbb7187a02c3833f0288766))
+- enhance "No projects found" message layout for better user experience ([d90db2c](https://github.com/ajatdarojat45/frontend-v2/commit/d90db2c8f37997cddcea51cf7bc554bfff52b3fc))
+- improve sorting logic for unique groups in project selector ([3d9e37e](https://github.com/ajatdarojat45/frontend-v2/commit/3d9e37ec66a7bbf6aee9886ddd7140b8c32d3013))
+- move add button to bottom row ([ae8a366](https://github.com/ajatdarojat45/frontend-v2/commit/ae8a36689d45f60ff9afb170b7beef83826fde0c))
+- number order for sources not start at 1 ([4584b70](https://github.com/ajatdarojat45/frontend-v2/commit/4584b70d88c5b71a1e70194a3f23ad9a00364c10))
+- select outside the sources/receivers, reset selection ([497e4a1](https://github.com/ajatdarojat45/frontend-v2/commit/497e4a16845e1849317bae63571b4293530acccc))
+- select receiver deselect source and vice versa ([a024fbb](https://github.com/ajatdarojat45/frontend-v2/commit/a024fbb40b40434ae78ee768221af0a8e36f458c))
+
 ### [0.0.10](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.9...v0.0.10) (2025-10-14)
 
 ### Features

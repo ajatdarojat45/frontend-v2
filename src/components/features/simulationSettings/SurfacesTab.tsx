@@ -176,7 +176,7 @@ export function SurfacesTab() {
   return (
     <div className="text-white">
       <div className="mb-4 flex justify-between items-center">
-        <h4 className="text-lg font-semibold mb-2">Surfaces</h4>
+        <h4 className="text-xl text-choras-primary">Surfaces</h4>
         <SurfaceMaterialList />
       </div>
 
@@ -196,7 +196,7 @@ export function SurfacesTab() {
               </tr>
             </thead>
             <tbody>
-              <tr className="border-b border-gray-600">
+              <tr className="border-b border-choras-gray">
                 <td className="px-3 py-2 text-sm">
                   <button
                     onClick={() => setShowIndividualAssignments(!showIndividualAssignments)}
@@ -214,11 +214,11 @@ export function SurfacesTab() {
                   <Select value={getAssignAllValue()} onValueChange={handleAssignAllMaterials}>
                     <SelectTrigger
                       size="sm"
-                      className="w-full bg-gray-700 border-gray-500 text-white [&>span]:truncate [&>span]:block [&>span]:max-w-full"
+                      className="w-full bg-choras-dark border-choras-gray text-white [&>span]:truncate [&>span]:block [&>span]:max-w-full [&>svg]:text-choras-gray"
                     >
                       <SelectValue placeholder="Select material for all surfaces" />
                     </SelectTrigger>
-                    <SelectContent className="bg-gray-800 border-gray-600">
+                    <SelectContent className="bg-choras-dark border-choras-gray">
                       <SelectItem value="default" className="text-white">
                         All Assignment
                       </SelectItem>
@@ -254,7 +254,10 @@ export function SurfacesTab() {
                   const assignedMaterialId = materialAssignments[surfaceKey];
 
                   return (
-                    <tr key={surface.id} className="hover:bg-gray-800/30 border-t border-gray-700">
+                    <tr
+                      key={surface.id}
+                      className="hover:bg-choras-dark/90 border-t border-gray-700"
+                    >
                       <td className="px-3 py-2 text-sm w-1/3">
                         <div className="font-medium">{getDisplayName(surface, index)}</div>
                       </td>
@@ -265,11 +268,11 @@ export function SurfacesTab() {
                         >
                           <SelectTrigger
                             size="sm"
-                            className="w-full bg-gray-800 border-gray-600 text-white [&>span]:truncate [&>span]:block [&>span]:max-w-full"
+                            className="w-full bg-choras-dark border-choras-gray text-white [&>span]:truncate [&>span]:block [&>span]:max-w-full [&>svg]:text-choras-gray"
                           >
                             <SelectValue placeholder={getMaterialName(assignedMaterialId)} />
                           </SelectTrigger>
-                          <SelectContent className="bg-gray-800 border-gray-600">
+                          <SelectContent className="bg-choras-dark border-choras-gray">
                             <SelectItem value="default" className="text-white">
                               Default
                             </SelectItem>
@@ -306,7 +309,7 @@ export function SurfacesTab() {
       )}
 
       {surfaces.length > 0 && (
-        <div className="mt-4 pt-4 border-t border-gray-600">
+        <div className="mt-4 pt-4 border-t border-choras-gray">
           <div className="text-sm text-gray-400">Total: {surfaces.length} surfaces found</div>
         </div>
       )}

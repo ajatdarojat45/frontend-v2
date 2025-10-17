@@ -78,7 +78,12 @@ export function CreateSimulation({ modelId }: CreateSimulationProps) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="secondary">Create Simulation</Button>
+        <Button
+          variant="secondary"
+          className="bg-choras-dark border border-choras-primary text-choras-primary hover:bg-white hover:text-choras-dark cursor-pointer"
+        >
+          Create Simulation
+        </Button>
       </DialogTrigger>
       <DialogContent className="max-w-md">
         <Form {...form}>

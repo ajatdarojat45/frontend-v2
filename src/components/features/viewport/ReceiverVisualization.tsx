@@ -4,7 +4,7 @@ import { Text, TransformControls } from "@react-three/drei";
 import { useThree, type ThreeEvent } from "@react-three/fiber";
 import type { RootState } from "@/store";
 import type { Receiver } from "@/types/simulation";
-import { updateReceiver, selectReceiver } from "@/store/sourceReceiverSlice";
+import { updateReceiver, selectReceiver, setIsTransforming } from "@/store/sourceReceiverSlice";
 import { useSourceReceiverApi } from "@/hooks/useSourceReceiverApi";
 import {
   OrbitControls as OrbitControlsType,
@@ -25,6 +25,7 @@ function ReceiverPoint({
   onTransformEnd: (receiverId: string, position: THREE.Vector3) => void;
   orbitControlsRef: React.RefObject<OrbitControlsType | null>;
 }) {
+  const dispatch = useDispatch();
   const { gl, scene } = useThree();
   const meshRef = useRef<THREE.Mesh>(null);
   const transformRef = useRef<TransformControlsType | null>(null);
@@ -60,13 +61,13 @@ function ReceiverPoint({
         }}
       >
         <sphereGeometry args={[0.15, 16, 16]} />
-        <meshBasicMaterial color={isSelected ? "#fbbf24" : "#eab308"} />
+        <meshBasicMaterial color={"#eab308"} />
       </mesh>
 
       <Text
         position={[receiver.x, receiver.y, receiver.z + 0.3]}
         fontSize={0.2}
-        color={isSelected ? "#fbbf24" : "#eab308"}
+        color={"#eab308"}
         anchorX="center"
         anchorY="middle"
         outlineWidth={0.02}
@@ -83,11 +84,13 @@ function ReceiverPoint({
           mode="translate"
           matrixAutoUpdate={false}
           onMouseDown={() => {
+            dispatch(setIsTransforming(true));
             if (orbitControlsRef?.current) {
               orbitControlsRef.current.enabled = false;
             }
           }}
           onMouseUp={() => {
+            dispatch(setIsTransforming(false));
             if (orbitControlsRef?.current) {
               orbitControlsRef.current.enabled = true;
             }
@@ -123,7 +126,6 @@ export function ReceiverVisualization({ orbitControlsRef }: ReceiverVisualizatio
   };
 
   const handleTransformEnd = (receiverId: string, position: THREE.Vector3) => {
-    // Update Redux state
     dispatch(updateReceiver({ id: receiverId, field: "x", value: Number(position.x.toFixed(2)) }));
     dispatch(updateReceiver({ id: receiverId, field: "y", value: Number(position.y.toFixed(2)) }));
     dispatch(updateReceiver({ id: receiverId, field: "z", value: Number(position.z.toFixed(2)) }));
