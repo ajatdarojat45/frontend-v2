@@ -17,8 +17,8 @@ export const store = configureStore({
     [projectApi.reducerPath]: projectApi.reducer,
     [simulationApi.reducerPath]: simulationApi.reducer,
     [modelApi.reducerPath]: modelApi.reducer,
-    [auralizationApi.reducerPath]: auralizationApi.reducer,
     [materialsApi.reducerPath]: materialsApi.reducer,
+    [auralizationApi.reducerPath]: auralizationApi.reducer,
     project: projectReducer,
     simulation: simulationReducer,
     model: modelReducer,
@@ -37,8 +37,6 @@ export const store = configureStore({
           "geometrySelection/removeHighlightedMesh",
           "auralizationApi/executeQuery/fulfilled",
         ],
-        // Ignore the entire auralizationApi reducer path so binary ArrayBuffer responses
-        // stored by RTK Query won't trigger the serializable-state middleware.
         ignoredPaths: [
           "model.rhinoFiles",
           "geometrySelection.selectedGeometry",
@@ -50,8 +48,8 @@ export const store = configureStore({
       projectApi.middleware,
       simulationApi.middleware,
       modelApi.middleware,
-      auralizationApi.middleware,
       materialsApi.middleware,
+      auralizationApi.middleware,
     ),
 });
 
