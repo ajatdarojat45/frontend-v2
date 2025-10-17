@@ -48,7 +48,7 @@ export const simulationApi = createApi({
       // Invalidates specific simulation and list tags
       invalidatesTags: (_, __, arg) => [
         { type: "Simulations", id: arg.id },
-        { type: "Simulations", id: arg.body.modelId },
+        { type: "SimulationsByModel", id: arg.body.modelId },
       ],
     }),
   }),
