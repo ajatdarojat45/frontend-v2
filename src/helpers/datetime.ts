@@ -7,3 +7,12 @@ export function formatDate(dateString: string) {
   };
   return new Date(dateString).toLocaleDateString("en-US", options);
 }
+
+export function formatDateLong(dateString: string) {
+  const options: Intl.DateTimeFormatOptions = {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  };
+  return new Date(dateString).toLocaleDateString("en-GB", options);
+}

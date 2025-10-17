@@ -1,14 +1,20 @@
 import type { Model } from "@/types/model";
-import { Button } from "@/components/ui/button";
-import { AudioLinesIcon } from "lucide-react";
+import { EllipsisVerticalIcon } from "lucide-react";
 import { useGetSimulationsByModelIdQuery } from "@/store/simulationApi";
-import { Link } from "react-router";
 import { useDeleteModelMutation } from "@/store/modelApi";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { useDispatch } from "react-redux";
 import type { AppDispatch } from "@/store";
 import { projectApi } from "@/store/projectApi";
 import { toast } from "sonner";
+import modelImg from "@/assets/model.png";
+import { Card, CardHeader, CardTitle, CardContent, CardAction } from "@/components/ui/card";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 type ModelCardProps = {
   model: Model;
@@ -23,10 +29,7 @@ export function ModelCard({ model, projectId }: ModelCardProps) {
   const handleDeleteModel = async () => {
     try {
       await deleteModel(model.id).unwrap();
-
-      // Invalidate project tag so RTK Query will refetch any queries that provide this tag
       dispatch(projectApi.util.invalidateTags([{ type: "Projects", id: projectId }]));
-
       toast.success("Model deleted successfully");
     } catch {
       toast.error("Failed to delete model");
@@ -34,52 +37,49 @@ export function ModelCard({ model, projectId }: ModelCardProps) {
   };
 
   return (
-    <div
-      key={model.id}
-      className="w-full rounded-lg border border-teal-200 bg-white p-6 flex flex-col md:flex-row items-center justify-between gap-4 shadow-sm"
-    >
-      {/* Left: waveform icon */}
-      <div className="flex-shrink-0 flex items-center justify-center">
-        <AudioLinesIcon size={64} />
+    <Card className="min-h-[192px] border border-transparent bg-gradient-to-r from-choras-primary from-50% to-choras-secondary bg-clip-border p-0.5">
+      <div className="bg-[#e7e7e7] min-h-[190px] py-6 rounded-lg h-full flex flex-col justify-between">
+        <CardHeader className="overflow-hidden relative px-5">
+          <CardTitle className="truncate font-inter font-bold text-sm text-choras-secondary">
+            {model.name}
+          </CardTitle>
+          <CardAction onClick={(e) => e.stopPropagation()}>
+            <DropdownMenu>
+              <DropdownMenuTrigger className="cursor-pointer absolute right-0 px-4">
+                <EllipsisVerticalIcon className="text-black/50" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <ConfirmDialog
+                  onConfirm={handleDeleteModel}
+                  title="Delete model"
+                  description="This action cannot be undone."
+                  confirmLabel="Delete model"
+                  confirmVariant="destructive"
+                  trigger={
+                    <DropdownMenuItem
+                      onSelect={(e) => e.preventDefault()}
+                      onClick={(e) => e.stopPropagation()}
+                      className="text-red-600"
+                    >
+                      Delete Model
+                    </DropdownMenuItem>
+                  }
+                />
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </CardAction>
+        </CardHeader>
+        <CardContent className="flex items-end justify-between">
+          <div className="text-black/50 text-xs">
+            <p>{simulations?.length || 0} simulations</p>
+          </div>
+          <img
+            className="w-32 h-24 object-cover rounded-lg"
+            src={modelImg}
+            alt="Model Illustration"
+          />
+        </CardContent>
       </div>
-
-      {/* Center: model name */}
-      <div className="flex-1 flex flex-col items-center md:items-start">
-        <h4 className="text-2xl font-semibold text-center md:text-left mb-2">{model.name}</h4>
-      </div>
-
-      {/* Center-right: meta info */}
-      <div className="flex flex-col gap-2 items-center md:items-start text-slate-500 text-lg min-w-[220px]">
-        <div className="flex items-center gap-2">
-          <span>Contains {simulations?.length || 0} simulations</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <span>
-            Created in{" "}
-            {new Date(model.createdAt).toLocaleString(undefined, {
-              month: "short",
-              day: "numeric",
-            })}
-          </span>
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="text-pink-400">Contains .geo file</span>
-        </div>
-      </div>
-
-      {/* Right: CTA */}
-      <div className="flex flex-col gap-3 items-center">
-        <Button asChild variant="outline">
-          <Link to={"/editor/" + model.id}>Open model</Link>
-        </Button>
-        <ConfirmDialog
-          onConfirm={handleDeleteModel}
-          title="Delete model"
-          description="This action cannot be undone."
-          confirmLabel="Delete model"
-          confirmVariant="destructive"
-        />
-      </div>
-    </div>
+    </Card>
   );
 }
