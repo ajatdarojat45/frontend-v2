@@ -1,19 +1,22 @@
 import { CreateSimulation } from "@/components/features/CreateSimulation";
 import { EmptySimulation } from "@/components/features/EmptySimulation";
-import { SimulationPicker } from "@/components/features/SimulationPicker";
-import { ModelViewer } from "@/components/features/ModelViewer";
 import { AppLayout } from "@/components/ui/app-layout";
 import { useGetSimulationsByModelIdQuery } from "@/store/simulationApi";
 import { setActiveSimulation } from "@/store/simulationSlice";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router";
-import { Button } from "@/components/ui/button";
+import { SimulationPicker } from "@/components/features/simulationSettings/SimulationPicker";
+import { SidebarTabs } from "@/components/features/simulationSettings/SidebarTabs";
+import { ModelViewer } from "@/components/features/viewport/ModelViewer";
+import { useGetModelQuery } from "@/store/modelApi";
+import { ChevronRightIcon } from "lucide-react";
 
 export function EditorPage() {
   const navigate = useNavigate();
   const { modelId, simulationId } = useParams() as { modelId: string; simulationId?: string };
   const { data: simulations } = useGetSimulationsByModelIdQuery(+modelId);
+  const { data: model } = useGetModelQuery(modelId);
   const dispatch = useDispatch();
 
   // If no simulationId is provided, redirect to the first simulation
@@ -37,24 +40,31 @@ export function EditorPage() {
 
   return (
     <AppLayout
-      title="Editor"
+      title={
+        model && (
+          <div className="flex flex-2 items-center justify-center text-choras-primary text-2xl">
+            <Link className="hover:underline" to={`/projects/${model.projectId}`}>
+              {model.projectName}
+            </Link>
+            <ChevronRightIcon />
+            <span className="underline">{model.modelName}</span>
+          </div>
+        )
+      }
       sidebar={
-        <div className="h-full">
-          {
-            // If there's a simulationId, show the simulation editor
-            simulationId ? (
-              <div className="w-full h-full flex flex-col justify-between p-4">
+        <div className="h-full flex flex-col">
+          {simulationId ? (
+            <>
+              <div className="p-4 flex-shrink-0">
                 <SimulationPicker modelId={+modelId} simulationId={+simulationId} />
-                You're editing simulation {simulationId}
-                <Button asChild variant="secondary">
-                  <Link to="result">View Result</Link>
-                </Button>
               </div>
-            ) : (
-              // If no simulations exist, show the empty state
-              <EmptySimulation modelId={+modelId} />
-            )
-          }
+              <div className="flex-1 overflow-auto px-4 scrollbar-hide">
+                <SidebarTabs />
+              </div>
+            </>
+          ) : (
+            <EmptySimulation modelId={+modelId} />
+          )}
         </div>
       }
       right={<CreateSimulation modelId={+modelId} />}

@@ -1,6 +1,6 @@
 import { formatFilename } from "@/helpers/file";
 import { useGetImpulseResponseBySimulationIdQuery } from "@/store/auralizationApi";
-import { useGetSimulationQuery } from "@/store/simulationApi";
+import { useGetSimulationByIdQuery } from "@/store/simulationApi";
 import WavesurferPlayer from "@wavesurfer/react";
 import { useRef, useMemo } from "react";
 import { AudioPlayer } from "react-audio-play";
@@ -20,7 +20,7 @@ export function ImpulseResponsePlayer({ simulationId }: ImpulseResponsePlayerPro
   } = useGetImpulseResponseBySimulationIdQuery(simulationId);
   const wsRef = useRef<WaveSurfer>(null);
 
-  const { data: simulation } = useGetSimulationQuery(simulationId);
+  const { data: simulation } = useGetSimulationByIdQuery(simulationId);
 
   // Create a blob URL for the audio data
   const audioUrl = useMemo(() => {

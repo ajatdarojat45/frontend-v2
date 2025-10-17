@@ -18,13 +18,6 @@ export const simulationApi = createApi({
       providesTags: (_, __, arg) => [{ type: "SimulationsByModel", id: arg }],
     }),
 
-    getSimulation: build.query<Simulation, number>({
-      query: (simulationId) => `/simulations/${simulationId}`,
-
-      // Provides a single Simulations-type tag for cache invalidation
-      providesTags: (_, __, arg) => [{ type: "Simulations", id: arg }],
-    }),
-
     createSimulation: build.mutation<Simulation, Partial<Simulation>>({
       query: (body) => ({
         url: "/simulations",
@@ -40,6 +33,28 @@ export const simulationApi = createApi({
       query: (simulationId) => `/simulations/${simulationId}/result`,
       providesTags: (_, __, arg) => [{ type: "SimulationResults", id: arg }],
     }),
+    // Get simulation by ID
+    getSimulationById: build.query<Simulation, number>({
+      query: (simulationId) => `/simulations/${simulationId}`,
+
+      // Provides specific simulation tag for cache invalidation
+      providesTags: (_, __, arg) => [{ type: "Simulations", id: arg }],
+    }),
+
+    // Update simulation by ID
+    updateSimulation: build.mutation<Simulation, { id: number; body: Partial<Simulation> }>({
+      query: ({ id, body }) => ({
+        url: `/simulations/${id}`,
+        method: "PUT",
+        body,
+      }),
+
+      // Invalidates specific simulation and list tags
+      invalidatesTags: (_, __, arg) => [
+        { type: "Simulations", id: arg.id },
+        { type: "SimulationsByModel", id: arg.body.modelId },
+      ],
+    }),
   }),
 });
 
@@ -48,7 +63,8 @@ export const simulationApi = createApi({
 export const {
   useGetSimulationsByModelIdQuery,
   useLazyGetSimulationsByModelIdQuery,
-  useGetSimulationQuery,
   useCreateSimulationMutation,
+  useGetSimulationByIdQuery,
+  useUpdateSimulationMutation,
   useGetSimulationResultQuery,
 } = simulationApi;

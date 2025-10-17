@@ -1,9 +1,9 @@
-import { ViewportCanvas } from "./ViewportCanvas";
 import { Loading } from "@/components/ui/loading";
 import { Alert, AlertTitle } from "@/components/ui/alert";
 import { AlertCircleIcon } from "lucide-react";
 import { useGetModelQuery } from "@/store/modelApi";
 import type { ModelViewerProps } from "@/types/modelViewport";
+import { ViewportCanvas } from "./ViewportCanvas";
 
 export function ModelViewer({ modelId }: ModelViewerProps) {
   const { data: model, isLoading, error } = useGetModelQuery(modelId);
