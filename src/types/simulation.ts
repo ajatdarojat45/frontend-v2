@@ -104,3 +104,44 @@ export interface TaskStatus {
   status: string;
   taskType: string;
 }
+
+export interface SimulationResult {
+  frequencies: number[];
+  label: string;
+  orderNumber: number;
+  percentage: number;
+  responses: Response[];
+  resultType: string;
+  sourcePointId: string;
+  sourceX: number;
+  sourceY: number;
+  sourceZ: number;
+}
+
+export interface Response {
+  label: string;
+  orderNumber: number;
+  parameters: Parameters;
+  pointId: string;
+  receiverResults: ReceiverResult[];
+  x: number;
+  y: number;
+  z: number;
+}
+
+export interface Parameters {
+  c80: number[];
+  d50: number[];
+  edt: number[];
+  spl_t0_freq: number[];
+  t20: number[];
+  t30: number[];
+  ts: number[];
+}
+
+export interface ReceiverResult {
+  data: number[];
+  frequency: number;
+  t: number[];
+  type: string;
+}

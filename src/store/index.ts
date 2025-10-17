@@ -6,6 +6,7 @@ import { projectReducer } from "./projectSlice";
 import { simulationReducer } from "./simulationSlice";
 import { modelApi } from "./modelApi";
 import modelReducer from "./modelSlice";
+import { auralizationApi } from "./auralizationApi";
 import geometrySelectionReducer from "./geometrySelectionSlice";
 import { materialsApi } from "./materialsApi";
 import materialAssignmentReducer from "./materialAssignmentSlice";
@@ -17,6 +18,7 @@ export const store = configureStore({
     [simulationApi.reducerPath]: simulationApi.reducer,
     [modelApi.reducerPath]: modelApi.reducer,
     [materialsApi.reducerPath]: materialsApi.reducer,
+    [auralizationApi.reducerPath]: auralizationApi.reducer,
     project: projectReducer,
     simulation: simulationReducer,
     model: modelReducer,
@@ -33,11 +35,13 @@ export const store = configureStore({
           "geometrySelection/selectGeometry",
           "geometrySelection/addHighlightedMesh",
           "geometrySelection/removeHighlightedMesh",
+          "auralizationApi/executeQuery/fulfilled",
         ],
         ignoredPaths: [
           "model.rhinoFiles",
           "geometrySelection.selectedGeometry",
           "geometrySelection.highlightedMeshes",
+          auralizationApi.reducerPath,
         ],
       },
     }).concat(
@@ -45,6 +49,7 @@ export const store = configureStore({
       simulationApi.middleware,
       modelApi.middleware,
       materialsApi.middleware,
+      auralizationApi.middleware,
     ),
 });
 

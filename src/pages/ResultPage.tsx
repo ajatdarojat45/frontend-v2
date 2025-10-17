@@ -1,0 +1,36 @@
+import { AppLayout } from "@/components/ui/app-layout";
+import { Link, useParams } from "react-router";
+import { Button } from "@/components/ui/button";
+import { ResultAuralizations } from "@/components/features/ResultAuralizations";
+import { DownloadResult } from "@/components/features/DownloadResult";
+
+export function ResultPage() {
+  const { modelId, simulationId } = useParams() as { modelId: string; simulationId: string };
+
+  return (
+    <AppLayout
+      title="Result"
+      sidebar={
+        <div className="h-full flex flex-col justify-end p-4 space-y-3">
+          <DownloadResult
+            mode="parameters"
+            triggerLabel="Download Parameters"
+            simulationId={+simulationId}
+          />
+          <DownloadResult mode="plots" triggerLabel="Download Plots" simulationId={+simulationId} />
+          <DownloadResult
+            mode="auralizations"
+            triggerLabel="Download Impulse Response"
+            simulationId={+simulationId}
+          />
+          <DownloadResult simulationId={+simulationId} />
+          <Button asChild variant="secondary" className="w-full">
+            <Link to={`/editor/${modelId}/${simulationId}`}>Exit Result</Link>
+          </Button>
+        </div>
+      }
+    >
+      <ResultAuralizations simulationId={+simulationId} />
+    </AppLayout>
+  );
+}
