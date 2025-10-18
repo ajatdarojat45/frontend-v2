@@ -31,17 +31,14 @@ export function SettingTab() {
     }
   }, [settingsData, dispatch]);
 
-  // Clear settings when simulation changes and repopulate with new simulation data
   useEffect(() => {
     if (simulation?.solverSettings?.simulationSettings && settingsData?.options) {
       const existingSettings = simulation.solverSettings
         .simulationSettings as SimulationSettingsState["values"];
 
-      // Clear current values and set defaults from options
       dispatch(clearSettings());
       dispatch(setOptions(settingsData.options));
 
-      // Then populate with the simulation's saved settings
       settingsData.options.forEach((option) => {
         const savedValue = existingSettings[option.id];
         if (savedValue !== undefined) {
@@ -91,7 +88,7 @@ export function SettingTab() {
   return (
     <div className="text-white">
       <div className="mb-4 flex justify-between items-center">
-        <h4 className="text-lg font-semibold mb-2">Settings</h4>
+        <h4 className="text-xl text-choras-primary">Sources</h4>
         <SettingJsonEditor />
       </div>
 

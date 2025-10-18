@@ -58,7 +58,7 @@ export function EditorPage() {
               <div className="p-4 flex-shrink-0">
                 <SimulationPicker modelId={+modelId} simulationId={+simulationId} />
               </div>
-              <hr className="text-white py-1" />
+              <hr className="border-choras-gray py-1 border-0.5" />
               <div className="flex-1 overflow-auto px-4 scrollbar-hide">
                 <SidebarTabs />
               </div>

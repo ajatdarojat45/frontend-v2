@@ -43,7 +43,7 @@ export function DynamicSettingField({ option, value, onChange }: DynamicSettingF
                 onClick={() => onChange(stringValue)}
                 className={`w-4 h-4 rounded-full border-2 transition-all ${
                   isSelected
-                    ? "border-blue-500 bg-blue-500"
+                    ? "border-white bg-transparent"
                     : "border-gray-400 hover:border-gray-300"
                 }`}
               >

@@ -43,7 +43,6 @@ export function SimulationPicker({ modelId, simulationId }: SimulationPickerProp
     navigate(`/editor/${modelId}/${simulationId}`);
   };
 
-  // Set active simulation when component loads with an existing simulationId
   useEffect(() => {
     if (simulationId && simulations) {
       const currentSimulation = simulations.find((sim) => sim.id === simulationId);
