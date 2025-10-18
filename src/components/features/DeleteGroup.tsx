@@ -54,8 +54,12 @@ export function DeleteGroup({ group, projectsCount }: DeleteGroupProps) {
           : `Are you sure you want to delete group "${group}"? This action cannot be undone.`
       }
       trigger={
-        <Button variant="ghost" size="sm">
-          <TrashIcon className="size-4 text-destructive" />
+        <Button
+          variant="ghost"
+          size="sm"
+          className="opacity-25 hover:opacity-75 hover:bg-transparent transition-opacity"
+        >
+          <TrashIcon className="size-4 text-black" />
         </Button>
       }
       open={open}
