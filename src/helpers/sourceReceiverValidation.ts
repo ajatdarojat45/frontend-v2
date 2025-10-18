@@ -28,12 +28,12 @@ export function validateSourceOrReceiver(
 ): ValidationResult {
   // Check if point is outside the model bounds (x <= 0 case)
   if (
-    point.x < modelBounds.min.x ||
-    point.x > modelBounds.max.x ||
-    point.y < modelBounds.min.y ||
-    point.y > modelBounds.max.y ||
-    point.z < modelBounds.min.z ||
-    point.z > modelBounds.max.z
+    point.x <= modelBounds.min.x ||
+    point.x >= modelBounds.max.x ||
+    point.y <= modelBounds.min.y ||
+    point.y >= modelBounds.max.y ||
+    point.z <= modelBounds.min.z ||
+    point.z >= modelBounds.max.z
   ) {
     return {
       isValid: false,
