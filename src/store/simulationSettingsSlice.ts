@@ -7,6 +7,7 @@ const initialState: SimulationSettingsState = {
   values: {},
   loading: false,
   error: null,
+  selectedMethodType: "DE",
 };
 
 const simulationSettingsSlice = createSlice({
@@ -35,10 +36,15 @@ const simulationSettingsSlice = createSlice({
       state.values = {};
       state.error = null;
     },
+    setSelectedMethodType: (state, action: PayloadAction<string>) => {
+      state.selectedMethodType = action.payload;
+      state.options = [];
+      state.values = {};
+    },
   },
 });
 
-export const { setOptions, updateValue, resetValues, clearSettings } =
+export const { setOptions, updateValue, resetValues, clearSettings, setSelectedMethodType } =
   simulationSettingsSlice.actions;
 
 export const simulationSettingsReducer = simulationSettingsSlice.reducer;

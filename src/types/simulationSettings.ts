@@ -22,4 +22,15 @@ export interface SimulationSettingsState {
   values: Record<string, string | number>;
   loading: boolean;
   error: string | null;
+  selectedMethodType: string;
+}
+
+export interface SimulationMethod {
+  createdAt: string;
+  description: string;
+  documentationURL: string;
+  label: string;
+  repositoryURL: string;
+  simulationType: string;
+  updatedAt: string;
 }

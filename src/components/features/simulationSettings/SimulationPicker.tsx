@@ -6,11 +6,15 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useGetSimulationsByModelIdQuery } from "@/store/simulationApi";
+import { useGetSimulationMethodsQuery } from "@/store/simulationSettingsApi";
 import { useNavigate } from "react-router";
 import { Button } from "@/components/ui/button";
 import { formatDate } from "@/helpers/datetime";
 import { CheckCircleIcon, FileText, GithubIcon } from "lucide-react";
 import type { Simulation } from "@/types/simulation";
+import { useDispatch, useSelector } from "react-redux";
+import { setSelectedMethodType } from "@/store/simulationSettingsSlice";
+import type { RootState } from "@/store";
 
 type SimulationPickerProps = {
   modelId: number;
@@ -18,18 +22,28 @@ type SimulationPickerProps = {
 };
 export function SimulationPicker({ modelId, simulationId }: SimulationPickerProps) {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { data: simulations, isLoading } = useGetSimulationsByModelIdQuery(modelId);
+  const { data: methods, isLoading: methodsLoading } = useGetSimulationMethodsQuery();
+  const selectedMethodType = useSelector(
+    (state: RootState) => state.simulationSettings.selectedMethodType,
+  );
 
-  if (!simulations || simulations.length === 0 || isLoading) {
+  const handleMethodChange = (methodType: string) => {
+    dispatch(setSelectedMethodType(methodType));
+  };
+
+  if (!simulations || simulations.length === 0 || isLoading || methodsLoading) {
     return (
       <Button variant="secondary" className="justify-start">
-        Loading simulations...
+        Loading...
       </Button>
     );
   }
 
-  // Active simulation used to display the current selected simulation in the picker
   const activeSimulation = simulations.find((sim) => sim.id === simulationId);
+
+  const selectedMethod = methods?.find((method) => method.simulationType === selectedMethodType);
 
   return (
     <div className="space-y-4">
@@ -61,24 +75,50 @@ export function SimulationPicker({ modelId, simulationId }: SimulationPickerProp
           Method:
         </label>
         <div className="col-span-2">
-          <Select value="DE" disabled>
-            <SelectTrigger className="bg-white w-full">
-              <SelectValue>DE</SelectValue>
+          <Select value={selectedMethodType} onValueChange={handleMethodChange} disabled>
+            <SelectTrigger className="bg-choras-dark text-white border-choras-gray [&>svg]:text-choras-gray w-full">
+              <SelectValue>
+                {selectedMethod ? selectedMethod.label.replace("method", "") : "Select a method"}
+              </SelectValue>
             </SelectTrigger>
+            <SelectContent className="bg-choras-dark border-choras-gray">
+              {methods?.map((method) => (
+                <SelectItem
+                  key={method.simulationType}
+                  value={method.simulationType}
+                  className="bg-choras-dark hover:bg-choras-dark/90 active:bg-choras-dark/80 text-white"
+                >
+                  {method.label.replace("method", "")}
+                </SelectItem>
+              ))}
+            </SelectContent>
           </Select>
         </div>
       </div>
       <div className="grid grid-cols-2 gap-6 w-full items-center">
-        <Button variant="outline">
+        <Button
+          variant="outline"
+          onClick={() =>
+            selectedMethod?.repositoryURL && window.open(selectedMethod.repositoryURL, "_blank")
+          }
+          disabled={!selectedMethod?.repositoryURL}
+        >
           <div className="flex items-center gap-2 justify-center">
             <GithubIcon size={16} />
-            DE Repo
+            {selectedMethodType} Repo
           </div>
         </Button>
-        <Button variant="outline">
+        <Button
+          variant="outline"
+          onClick={() =>
+            selectedMethod?.documentationURL &&
+            window.open(selectedMethod.documentationURL, "_blank")
+          }
+          disabled={!selectedMethod?.documentationURL}
+        >
           <div className="flex items-center gap-2 justify-center">
             <FileText size={16} />
-            DE Docs
+            {selectedMethodType} Docs
           </div>
         </Button>
       </div>

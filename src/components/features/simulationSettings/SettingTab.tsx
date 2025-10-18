@@ -11,13 +11,19 @@ import { SettingJsonEditor } from "./SettingJsonEditor";
 
 export function SettingTab() {
   const dispatch = useDispatch();
-  const { options, values } = useSelector((state: RootState) => state.simulationSettings);
+  const { options, values, selectedMethodType } = useSelector(
+    (state: RootState) => state.simulationSettings,
+  );
   const [showGeneralSettings, setShowGeneralSettings] = useState(true);
   const [showExtendedSettings, setShowExtendedSettings] = useState(true);
 
   const { simulation, simulationError, updateSimulationSettings } = useSimulationSettingsApi();
 
-  const { data: settingsData, error, isLoading } = useGetSimulationSettingsQuery("DE");
+  const {
+    data: settingsData,
+    error,
+    isLoading,
+  } = useGetSimulationSettingsQuery(selectedMethodType);
 
   useEffect(() => {
     if (settingsData?.options) {
@@ -123,7 +129,7 @@ export function SettingTab() {
             onClick={() => setShowExtendedSettings(!showExtendedSettings)}
             className="w-full flex items-center justify-between py-2 hover:text-gray-300 transition-colors"
           >
-            <h5 className="text-md font-medium text-white">Diffusion Equation Settings</h5>
+            <h5 className="text-md font-medium text-white">{selectedMethodType} Settings</h5>
             <span
               className={`transform transition-transform ${showExtendedSettings ? "rotate-90" : "rotate-0"}`}
             >
