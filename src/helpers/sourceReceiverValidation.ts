@@ -72,11 +72,11 @@ function isPointTooCloseToSurface(point: Point3D, surface: SurfaceInfo): boolean
   const { min, max } = surface.boundingBox;
 
   const withinXBounds =
-    point.x >= min.x - INVISIBLE_SPHERE_RADIUS && point.x <= max.x + INVISIBLE_SPHERE_RADIUS;
+    point.x > min.x - INVISIBLE_SPHERE_RADIUS && point.x < max.x + INVISIBLE_SPHERE_RADIUS;
   const withinYBounds =
-    point.y >= min.y - INVISIBLE_SPHERE_RADIUS && point.y <= max.y + INVISIBLE_SPHERE_RADIUS;
+    point.y > min.y - INVISIBLE_SPHERE_RADIUS && point.y < max.y + INVISIBLE_SPHERE_RADIUS;
   const withinZBounds =
-    point.z >= min.z - INVISIBLE_SPHERE_RADIUS && point.z <= max.z + INVISIBLE_SPHERE_RADIUS;
+    point.z > min.z - INVISIBLE_SPHERE_RADIUS && point.z < max.z + INVISIBLE_SPHERE_RADIUS;
 
   if (withinXBounds && withinYBounds && withinZBounds) {
     const distances = [
