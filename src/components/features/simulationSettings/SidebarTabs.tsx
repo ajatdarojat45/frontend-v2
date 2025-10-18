@@ -1,6 +1,7 @@
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { SurfacesTab } from "./SurfacesTab";
 import { SourceReceiversTab } from "./SourceReceiversTab";
+import { SettingTab } from "./SettingTab";
 
 export function SidebarTabs() {
   return (
@@ -15,11 +16,8 @@ export function SidebarTabs() {
             <SourceReceiversTab />
           </TabsContent>
 
-          <TabsContent value="settings" className="m-0">
-            <div className="space-y-4">
-              <h3 className="text-sm font-medium">Settings</h3>
-              <p className="text-sm text-muted-foreground">Application settings will go here.</p>
-            </div>
+          <TabsContent value="settings" className="h-full m-0">
+            <SettingTab />
           </TabsContent>
         </div>
 
