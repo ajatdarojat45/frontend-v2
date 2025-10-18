@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useGetSimulationSettingsQuery } from "@/store/simulationSettingsApi";
-import { setOptions, updateValue } from "@/store/simulationSettingsSlice";
+import { setOptions, updateValue, clearSettings } from "@/store/simulationSettingsSlice";
 import { DynamicSettingField } from "./DynamicSettingField";
 import { ChevronRight } from "lucide-react";
 import { useSimulationSettingsApi } from "@/hooks/useSimulationSettingsApi";
@@ -31,22 +31,25 @@ export function SettingTab() {
     }
   }, [settingsData, dispatch]);
 
+  // Clear settings when simulation changes and repopulate with new simulation data
   useEffect(() => {
     if (simulation?.solverSettings?.simulationSettings && settingsData?.options) {
       const existingSettings = simulation.solverSettings
         .simulationSettings as SimulationSettingsState["values"];
 
-      const hasAnyValues = settingsData.options.some((option) => values[option.id] !== undefined);
+      // Clear current values and set defaults from options
+      dispatch(clearSettings());
+      dispatch(setOptions(settingsData.options));
 
-      if (!hasAnyValues) {
-        settingsData.options.forEach((option) => {
-          if (existingSettings[option.id] !== undefined) {
-            dispatch(updateValue({ id: option.id, value: existingSettings[option.id] }));
-          }
-        });
-      }
+      // Then populate with the simulation's saved settings
+      settingsData.options.forEach((option) => {
+        const savedValue = existingSettings[option.id];
+        if (savedValue !== undefined) {
+          dispatch(updateValue({ id: option.id, value: savedValue }));
+        }
+      });
     }
-  }, [simulation?.solverSettings?.simulationSettings, settingsData?.options, dispatch, values]);
+  }, [simulation?.id, settingsData?.options, dispatch]);
 
   const handleValueChange = (id: string, value: string | number) => {
     dispatch(updateValue({ id, value }));

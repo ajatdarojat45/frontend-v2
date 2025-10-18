@@ -14,7 +14,9 @@ import { CheckCircleIcon, FileText, GithubIcon } from "lucide-react";
 import type { Simulation } from "@/types/simulation";
 import { useDispatch, useSelector } from "react-redux";
 import { setSelectedMethodType } from "@/store/simulationSettingsSlice";
+import { setActiveSimulation } from "@/store/simulationSlice";
 import type { RootState } from "@/store";
+import { useEffect } from "react";
 
 type SimulationPickerProps = {
   modelId: number;
@@ -32,6 +34,24 @@ export function SimulationPicker({ modelId, simulationId }: SimulationPickerProp
   const handleMethodChange = (methodType: string) => {
     dispatch(setSelectedMethodType(methodType));
   };
+
+  const handleSimulationChange = (simulationId: string) => {
+    const selectedSimulation = simulations?.find((sim) => sim.id.toString() === simulationId);
+    if (selectedSimulation) {
+      dispatch(setActiveSimulation(selectedSimulation));
+    }
+    navigate(`/editor/${modelId}/${simulationId}`);
+  };
+
+  // Set active simulation when component loads with an existing simulationId
+  useEffect(() => {
+    if (simulationId && simulations) {
+      const currentSimulation = simulations.find((sim) => sim.id === simulationId);
+      if (currentSimulation) {
+        dispatch(setActiveSimulation(currentSimulation));
+      }
+    }
+  }, [simulationId, simulations, dispatch]);
 
   if (!simulations || simulations.length === 0 || isLoading || methodsLoading) {
     return (
@@ -52,10 +72,7 @@ export function SimulationPicker({ modelId, simulationId }: SimulationPickerProp
           Simulation:
         </label>
         <div className="col-span-2">
-          <Select
-            onValueChange={(id) => navigate(`/editor/${modelId}/${id}`)}
-            value={simulationId?.toString()}
-          >
+          <Select onValueChange={handleSimulationChange} value={simulationId?.toString()}>
             <SelectTrigger className="bg-choras-dark text-white border-choras-gray [&>svg]:text-choras-gray w-full">
               <SelectValue>
                 {activeSimulation && activeSimulation.completedAt && (
