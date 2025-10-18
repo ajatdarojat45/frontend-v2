@@ -56,10 +56,11 @@ export function SourceReceiversTab() {
 
   const validateSource = (source: Source): Source => {
     const modelBounds = getModelBounds(surfaces);
+    const allOtherPoints = [...sources.filter((s) => s.id !== source.id), ...receivers];
     const validation = validateSourceOrReceiver(
       { x: source.x, y: source.y, z: source.z },
       modelBounds,
-      [],
+      allOtherPoints,
       surfaces,
       source.id,
     );
@@ -90,6 +91,40 @@ export function SourceReceiversTab() {
       toast.error("Cannot load simulation data. Source/Receiver changes will not be saved.");
     }
   }, [simulationError]);
+
+  useEffect(() => {
+    if (sources.length > 0 && surfaces.length > 0) {
+      const validatedReceivers = receivers.map(validateReceiver);
+      const hasChanges = validatedReceivers.some((newReceiver, index) => {
+        const oldReceiver = receivers[index];
+        return (
+          oldReceiver &&
+          (newReceiver.isValid !== oldReceiver.isValid ||
+            newReceiver.validationError !== oldReceiver.validationError)
+        );
+      });
+      if (hasChanges) {
+        dispatch(setReceivers(validatedReceivers));
+      }
+    }
+  }, [sources, surfaces]);
+
+  useEffect(() => {
+    if (receivers.length > 0 && surfaces.length > 0) {
+      const validatedSources = sources.map(validateSource);
+      const hasChanges = validatedSources.some((newSource, index) => {
+        const oldSource = sources[index];
+        return (
+          oldSource &&
+          (newSource.isValid !== oldSource.isValid ||
+            newSource.validationError !== oldSource.validationError)
+        );
+      });
+      if (hasChanges) {
+        dispatch(setSources(validatedSources));
+      }
+    }
+  }, [receivers, surfaces]);
 
   const handleAddSource = () => {
     if (sources.length >= 5) return;
