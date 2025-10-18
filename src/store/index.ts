@@ -11,6 +11,8 @@ import geometrySelectionReducer from "./geometrySelectionSlice";
 import { materialsApi } from "./materialsApi";
 import materialAssignmentReducer from "./materialAssignmentSlice";
 import { sourceReceiverReducer } from "./sourceReceiverSlice";
+import { simulationSettingsApi } from "./simulationSettingsApi";
+import { simulationSettingsReducer } from "./simulationSettingsSlice";
 
 export const store = configureStore({
   reducer: {
@@ -18,6 +20,7 @@ export const store = configureStore({
     [simulationApi.reducerPath]: simulationApi.reducer,
     [modelApi.reducerPath]: modelApi.reducer,
     [materialsApi.reducerPath]: materialsApi.reducer,
+    [simulationSettingsApi.reducerPath]: simulationSettingsApi.reducer,
     [auralizationApi.reducerPath]: auralizationApi.reducer,
     project: projectReducer,
     simulation: simulationReducer,
@@ -25,6 +28,7 @@ export const store = configureStore({
     geometrySelection: geometrySelectionReducer,
     materialAssignment: materialAssignmentReducer,
     sourceReceiver: sourceReceiverReducer,
+    simulationSettings: simulationSettingsReducer,
   },
 
   middleware: (getDefaultMiddleware) =>
@@ -49,6 +53,7 @@ export const store = configureStore({
       simulationApi.middleware,
       modelApi.middleware,
       materialsApi.middleware,
+      simulationSettingsApi.middleware,
       auralizationApi.middleware,
     ),
 });

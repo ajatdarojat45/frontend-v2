@@ -72,14 +72,15 @@ export function HomePage() {
         </div>
         {groupProjects.map((groupProject) => (
           <div key={groupProject.group}>
-            <h1 className="inline pb-2 text-lg font-inter font-light border-b text-choras-dark border-b-choras-dark">
-              {groupProject.group === "NONE" ? "Ungrouped" : groupProject.group}
-
+            <div className="flex items-center">
+              <h1 className="inline text-lg font-inter font-light border-b text-choras-dark border-b-choras-dark">
+                {groupProject.group === "NONE" ? "Ungrouped" : groupProject.group}
+              </h1>
               <DeleteGroup
                 projectsCount={groupProject.projects.length}
                 group={groupProject.group}
               />
-            </h1>
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 border-b border-b-black/25 mt-5 pb-8 mb-6">
               {groupProject.projects.map((project) => (
                 <Link key={project.id} to={`/projects/${project.id}`}>
