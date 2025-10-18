@@ -26,7 +26,7 @@ export function SidebarTabs() {
         <TabsList className="fixed left-64 md:left-72 lg:left-[var(--width-sidebar)] bottom-0 h-[75%] w-8 p-0 flex-col rounded-r-xl roundedn-l-none z-10 bg-transparent">
           <TabsTrigger
             value="sources"
-            className="w-full data-[state=active]:bg-choras-dark data-[state=active]:text-choras-primary text-white/50 flex items-center justify-center bg-choras-dark/50 rounded-l-none cursor-pointer pr-4"
+            className="w-full data-[state=active]:bg-choras-dark data-[state=active]:text-choras-primary text-white/50 flex items-center justify-center bg-choras-dark/50 rounded-l-none cursor-pointer pr-2"
             style={{
               writingMode: "vertical-rl",
               textOrientation: "mixed",
@@ -37,7 +37,7 @@ export function SidebarTabs() {
           </TabsTrigger>
           <TabsTrigger
             value="surfaces"
-            className="w-full data-[state=active]:bg-choras-dark data-[state=active]:text-choras-primary text-white/50 flex items-center justify-center bg-choras-dark/50 rounded-l-none cursor-pointer pr-4"
+            className="w-full data-[state=active]:bg-choras-dark data-[state=active]:text-choras-primary text-white/50 flex items-center justify-center bg-choras-dark/50 rounded-l-none cursor-pointer pr-2"
             style={{
               writingMode: "vertical-rl",
               textOrientation: "mixed",
@@ -48,7 +48,7 @@ export function SidebarTabs() {
           </TabsTrigger>
           <TabsTrigger
             value="settings"
-            className="w-full data-[state=active]:bg-choras-dark data-[state=active]:text-choras-primary text-white/50 flex items-center justify-center bg-choras-dark/50 rounded-l-none cursor-pointer pr-4"
+            className="w-full data-[state=active]:bg-choras-dark data-[state=active]:text-choras-primary text-white/50 flex items-center justify-center bg-choras-dark/50 rounded-l-none cursor-pointer pr-2"
             style={{
               writingMode: "vertical-rl",
               textOrientation: "mixed",
