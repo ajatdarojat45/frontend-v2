@@ -24,7 +24,10 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
-import { useCreateSimulationMutation } from "@/store/simulationApi";
+import {
+  useCreateSimulationMutation,
+  useLazyGetSimulationsByModelIdQuery,
+} from "@/store/simulationApi";
 import { toast } from "sonner";
 import { useNavigate } from "react-router";
 
@@ -49,6 +52,7 @@ export function CreateSimulation({ modelId }: CreateSimulationProps) {
     },
   });
   const [createSimulation, { isLoading }] = useCreateSimulationMutation();
+  const [getSimulationsByModelId] = useLazyGetSimulationsByModelIdQuery();
 
   // Reset form when dialog closes
   useEffect(() => {
@@ -67,6 +71,10 @@ export function CreateSimulation({ modelId }: CreateSimulationProps) {
           simulationSettings: {},
         },
       }).unwrap();
+
+      // Refetch simulations to update the list
+      await getSimulationsByModelId(modelId).unwrap();
+
       navigate(`/editor/${modelId}/${result.id}`);
       toast.success("Simulation created successfully");
       setOpen(false);
