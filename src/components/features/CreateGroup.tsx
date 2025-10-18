@@ -66,7 +66,7 @@ export function CreateGroup({ onCreate }: CreateGroupProps) {
           Create Group
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-w-md" onKeyDown={(e) => e.stopPropagation()}>
         <Form {...form}>
           <form
             onSubmit={(e) => {
@@ -90,7 +90,7 @@ export function CreateGroup({ onCreate }: CreateGroupProps) {
                   <FormItem>
                     <FormLabel>Name</FormLabel>
                     <FormControl>
-                      <Input placeholder="Group name" {...field} />
+                      <Input autoComplete="off" placeholder="Group name" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
