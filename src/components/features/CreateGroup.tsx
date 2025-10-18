@@ -24,6 +24,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { PlusIcon } from "lucide-react";
+import { useDispatch } from "react-redux";
+import { addGroup } from "@/store/projectSlice";
 
 const CreateGroupSchema = z.object({
   name: z.string().min(3, { message: "Name must be at least 3 characters." }),
@@ -32,11 +34,12 @@ const CreateGroupSchema = z.object({
 type CreateGroupData = z.infer<typeof CreateGroupSchema>;
 
 type CreateGroupProps = {
-  onCreate: (data: CreateGroupData) => void;
+  onCreate?: (name: string) => void; // Callback when a group is created
 };
 export function CreateGroup({ onCreate }: CreateGroupProps) {
   // Managing the dialog open state
   const [open, setOpen] = useState(false);
+  const dispatch = useDispatch();
 
   const form = useForm<CreateGroupData>({
     resolver: zodResolver(CreateGroupSchema),
@@ -49,7 +52,9 @@ export function CreateGroup({ onCreate }: CreateGroupProps) {
   }, [open, form]);
 
   const onSubmit = (data: CreateGroupData) => {
-    onCreate(data);
+    // Dispatch Redux action to add group (will sync to localStorage automatically)
+    dispatch(addGroup(data.name));
+    onCreate?.(data.name);
     setOpen(false);
   };
 
@@ -61,7 +66,7 @@ export function CreateGroup({ onCreate }: CreateGroupProps) {
           Create Group
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-w-md" onKeyDown={(e) => e.stopPropagation()}>
         <Form {...form}>
           <form
             onSubmit={(e) => {
@@ -85,7 +90,7 @@ export function CreateGroup({ onCreate }: CreateGroupProps) {
                   <FormItem>
                     <FormLabel>Name</FormLabel>
                     <FormControl>
-                      <Input placeholder="Group name" {...field} />
+                      <Input autoComplete="off" placeholder="Group name" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

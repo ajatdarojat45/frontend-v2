@@ -42,7 +42,7 @@ export function SimulationPicker({ modelId, simulationId }: SimulationPickerProp
             onValueChange={(id) => navigate(`/editor/${modelId}/${id}`)}
             value={simulationId?.toString()}
           >
-            <SelectTrigger className="bg-white w-full">
+            <SelectTrigger className="bg-choras-dark text-white border-choras-gray [&>svg]:text-choras-gray w-full">
               <SelectValue>
                 {activeSimulation && activeSimulation.completedAt && (
                   <CheckCircleIcon className="inline text-green-600" />
@@ -50,7 +50,7 @@ export function SimulationPicker({ modelId, simulationId }: SimulationPickerProp
                 {activeSimulation ? activeSimulation.name : "Select a simulation"}
               </SelectValue>
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="bg-choras-dark border-choras-gray">
               {simulations.map((simulation) => (
                 <CustomSelectItem key={simulation.id} simulation={simulation} />
               ))}
@@ -88,12 +88,12 @@ export function SimulationPicker({ modelId, simulationId }: SimulationPickerProp
 
 function CustomSelectItem({ simulation }: { simulation: Simulation }) {
   let timestamp = (
-    <p className="text-xs text-neutral-400">Created at: {formatDate(simulation.createdAt)}</p>
+    <p className="text-xs text-choras-gray">Created at: {formatDate(simulation.createdAt)}</p>
   );
 
   if (simulation.completedAt) {
     timestamp = (
-      <p className="text-xs text-neutral-400 inline-flex gap-2">
+      <p className="text-xs text-choras-gray inline-flex gap-2">
         <CheckCircleIcon className="text-green-600" /> Completed at:{" "}
         {formatDate(simulation.completedAt)}
       </p>
@@ -101,9 +101,13 @@ function CustomSelectItem({ simulation }: { simulation: Simulation }) {
   }
 
   return (
-    <SelectItem key={simulation.id} value={simulation.id.toString()}>
+    <SelectItem
+      key={simulation.id}
+      value={simulation.id.toString()}
+      className="bg-choras-dark hover:bg-choras-dark/90 active:bg-choras-dark/80"
+    >
       <div className="flex flex-col gap-1">
-        <p>{simulation.name}</p>
+        <p className="text-choras-gray">{simulation.name}</p>
         {timestamp}
       </div>
     </SelectItem>

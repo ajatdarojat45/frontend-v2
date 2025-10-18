@@ -33,7 +33,7 @@ export function GeometrySelectionInfo() {
 
   if (!selectedGeometry || selectedGeometry.mesh?.visible === false) {
     return (
-      <Card className="w-80">
+      <Card className="w-80 border border-choras-gray">
         <CardHeader>
           <CardTitle className="text-sm">Geometry Information</CardTitle>
         </CardHeader>
@@ -53,7 +53,7 @@ export function GeometrySelectionInfo() {
   }
 
   return (
-    <Card className="w-80">
+    <Card className="w-80 border border-choras-gray">
       <CardHeader>
         <CardTitle className="text-sm">Selected Surface</CardTitle>
       </CardHeader>

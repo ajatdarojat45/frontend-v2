@@ -20,12 +20,13 @@ export type ConfirmDialogProps = {
   confirmLabel?: string;
   cancelLabel?: string;
   confirmVariant?: "default" | "destructive" | "secondary" | "outline" | "ghost" | "link";
+  footer?: React.ReactNode; // Custom footer (buttons)
 
   // Trigger element
   trigger?: React.ReactNode;
 
   // Behavior
-  onConfirm: () => Promise<void> | void; // async or sync handler
+  onConfirm?: () => Promise<void> | void; // async or sync handler
   disabled?: boolean;
   autoCloseOnSuccess?: boolean; // default: true
   onOpenChange?: (open: boolean) => void;
@@ -48,6 +49,7 @@ export function ConfirmDialog({
   onOpenChange,
   open: controlledOpen,
   defaultOpen,
+  footer,
 }: ConfirmDialogProps) {
   const [uncontrolledOpen, setUncontrolledOpen] = useState(!!defaultOpen);
   const isControlled = controlledOpen !== undefined;
@@ -74,7 +76,7 @@ export function ConfirmDialog({
     if (isProcessing) return;
     setIsProcessing(true);
     try {
-      await onConfirm();
+      await onConfirm?.();
       if (autoCloseOnSuccess) setOpen(false);
     } catch {
       // Do not auto-close on error; caller can show toasts
@@ -100,18 +102,22 @@ export function ConfirmDialog({
         </AlertDialogHeader>
 
         <AlertDialogFooter>
-          <AlertDialogCancel disabled={isProcessing}>{cancelLabel}</AlertDialogCancel>
+          {footer ?? (
+            <>
+              <AlertDialogCancel disabled={isProcessing}>{cancelLabel}</AlertDialogCancel>
 
-          {/* Use a regular Button for the confirm action so Radix doesn't auto-close
+              {/* Use a regular Button for the confirm action so Radix doesn't auto-close
               the dialog before our async handler finishes. */}
-          <Button
-            onClick={handleConfirm}
-            disabled={isProcessing || disabled}
-            aria-busy={isProcessing}
-            variant={confirmVariant}
-          >
-            {isProcessing ? `${confirmLabel}…` : confirmLabel}
-          </Button>
+              <Button
+                onClick={handleConfirm}
+                disabled={isProcessing || disabled}
+                aria-busy={isProcessing}
+                variant={confirmVariant}
+              >
+                {isProcessing ? `${confirmLabel}…` : confirmLabel}
+              </Button>
+            </>
+          )}
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

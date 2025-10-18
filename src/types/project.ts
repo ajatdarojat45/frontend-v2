@@ -9,3 +9,8 @@ export interface Project {
   name: string;
   updatedAt: string;
 }
+
+export interface GroupProject {
+  group: string;
+  projects: Array<Project>;
+}

@@ -1,8 +1,11 @@
 import { useRef, useState, useCallback, useMemo } from "react";
 import { useThree } from "@react-three/fiber";
+import { useDispatch, useSelector } from "react-redux";
 import { useModelLoader } from "@/hooks/useModelLoader";
 import { useGeometrySelection } from "@/hooks/useGeometrySelection";
 import { createEdgeOutlineForObject3D } from "@/helpers/layerProcessor";
+import { selectSource, selectReceiver } from "@/store/sourceReceiverSlice";
+import type { RootState } from "@/store";
 import * as THREE from "three";
 import type { ModelRendererProps } from "@/types/modelViewport";
 
@@ -13,6 +16,10 @@ const HOVER_COLOR = 0x888888;
 const ORIGINAL_COLOR_CACHE = new WeakMap<THREE.Material, number | THREE.Color>();
 
 export function ModelRenderer({ modelId }: ModelRendererProps) {
+  const dispatch = useDispatch();
+  const selectedSource = useSelector((state: RootState) => state.sourceReceiver.selectedSource);
+  const selectedReceiver = useSelector((state: RootState) => state.sourceReceiver.selectedReceiver);
+  const isTransforming = useSelector((state: RootState) => state.sourceReceiver.isTransforming);
   const { getCurrentModel, currentModelId } = useModelLoader();
   const {
     selectedGeometry,
@@ -127,6 +134,11 @@ export function ModelRenderer({ modelId }: ModelRendererProps) {
   const handleClick = useCallback(() => {
     if (!groupRef.current) return;
 
+    if (!isTransforming && (selectedSource || selectedReceiver)) {
+      dispatch(selectSource(null));
+      dispatch(selectReceiver(null));
+    }
+
     const meshes: THREE.Mesh[] = [];
     groupRef.current.traverse((child) => {
       if (child instanceof THREE.Mesh) {
@@ -181,6 +193,10 @@ export function ModelRenderer({ modelId }: ModelRendererProps) {
     addHighlightedMesh,
     selectGeometry,
     clearSelection,
+    dispatch,
+    selectedSource,
+    selectedReceiver,
+    isTransforming,
     camera,
     raycaster,
     pointer,

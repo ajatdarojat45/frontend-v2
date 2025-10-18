@@ -4,7 +4,7 @@ import { Text, TransformControls } from "@react-three/drei";
 import { useThree, type ThreeEvent } from "@react-three/fiber";
 import type { RootState } from "@/store";
 import type { Source } from "@/types/simulation";
-import { updateSource, selectSource } from "@/store/sourceReceiverSlice";
+import { updateSource, selectSource, setIsTransforming } from "@/store/sourceReceiverSlice";
 import { useSourceReceiverApi } from "@/hooks/useSourceReceiverApi";
 import {
   OrbitControls as OrbitControlsType,
@@ -25,6 +25,7 @@ function SourcePoint({
   onTransformEnd: (sourceId: string, position: THREE.Vector3) => void;
   orbitControlsRef: React.RefObject<OrbitControlsType | null>;
 }) {
+  const dispatch = useDispatch();
   const { gl, scene } = useThree();
   const meshRef = useRef<THREE.Mesh>(null);
   const transformRef = useRef<TransformControlsType | null>(null);
@@ -60,13 +61,13 @@ function SourcePoint({
         }}
       >
         <sphereGeometry args={[0.15, 16, 16]} />
-        <meshBasicMaterial color={isSelected ? "#fbbf24" : "#22d3ee"} />
+        <meshBasicMaterial color={"#22d3ee"} />
       </mesh>
 
       <Text
         position={[source.x, source.y, source.z + 0.3]}
         fontSize={0.2}
-        color={isSelected ? "#fbbf24" : "#06b6d4"}
+        color={"#06b6d4"}
         anchorX="center"
         anchorY="middle"
         outlineWidth={0.02}
@@ -83,11 +84,13 @@ function SourcePoint({
           mode="translate"
           matrixAutoUpdate={false}
           onMouseDown={() => {
+            dispatch(setIsTransforming(true));
             if (orbitControlsRef?.current) {
               orbitControlsRef.current.enabled = false;
             }
           }}
           onMouseUp={() => {
+            dispatch(setIsTransforming(false));
             if (orbitControlsRef?.current) {
               orbitControlsRef.current.enabled = true;
             }

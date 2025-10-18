@@ -5,15 +5,18 @@ import { useGetSimulationsByModelIdQuery } from "@/store/simulationApi";
 import { setActiveSimulation } from "@/store/simulationSlice";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate, useParams } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
 import { SimulationPicker } from "@/components/features/simulationSettings/SimulationPicker";
 import { SidebarTabs } from "@/components/features/simulationSettings/SidebarTabs";
 import { ModelViewer } from "@/components/features/viewport/ModelViewer";
+import { useGetModelQuery } from "@/store/modelApi";
+import { ChevronRightIcon } from "lucide-react";
 
 export function EditorPage() {
   const navigate = useNavigate();
   const { modelId, simulationId } = useParams() as { modelId: string; simulationId?: string };
   const { data: simulations } = useGetSimulationsByModelIdQuery(+modelId);
+  const { data: model } = useGetModelQuery(modelId);
   const dispatch = useDispatch();
 
   // If no simulationId is provided, redirect to the first simulation
@@ -37,23 +40,33 @@ export function EditorPage() {
 
   return (
     <AppLayout
-      title="Editor"
+      title={
+        model && (
+          <div className="flex flex-2 items-center justify-center text-choras-primary text-2xl">
+            <Link className="hover:underline" to={`/projects/${model.projectId}`}>
+              {model.projectName}
+            </Link>
+            <ChevronRightIcon />
+            <span className="underline">{model.modelName}</span>
+          </div>
+        )
+      }
       sidebar={
-        <div className="h-[calc(100%-4rem)]">
-          {
-            // If there's a simulationId, show the simulation editor
-            simulationId ? (
-              <div className="w-full h-full flex flex-col p-4">
+        <div className="h-full flex flex-col">
+          {simulationId ? (
+            <>
+              <div className="p-4 flex-shrink-0">
                 <SimulationPicker modelId={+modelId} simulationId={+simulationId} />
+              </div>
+              <div className="flex-1 overflow-auto px-4 scrollbar-hide">
                 You're editing simulation {simulationId}
                 <hr className="border-0.5 py-2" />
                 <SidebarTabs />
               </div>
-            ) : (
-              // If no simulations exist, show the empty state
-              <EmptySimulation modelId={+modelId} />
-            )
-          }
+            </>
+          ) : (
+            <EmptySimulation modelId={+modelId} />
+          )}
         </div>
       }
       right={<CreateSimulation modelId={+modelId} />}
