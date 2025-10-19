@@ -1,14 +1,13 @@
 import { AppLayout } from "@/components/ui/app-layout";
-import { Link, useParams } from "react-router";
-import { Button } from "@/components/ui/button";
+import { useParams } from "react-router";
 import { ResultAuralizations } from "@/components/features/results/ResultAuralizations";
-import { DownloadResult } from "@/components/features/results/DownloadResult";
 import { ResultParameters } from "@/components/features/results/ResultParameters";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useGetModelQuery } from "@/store/modelApi";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { EditorNav } from "@/components/features/viewport/EditorNav";
 import { TrapezoidOutlineTab } from "@/components/features/results/TrapezoidOutlineTab";
+import { CompareResult } from "@/components/features/results/CompareResult";
 
 export function ResultPage() {
   const { modelId, simulationId } = useParams() as { modelId: string; simulationId: string };
@@ -36,25 +35,7 @@ export function ResultPage() {
           />
         )
       }
-      sidebar={
-        <div className="h-full flex flex-col justify-end p-4 space-y-3">
-          <DownloadResult
-            mode="parameters"
-            triggerLabel="Download Parameters"
-            simulationId={+simulationId}
-          />
-          <DownloadResult mode="plots" triggerLabel="Download Plots" simulationId={+simulationId} />
-          <DownloadResult
-            mode="auralizations"
-            triggerLabel="Download Impulse Response"
-            simulationId={+simulationId}
-          />
-          <DownloadResult simulationId={+simulationId} />
-          <Button asChild variant="secondary" className="w-full">
-            <Link to={`/editor/${modelId}/${simulationId}`}>Exit Result</Link>
-          </Button>
-        </div>
-      }
+      sidebar={<CompareResult modelId={+modelId} />}
     >
       <EditorNav active="results" modelId={+modelId} simulationId={+simulationId} />
       <Tabs defaultValue="parameters" className="mt-8">

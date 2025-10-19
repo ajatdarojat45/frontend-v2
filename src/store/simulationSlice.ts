@@ -3,20 +3,53 @@ import { createSlice } from "@reduxjs/toolkit";
 
 type SimulationState = {
   activeSimulation: Simulation | null;
+  compareResults: {
+    id: string;
+    simulationId: number | null;
+    sourceId: string | null;
+    receiverId: string | null;
+    color: string;
+  }[];
 };
 
 const simulationSlice = createSlice({
   name: "simulation",
   initialState: {
     activeSimulation: null,
+    compareResults: [],
   } as SimulationState,
   reducers: {
     setActiveSimulation: (state, action) => {
       state.activeSimulation = action.payload;
     },
+    addCompareResult: (state, action) => {
+      state.compareResults.push(action.payload);
+    },
+    removeCompareResult: (state, action) => {
+      state.compareResults = state.compareResults.filter((result) => result.id !== action.payload);
+    },
+    updateCompareResult: (state, action) => {
+      const { id, field, value } = action.payload;
+      const index = state.compareResults.findIndex((r) => r.id === id);
+      if (index !== -1) {
+        state.compareResults[index] = {
+          ...state.compareResults[index],
+          [field]: value,
+        };
+      }
+    },
+    initializeCompareResults: (state, action) => {
+      state.compareResults = action.payload;
+    },
   },
 });
 
-export const { setActiveSimulation } = simulationSlice.actions;
+export const {
+  setActiveSimulation,
+  addCompareResult,
+  removeCompareResult,
+  updateCompareResult,
+  initializeCompareResults,
+} = simulationSlice.actions;
 
 export const simulationReducer = simulationSlice.reducer;
