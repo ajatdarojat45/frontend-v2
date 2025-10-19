@@ -48,11 +48,12 @@ export function SettingTab() {
     }
   }, [simulation?.id, settingsData?.options, dispatch]);
 
-  const handleValueChange = (id: string, value: string | number) => {
-    dispatch(updateValue({ id, value }));
-
-    const updatedValues = { ...values, [id]: value };
-    updateSimulationSettings(updatedValues);
+  const handleValueChange = (id: string, value: string | number, isValid: boolean = true) => {
+    if (isValid) {
+      dispatch(updateValue({ id, value }));
+      const updatedValues = { ...values, [id]: value };
+      updateSimulationSettings(updatedValues);
+    }
   };
 
   const generalSettingsIds = ["de_c0", "de_ir_length", "sim_len_type"];
@@ -112,7 +113,7 @@ export function SettingTab() {
                   key={option.id}
                   option={option}
                   value={values[option.id] || option.default}
-                  onChange={(value) => handleValueChange(option.id, value)}
+                  onChange={(value, isValid) => handleValueChange(option.id, value, isValid)}
                 />
               ))}
               {generalSettings.length === 0 && (
@@ -143,7 +144,7 @@ export function SettingTab() {
                   key={option.id}
                   option={option}
                   value={values[option.id] || option.default}
-                  onChange={(value) => handleValueChange(option.id, value)}
+                  onChange={(value, isValid) => handleValueChange(option.id, value, isValid)}
                 />
               ))}
               {extendedSettings.length === 0 && (
