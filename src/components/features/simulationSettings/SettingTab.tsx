@@ -63,8 +63,8 @@ export function SettingTab() {
   if (isLoading) {
     return (
       <div className="text-white">
-        <div className="mb-4">
-          <h4 className="text-lg font-semibold mb-2">Settings</h4>
+        <div className="mb-4 mt-2 flex justify-between items-center">
+          <h4 className="text-xl text-choras-primary">Settings</h4>
         </div>
         <div className="flex items-center justify-center py-8">
           <div className="text-gray-400">Loading settings...</div>
@@ -76,8 +76,8 @@ export function SettingTab() {
   if (error || simulationError) {
     return (
       <div className="text-white">
-        <div className="mb-4">
-          <h4 className="text-lg font-semibold mb-2">Settings</h4>
+        <div className="mb-4 mt-2 flex justify-between items-center">
+          <h4 className="text-xl text-choras-primary">Settings</h4>
         </div>
         <div className="flex items-center justify-center py-8">
           <div className="text-red-400">Failed to load simulation settings</div>
@@ -88,7 +88,7 @@ export function SettingTab() {
 
   return (
     <div className="text-white">
-      <div className="mb-4 flex justify-between items-center">
+      <div className="mb-4 mt-2 flex justify-between items-center">
         <h4 className="text-xl text-choras-primary">Settings</h4>
         <SettingJsonEditor />
       </div>
