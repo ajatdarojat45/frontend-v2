@@ -1,9 +1,9 @@
 import { AppLayout } from "@/components/ui/app-layout";
 import { Link, useParams } from "react-router";
 import { Button } from "@/components/ui/button";
-import { ResultAuralizations } from "@/components/features/ResultAuralizations";
-import { DownloadResult } from "@/components/features/DownloadResult";
-import { ResultParameters } from "@/components/features/ResultParameters";
+import { ResultAuralizations } from "@/components/features/results/ResultAuralizations";
+import { DownloadResult } from "@/components/features/results/DownloadResult";
+import { ResultParameters } from "@/components/features/results/ResultParameters";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useGetModelQuery } from "@/store/modelApi";
 import { Breadcrumb } from "@/components/ui/breadcrumb";

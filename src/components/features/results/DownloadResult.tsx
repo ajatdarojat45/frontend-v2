@@ -16,7 +16,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useGetSimulationResultQuery } from "@/store/simulationApi";
-import { Loading } from "../ui/loading";
+import { Loading } from "@/components/ui/loading";
 import { http } from "@/libs/http";
 import { downloadFile, formatFilename } from "@/helpers/file";
 import { cn } from "@/libs/style";
