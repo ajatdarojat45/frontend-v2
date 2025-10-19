@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useGetModelQuery } from "@/store/modelApi";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { EditorNav } from "@/components/features/viewport/EditorNav";
+import { TrapezoidOutlineTab } from "@/components/features/results/TrapezoidOutlineTab";
 
 export function ResultPage() {
   const { modelId, simulationId } = useParams() as { modelId: string; simulationId: string };
@@ -57,26 +58,12 @@ export function ResultPage() {
     >
       <EditorNav active="results" modelId={+modelId} simulationId={+simulationId} />
       <Tabs defaultValue="parameters" className="mt-8">
-        <TabsList className="mx-auto  bg-transparent  w-80 p-0 absolute right-0 top-16">
-          <TabsTrigger
-            className="w-full h-full rounded-tl-none rounded-tr-none data-[state=active]:bg-choras-accent data-[state=active]:text-black text-white/50 flex items-center justify-center bg-choras-dark/50 cursor-pointer"
-            style={{
-              textOrientation: "mixed",
-              clipPath: "polygon(0 0, 100% 0, 100% 1%, 85% 100%, 15% 100%, 0 1%)",
-            }}
-            value="parameters"
-          >
-            Parameters
+        <TabsList className="mx-auto bg-transparent w-80 p-0 h-8 absolute right-0 top-16 border-0">
+          <TabsTrigger value="parameters" asChild>
+            <TrapezoidOutlineTab value="parameters">Parameters</TrapezoidOutlineTab>
           </TabsTrigger>
-          <TabsTrigger
-            className="w-full h-full rounded-tl-none rounded-tr-none data-[state=active]:bg-choras-accent data-[state=active]:text-black text-white/50 flex items-center justify-center bg-choras-dark/50 cursor-pointer"
-            style={{
-              textOrientation: "mixed",
-              clipPath: "polygon(0 0, 100% 0, 100% 1%, 85% 100%, 15% 100%, 0 1%)",
-            }}
-            value="auralizations"
-          >
-            Auralizations
+          <TabsTrigger value="auralizations" asChild>
+            <TrapezoidOutlineTab value="auralizations">Auralizations</TrapezoidOutlineTab>
           </TabsTrigger>
         </TabsList>
         <TabsContent value="parameters">
