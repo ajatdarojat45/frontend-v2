@@ -5,13 +5,35 @@ import { ResultAuralizations } from "@/components/features/ResultAuralizations";
 import { DownloadResult } from "@/components/features/DownloadResult";
 import { ResultParameters } from "@/components/features/ResultParameters";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useGetModelQuery } from "@/store/modelApi";
+import { Breadcrumb } from "@/components/ui/breadcrumb";
 
 export function ResultPage() {
   const { modelId, simulationId } = useParams() as { modelId: string; simulationId: string };
+  const { data: model } = useGetModelQuery(modelId);
 
   return (
     <AppLayout
-      title="Result"
+      title={
+        model && (
+          <Breadcrumb
+            items={[
+              {
+                label: model.projectTag || "Ungrouped",
+                href: `/`,
+              },
+              {
+                label: model.projectName,
+                href: `/projects/${model.projectId}`,
+              },
+              {
+                label: model.modelName,
+                isActive: true,
+              },
+            ]}
+          />
+        )
+      }
       sidebar={
         <div className="h-full flex flex-col justify-end p-4 space-y-3">
           <DownloadResult
