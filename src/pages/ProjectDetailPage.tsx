@@ -11,6 +11,7 @@ import { useParams, Link } from "react-router";
 import modelImg from "@/assets/model.png";
 import { formatDateLong } from "@/helpers/datetime";
 import uploadIcon from "@/assets/upload-icon.png";
+import { Breadcrumb } from "@/components/ui/breadcrumb";
 
 export function ProjectDetailPage() {
   const { id } = useParams() as { id: string };
@@ -116,7 +117,16 @@ export function ProjectDetailPage() {
 
   return (
     <AppLayout
-      title={project ? project.name : "Project Detail"}
+      title={
+        project && (
+          <Breadcrumb
+            items={[
+              { label: project.group || "Ungrouped", href: "/" },
+              { label: project.name, isActive: true },
+            ]}
+          />
+        )
+      }
       sidebar={<WelcomeSidebar />}
       right={<UploadModel projectId={id} onSuccess={refetch} />}
     >

@@ -5,12 +5,12 @@ import { useGetSimulationsByModelIdQuery } from "@/store/simulationApi";
 import { setActiveSimulation } from "@/store/simulationSlice";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { Link, useNavigate, useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { SimulationPicker } from "@/components/features/simulationSettings/SimulationPicker";
 import { SidebarTabs } from "@/components/features/simulationSettings/SidebarTabs";
 import { ModelViewer } from "@/components/features/viewport/ModelViewer";
 import { useGetModelQuery } from "@/store/modelApi";
-import { ChevronRightIcon } from "lucide-react";
+import { Breadcrumb } from "@/components/ui/breadcrumb";
 
 export function EditorPage() {
   const navigate = useNavigate();
@@ -42,13 +42,22 @@ export function EditorPage() {
     <AppLayout
       title={
         model && (
-          <div className="flex flex-2 items-center justify-center text-choras-primary text-2xl">
-            <Link className="hover:underline" to={`/projects/${model.projectId}`}>
-              {model.projectName}
-            </Link>
-            <ChevronRightIcon />
-            <span className="underline">{model.modelName}</span>
-          </div>
+          <Breadcrumb
+            items={[
+              {
+                label: model.projectTag || "Ungrouped",
+                href: `/`,
+              },
+              {
+                label: model.projectName,
+                href: `/projects/${model.projectId}`,
+              },
+              {
+                label: model.modelName,
+                isActive: true,
+              },
+            ]}
+          />
         )
       }
       sidebar={

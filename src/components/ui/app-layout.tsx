@@ -15,7 +15,7 @@ export function AppLayout({ title, right, sidebar, children }: AppLayoutProps) {
       <header className="h-16 bg-choras-dark flex justify-between items-center">
         <Link
           to="/"
-          className="w-sidebar h-16 pl-6 flex items-center border-b border-b-stone-600 font-choras uppercase text-white text-[2.5rem]"
+          className="w-sidebar h-16 pl-6 flex flex-1 items-center border-b border-b-stone-600 font-choras uppercase text-white text-[2.5rem]"
         >
           CHORAS
         </Link>
@@ -24,7 +24,7 @@ export function AppLayout({ title, right, sidebar, children }: AppLayoutProps) {
             {title}
           </h1>
         ) : (
-          title
+          <div className="flex-2">{title}</div>
         )}
         <div className="w-sidebar flex-1 flex justify-end pr-6">{right}</div>
       </header>
