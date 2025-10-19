@@ -82,7 +82,7 @@ export function UploadConvolvedAudio({ simulationId }: UploadConvolvedAudioProps
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">Upload Audio</Button>
+        <Button>Upload Audio</Button>
       </DialogTrigger>
 
       <DialogContent className="max-w-md">

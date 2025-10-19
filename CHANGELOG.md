@@ -2,6 +2,31 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.13](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.12...v0.0.13) (2025-10-18)
+
+### Features
+
+- add monaco editor to edit setting with json ([ac9519f](https://github.com/ajatdarojat45/frontend-v2/commit/ac9519ffb3a1f9220fa794ae7f7478bf3ed73d40))
+- add settings tab, fetch settings, and update simulation ([7dfc5cd](https://github.com/ajatdarojat45/frontend-v2/commit/7dfc5cd94e3e3b1853911b521d4f6c1840e364e1))
+
+### Bug Fixes
+
+- change simulation actually change the settings ([0823ad6](https://github.com/ajatdarojat45/frontend-v2/commit/0823ad6e8ceb9af36e958c65543c85b2dde04ac6))
+- change simulation method refetch the settings and populate docs button ([3784143](https://github.com/ajatdarojat45/frontend-v2/commit/3784143b0ea3a1f410995f18dbd9af4e7aefc3a7))
+
+### [0.0.12](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.11...v0.0.12) (2025-10-18)
+
+### Features
+
+- add lazy query for simulations by model ID and update cache invalidation tags ([1e9bc53](https://github.com/ajatdarojat45/frontend-v2/commit/1e9bc53db2c347825b6112bce873b72b97c96883))
+
+### Bug Fixes
+
+- change validation logic ([6333e9c](https://github.com/ajatdarojat45/frontend-v2/commit/6333e9c96d7eb04a7bdf9d1a35a80de236a5b9e1))
+- change validation logic ([d5fbbee](https://github.com/ajatdarojat45/frontend-v2/commit/d5fbbeee2cb308c1c64fd53d31c78be18c79c371))
+- change validation logic ([c1d3370](https://github.com/ajatdarojat45/frontend-v2/commit/c1d3370fc047fe19cd9285a1a834b63076a18506))
+- validate every source and receivers proximity ([1d02e18](https://github.com/ajatdarojat45/frontend-v2/commit/1d02e187539a4c1fd0d23d7b2dde5ab39a8dd946))
+
 ### [0.0.11](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.10...v0.0.11) (2025-10-16)
 
 ### Features

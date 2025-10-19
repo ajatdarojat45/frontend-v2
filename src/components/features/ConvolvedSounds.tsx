@@ -50,7 +50,7 @@ export function ConvolvedSounds({ simulationId, onSelect }: ConvolvedSoundsProps
 
   return (
     <Select onValueChange={handleSelect}>
-      <SelectTrigger className="bg-white w-full">
+      <SelectTrigger className="!h-10 bg-white w-full">
         <SelectValue placeholder="Select audio" />
       </SelectTrigger>
       <SelectContent>

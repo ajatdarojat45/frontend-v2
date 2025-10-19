@@ -1,6 +1,7 @@
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { SurfacesTab } from "./SurfacesTab";
 import { SourceReceiversTab } from "./SourceReceiversTab";
+import { SettingTab } from "./SettingTab";
 
 export function SidebarTabs() {
   return (
@@ -15,18 +16,15 @@ export function SidebarTabs() {
             <SourceReceiversTab />
           </TabsContent>
 
-          <TabsContent value="settings" className="m-0">
-            <div className="space-y-4">
-              <h3 className="text-sm font-medium">Settings</h3>
-              <p className="text-sm text-muted-foreground">Application settings will go here.</p>
-            </div>
+          <TabsContent value="settings" className="h-full m-0">
+            <SettingTab />
           </TabsContent>
         </div>
 
         <TabsList className="fixed left-64 md:left-72 lg:left-[var(--width-sidebar)] bottom-0 h-[75%] w-8 p-0 flex-col rounded-r-xl roundedn-l-none z-10 bg-transparent">
           <TabsTrigger
             value="sources"
-            className="w-full data-[state=active]:bg-choras-dark data-[state=active]:text-choras-primary text-white/50 flex items-center justify-center bg-choras-dark/50 rounded-l-none cursor-pointer pr-4"
+            className="w-full data-[state=active]:bg-choras-dark data-[state=active]:text-choras-primary text-white/50 flex items-center justify-center bg-choras-dark/50 rounded-l-none cursor-pointer pr-2"
             style={{
               writingMode: "vertical-rl",
               textOrientation: "mixed",
@@ -37,7 +35,7 @@ export function SidebarTabs() {
           </TabsTrigger>
           <TabsTrigger
             value="surfaces"
-            className="w-full data-[state=active]:bg-choras-dark data-[state=active]:text-choras-primary text-white/50 flex items-center justify-center bg-choras-dark/50 rounded-l-none cursor-pointer pr-4"
+            className="w-full data-[state=active]:bg-choras-dark data-[state=active]:text-choras-primary text-white/50 flex items-center justify-center bg-choras-dark/50 rounded-l-none cursor-pointer pr-2"
             style={{
               writingMode: "vertical-rl",
               textOrientation: "mixed",
@@ -48,7 +46,7 @@ export function SidebarTabs() {
           </TabsTrigger>
           <TabsTrigger
             value="settings"
-            className="w-full data-[state=active]:bg-choras-dark data-[state=active]:text-choras-primary text-white/50 flex items-center justify-center bg-choras-dark/50 rounded-l-none cursor-pointer pr-4"
+            className="w-full data-[state=active]:bg-choras-dark data-[state=active]:text-choras-primary text-white/50 flex items-center justify-center bg-choras-dark/50 rounded-l-none cursor-pointer pr-2"
             style={{
               writingMode: "vertical-rl",
               textOrientation: "mixed",
