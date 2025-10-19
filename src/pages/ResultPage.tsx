@@ -59,7 +59,7 @@ export function ResultPage() {
       <Tabs defaultValue="parameters" className="mt-8">
         <TabsList className="mx-auto  bg-transparent  w-80 p-0 absolute right-0 top-16">
           <TabsTrigger
-            className="w-full h-full rounded-tl-none rounded-tr-none data-[state=active]:bg-choras-dark data-[state=active]:text-choras-primary text-white/50 flex items-center justify-center bg-choras-dark/50 cursor-pointer"
+            className="w-full h-full rounded-tl-none rounded-tr-none data-[state=active]:bg-choras-accent data-[state=active]:text-black text-white/50 flex items-center justify-center bg-choras-dark/50 cursor-pointer"
             style={{
               textOrientation: "mixed",
               clipPath: "polygon(0 0, 100% 0, 100% 1%, 85% 100%, 15% 100%, 0 1%)",
@@ -69,7 +69,7 @@ export function ResultPage() {
             Parameters
           </TabsTrigger>
           <TabsTrigger
-            className="w-full h-full rounded-tl-none rounded-tr-none data-[state=active]:bg-choras-dark data-[state=active]:text-choras-primary text-white/50 flex items-center justify-center bg-choras-dark/50 cursor-pointer"
+            className="w-full h-full rounded-tl-none rounded-tr-none data-[state=active]:bg-choras-accent data-[state=active]:text-black text-white/50 flex items-center justify-center bg-choras-dark/50 cursor-pointer"
             style={{
               textOrientation: "mixed",
               clipPath: "polygon(0 0, 100% 0, 100% 1%, 85% 100%, 15% 100%, 0 1%)",

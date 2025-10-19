@@ -23,7 +23,7 @@ export function ResultParameters({ simulationId }: ResultParametersProps) {
   const { data: results, isLoading, error } = useGetSimulationResultQuery(simulationId);
   const { data: simulation } = useGetSimulationByIdQuery(simulationId);
 
-  if (isLoading) return <Loading />;
+  if (isLoading) return <Loading className="h-container justify-center" />;
 
   if (error) {
     return (
