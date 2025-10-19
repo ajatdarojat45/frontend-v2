@@ -29,7 +29,7 @@ interface CompareResultItemProps {
   receiverId: string | null;
   color: string;
   modelId: number;
-  canRemove: boolean;
+  isCurrent: boolean;
 }
 
 export function CompareResultItem({
@@ -39,7 +39,7 @@ export function CompareResultItem({
   receiverId,
   color,
   modelId,
-  canRemove,
+  isCurrent,
 }: CompareResultItemProps) {
   const [isDownloading, setIsDownloading] = useState(false);
   const dispatch = useDispatch();
@@ -131,7 +131,11 @@ export function CompareResultItem({
         <div className={`w-3 h-3 rounded-full`} style={{ backgroundColor: color }} />
         <span className="text-white font-medium">Simulation</span>
         <div className="flex-1">
-          <Select value={simulationId?.toString()} onValueChange={handleSimulationIdChange}>
+          <Select
+            disabled={isCurrent}
+            value={simulationId?.toString()}
+            onValueChange={handleSimulationIdChange}
+          >
             <SelectTrigger className="bg-choras-dark text-white border-choras-gray [&>svg]:text-choras-gray w-full">
               <SelectValue placeholder="Select simulation">
                 {selectedSimulation && selectedSimulation.completedAt && (
@@ -210,7 +214,7 @@ export function CompareResultItem({
       </div>
 
       <div className="flex space-x-2">
-        {canRemove && (
+        {!isCurrent && (
           <Button onClick={handleRemove} size="icon" variant="destructive">
             <X size={20} />
           </Button>

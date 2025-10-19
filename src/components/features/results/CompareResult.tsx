@@ -69,7 +69,7 @@ export function CompareResult({ modelId }: CompareResultProps) {
           receiverId={result.receiverId}
           color={result.color}
           modelId={modelId}
-          canRemove={idx !== 0 && compareResults.length > 1}
+          isCurrent={idx === 0 && result.simulationId === activeSimulation?.id}
         />
       ))}
 
