@@ -7,6 +7,7 @@ import { ModelRenderer } from "./ModelRenderer";
 import { GeometrySelectionInfo } from "./GeometrySelectionInfo";
 import { SourceVisualization } from "./SourceVisualization";
 import { ReceiverVisualization } from "./ReceiverVisualization";
+import { RunSimulationButton } from "./RunSimulationButton";
 import type { ViewportCanvasProps } from "@/types/modelViewport";
 import { OrbitControls as OrbitControlsType } from "three-stdlib";
 
@@ -129,8 +130,13 @@ export function ViewportCanvas({ modelUrl, modelId }: ViewportCanvasProps) {
       </div>
 
       {/* Selection Info Panel */}
-      <div className="absolute bottom-4 right-4 z-10">
+      <div className="absolute bottom-4 left-[calc(var(--width-sidebar)+3rem)] z-10">
         <GeometrySelectionInfo />
+      </div>
+
+      {/* Run Simulation Button */}
+      <div className="absolute bottom-4 right-4 z-10">
+        <RunSimulationButton />
       </div>
     </div>
   );
