@@ -45,6 +45,10 @@ export function DeleteGroup({ group, projectsCount }: DeleteGroupProps) {
     }
   };
 
+  if (projectsCount === 0 && group === "NONE") {
+    return null; // Don't render anything if there are no projects in "NONE" group
+  }
+
   return (
     <ConfirmDialog
       title={group === "NONE" ? "Delete Projects" : `Delete Group "${group}"`}
