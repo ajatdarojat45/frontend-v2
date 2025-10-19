@@ -8,6 +8,7 @@ import { selectSource, selectReceiver } from "@/store/sourceReceiverSlice";
 import type { RootState } from "@/store";
 import * as THREE from "three";
 import type { ModelRendererProps } from "@/types/modelViewport";
+import type { ThreeEvent } from "@react-three/fiber";
 
 type MaterialWithUuid = THREE.Material & { uuid: string };
 
@@ -32,6 +33,8 @@ export function ModelRenderer({ modelId }: ModelRendererProps) {
   const { camera, raycaster, pointer, gl } = useThree();
   const groupRef = useRef<THREE.Group>(null);
   const [hoveredMesh, setHoveredMesh] = useState<THREE.Mesh | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStartPosition, setDragStartPosition] = useState<{ x: number; y: number } | null>(null);
 
   const modelData = getCurrentModel();
 
@@ -88,51 +91,91 @@ export function ModelRenderer({ modelId }: ModelRendererProps) {
     });
   }, []);
 
-  const handlePointerMove = useCallback(() => {
-    if (!groupRef.current) return;
+  const handlePointerDown = useCallback(
+    (event: ThreeEvent<PointerEvent>) => {
+      const rect = gl.domElement.getBoundingClientRect();
+      const x = event.nativeEvent.clientX - rect.left;
+      const y = event.nativeEvent.clientY - rect.top;
 
-    const meshes: THREE.Mesh[] = [];
-    groupRef.current.traverse((child) => {
-      if (child instanceof THREE.Mesh) {
-        meshes.push(child);
+      setDragStartPosition({ x, y });
+      setIsDragging(false);
+    },
+    [gl],
+  );
+
+  const handlePointerUp = useCallback(() => {
+    setDragStartPosition(null);
+    setTimeout(() => setIsDragging(false), 0);
+  }, []);
+
+  const handlePointerMove = useCallback(
+    (event: ThreeEvent<PointerEvent>) => {
+      if (!groupRef.current) return;
+
+      if (dragStartPosition && !isDragging) {
+        const rect = gl.domElement.getBoundingClientRect();
+        const currentX = event.nativeEvent.clientX - rect.left;
+        const currentY = event.nativeEvent.clientY - rect.top;
+
+        const deltaX = Math.abs(currentX - dragStartPosition.x);
+        const deltaY = Math.abs(currentY - dragStartPosition.y);
+        const dragThreshold = 5; // pixels
+
+        if (deltaX > dragThreshold || deltaY > dragThreshold) {
+          setIsDragging(true);
+        }
       }
-    });
 
-    raycaster.setFromCamera(pointer, camera);
-    const intersects = raycaster.intersectObjects(meshes);
+      const meshes: THREE.Mesh[] = [];
+      groupRef.current.traverse((child) => {
+        if (child instanceof THREE.Mesh) {
+          meshes.push(child);
+        }
+      });
 
-    if (intersects.length > 0) {
-      const newHoveredMesh = intersects[0].object as THREE.Mesh;
-      if (newHoveredMesh !== hoveredMesh) {
+      raycaster.setFromCamera(pointer, camera);
+      const intersects = raycaster.intersectObjects(meshes);
+
+      if (intersects.length > 0) {
+        const newHoveredMesh = intersects[0].object as THREE.Mesh;
+        if (newHoveredMesh !== hoveredMesh) {
+          if (hoveredMesh && !highlightedMeshes.has(hoveredMesh)) {
+            restoreOriginalColor(hoveredMesh);
+          }
+
+          if (!highlightedMeshes.has(newHoveredMesh)) {
+            highlightMesh(newHoveredMesh, HOVER_COLOR);
+          }
+
+          setHoveredMesh(newHoveredMesh);
+        }
+      } else {
         if (hoveredMesh && !highlightedMeshes.has(hoveredMesh)) {
           restoreOriginalColor(hoveredMesh);
         }
-
-        if (!highlightedMeshes.has(newHoveredMesh)) {
-          highlightMesh(newHoveredMesh, HOVER_COLOR);
-        }
-
-        setHoveredMesh(newHoveredMesh);
+        setHoveredMesh(null);
       }
-    } else {
-      if (hoveredMesh && !highlightedMeshes.has(hoveredMesh)) {
-        restoreOriginalColor(hoveredMesh);
-      }
-      setHoveredMesh(null);
-    }
-  }, [
-    hoveredMesh,
-    highlightedMeshes,
-    restoreOriginalColor,
-    highlightMesh,
-    camera,
-    raycaster,
-    pointer,
-    gl,
-  ]);
+    },
+    [
+      hoveredMesh,
+      highlightedMeshes,
+      restoreOriginalColor,
+      highlightMesh,
+      dragStartPosition,
+      isDragging,
+      camera,
+      raycaster,
+      pointer,
+      gl,
+    ],
+  );
 
   const handleClick = useCallback(() => {
     if (!groupRef.current) return;
+
+    if (isDragging) {
+      return;
+    }
 
     if (!isTransforming && (selectedSource || selectedReceiver)) {
       dispatch(selectSource(null));
@@ -197,6 +240,7 @@ export function ModelRenderer({ modelId }: ModelRendererProps) {
     selectedSource,
     selectedReceiver,
     isTransforming,
+    isDragging,
     camera,
     raycaster,
     pointer,
@@ -207,7 +251,13 @@ export function ModelRenderer({ modelId }: ModelRendererProps) {
   }
 
   return (
-    <group ref={groupRef} onPointerMove={handlePointerMove} onClick={handleClick}>
+    <group
+      ref={groupRef}
+      onPointerDown={handlePointerDown}
+      onPointerUp={handlePointerUp}
+      onPointerMove={handlePointerMove}
+      onClick={handleClick}
+    >
       <mesh position={[0, 0, -1000]} visible={false}>
         <planeGeometry args={[10000, 10000]} />
         <meshBasicMaterial transparent opacity={0} />
