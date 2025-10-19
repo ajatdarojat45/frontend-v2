@@ -65,7 +65,7 @@ export function CompareResult({ modelId }: CompareResultProps) {
     <div>
       <h2 className="font-choras text-2xl p-4 font-semibold text-choras-accent">Results</h2>
 
-      {compareResults.map((result) => (
+      {compareResults.map((result, idx) => (
         <CompareResultItem
           key={result.id}
           id={result.id}
@@ -74,16 +74,12 @@ export function CompareResult({ modelId }: CompareResultProps) {
           receiverId={result.receiverId}
           color={result.color}
           modelId={modelId}
-          canRemove={compareResults.length > 1}
+          canRemove={idx !== 0 && compareResults.length > 1}
         />
       ))}
 
       <div className="m-4">
-        <Button
-          onClick={handleAddResult}
-          variant="outline"
-          className="w-full border-choras-accent text-choras-accent hover:bg-choras-accent hover:text-black"
-        >
+        <Button onClick={handleAddResult} variant="outline" className="w-full">
           <Plus size={20} className="mr-1" />
           Add result
         </Button>

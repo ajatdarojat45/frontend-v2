@@ -98,6 +98,25 @@ export function CompareResultItem({
     }
   };
 
+  const handleSimulationIdChange = (value: string) => {
+    const newSimulationId = parseInt(value);
+    handleUpdate("simulationId", newSimulationId);
+
+    // Find the selected simulation and auto-select first source and receiver
+    const simulation = simulations?.find((sim) => sim.id === newSimulationId);
+    if (simulation) {
+      const firstSourceId = simulation.sources?.[0]?.id || null;
+      const firstReceiverId = simulation.receivers?.[0]?.id || null;
+
+      if (firstSourceId) {
+        handleUpdate("sourceId", firstSourceId);
+      }
+      if (firstReceiverId) {
+        handleUpdate("receiverId", firstReceiverId);
+      }
+    }
+  };
+
   // Get sources and receivers from selected simulation
   const sources = selectedSimulation?.sources || [];
   const receivers = selectedSimulation?.receivers || [];
@@ -108,10 +127,7 @@ export function CompareResultItem({
         <div className={`w-3 h-3 rounded-full ${color}`} />
         <span className="text-white font-medium">Simulation</span>
         <div className="flex-1">
-          <Select
-            value={simulationId?.toString()}
-            onValueChange={(value) => handleUpdate("simulationId", parseInt(value))}
-          >
+          <Select value={simulationId?.toString()} onValueChange={handleSimulationIdChange}>
             <SelectTrigger className="bg-choras-dark text-white border-choras-gray [&>svg]:text-choras-gray w-full">
               <SelectValue placeholder="Select simulation">
                 {selectedSimulation && selectedSimulation.completedAt && (
