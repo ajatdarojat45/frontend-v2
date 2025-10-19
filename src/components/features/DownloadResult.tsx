@@ -258,7 +258,7 @@ export function DownloadResult({ simulationId, mode, triggerLabel }: DownloadRes
                 }}
               />
               <Label htmlFor="plots" className="font-medium">
-                Plots :
+                Plots
               </Label>
             </div>
 
@@ -298,7 +298,7 @@ export function DownloadResult({ simulationId, mode, triggerLabel }: DownloadRes
                 }}
               />
               <Label htmlFor="auralizations" className="font-medium">
-                Auralization :
+                Auralization
               </Label>
             </div>
 
