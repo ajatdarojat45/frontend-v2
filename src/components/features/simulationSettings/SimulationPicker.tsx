@@ -6,11 +6,17 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useGetSimulationsByModelIdQuery } from "@/store/simulationApi";
+import { useGetSimulationMethodsQuery } from "@/store/simulationSettingsApi";
 import { useNavigate } from "react-router";
 import { Button } from "@/components/ui/button";
 import { formatDate } from "@/helpers/datetime";
-import { CheckCircleIcon } from "lucide-react";
+import { CheckCircleIcon, FileText, GithubIcon } from "lucide-react";
 import type { Simulation } from "@/types/simulation";
+import { useDispatch, useSelector } from "react-redux";
+import { setSelectedMethodType } from "@/store/simulationSettingsSlice";
+import { setActiveSimulation } from "@/store/simulationSlice";
+import type { RootState } from "@/store";
+import { useEffect } from "react";
 
 type SimulationPickerProps = {
   modelId: number;
@@ -18,41 +24,121 @@ type SimulationPickerProps = {
 };
 export function SimulationPicker({ modelId, simulationId }: SimulationPickerProps) {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { data: simulations, isLoading } = useGetSimulationsByModelIdQuery(modelId);
+  const { data: methods, isLoading: methodsLoading } = useGetSimulationMethodsQuery();
+  const selectedMethodType = useSelector(
+    (state: RootState) => state.simulationSettings.selectedMethodType,
+  );
 
-  if (!simulations || simulations.length === 0 || isLoading) {
+  const handleMethodChange = (methodType: string) => {
+    dispatch(setSelectedMethodType(methodType));
+  };
+
+  const handleSimulationChange = (simulationId: string) => {
+    const selectedSimulation = simulations?.find((sim) => sim.id.toString() === simulationId);
+    if (selectedSimulation) {
+      dispatch(setActiveSimulation(selectedSimulation));
+    }
+    navigate(`/editor/${modelId}/${simulationId}`);
+  };
+
+  useEffect(() => {
+    if (simulationId && simulations) {
+      const currentSimulation = simulations.find((sim) => sim.id === simulationId);
+      if (currentSimulation) {
+        dispatch(setActiveSimulation(currentSimulation));
+      }
+    }
+  }, [simulationId, simulations, dispatch]);
+
+  if (!simulations || simulations.length === 0 || isLoading || methodsLoading) {
     return (
       <Button variant="secondary" className="justify-start">
-        Loading simulations...
+        Loading...
       </Button>
     );
   }
 
-  // Active simulation used to display the current selected simulation in the picker
   const activeSimulation = simulations.find((sim) => sim.id === simulationId);
 
+  const selectedMethod = methods?.find((method) => method.simulationType === selectedMethodType);
+
   return (
-    <Select
-      // We use the URL to manage the active simulation
-      // When a simulation is selected, navigate to the corresponding URL
-      onValueChange={(id) => navigate(`/editor/${modelId}/${id}`)}
-      // So the value is coming from the URL param
-      value={simulationId?.toString()}
-    >
-      <SelectTrigger className="bg-choras-dark text-white border-choras-gray [&>svg]:text-choras-gray w-full">
-        <SelectValue>
-          {activeSimulation && activeSimulation.completedAt && (
-            <CheckCircleIcon className="inline text-green-600" />
-          )}
-          {activeSimulation ? activeSimulation.name : "Select a simulation"}
-        </SelectValue>
-      </SelectTrigger>
-      <SelectContent className="bg-choras-dark border-choras-gray">
-        {simulations.map((simulation) => (
-          <CustomSelectItem key={simulation.id} simulation={simulation} />
-        ))}
-      </SelectContent>
-    </Select>
+    <div className="space-y-4">
+      <div className="grid grid-cols-3 gap-3 w-full items-center">
+        <label htmlFor="simulation" className="font-medium text-white">
+          Simulation:
+        </label>
+        <div className="col-span-2">
+          <Select onValueChange={handleSimulationChange} value={simulationId?.toString()}>
+            <SelectTrigger className="bg-choras-dark text-white border-choras-gray [&>svg]:text-choras-gray w-full">
+              <SelectValue>
+                {activeSimulation && activeSimulation.completedAt && (
+                  <CheckCircleIcon className="inline text-green-600" />
+                )}
+                {activeSimulation ? activeSimulation.name : "Select a simulation"}
+              </SelectValue>
+            </SelectTrigger>
+            <SelectContent className="bg-choras-dark border-choras-gray">
+              {simulations.map((simulation) => (
+                <CustomSelectItem key={simulation.id} simulation={simulation} />
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        <label htmlFor="method" className="font-medium text-white">
+          Method:
+        </label>
+        <div className="col-span-2">
+          <Select value={selectedMethodType} onValueChange={handleMethodChange} disabled>
+            <SelectTrigger className="bg-choras-dark text-white border-choras-gray [&>svg]:text-choras-gray w-full">
+              <SelectValue>
+                {selectedMethod ? selectedMethod.label.replace("method", "") : "Select a method"}
+              </SelectValue>
+            </SelectTrigger>
+            <SelectContent className="bg-choras-dark border-choras-gray">
+              {methods?.map((method) => (
+                <SelectItem
+                  key={method.simulationType}
+                  value={method.simulationType}
+                  className="bg-choras-dark hover:bg-choras-dark/90 active:bg-choras-dark/80 text-white"
+                >
+                  {method.label.replace("method", "")}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+      <div className="grid grid-cols-2 gap-6 w-full items-center">
+        <Button
+          variant="outline"
+          onClick={() =>
+            selectedMethod?.repositoryURL && window.open(selectedMethod.repositoryURL, "_blank")
+          }
+          disabled={!selectedMethod?.repositoryURL}
+        >
+          <div className="flex items-center gap-2 justify-center">
+            <GithubIcon size={16} />
+            {selectedMethodType} Repo
+          </div>
+        </Button>
+        <Button
+          variant="outline"
+          onClick={() =>
+            selectedMethod?.documentationURL &&
+            window.open(selectedMethod.documentationURL, "_blank")
+          }
+          disabled={!selectedMethod?.documentationURL}
+        >
+          <div className="flex items-center gap-2 justify-center">
+            <FileText size={16} />
+            {selectedMethodType} Docs
+          </div>
+        </Button>
+      </div>
+    </div>
   );
 }
 
