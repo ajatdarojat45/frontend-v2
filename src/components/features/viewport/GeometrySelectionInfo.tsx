@@ -33,18 +33,18 @@ export function GeometrySelectionInfo() {
 
   if (!selectedGeometry || selectedGeometry.mesh?.visible === false) {
     return (
-      <Card className="w-80 border border-choras-gray">
+      <Card className="w-80 border border-choras-gray gap-1">
         <CardHeader>
-          <CardTitle className="text-sm">Geometry Information</CardTitle>
+          <CardTitle className="text-xs">Geometry Information</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-2">
-          <div className="grid grid-cols-2 gap-2 text-sm">
+        <CardContent>
+          <div className="grid grid-cols-2 gap-0 text-xs">
             <div>
               <span className="font-medium">Total Volume:</span>
             </div>
             <div className="text-muted-foreground">{totalModelVolume.toFixed(2)} m³</div>
           </div>
-          <p className="text-sm text-muted-foreground mt-3">
+          <p className="text-xs text-muted-foreground mt-3">
             Click on a face in the model to select it for material assignment.
           </p>
         </CardContent>
@@ -53,12 +53,12 @@ export function GeometrySelectionInfo() {
   }
 
   return (
-    <Card className="w-80 border border-choras-gray">
+    <Card className="w-80 border border-choras-gray gap-1">
       <CardHeader>
-        <CardTitle className="text-sm">Selected Surface</CardTitle>
+        <CardTitle className="text-xs">Selected Surface</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-2">
-        <div className="grid grid-cols-2 gap-2 text-sm">
+      <CardContent>
+        <div className="grid grid-cols-2 gap-2 text-xs">
           <div>
             <span className="font-medium">Surface:</span>
           </div>
