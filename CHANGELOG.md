@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.14](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.13...v0.0.14) (2025-10-19)
+
+### Bug Fixes
+
+- change debounce value for update settings to 1 second instead of 300ms ([55904a7](https://github.com/ajatdarojat45/frontend-v2/commit/55904a738f5fdb96a81695b52a4427bbc8469390))
+- different validation type for source and receiver when close together ([554b20d](https://github.com/ajatdarojat45/frontend-v2/commit/554b20d6ae87cd61f4d247fcda985a7a6f122c9e))
+- make source&receivers turns red in viewport when not valid ([6dd6d41](https://github.com/ajatdarojat45/frontend-v2/commit/6dd6d41e85604e553547b5802565273ee89ce390))
+- only register click event to (de)select sources/receivers ([968cd81](https://github.com/ajatdarojat45/frontend-v2/commit/968cd811867f28fa02b4401bead5adac16ec2757))
+- prevent rendering when there are no projects in "NONE" group ([e605ced](https://github.com/ajatdarojat45/frontend-v2/commit/e605ceda06886ded355fe37c9e260d20fa826ab4))
+- settings validation to not exceed the range input and not call update ([43b2e28](https://github.com/ajatdarojat45/frontend-v2/commit/43b2e28c96df76f30b4b97265e6ff340f860d3af))
+
 ### [0.0.13](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.12...v0.0.13) (2025-10-18)
 
 ### Features

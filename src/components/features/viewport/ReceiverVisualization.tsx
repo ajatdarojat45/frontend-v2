@@ -61,13 +61,13 @@ function ReceiverPoint({
         }}
       >
         <sphereGeometry args={[0.15, 16, 16]} />
-        <meshBasicMaterial color={"#eab308"} />
+        <meshBasicMaterial color={receiver.isValid === false ? "#ef4444" : "#eab308"} />
       </mesh>
 
       <Text
         position={[receiver.x, receiver.y, receiver.z + 0.3]}
         fontSize={0.2}
-        color={"#eab308"}
+        color={receiver.isValid === false ? "#dc2626" : "#eab308"}
         anchorX="center"
         anchorY="middle"
         outlineWidth={0.02}

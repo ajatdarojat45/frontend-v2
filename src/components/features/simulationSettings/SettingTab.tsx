@@ -48,11 +48,12 @@ export function SettingTab() {
     }
   }, [simulation?.id, settingsData?.options, dispatch]);
 
-  const handleValueChange = (id: string, value: string | number) => {
-    dispatch(updateValue({ id, value }));
-
-    const updatedValues = { ...values, [id]: value };
-    updateSimulationSettings(updatedValues);
+  const handleValueChange = (id: string, value: string | number, isValid: boolean = true) => {
+    if (isValid) {
+      dispatch(updateValue({ id, value }));
+      const updatedValues = { ...values, [id]: value };
+      updateSimulationSettings(updatedValues);
+    }
   };
 
   const generalSettingsIds = ["de_c0", "de_ir_length", "sim_len_type"];
@@ -62,8 +63,8 @@ export function SettingTab() {
   if (isLoading) {
     return (
       <div className="text-white">
-        <div className="mb-4">
-          <h4 className="text-lg font-semibold mb-2">Settings</h4>
+        <div className="mb-4 mt-2 flex justify-between items-center">
+          <h4 className="text-xl text-choras-primary">Settings</h4>
         </div>
         <div className="flex items-center justify-center py-8">
           <div className="text-gray-400">Loading settings...</div>
@@ -75,8 +76,8 @@ export function SettingTab() {
   if (error || simulationError) {
     return (
       <div className="text-white">
-        <div className="mb-4">
-          <h4 className="text-lg font-semibold mb-2">Settings</h4>
+        <div className="mb-4 mt-2 flex justify-between items-center">
+          <h4 className="text-xl text-choras-primary">Settings</h4>
         </div>
         <div className="flex items-center justify-center py-8">
           <div className="text-red-400">Failed to load simulation settings</div>
@@ -87,8 +88,8 @@ export function SettingTab() {
 
   return (
     <div className="text-white">
-      <div className="mb-4 flex justify-between items-center">
-        <h4 className="text-xl text-choras-primary">Sources</h4>
+      <div className="mb-4 mt-2 flex justify-between items-center">
+        <h4 className="text-xl text-choras-primary">Settings</h4>
         <SettingJsonEditor />
       </div>
 
@@ -112,7 +113,7 @@ export function SettingTab() {
                   key={option.id}
                   option={option}
                   value={values[option.id] || option.default}
-                  onChange={(value) => handleValueChange(option.id, value)}
+                  onChange={(value, isValid) => handleValueChange(option.id, value, isValid)}
                 />
               ))}
               {generalSettings.length === 0 && (
@@ -143,7 +144,7 @@ export function SettingTab() {
                   key={option.id}
                   option={option}
                   value={values[option.id] || option.default}
-                  onChange={(value) => handleValueChange(option.id, value)}
+                  onChange={(value, isValid) => handleValueChange(option.id, value, isValid)}
                 />
               ))}
               {extendedSettings.length === 0 && (
