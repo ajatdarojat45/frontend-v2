@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import { useGetSimulationByIdQuery, useGetSimulationResultQuery } from "@/store/simulationApi";
 import { Loading } from "@/components/ui/loading";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -8,6 +7,13 @@ import { FREQUENCY_BANDS } from "@/constants";
 import Chart from "react-apexcharts";
 import { roundTo2 } from "@/helpers/number";
 import { DownloadResult } from "./DownloadResult";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 type ResultParametersProps = {
   simulationId: number;
@@ -48,20 +54,29 @@ export function ResultParameters({ simulationId }: ResultParametersProps) {
 
   return (
     <div className="h-full w-full p-8 space-y-4">
-      <div className="flex space-x-2 justify-center">
-        {keys.map((key) => (
-          <Button
-            key={key}
-            onClick={() => setSelectedParameter(key)}
-            variant={key === selectedParameter ? "default" : "outline"}
-            className="uppercase"
-          >
-            {key}
-          </Button>
-        ))}
+      <h1 className="text-2xl text-choras-secondary font-inter font-bold mb-8">Parameters</h1>
+
+      <div className="flex justify-between">
+        <Select
+          onValueChange={(v) => setSelectedParameter(v as keyof Parameters)}
+          value={selectedParameter}
+        >
+          <SelectTrigger className="!h-10 w-48 border-black rounded-sm">
+            <SelectValue className="text-black" placeholder="Select Parameter" />
+          </SelectTrigger>
+          <SelectContent>
+            {keys.map((key) => (
+              <SelectItem key={key} value={key}>
+                {key.toUpperCase()}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+
+        <DownloadResult simulationId={+simulationId} mode="parameters" />
       </div>
 
-      <div>
+      <div className="border border-black p-2 rounded-sm">
         <Chart
           type="bar"
           options={{
@@ -100,12 +115,6 @@ export function ResultParameters({ simulationId }: ResultParametersProps) {
           height={500}
         />
       </div>
-
-      <DownloadResult
-        simulationId={+simulationId}
-        mode="parameters"
-        triggerLabel="Download Parameters"
-      />
     </div>
   );
 }

@@ -178,9 +178,9 @@ export function DownloadResult({ simulationId, mode, triggerLabel }: DownloadRes
       }}
     >
       <DialogTrigger asChild>
-        <Button variant="outline" className="w-full">
-          <Download className="h-4 w-4 mr-2" />
-          {triggerLabel ?? "Download Results"}
+        <Button variant="outlineSecondary">
+          <Download className="h-4 w-4" />
+          {triggerLabel ?? "Download"}
         </Button>
       </DialogTrigger>
 
