@@ -13,7 +13,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { selectCompareResultsSeriesData } from "@/store/simulationSelector";
+import {
+  selectCompareSimulationIds,
+  selectCompareResultsSeriesData,
+} from "@/store/simulationSelector";
 import { useSelector } from "react-redux";
 
 type ResultParametersProps = {
@@ -26,6 +29,7 @@ export function ResultParameters({ simulationId }: ResultParametersProps) {
   const seriesData = useSelector(
     selectCompareResultsSeriesData(selectedParameter, simulation?.modelId),
   );
+  const compareResultIds = useSelector(selectCompareSimulationIds);
 
   if (isLoading) return <Loading className="h-container justify-center" />;
 
@@ -70,7 +74,7 @@ export function ResultParameters({ simulationId }: ResultParametersProps) {
           </SelectContent>
         </Select>
 
-        <DownloadResult simulationId={+simulationId} mode="parameters" />
+        <DownloadResult simulationIds={compareResultIds} mode="parameters" />
       </div>
 
       <div className="border border-black p-2 rounded-sm">

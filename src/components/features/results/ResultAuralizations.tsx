@@ -6,7 +6,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loading } from "@/components/ui/loading";
 import { useGetAuralizationsBySimulationIdQuery } from "@/store/auralizationApi";
 import { useSelector } from "react-redux";
-import type { RootState } from "@/store";
+import { selectCompareSimulationIds, selectCompareResults } from "@/store/simulationSelector";
 
 type ResultAuralizationsProps = {
   simulationId: number;
@@ -17,7 +17,10 @@ export function ResultAuralizations({ simulationId }: ResultAuralizationsProps) 
     isLoading,
     isError,
   } = useGetAuralizationsBySimulationIdQuery(simulationId);
-  const compareResults = useSelector((state: RootState) => state.simulation.compareResults);
+  const compareResults = useSelector(selectCompareResults);
+  const compareResultIds = useSelector(selectCompareSimulationIds);
+
+  console.log(compareResultIds, "<<<");
 
   if (isLoading) {
     return <Loading message="Loading audio files..." className="h-container justify-center" />;
@@ -48,7 +51,7 @@ export function ResultAuralizations({ simulationId }: ResultAuralizationsProps) 
 
         <DownloadResult
           triggerLabel="Download Impulse Response"
-          simulationId={simulationId}
+          simulationIds={compareResultIds}
           mode="auralizations"
         />
       </div>

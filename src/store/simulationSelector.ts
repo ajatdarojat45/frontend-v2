@@ -34,6 +34,13 @@ export const selectActiveSimulation = (state: RootState) => state.simulation.act
 // Selector to get compare results from the state
 export const selectCompareResults = (state: RootState) => state.simulation.compareResults;
 
+export const selectCompareSimulationIds = createSelector(selectCompareResults, (compareResults) =>
+  compareResults
+    .map((result) => result.simulationId)
+    .filter((id) => id !== null)
+    .map(Number),
+);
+
 // Selector to create chart series data from compare results
 export const selectCompareResultsSeriesData = (parameter: keyof Parameters, modelId?: number) =>
   createSelector(

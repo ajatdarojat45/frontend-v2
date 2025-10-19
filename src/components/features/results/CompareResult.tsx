@@ -6,6 +6,7 @@ import type { RootState } from "@/store";
 import { useEffect } from "react";
 import { CompareResultItem } from "./CompareResultItem";
 import { COLORS } from "@/constants";
+import { selectCompareResults } from "@/store/simulationSelector";
 
 interface CompareResultProps {
   modelId: number;
@@ -15,7 +16,7 @@ const colorVariants = Object.values(COLORS);
 
 export function CompareResult({ modelId }: CompareResultProps) {
   const dispatch = useDispatch();
-  const compareResults = useSelector((state: RootState) => state.simulation.compareResults);
+  const compareResults = useSelector(selectCompareResults);
   const activeSimulation = useSelector((state: RootState) => state.simulation.activeSimulation);
 
   // Initialize with one result if empty, using activeSimulation
