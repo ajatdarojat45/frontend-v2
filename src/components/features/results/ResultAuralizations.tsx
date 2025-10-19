@@ -39,7 +39,9 @@ export function ResultAuralizations({ simulationId }: ResultAuralizationsProps) 
   return (
     <div className="h-full w-full p-8 space-y-4">
       <div className="flex justify-between">
-        <h1 className="text-2xl">Impulse Response</h1>
+        <h1 className="text-2xl text-choras-secondary font-inter font-bold mb-8">
+          Impulse Response
+        </h1>
 
         <DownloadResult
           triggerLabel="Download Impulse Response"
@@ -50,7 +52,7 @@ export function ResultAuralizations({ simulationId }: ResultAuralizationsProps) 
       <ImpulseResponsePlayer simulationId={simulationId} />
 
       <div className="flex justify-between mt-12">
-        <h1 className="text-2xl">Convolved Sound</h1>
+        <h1 className="text-2xl text-choras-secondary font-inter font-bold">Convolved Sound</h1>
         <UploadConvolvedAudio simulationId={simulationId} />
       </div>
       {auralizations.map((auralization) => (
