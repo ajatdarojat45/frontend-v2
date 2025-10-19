@@ -45,6 +45,8 @@ export function SourceReceiversTab() {
       modelBounds,
       sources,
       surfaces,
+      receiver.id,
+      "receiver",
     );
 
     return {
@@ -56,13 +58,13 @@ export function SourceReceiversTab() {
 
   const validateSource = (source: Source): Source => {
     const modelBounds = getModelBounds(surfaces);
-    const allOtherPoints = [...sources.filter((s) => s.id !== source.id), ...receivers];
     const validation = validateSourceOrReceiver(
       { x: source.x, y: source.y, z: source.z },
       modelBounds,
-      allOtherPoints,
+      receivers,
       surfaces,
       source.id,
+      "source",
     );
 
     return {
