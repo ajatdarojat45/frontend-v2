@@ -8,7 +8,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { EllipsisVertical } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Editor } from "@monaco-editor/react";
@@ -105,7 +104,6 @@ export function SettingJsonEditor() {
 
       await updateSimulationSettings(parsedJson);
 
-      toast.success("Settings saved successfully");
       setOpen(false);
     } catch (error) {
       console.error("Failed to save JSON settings:", error);
@@ -116,8 +114,12 @@ export function SettingJsonEditor() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="ghost" className="rounded-full hover:bg-gray-600 hover:text-white">
-          <EllipsisVertical size={20} className="text-white" />
+        <Button
+          variant="ghost"
+          size={"sm"}
+          className="hover:bg-gray-600 hover:text-white border border-choras-gray rounded-lg"
+        >
+          Open as JSON
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-2xl max-h-[80vh]">
@@ -158,14 +160,14 @@ export function SettingJsonEditor() {
           <Button
             variant="outline"
             onClick={handleReset}
-            className="text-gray-300 border-gray-600 hover:bg-gray-700"
+            className="border-choras-primary cursor-pointer"
           >
             Reset
           </Button>
           <Button
             onClick={handleSave}
             disabled={!isValidJson}
-            className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600"
+            className="bg-choras-primary disabled:bg-gray-600 cursor-pointer disabled:cursor-not-allowed"
           >
             Save
           </Button>
