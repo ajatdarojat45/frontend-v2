@@ -67,4 +67,5 @@ export const {
   useGetSimulationByIdQuery,
   useUpdateSimulationMutation,
   useGetSimulationResultQuery,
+  useLazyGetSimulationResultQuery,
 } = simulationApi;

@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import {
   useGetSimulationResultQuery,
   useGetSimulationsByModelIdQuery,
+  useLazyGetSimulationResultQuery,
 } from "@/store/simulationApi";
 import { useGetSimulationMethodsQuery } from "@/store/simulationSettingsApi";
 import { formatDate } from "@/helpers/datetime";
@@ -47,6 +48,7 @@ export function CompareResultItem({
   const { data: results } = useGetSimulationResultQuery(simulationId!, {
     skip: !simulationId,
   });
+  const [getSimulationResult] = useLazyGetSimulationResultQuery();
 
   const selectedSimulation = simulations?.find((sim) => sim.id === simulationId);
   const selectedMethod = selectedSimulation
@@ -105,6 +107,8 @@ export function CompareResultItem({
     // Find the selected simulation and auto-select first source and receiver
     const simulation = simulations?.find((sim) => sim.id === newSimulationId);
     if (simulation) {
+      getSimulationResult(newSimulationId);
+
       const firstSourceId = simulation.sources?.[0]?.id || null;
       const firstReceiverId = simulation.receivers?.[0]?.id || null;
 
