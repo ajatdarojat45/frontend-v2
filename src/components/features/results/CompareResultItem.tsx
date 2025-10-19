@@ -124,7 +124,7 @@ export function CompareResultItem({
   return (
     <div className="border-y border-stone-600 p-4 space-y-4 relative">
       <div className="flex items-center gap-3">
-        <div className={`w-3 h-3 rounded-full ${color}`} />
+        <div className={`w-3 h-3 rounded-full`} style={{ backgroundColor: color }} />
         <span className="text-white font-medium">Simulation</span>
         <div className="flex-1">
           <Select value={simulationId?.toString()} onValueChange={handleSimulationIdChange}>

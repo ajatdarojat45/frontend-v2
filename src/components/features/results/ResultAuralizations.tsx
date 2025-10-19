@@ -5,6 +5,8 @@ import { DownloadResult } from "./DownloadResult";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loading } from "@/components/ui/loading";
 import { useGetAuralizationsBySimulationIdQuery } from "@/store/auralizationApi";
+import { useSelector } from "react-redux";
+import type { RootState } from "@/store";
 
 type ResultAuralizationsProps = {
   simulationId: number;
@@ -15,6 +17,7 @@ export function ResultAuralizations({ simulationId }: ResultAuralizationsProps) 
     isLoading,
     isError,
   } = useGetAuralizationsBySimulationIdQuery(simulationId);
+  const compareResults = useSelector((state: RootState) => state.simulation.compareResults);
 
   if (isLoading) {
     return <Loading message="Loading audio files..." className="h-container justify-center" />;
@@ -49,7 +52,16 @@ export function ResultAuralizations({ simulationId }: ResultAuralizationsProps) 
           mode="auralizations"
         />
       </div>
-      <ImpulseResponsePlayer simulationId={simulationId} />
+      {compareResults.map(
+        (result) =>
+          result.simulationId && (
+            <ImpulseResponsePlayer
+              key={`ir-player-${result.id}-${result.simulationId}`}
+              simulationId={result.simulationId}
+              color={result.color}
+            />
+          ),
+      )}
 
       <div className="flex justify-between mt-12">
         <h1 className="text-2xl text-choras-secondary font-inter font-bold">Convolved Sound</h1>

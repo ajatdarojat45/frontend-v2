@@ -5,19 +5,13 @@ import { addCompareResult, initializeCompareResults } from "@/store/simulationSl
 import type { RootState } from "@/store";
 import { useEffect } from "react";
 import { CompareResultItem } from "./CompareResultItem";
+import { COLORS } from "@/constants";
 
 interface CompareResultProps {
   modelId: number;
 }
 
-const COLORS = [
-  "bg-purple-500",
-  "bg-blue-500",
-  "bg-green-500",
-  "bg-yellow-500",
-  "bg-red-500",
-  "bg-pink-500",
-];
+const colorVariants = Object.values(COLORS);
 
 export function CompareResult({ modelId }: CompareResultProps) {
   const dispatch = useDispatch();
@@ -40,7 +34,7 @@ export function CompareResult({ modelId }: CompareResultProps) {
               activeSimulation.receivers.length > 0
                 ? activeSimulation.receivers[0].id.toString()
                 : null,
-            color: COLORS[0],
+            color: colorVariants[0],
           },
         ]),
       );
@@ -49,7 +43,7 @@ export function CompareResult({ modelId }: CompareResultProps) {
 
   const handleAddResult = () => {
     const newId = (compareResults.length + 1).toString();
-    const newColor = COLORS[compareResults.length % COLORS.length];
+    const newColor = colorVariants[compareResults.length % colorVariants.length];
     dispatch(
       addCompareResult({
         id: newId,
