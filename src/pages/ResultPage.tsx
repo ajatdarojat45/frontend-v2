@@ -7,6 +7,7 @@ import { ResultParameters } from "@/components/features/results/ResultParameters
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useGetModelQuery } from "@/store/modelApi";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
+import { EditorNav } from "@/components/features/viewport/EditorNav";
 
 export function ResultPage() {
   const { modelId, simulationId } = useParams() as { modelId: string; simulationId: string };
@@ -54,10 +55,29 @@ export function ResultPage() {
         </div>
       }
     >
+      <EditorNav active="results" modelId={+modelId} simulationId={+simulationId} />
       <Tabs defaultValue="parameters" className="mt-8">
-        <TabsList className="mx-auto">
-          <TabsTrigger value="parameters">Parameters</TabsTrigger>
-          <TabsTrigger value="auralizations">Auralizations</TabsTrigger>
+        <TabsList className="mx-auto  bg-transparent  w-80 p-0 absolute right-0 top-16">
+          <TabsTrigger
+            className="w-full h-full rounded-tl-none rounded-tr-none data-[state=active]:bg-choras-dark data-[state=active]:text-choras-primary text-white/50 flex items-center justify-center bg-choras-dark/50 cursor-pointer"
+            style={{
+              textOrientation: "mixed",
+              clipPath: "polygon(0 0, 100% 0, 100% 1%, 85% 100%, 15% 100%, 0 1%)",
+            }}
+            value="parameters"
+          >
+            Parameters
+          </TabsTrigger>
+          <TabsTrigger
+            className="w-full h-full rounded-tl-none rounded-tr-none data-[state=active]:bg-choras-dark data-[state=active]:text-choras-primary text-white/50 flex items-center justify-center bg-choras-dark/50 cursor-pointer"
+            style={{
+              textOrientation: "mixed",
+              clipPath: "polygon(0 0, 100% 0, 100% 1%, 85% 100%, 15% 100%, 0 1%)",
+            }}
+            value="auralizations"
+          >
+            Auralizations
+          </TabsTrigger>
         </TabsList>
         <TabsContent value="parameters">
           <ResultParameters simulationId={+simulationId} />

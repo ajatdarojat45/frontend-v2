@@ -15,7 +15,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/projects/:id" element={<ProjectDetailPage />} />
           <Route path="/editor/:modelId/:simulationId?" element={<EditorPage />} />
-          <Route path="/editor/:modelId/:simulationId/result" element={<ResultPage />} />
+          <Route path="/editor/:modelId/:simulationId/results" element={<ResultPage />} />
 
           {/* Not Found */}
           <Route path="*" element={<Navigate to="/" />} />

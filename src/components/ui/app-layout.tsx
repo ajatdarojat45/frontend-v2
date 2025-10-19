@@ -12,13 +12,14 @@ export function AppLayout({ title, right, sidebar, children }: AppLayoutProps) {
   return (
     <div className="h-screen flex flex-col">
       {/* Header */}
-      <header className="h-16 bg-choras-dark flex justify-between items-center">
+      <header className="h-16 bg-choras-dark flex justify-between relative items-center">
         <Link
           to="/"
-          className="w-sidebar h-16 pl-6 flex flex-1 items-center border-b border-b-stone-600 font-choras uppercase text-white text-[2.5rem]"
+          className="w-sidebar h-16 pl-6 flex flex-1 items-center font-choras uppercase text-white text-[2.5rem]"
         >
           CHORAS
         </Link>
+        <div className="border-b border-b-stone-600 absolute top-16 left-0 w-sidebar z-50" />
         {typeof title === "string" ? (
           <h1 className="text-center font-choras text-choras-primary text-2xl flex-2 font-bold">
             {title}

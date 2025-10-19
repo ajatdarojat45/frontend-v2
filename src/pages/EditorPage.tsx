@@ -11,6 +11,7 @@ import { SidebarTabs } from "@/components/features/simulationSettings/SidebarTab
 import { ModelViewer } from "@/components/features/viewport/ModelViewer";
 import { useGetModelQuery } from "@/store/modelApi";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
+import { EditorNav } from "@/components/features/viewport/EditorNav";
 
 export function EditorPage() {
   const navigate = useNavigate();
@@ -79,6 +80,9 @@ export function EditorPage() {
       }
       right={<CreateSimulation modelId={+modelId} />}
     >
+      {simulationId && (
+        <EditorNav active="geometry" modelId={+modelId} simulationId={+simulationId} />
+      )}
       <div className="h-full w-full">
         <ModelViewer modelId={modelId} />
       </div>
