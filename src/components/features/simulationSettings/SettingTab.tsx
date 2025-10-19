@@ -89,7 +89,7 @@ export function SettingTab() {
   return (
     <div className="text-white">
       <div className="mb-4 flex justify-between items-center">
-        <h4 className="text-xl text-choras-primary">Sources</h4>
+        <h4 className="text-xl text-choras-primary">Settings</h4>
         <SettingJsonEditor />
       </div>
 
