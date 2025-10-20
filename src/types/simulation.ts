@@ -26,6 +26,7 @@ export interface Receiver {
   x: number;
   y: number;
   z: number;
+  validationError?: string;
 }
 
 export interface SimulationRun {
@@ -83,6 +84,8 @@ export interface Source {
   x: number;
   y: number;
   z: number;
+  isValid?: boolean;
+  validationError?: string;
 }
 
 export interface Source2 {

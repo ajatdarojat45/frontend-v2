@@ -47,62 +47,76 @@ export function ProjectCard(props: ProjectCardProps) {
   };
 
   return (
-    <Card>
-      <CardHeader className="overflow-hidden relative">
-        <CardTitle className="truncate">{project.name}</CardTitle>
+    <Card className="min-h-[192px] border border-transparent bg-gradient-to-r from-choras-primary from-50% to-choras-secondary bg-clip-border p-0.5">
+      <div className="bg-[#e7e7e7] min-h-[190px] py-6 rounded-lg h-full flex flex-col justify-between">
+        <CardHeader className="overflow-hidden relative px-5">
+          <CardTitle className="truncate font-inter font-bold text-sm text-choras-secondary">
+            {project.name}
+          </CardTitle>
 
-        {/* stopPropagation on dropdown open, to avoid event bubbling which cause navigation to detail project */}
-        <CardAction onClick={(e) => e.stopPropagation()}>
-          <DropdownMenu>
-            <DropdownMenuTrigger className="cursor-pointer absolute right-0 px-4">
-              <EllipsisVerticalIcon />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <ConfirmDialog
-                title="Delete Project"
-                description="Are you sure you want to delete this project? This action cannot be undone."
-                onConfirm={handleDeleteProject}
-                confirmVariant="destructive"
-                confirmLabel="Delete Project"
-                trigger={
-                  <DropdownMenuItem
-                    onSelect={(e) => e.preventDefault()}
-                    onClick={(e) => e.stopPropagation()}
-                    className="text-red-600"
-                  >
-                    Delete Project
-                  </DropdownMenuItem>
-                }
-              />
-              <ProjectForm
-                defaultValues={project}
-                id={project.id}
-                groupOnly
-                trigger={
-                  <DropdownMenuItem
-                    onSelect={(e) => e.preventDefault()}
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    Change Group
-                  </DropdownMenuItem>
-                }
-              />
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </CardAction>
-      </CardHeader>
-      <CardContent className="flex items-end justify-between">
-        <div>
-          <p>{project.models.length} model</p>
-          <p>{simulationCount} simulations</p>
-        </div>
+          {/* stopPropagation on dropdown open, to avoid event bubbling which cause navigation to detail project */}
+          <CardAction onClick={(e) => e.stopPropagation()}>
+            <DropdownMenu>
+              <DropdownMenuTrigger className="cursor-pointer absolute right-0 px-4">
+                <EllipsisVerticalIcon className="text-black/50" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <ConfirmDialog
+                  title="Delete Project"
+                  description="Are you sure you want to delete this project? This action cannot be undone."
+                  onConfirm={handleDeleteProject}
+                  confirmVariant="destructive"
+                  confirmLabel="Delete Project"
+                  trigger={
+                    <DropdownMenuItem
+                      onSelect={(e) => e.preventDefault()}
+                      onClick={(e) => e.stopPropagation()}
+                      className="text-red-600"
+                    >
+                      Delete Project
+                    </DropdownMenuItem>
+                  }
+                />
+                <ProjectForm
+                  defaultValues={project}
+                  id={project.id}
+                  groupOnly
+                  trigger={
+                    <DropdownMenuItem
+                      onSelect={(e) => e.preventDefault()}
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      Change Group
+                    </DropdownMenuItem>
+                  }
+                />
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </CardAction>
+        </CardHeader>
+        <CardContent className="flex items-end justify-between">
+          <div className="text-black/50 text-xs">
+            <p>{project.models.length} model</p>
+            <p>{simulationCount} simulations</p>
+          </div>
 
-        <img
-          className="invisible sm:visible w-24 object-cover"
-          src={modelImg}
-          alt="Model Illustration"
-        />
-      </CardContent>
+          <div className="invisible sm:visible relative w-36 h-24">
+            {/* Stack of cards based on model length */}
+            {Array.from({ length: Math.min(project.models.length, 3) }, (_, index) => (
+              <img
+                key={index}
+                className="absolute w-36 h-24 object-cover rounded-lg"
+                src={modelImg}
+                alt="Model Illustration"
+                style={{
+                  transform: `rotate(${index * 15 - 5}deg) translate(${index * (project.models.length > 2 ? 15 : 30) - 30}px, ${index * -2}px)`,
+                  boxShadow: `0 ${2 + index * 2}px ${4 + index * 2}px rgba(0, 0, 0, 0.2), 0 ${1 + index}px ${2 + index}px rgba(0, 0, 0, 0.1)`,
+                }}
+              />
+            ))}
+          </div>
+        </CardContent>
+      </div>
     </Card>
   );
 }

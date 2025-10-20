@@ -1,15 +1,19 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Grid, GizmoHelper, GizmoViewport } from "@react-three/drei";
 import { Button } from "@/components/ui/button";
 import { useModelLoader } from "@/hooks/useModelLoader";
 import { ModelRenderer } from "./ModelRenderer";
 import { GeometrySelectionInfo } from "./GeometrySelectionInfo";
+import { SourceVisualization } from "./SourceVisualization";
+import { ReceiverVisualization } from "./ReceiverVisualization";
 import type { ViewportCanvasProps } from "@/types/modelViewport";
+import { OrbitControls as OrbitControlsType } from "three-stdlib";
 
 export function ViewportCanvas({ modelUrl, modelId }: ViewportCanvasProps) {
   const [cameraType, setCameraType] = useState<"perspective" | "orthographic">("perspective");
   const { loadModelFromUrl, isModelLoaded, isLoading, error, setActiveModel } = useModelLoader();
+  const orbitControlsRef = useRef<OrbitControlsType | null>(null);
 
   useEffect(() => {
     if (modelUrl && modelId) {
@@ -103,6 +107,7 @@ export function ViewportCanvas({ modelUrl, modelId }: ViewportCanvasProps) {
             side={2}
           />
           <OrbitControls
+            ref={orbitControlsRef}
             enablePan={true}
             enableZoom={true}
             enableRotate={true}
@@ -118,6 +123,8 @@ export function ViewportCanvas({ modelUrl, modelId }: ViewportCanvasProps) {
           </GizmoHelper>
 
           {modelId && <ModelRenderer modelId={modelId} />}
+          <SourceVisualization orbitControlsRef={orbitControlsRef} />
+          <ReceiverVisualization orbitControlsRef={orbitControlsRef} />
         </Canvas>
       </div>
 

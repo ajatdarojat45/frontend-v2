@@ -65,6 +65,29 @@ export const projectApi = createApi({
       // that newly created project could show up in any lists.
       invalidatesTags: [{ type: "Projects", id: "LIST" }],
     }),
+
+    deleteProjectsByGroup: build.mutation<void, string>({
+      query: (group) => ({
+        url: `/projects/deleteByGroup`,
+        params: { group },
+        method: "DELETE",
+      }),
+
+      // Invalidates all Project-type queries providing the `LIST` id - after all, depending of the sort order,
+      invalidatesTags: [{ type: "Projects", id: "LIST" }],
+    }),
+
+    updateProjectsByGroup: build.mutation<void, { group: string; newGroup: string }>({
+      query: ({ group, newGroup }) => ({
+        url: `/projects/updateByGroup`,
+        params: { group },
+        body: { newGroup },
+        method: "PATCH",
+      }),
+
+      // Invalidates all Project-type queries providing the `LIST` id - after all, depending of the sort order,
+      invalidatesTags: [{ type: "Projects", id: "LIST" }],
+    }),
   }),
 });
 
@@ -76,4 +99,6 @@ export const {
   useCreateProjectMutation,
   useUpdateProjectMutation,
   useDeleteProjectMutation,
+  useUpdateProjectsByGroupMutation,
+  useDeleteProjectsByGroupMutation,
 } = projectApi;

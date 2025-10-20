@@ -33,7 +33,7 @@ export function GeometrySelectionInfo() {
 
   if (!selectedGeometry || selectedGeometry.mesh?.visible === false) {
     return (
-      <Card className="w-80">
+      <Card className="w-80 border border-choras-gray">
         <CardHeader>
           <CardTitle className="text-sm">Geometry Information</CardTitle>
         </CardHeader>
@@ -53,7 +53,7 @@ export function GeometrySelectionInfo() {
   }
 
   return (
-    <Card className="w-80">
+    <Card className="w-80 border border-choras-gray">
       <CardHeader>
         <CardTitle className="text-sm">Selected Surface</CardTitle>
       </CardHeader>
@@ -71,7 +71,7 @@ export function GeometrySelectionInfo() {
           {selectedSurfaceInfo?.surface.area && (
             <>
               <div>
-                <span className="font-medium">Surface Area:</span>
+                <span className="font-medium">Surface area:</span>
               </div>
               <div className="text-muted-foreground">
                 {selectedSurfaceInfo.surface.area.toFixed(2)} m²
@@ -80,7 +80,7 @@ export function GeometrySelectionInfo() {
           )}
 
           <div>
-            <span className="font-medium">Assigned Material:</span>
+            <span className="font-medium">Assigned material:</span>
           </div>
           <div className="text-muted-foreground text-xs">
             {(() => {
