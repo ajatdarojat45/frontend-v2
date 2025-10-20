@@ -90,6 +90,7 @@ export const {
   useGetSimulationByIdQuery,
   useUpdateSimulationMutation,
   useGetSimulationResultQuery,
+  useLazyGetSimulationResultQuery,
   useRunSimulationMutation,
   useGetSimulationRunsQuery,
   useLazyGetSimulationRunsQuery,
