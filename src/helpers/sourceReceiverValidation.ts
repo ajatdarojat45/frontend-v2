@@ -22,9 +22,10 @@ const INVISIBLE_SPHERE_RADIUS = 0.2;
 export function validateSourceOrReceiver(
   point: Point3D,
   modelBounds: ModelBounds,
-  sources: Source[],
+  otherPoints: (Source | { x: number; y: number; z: number; id: string })[],
   surfaces: SurfaceInfo[],
-  excludeSourceId?: string,
+  excludeId?: string,
+  pointType?: "source" | "receiver",
 ): ValidationResult {
   // Check if point is outside the model bounds (x <= 0 case)
   if (
@@ -50,15 +51,18 @@ export function validateSourceOrReceiver(
     }
   }
 
-  for (const source of sources) {
-    if (excludeSourceId && source.id === excludeSourceId) {
+  for (const otherPoint of otherPoints) {
+    if (excludeId && otherPoint.id === excludeId) {
       continue;
     }
 
-    if (isPointTooCloseToPoint(point, source)) {
+    if (isPointTooCloseToPoint(point, otherPoint)) {
+      // Determine the appropriate error message based on what we're validating against
+      const errorMessage =
+        pointType === "source" ? "Too close to a receiver" : "Too close to a source";
       return {
         isValid: false,
-        validationError: "too close to a source",
+        validationError: errorMessage,
       };
     }
   }
