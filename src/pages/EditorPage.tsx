@@ -81,7 +81,12 @@ export function EditorPage() {
       right={<CreateSimulation modelId={+modelId} />}
     >
       {simulationId && (
-        <EditorNav active="geometry" modelId={+modelId} simulationId={+simulationId} />
+        <EditorNav
+          key={`editor-nav-${modelId}-${simulationId}`}
+          active="geometry"
+          modelId={+modelId}
+          simulationId={+simulationId}
+        />
       )}
       <div className="h-full w-full">
         <ModelViewer modelId={modelId} />
