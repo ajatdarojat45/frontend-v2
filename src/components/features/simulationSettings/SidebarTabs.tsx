@@ -2,11 +2,24 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { SurfacesTab } from "./SurfacesTab";
 import { SourceReceiversTab } from "./SourceReceiversTab";
 import { SettingTab } from "./SettingTab";
+import { useSelector, useDispatch } from "react-redux";
+import { setActiveTab } from "@/store/tabSlice";
+import type { RootState } from "@/store";
 
 export function SidebarTabs() {
+  const dispatch = useDispatch();
+  const activeTab = useSelector((state: RootState) => state.tab.activeTab);
+
   return (
     <div className="h-full w-full relative p-0">
-      <Tabs defaultValue="sources" className="h-full w-full" orientation="vertical">
+      <Tabs
+        value={activeTab}
+        onValueChange={(value) =>
+          dispatch(setActiveTab(value as "sources" | "surfaces" | "settings"))
+        }
+        className="h-full w-full"
+        orientation="vertical"
+      >
         <div className="h-full w-full">
           <TabsContent value="surfaces" className="m-0">
             <SurfacesTab />
