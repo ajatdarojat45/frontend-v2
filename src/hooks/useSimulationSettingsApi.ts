@@ -67,7 +67,7 @@ export function useSimulationSettingsApi() {
           console.error("Failed to update simulation:", error);
           toast.error("Failed to save settings");
         }
-      }, 300);
+      }, 1000);
     },
     [activeSimulation?.id, simulation, currentModelId, values, updateSimulation],
   );
