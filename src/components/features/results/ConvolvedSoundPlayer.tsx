@@ -1,7 +1,14 @@
 import type { Auralization } from "@/types/auralization";
-import { Item, ItemActions, ItemContent, ItemDescription, ItemMedia, ItemTitle } from "../ui/item";
+import {
+  Item,
+  ItemActions,
+  ItemContent,
+  ItemDescription,
+  ItemMedia,
+  ItemTitle,
+} from "@/components/ui/item";
 import { AudioLinesIcon, LoaderCircleIcon, PlayIcon } from "lucide-react";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { http } from "@/libs/http";
 import { useState } from "react";
