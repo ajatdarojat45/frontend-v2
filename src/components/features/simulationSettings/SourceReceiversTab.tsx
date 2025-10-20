@@ -22,6 +22,7 @@ import {
   setSources,
   setReceivers,
 } from "@/store/sourceReceiverSlice";
+import { setHighlightedElement } from "@/store/tabSlice";
 import { useSourceReceiverApi } from "@/hooks/useSourceReceiverApi";
 import { toast } from "sonner";
 import { useSurfaces } from "@/hooks/useSurfaces";
@@ -33,6 +34,7 @@ export function SourceReceiversTab() {
   const receivers = useSelector((state: RootState) => state.sourceReceiver.receivers);
   const selectedSource = useSelector((state: RootState) => state.sourceReceiver.selectedSource);
   const selectedReceiver = useSelector((state: RootState) => state.sourceReceiver.selectedReceiver);
+  const highlightedElement = useSelector((state: RootState) => state.tab.highlightedElement);
 
   const { simulation, simulationError, updateSimulationData, updateReceiversData } =
     useSourceReceiverApi();
@@ -93,6 +95,16 @@ export function SourceReceiversTab() {
       toast.error("Cannot load simulation data. Source/Receiver changes will not be saved.");
     }
   }, [simulationError]);
+
+  // Clear highlighting after 3 seconds
+  useEffect(() => {
+    if (highlightedElement) {
+      const timer = setTimeout(() => {
+        dispatch(setHighlightedElement(null));
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [highlightedElement, dispatch]);
 
   useEffect(() => {
     if (sources.length > 0 && surfaces.length > 0) {
@@ -374,7 +386,11 @@ export function SourceReceiversTab() {
             onClick={handleAddSource}
             disabled={sources.length >= 5}
             size="sm"
-            className="w-full h-8 text-xs cursor-pointer"
+            className={`w-full h-8 text-xs cursor-pointer transition-all duration-500 ${
+              highlightedElement === "add-source-button"
+                ? "ring-2 ring-yellow-400 shadow-lg animate-pulse bg-yellow-500/20"
+                : ""
+            }`}
             variant="outline"
           >
             <Plus size={14} className="mr-1" />
@@ -505,7 +521,11 @@ export function SourceReceiversTab() {
             onClick={handleAddReceiver}
             disabled={receivers.length >= 5}
             size="sm"
-            className="w-full h-8 text-xs mb-4 cursor-pointer"
+            className={`w-full h-8 text-xs mb-4 cursor-pointer transition-all duration-500 ${
+              highlightedElement === "add-receiver-button"
+                ? "ring-2 ring-yellow-400 shadow-lg animate-pulse bg-yellow-500/20"
+                : ""
+            }`}
             variant="outline"
           >
             <Plus size={14} className="mr-1" />

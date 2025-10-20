@@ -12,6 +12,7 @@ import materialAssignmentReducer from "./materialAssignmentSlice";
 import { sourceReceiverReducer } from "./sourceReceiverSlice";
 import { simulationSettingsApi } from "./simulationSettingsApi";
 import { simulationSettingsReducer } from "./simulationSettingsSlice";
+import { tabReducer } from "./tabSlice";
 
 export const store = configureStore({
   reducer: {
@@ -27,6 +28,7 @@ export const store = configureStore({
     materialAssignment: materialAssignmentReducer,
     sourceReceiver: sourceReceiverReducer,
     simulationSettings: simulationSettingsReducer,
+    tab: tabReducer,
   },
 
   middleware: (getDefaultMiddleware) =>
