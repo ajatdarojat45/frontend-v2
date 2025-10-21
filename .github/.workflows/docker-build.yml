@@ -2,7 +2,7 @@ name: Cross-Platform Frontend Build
 
 on:
   push:
-    branches: [ main ]
+    branches: [ chore/docker ]
   pull_request:
 
 jobs:
