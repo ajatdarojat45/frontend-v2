@@ -2,11 +2,24 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { SurfacesTab } from "./SurfacesTab";
 import { SourceReceiversTab } from "./SourceReceiversTab";
 import { SettingTab } from "./SettingTab";
+import { useSelector, useDispatch } from "react-redux";
+import { setActiveTab } from "@/store/tabSlice";
+import type { RootState } from "@/store";
 
 export function SidebarTabs() {
+  const dispatch = useDispatch();
+  const activeTab = useSelector((state: RootState) => state.tab.activeTab);
+
   return (
     <div className="h-full w-full relative p-0">
-      <Tabs defaultValue="sources" className="h-full w-full" orientation="vertical">
+      <Tabs
+        value={activeTab}
+        onValueChange={(value) =>
+          dispatch(setActiveTab(value as "sources" | "surfaces" | "settings"))
+        }
+        className="h-full w-full"
+        orientation="vertical"
+      >
         <div className="h-full w-full">
           <TabsContent value="surfaces" className="m-0">
             <SurfacesTab />
@@ -21,7 +34,7 @@ export function SidebarTabs() {
           </TabsContent>
         </div>
 
-        <TabsList className="fixed left-64 md:left-72 lg:left-[var(--width-sidebar)] bottom-0 h-[75%] w-8 p-0 flex-col rounded-r-xl roundedn-l-none z-10 bg-transparent">
+        <TabsList className="fixed left-64 md:left-72 lg:left-[var(--width-sidebar)] bottom-0 h-[calc(75%+0.75rem)] w-8 p-0 flex-col rounded-r-xl roundedn-l-none z-10 bg-transparent">
           <TabsTrigger
             value="sources"
             className="w-full data-[state=active]:bg-choras-dark data-[state=active]:text-choras-primary text-white/50 flex items-center justify-center bg-choras-dark/50 rounded-l-none cursor-pointer pr-2"

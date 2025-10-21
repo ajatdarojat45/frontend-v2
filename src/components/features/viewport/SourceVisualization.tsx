@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useRef, useEffect } from "react";
-import { Text, TransformControls } from "@react-three/drei";
+import { Text, TransformControls, Billboard } from "@react-three/drei";
 import { useThree, type ThreeEvent } from "@react-three/fiber";
 import type { RootState } from "@/store";
 import type { Source } from "@/types/simulation";
@@ -64,17 +64,18 @@ function SourcePoint({
         <meshBasicMaterial color={source.isValid === false ? "#ef4444" : "#22d3ee"} />
       </mesh>
 
-      <Text
-        position={[source.x, source.y, source.z + 0.3]}
-        fontSize={0.2}
-        color={source.isValid === false ? "#dc2626" : "#06b6d4"}
-        anchorX="center"
-        anchorY="middle"
-        outlineWidth={0.02}
-        outlineColor="#000000"
-      >
-        {`S_${source.orderNumber}`}
-      </Text>
+      <Billboard position={[source.x, source.y, source.z + 0.3]}>
+        <Text
+          fontSize={0.2}
+          color={source.isValid === false ? "#dc2626" : "#06b6d4"}
+          anchorX="center"
+          anchorY="middle"
+          outlineWidth={0.02}
+          outlineColor="#000000"
+        >
+          {`${source.orderNumber}`}
+        </Text>
+      </Billboard>
 
       {isSelected && (
         <TransformControls
