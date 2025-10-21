@@ -2,6 +2,43 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.16](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.15...v0.0.16) (2025-10-20)
+
+### Features
+
+- add Breadcrumb component and integrate it into EditorPage and ProjectDetailPage ([d0a2f76](https://github.com/ajatdarojat45/frontend-v2/commit/d0a2f76e8d616b3886ad2f618b7af02161daebda))
+- add ConvolvedSoundPlayer component and integrate it into ResultAuralizations for audio playback ([c0034e1](https://github.com/ajatdarojat45/frontend-v2/commit/c0034e12b6f47e67dd293d09d53a6cd06a5496b4))
+- add DownloadResult component for customizable result downloads and integrate it into ResultPage ([c35ed3b](https://github.com/ajatdarojat45/frontend-v2/commit/c35ed3b9773ae61a84a8c1a412be2ed22d721ad8))
+- add DownloadResult component to ResultAuralizations and ResultParameters, include frequency bands constant and roundTo2 helper function ([cb0ece1](https://github.com/ajatdarojat45/frontend-v2/commit/cb0ece168dd87f266288b8097b053a54fca17643))
+- add lazy query for fetching simulations by model ID in CreateSimulation component ([27d77e2](https://github.com/ajatdarojat45/frontend-v2/commit/27d77e2c488904fdbca6489399f0eafa4c6bb4ff))
+- add ResultAuralizations, ConvolvedSoundPlayer, ImpulseResponsePlayer, and UploadConvolvedAudio components; enhance ResultPage with new features ([cb3e5c4](https://github.com/ajatdarojat45/frontend-v2/commit/cb3e5c485a831302c70d48558a654dfe7443760a))
+- add ResultPage and auralization API for impulse response handling ([9dc42e6](https://github.com/ajatdarojat45/frontend-v2/commit/9dc42e6b0e7b7c754534e7274d747678a8f2836e))
+- add Tabs component and ResultParameters to ResultPage for improved result organization ([a6b3b07](https://github.com/ajatdarojat45/frontend-v2/commit/a6b3b076893e80748bd3ee1c5ce502a8e7bdb638))
+- add TrapezoidOutlineTab component and integrate it into ResultPage for improved tab styling ([5e1a092](https://github.com/ajatdarojat45/frontend-v2/commit/5e1a092d02ad590199185f5f1b51554880443f40))
+- enhance DownloadResult button style and update EditorNav tab appearance ([c87570d](https://github.com/ajatdarojat45/frontend-v2/commit/c87570d208ab320b16b74cf2be79b5aea5e4d20e))
+- enhance DownloadResult component with simulation result fetching and download functionality ([45b93b1](https://github.com/ajatdarojat45/frontend-v2/commit/45b93b13d862ba36193feb184ee41317b16a8e8a))
+- enhance loading states and error handling in ResultAuralizations and ResultParameters components ([932b945](https://github.com/ajatdarojat45/frontend-v2/commit/932b94511fc7773d517399c85a2fc627e39a9751))
+- enhance ResultPage with simulation data fetching and filename formatting ([7b5c3c9](https://github.com/ajatdarojat45/frontend-v2/commit/7b5c3c94f42ac0cc4d39c2d0fd1d8b56734834c3))
+- enhance styling for Impulse Response and Convolved Sound headings in ResultAuralizations component ([bce21a5](https://github.com/ajatdarojat45/frontend-v2/commit/bce21a5c26370cc626fb1ad6f7b0ef36ba49cf45))
+- implement audio handling features with impulse response playback and audio file upload ([ab84bc6](https://github.com/ajatdarojat45/frontend-v2/commit/ab84bc667c3391551d8d3cb0b981916f742c3e4b))
+- integrate Breadcrumb component into ResultPage for improved navigation ([f09b93d](https://github.com/ajatdarojat45/frontend-v2/commit/f09b93dacf8a85e88c8542c1dbca938168568e57))
+- integrate DownloadResult component into ResultAuralizations for impulse response downloads ([656ca29](https://github.com/ajatdarojat45/frontend-v2/commit/656ca292809a4a4ace07a23d5829ff3eaea1035e))
+- integrate react-audio-play for enhanced audio playback in ResultPage ([b4696ec](https://github.com/ajatdarojat45/frontend-v2/commit/b4696ec0314d2ed6c00a3908cb2ec8fdee0ddc08))
+- refactor ResultPage to use ResultAuralizations component and update ImpulseResponsePlayer prop type ([0f95f90](https://github.com/ajatdarojat45/frontend-v2/commit/0f95f90ad2d6870ecbfe91d380dfa209ae4ba869))
+- update DownloadResult component to support customizable trigger labels and visibility for sections ([58cedf6](https://github.com/ajatdarojat45/frontend-v2/commit/58cedf69ee5dc18468dbe6e151738f1939db7fbc))
+- update routing for ResultPage and add EditorNav component for navigation in EditorPage and ResultPage ([1ecd21e](https://github.com/ajatdarojat45/frontend-v2/commit/1ecd21e70c4cd1bca06aae928242963a340a01dc))
+
+### Bug Fixes
+
+- add h-container class to children wrapper in AppLayout for consistent height ([fae7cb0](https://github.com/ajatdarojat45/frontend-v2/commit/fae7cb08696535d5175ae8658ea6ab39a8fa7716))
+- add TODO comment for future series data handling in ResultParameters component ([c9ef8d8](https://github.com/ajatdarojat45/frontend-v2/commit/c9ef8d874238eb820756d61b94c8556f7e2f5437))
+- add z-index to aside in AppLayout for improved layering ([f237a6d](https://github.com/ajatdarojat45/frontend-v2/commit/f237a6df59b824e6fe5defea73d6968a545b067e))
+- adjust AudioPlayer height for consistent styling in ConvolvedSoundPlayer component ([33dc753](https://github.com/ajatdarojat45/frontend-v2/commit/33dc7539c10c95be6aa351de6c72e0f92db43aa4))
+- adjust sidebar height in EditorPage for better layout consistency ([6b3cd06](https://github.com/ajatdarojat45/frontend-v2/commit/6b3cd06a90660c21a5044a83e5be67ebf427e2a0))
+- correct simulationId prop passed to DownloadResult component in ResultParameters ([751802d](https://github.com/ajatdarojat45/frontend-v2/commit/751802de623659d2fbbc80bae5a45c6e4b03a85b))
+- correct tag type for invalidation in updateSimulation mutation ([db8d256](https://github.com/ajatdarojat45/frontend-v2/commit/db8d2563fdcf3d37a9f0a705dd9f1ebe95ec1e14))
+- update import for simulation query to use correct hook ([aff74e8](https://github.com/ajatdarojat45/frontend-v2/commit/aff74e8f7305b05275b1c9ee6b59cdf5c57ea2bf))
+
 ### [0.0.15](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.13...v0.0.15) (2025-10-19)
 
 ### Features

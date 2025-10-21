@@ -16,11 +16,12 @@ const loadingVariants = cva("animate-spin rounded-full border-b-2 border-gray-90
 
 interface LoadingProps extends VariantProps<typeof loadingVariants> {
   message?: string;
+  className?: string;
 }
 
-export function Loading({ message = "Loading...", size }: LoadingProps) {
+export function Loading({ message = "Loading...", className, size }: LoadingProps) {
   return (
-    <div className="flex items-center justify-center space-x-2">
+    <div className={cn("flex flex-col items-center space-y-2", className)}>
       <div className={cn(loadingVariants({ size }))} />
       <span className="text-sm text-gray-600">{message}</span>
     </div>
