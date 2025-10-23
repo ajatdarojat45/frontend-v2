@@ -1,4 +1,4 @@
-import { useRef, useState, useCallback, useMemo } from "react";
+import { useRef, useState, useCallback, useMemo, useEffect } from "react";
 import { useThree } from "@react-three/fiber";
 import { useDispatch, useSelector } from "react-redux";
 import { useModelLoader } from "@/hooks/useModelLoader";
@@ -16,7 +16,7 @@ const HIGHLIGHT_COLOR = 0x006600;
 const HOVER_COLOR = 0x888888;
 const ORIGINAL_COLOR_CACHE = new WeakMap<THREE.Material, number | THREE.Color>();
 
-export function ModelRenderer({ modelId }: ModelRendererProps) {
+export function ModelRenderer({ modelId, viewMode }: ModelRendererProps) {
   const dispatch = useDispatch();
   const selectedSource = useSelector((state: RootState) => state.sourceReceiver.selectedSource);
   const selectedReceiver = useSelector((state: RootState) => state.sourceReceiver.selectedReceiver);
@@ -44,6 +44,49 @@ export function ModelRenderer({ modelId }: ModelRendererProps) {
     }
     return null;
   }, [modelData?.object3D, currentModelId, modelId]);
+
+  const applyViewMode = useCallback(
+    (object: THREE.Object3D) => {
+      object.traverse((child) => {
+        if (child instanceof THREE.Mesh && child.material) {
+          const materials = Array.isArray(child.material) ? child.material : [child.material];
+
+          materials.forEach((material) => {
+            if (
+              material instanceof THREE.MeshStandardMaterial ||
+              material instanceof THREE.MeshBasicMaterial
+            ) {
+              switch (viewMode) {
+                case "solid":
+                  material.transparent = true;
+                  material.opacity = 0.8;
+                  material.wireframe = false;
+                  break;
+                case "ghosted":
+                  material.transparent = true;
+                  material.opacity = 0.4;
+                  material.wireframe = false;
+                  break;
+                case "wireframe":
+                  material.transparent = false;
+                  material.opacity = 1.0;
+                  material.wireframe = true;
+                  break;
+              }
+              material.needsUpdate = true;
+            }
+          });
+        }
+      });
+    },
+    [viewMode],
+  );
+
+  useEffect(() => {
+    if (modelData?.object3D && currentModelId === modelId) {
+      applyViewMode(modelData.object3D);
+    }
+  }, [modelData?.object3D, currentModelId, modelId, applyViewMode]);
 
   const highlightMesh = useCallback((mesh: THREE.Mesh, color: number) => {
     if (!mesh.material) return;
