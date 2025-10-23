@@ -6,12 +6,14 @@ import { projectReducer } from "./projectSlice";
 import { simulationReducer } from "./simulationSlice";
 import { modelApi } from "./modelApi";
 import modelReducer from "./modelSlice";
+import { auralizationApi } from "./auralizationApi";
 import geometrySelectionReducer from "./geometrySelectionSlice";
 import { materialsApi } from "./materialsApi";
 import materialAssignmentReducer from "./materialAssignmentSlice";
 import { sourceReceiverReducer } from "./sourceReceiverSlice";
 import { simulationSettingsApi } from "./simulationSettingsApi";
 import { simulationSettingsReducer } from "./simulationSettingsSlice";
+import { tabReducer } from "./tabSlice";
 
 export const store = configureStore({
   reducer: {
@@ -20,6 +22,7 @@ export const store = configureStore({
     [modelApi.reducerPath]: modelApi.reducer,
     [materialsApi.reducerPath]: materialsApi.reducer,
     [simulationSettingsApi.reducerPath]: simulationSettingsApi.reducer,
+    [auralizationApi.reducerPath]: auralizationApi.reducer,
     project: projectReducer,
     simulation: simulationReducer,
     model: modelReducer,
@@ -27,6 +30,7 @@ export const store = configureStore({
     materialAssignment: materialAssignmentReducer,
     sourceReceiver: sourceReceiverReducer,
     simulationSettings: simulationSettingsReducer,
+    tab: tabReducer,
   },
 
   middleware: (getDefaultMiddleware) =>
@@ -37,11 +41,13 @@ export const store = configureStore({
           "geometrySelection/selectGeometry",
           "geometrySelection/addHighlightedMesh",
           "geometrySelection/removeHighlightedMesh",
+          "auralizationApi/executeQuery/fulfilled",
         ],
         ignoredPaths: [
           "model.rhinoFiles",
           "geometrySelection.selectedGeometry",
           "geometrySelection.highlightedMeshes",
+          auralizationApi.reducerPath,
         ],
       },
     }).concat(
@@ -50,6 +56,7 @@ export const store = configureStore({
       modelApi.middleware,
       materialsApi.middleware,
       simulationSettingsApi.middleware,
+      auralizationApi.middleware,
     ),
 });
 

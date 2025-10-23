@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useRef, useEffect } from "react";
-import { Text, TransformControls } from "@react-three/drei";
+import { Text, TransformControls, Billboard } from "@react-three/drei";
 import { useThree, type ThreeEvent } from "@react-three/fiber";
 import type { RootState } from "@/store";
 import type { Receiver } from "@/types/simulation";
@@ -64,17 +64,18 @@ function ReceiverPoint({
         <meshBasicMaterial color={receiver.isValid === false ? "#ef4444" : "#eab308"} />
       </mesh>
 
-      <Text
-        position={[receiver.x, receiver.y, receiver.z + 0.3]}
-        fontSize={0.2}
-        color={receiver.isValid === false ? "#dc2626" : "#eab308"}
-        anchorX="center"
-        anchorY="middle"
-        outlineWidth={0.02}
-        outlineColor="#000000"
-      >
-        {`R_${receiver.orderNumber}`}
-      </Text>
+      <Billboard position={[receiver.x, receiver.y, receiver.z + 0.3]}>
+        <Text
+          fontSize={0.2}
+          color={receiver.isValid === false ? "#dc2626" : "#eab308"}
+          anchorX="center"
+          anchorY="middle"
+          outlineWidth={0.02}
+          outlineColor="#000000"
+        >
+          {`${receiver.orderNumber}`}
+        </Text>
+      </Billboard>
 
       {isSelected && (
         <TransformControls
