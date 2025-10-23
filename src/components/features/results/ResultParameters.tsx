@@ -27,7 +27,6 @@ export function ResultParameters({ simulationId }: ResultParametersProps) {
   const { data: results, isLoading, error } = useGetSimulationResultQuery(simulationId);
   const { data: simulation } = useGetSimulationByIdQuery(simulationId);
 
-  // FIX: get series data based on active compareResults id
   const seriesData = useSelector(selectCompareResultsSeriesData(selectedParameter));
   const compareResultIds = useSelector(selectCompareSimulationIds);
 
