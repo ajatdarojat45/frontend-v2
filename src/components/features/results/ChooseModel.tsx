@@ -110,7 +110,7 @@ export function ChooseModel({ onModelSelect, trigger }: ChooseModelProps) {
           <div className="space-y-2">
             <label className="text-sm font-medium ">Group</label>
             <Select value={selectedGroup} onValueChange={handleGroupChange}>
-              <SelectTrigger>
+              <SelectTrigger className="w-full">
                 <SelectValue placeholder="Select a group" />
               </SelectTrigger>
               <SelectContent>
@@ -135,7 +135,7 @@ export function ChooseModel({ onModelSelect, trigger }: ChooseModelProps) {
             <div className="space-y-2">
               <label className="text-sm font-medium ">Project</label>
               <Select value={selectedProjectId} onValueChange={handleProjectChange}>
-                <SelectTrigger>
+                <SelectTrigger className="w-full">
                   <SelectValue placeholder="Select a project" />
                 </SelectTrigger>
                 <SelectContent>
@@ -154,7 +154,7 @@ export function ChooseModel({ onModelSelect, trigger }: ChooseModelProps) {
             <div className="space-y-2">
               <label className="text-sm font-medium ">Model</label>
               <Select value={selectedModelId} onValueChange={handleModelChange}>
-                <SelectTrigger>
+                <SelectTrigger className="w-full">
                   <SelectValue placeholder="Select a model" />
                 </SelectTrigger>
                 <SelectContent>

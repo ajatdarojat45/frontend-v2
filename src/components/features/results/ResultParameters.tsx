@@ -26,9 +26,9 @@ export function ResultParameters({ simulationId }: ResultParametersProps) {
   const [selectedParameter, setSelectedParameter] = useState<keyof Parameters>("edt");
   const { data: results, isLoading, error } = useGetSimulationResultQuery(simulationId);
   const { data: simulation } = useGetSimulationByIdQuery(simulationId);
-  const seriesData = useSelector(
-    selectCompareResultsSeriesData(selectedParameter, simulation?.modelId),
-  );
+
+  // FIX: get series data based on active compareResults id
+  const seriesData = useSelector(selectCompareResultsSeriesData(selectedParameter));
   const compareResultIds = useSelector(selectCompareSimulationIds);
 
   if (isLoading) return <Loading className="h-container justify-center" />;

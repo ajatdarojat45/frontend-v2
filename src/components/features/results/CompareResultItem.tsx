@@ -46,7 +46,13 @@ export function CompareResultItem({
   const [isDownloading, setIsDownloading] = useState(false);
   const dispatch = useDispatch();
   const { data: model } = useGetModelQuery(modelId?.toString(), { skip: !modelId });
-  const { data: simulations } = useGetSimulationsByModelIdQuery(modelId, { skip: !modelId });
+
+  console.log({ modelId });
+
+  const { data: simulations } = useGetSimulationsByModelIdQuery(modelId, {
+    skip: !modelId,
+    refetchOnMountOrArgChange: true,
+  });
   const { data: methods } = useGetSimulationMethodsQuery();
   const { data: results } = useGetSimulationResultQuery(simulationId!, {
     skip: !simulationId,

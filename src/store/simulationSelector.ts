@@ -42,16 +42,14 @@ export const selectCompareSimulationIds = createSelector(selectCompareResults, (
 );
 
 // Selector to create chart series data from compare results
-export const selectCompareResultsSeriesData = (parameter: keyof Parameters, modelId?: number) =>
+export const selectCompareResultsSeriesData = (parameter: keyof Parameters) =>
   createSelector(
     (state: RootState) => state.simulation.compareResults,
-    (state: RootState) =>
-      !modelId ? [] : simulationApi.endpoints.getSimulationsByModelId.select(modelId)(state)?.data,
     (state: RootState) => state,
-    (compareResults, simulations, state) => {
+    (compareResults, state) => {
       return compareResults
         .map((compareResult) => {
-          const { simulationId, sourceId, receiverId, color } = compareResult;
+          const { simulationId, sourceId, receiverId, color, modelId } = compareResult;
 
           // Skip if simulation or receiver is not selected
           if (!simulationId || !receiverId || !sourceId) {
@@ -67,8 +65,15 @@ export const selectCompareResultsSeriesData = (parameter: keyof Parameters, mode
             return null;
           }
 
+          // Get simulations for the modelId from RTK Query cache
+          const simulationsState =
+            simulationApi.endpoints.getSimulationsByModelId.select(modelId)(state);
+          const simulations = simulationsState?.data;
+
           // Get simulation name
-          const simulation = simulations?.find((sim) => sim.id === simulationId);
+          const simulation = simulations?.find(
+            (sim) => sim.id.toString() === simulationId.toString(),
+          );
           const simulationName = simulation?.name || `Simulation ${simulationId}`;
 
           // Find the result for the selected source and receiver

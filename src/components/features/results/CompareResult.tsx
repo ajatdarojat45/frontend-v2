@@ -59,7 +59,7 @@ export function CompareResult({ modelId }: CompareResultProps) {
   };
 
   return (
-    <div>
+    <div className="overflow-y-auto h-container">
       <h2 className="font-choras text-2xl p-4 font-semibold text-choras-accent">Results</h2>
 
       {compareResults.map((result, idx) => (
