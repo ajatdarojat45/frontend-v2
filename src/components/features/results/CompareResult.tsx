@@ -27,6 +27,7 @@ export function CompareResult({ modelId }: CompareResultProps) {
           {
             id: "1",
             simulationId: activeSimulation.id,
+            modelId: activeSimulation.modelId,
             sourceId:
               activeSimulation.sources.length > 0
                 ? activeSimulation.sources[0].id.toString()
@@ -48,6 +49,7 @@ export function CompareResult({ modelId }: CompareResultProps) {
     dispatch(
       addCompareResult({
         id: newId,
+        modelId: modelId,
         simulationId: null,
         sourceId: null,
         receiverId: null,
@@ -68,7 +70,7 @@ export function CompareResult({ modelId }: CompareResultProps) {
           sourceId={result.sourceId}
           receiverId={result.receiverId}
           color={result.color}
-          modelId={modelId}
+          modelId={result.modelId}
           isCurrent={idx === 0 && result.simulationId === activeSimulation?.id}
         />
       ))}

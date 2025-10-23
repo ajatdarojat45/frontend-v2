@@ -5,6 +5,7 @@ type SimulationState = {
   activeSimulation: Simulation | null;
   compareResults: {
     id: string;
+    modelId: number;
     simulationId: number | null;
     sourceId: string | null;
     receiverId: string | null;

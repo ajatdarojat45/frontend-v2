@@ -34,7 +34,9 @@ export function DownloadResult({ simulationIds, mode, triggerLabel }: DownloadRe
   const allSections = ["parameters", "plots", "auralizations"];
   const visibleSections = mode ? [mode] : allSections;
 
-  const { data: simulationResult, isLoading } = useGetSimulationResultQuery(simulationIds[0]);
+  const { data: simulationResult, isLoading } = useGetSimulationResultQuery(simulationIds[0], {
+    skip: simulationIds.length === 0,
+  });
 
   // Checkbox states
   const [parameters, setParameters] = useState(false);

@@ -21,6 +21,7 @@ import { http } from "@/libs/http";
 import { downloadFile, formatFilename } from "@/helpers/file";
 import { toast } from "sonner";
 import { useState } from "react";
+import { useGetModelQuery } from "@/store/modelApi";
 
 interface CompareResultItemProps {
   id: string;
@@ -43,7 +44,8 @@ export function CompareResultItem({
 }: CompareResultItemProps) {
   const [isDownloading, setIsDownloading] = useState(false);
   const dispatch = useDispatch();
-  const { data: simulations } = useGetSimulationsByModelIdQuery(modelId);
+  const { data: model } = useGetModelQuery(modelId?.toString(), { skip: !modelId });
+  const { data: simulations } = useGetSimulationsByModelIdQuery(modelId, { skip: !modelId });
   const { data: methods } = useGetSimulationMethodsQuery();
   const { data: results } = useGetSimulationResultQuery(simulationId!, {
     skip: !simulationId,
@@ -125,22 +127,26 @@ export function CompareResultItem({
   const sources = selectedSimulation?.sources || [];
   const receivers = selectedSimulation?.receivers || [];
 
+  console.log(model, "<<<");
+
   return (
     <div className="border-y border-stone-600 p-4 space-y-4 relative">
-      <div className="flex items-center gap-3">
+      {model && (
+        <div className="text-xs flex items-center justify-between gap-3 font-inter text-white/60">
+          <p className=" truncate">
+            {model.projectName} {">"} {model.modelName}
+          </p>
+          <p className="shrink underline">choose...</p>
+        </div>
+      )}
+
+      <div className="flex items-center">
         <div className={`w-3 h-3 rounded-full`} style={{ backgroundColor: color }} />
-        <span className="text-white font-medium">Simulation</span>
-        <div className="flex-1">
-          <Select
-            disabled={isCurrent}
-            value={simulationId?.toString()}
-            onValueChange={handleSimulationIdChange}
-          >
+        <span className="text-white text-base font-inter font-normal ml-3">Simulation</span>
+        <div className="flex-1 ml-8">
+          <Select value={simulationId?.toString()} onValueChange={handleSimulationIdChange}>
             <SelectTrigger className="bg-choras-dark text-white border-choras-gray [&>svg]:text-choras-gray w-full">
               <SelectValue placeholder="Select simulation">
-                {selectedSimulation && selectedSimulation.completedAt && (
-                  <CheckCircleIcon className="inline mr-2 text-green-600" size={16} />
-                )}
                 {selectedSimulation ? selectedSimulation.name : "Simulation 1"}
               </SelectValue>
             </SelectTrigger>
@@ -154,14 +160,14 @@ export function CompareResultItem({
       </div>
 
       {selectedMethod && (
-        <p className="text-white text-sm text-right">
+        <p className="text-white/60 text-xs text-right">
           Method: {selectedMethod.label.replace("method", "")}
         </p>
       )}
 
       <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <label className="text-white text-sm">Source</label>
+        <div className="flex flex-col space-y-2">
+          <label className="text-white/60 text-xs">Source</label>
           <Select
             disabled={!simulationId}
             value={sourceId?.toString()}
@@ -186,8 +192,8 @@ export function CompareResultItem({
           </Select>
         </div>
 
-        <div className="space-y-2">
-          <label className="text-white text-sm">Receiver</label>
+        <div className="flex flex-col space-y-2">
+          <label className="text-white/60 text-xs">Receiver</label>
           <Select
             disabled={!simulationId}
             value={receiverId?.toString()}
