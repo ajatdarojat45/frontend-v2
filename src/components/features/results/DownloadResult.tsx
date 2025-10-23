@@ -22,19 +22,21 @@ import { downloadFile, formatFilename } from "@/helpers/file";
 import { cn } from "@/libs/style";
 
 type DownloadResultProps = {
-  simulationId: number;
+  simulationIds: number[];
   mode?: "parameters" | "plots" | "auralizations";
   triggerLabel?: string;
 };
 
-export function DownloadResult({ simulationId, mode, triggerLabel }: DownloadResultProps) {
+export function DownloadResult({ simulationIds, mode, triggerLabel }: DownloadResultProps) {
   const [open, setOpen] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
 
   const allSections = ["parameters", "plots", "auralizations"];
   const visibleSections = mode ? [mode] : allSections;
 
-  const { data: simulationResult, isLoading } = useGetSimulationResultQuery(simulationId);
+  const { data: simulationResult, isLoading } = useGetSimulationResultQuery(simulationIds[0], {
+    skip: simulationIds.length === 0,
+  });
 
   // Checkbox states
   const [parameters, setParameters] = useState(false);
@@ -77,7 +79,7 @@ export function DownloadResult({ simulationId, mode, triggerLabel }: DownloadRes
       // Build the output in the required format
       const output: Record<string, (string | number)[]> = {
         xlsx: ["true"],
-        SimulationId: [simulationId], // TODO: if comparison panel is added, this should be SimulationIds of compared simulations
+        SimulationId: simulationIds, // TODO: if comparison panel is added, this should be SimulationIds of compared simulations
         Parameters: [],
         EDC: [],
         Auralization: [],
@@ -116,7 +118,7 @@ export function DownloadResult({ simulationId, mode, triggerLabel }: DownloadRes
       });
 
       // Download the file
-      downloadFile(data, formatFilename(`simulation ${simulationId} results.zip`));
+      downloadFile(data, formatFilename(`simulation ${simulationIds.join(",")} results.zip`));
 
       toast.success("Download started successfully");
       setOpen(false);

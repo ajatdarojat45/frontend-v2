@@ -5,7 +5,6 @@ import { useState } from "react";
 import type { Parameters } from "@/types/simulation";
 import { FREQUENCY_BANDS } from "@/constants";
 import Chart from "react-apexcharts";
-import { roundTo2 } from "@/helpers/number";
 import { DownloadResult } from "./DownloadResult";
 import {
   Select,
@@ -14,6 +13,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  selectCompareSimulationIds,
+  selectCompareResultsSeriesData,
+} from "@/store/simulationSelector";
+import { useSelector } from "react-redux";
 
 type ResultParametersProps = {
   simulationId: number;
@@ -22,6 +26,9 @@ export function ResultParameters({ simulationId }: ResultParametersProps) {
   const [selectedParameter, setSelectedParameter] = useState<keyof Parameters>("edt");
   const { data: results, isLoading, error } = useGetSimulationResultQuery(simulationId);
   const { data: simulation } = useGetSimulationByIdQuery(simulationId);
+
+  const seriesData = useSelector(selectCompareResultsSeriesData(selectedParameter));
+  const compareResultIds = useSelector(selectCompareSimulationIds);
 
   if (isLoading) return <Loading className="h-container justify-center" />;
 
@@ -42,15 +49,8 @@ export function ResultParameters({ simulationId }: ResultParametersProps) {
   }
 
   const result = results[0];
-  const paramertes = result.responses[0].parameters;
-  const keys = Object.keys(paramertes) as (keyof Parameters)[];
-  const availableFreqs = result.frequencies;
-
-  const seriesData = FREQUENCY_BANDS.map((freq) => {
-    const indexOfVal = availableFreqs.indexOf(freq);
-    const val = paramertes[selectedParameter][indexOfVal];
-    return val ? roundTo2(val) : null;
-  });
+  const parameters = result.responses[0].parameters;
+  const keys = Object.keys(parameters) as (keyof Parameters)[];
 
   return (
     <div className="h-full w-full p-8 space-y-4">
@@ -73,7 +73,7 @@ export function ResultParameters({ simulationId }: ResultParametersProps) {
           </SelectContent>
         </Select>
 
-        <DownloadResult simulationId={+simulationId} mode="parameters" />
+        <DownloadResult simulationIds={compareResultIds} mode="parameters" />
       </div>
 
       <div className="border border-black p-2 rounded-sm">
@@ -105,13 +105,7 @@ export function ResultParameters({ simulationId }: ResultParametersProps) {
               },
             },
           }}
-          series={[
-            // TODO: if comparison panel is added, series data should come from comparison state
-            {
-              name: simulation.name,
-              data: seriesData,
-            },
-          ]}
+          series={seriesData}
           height={500}
         />
       </div>
