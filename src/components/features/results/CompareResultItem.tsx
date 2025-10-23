@@ -22,6 +22,7 @@ import { downloadFile, formatFilename } from "@/helpers/file";
 import { toast } from "sonner";
 import { useState } from "react";
 import { useGetModelQuery } from "@/store/modelApi";
+import { ChooseModel } from "./ChooseModel";
 
 interface CompareResultItemProps {
   id: string;
@@ -136,7 +137,19 @@ export function CompareResultItem({
           <p className=" truncate">
             {model.projectName} {">"} {model.modelName}
           </p>
-          <p className="shrink underline">choose...</p>
+          <ChooseModel
+            onModelSelect={(model) => {
+              dispatch(
+                updateCompareResult({
+                  modelId: model.id,
+                  sourceId: null,
+                  receiverId: null,
+                  simulationId: null,
+                }),
+              );
+            }}
+            trigger={<p className="shrink underline">choose...</p>}
+          />
         </div>
       )}
 
