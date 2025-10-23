@@ -10,6 +10,7 @@ import {
   clearAllAssignments,
   setAssignments,
 } from "@/store/materialAssignmentSlice";
+import { setHighlightedElement } from "@/store/tabSlice";
 import { toast } from "sonner";
 import {
   Select,
@@ -36,6 +37,7 @@ export function SurfacesTab() {
   );
   const activeSimulation = useSelector((state: RootState) => state.simulation.activeSimulation);
   const currentModelId = useSelector((state: RootState) => state.model.currentModelId);
+  const highlightedElement = useSelector((state: RootState) => state.tab.highlightedElement);
   const { data: simulation, error: simulationError } = useGetSimulationByIdQuery(
     activeSimulation?.id ?? 0,
     {
@@ -55,6 +57,16 @@ export function SurfacesTab() {
       toast.error("Cannot load simulation data. Material assignments will not be saved.");
     }
   }, [simulationError]);
+
+  // Clear highlighting after 3 seconds
+  useEffect(() => {
+    if (highlightedElement) {
+      const timer = setTimeout(() => {
+        dispatch(setHighlightedElement(null));
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [highlightedElement, dispatch]);
 
   const debounceTimeoutRef = useRef<NodeJS.Timeout>(null);
 
@@ -183,7 +195,13 @@ export function SurfacesTab() {
       {surfaces.length === 0 ? (
         <div className="text-gray-400 text-sm italic">No model loaded or no surfaces found</div>
       ) : (
-        <div className="overflow-hidden">
+        <div
+          className={`overflow-hidden transition-all duration-500 ${
+            highlightedElement === "material-assignment"
+              ? "ring-2 ring-yellow-400 shadow-lg animate-pulse bg-yellow-500/10 rounded-lg p-2"
+              : ""
+          }`}
+        >
           <table className="w-full table-fixed">
             <thead>
               <tr>

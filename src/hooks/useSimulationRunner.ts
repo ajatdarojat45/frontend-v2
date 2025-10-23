@@ -103,7 +103,7 @@ export function useSimulationRunner() {
       await runSimulation({ simulationId: activeSimulation.id }).unwrap();
       toast.success("Simulation started!");
 
-      pollIntervalRef.current = setInterval(pollProgress, 3000);
+      pollIntervalRef.current = setInterval(pollProgress, 1000);
 
       pollProgress();
     } catch (error) {

@@ -12,7 +12,7 @@ const buttonVariants = cva(
         default:
           "bg-gradient-to-r from-choras-primary to-choras-secondary text-white font-inter font-bold",
         destructive:
-          "bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
+          "bg-red-400 text-white hover:bg-red-400/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
         outline:
           "border border-choras-primary bg-transparent text-choras-primary shadow-xs hover:bg-choras-primary/10 hover:text-choras-primary dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
         outlineSecondary:
