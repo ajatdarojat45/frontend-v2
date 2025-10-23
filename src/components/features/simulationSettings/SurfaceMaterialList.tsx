@@ -13,6 +13,7 @@ import { EllipsisVertical, Search } from "lucide-react";
 import { useState } from "react";
 import { useGetMaterialsQuery } from "@/store/materialsApi";
 import type { Material } from "@/types/material";
+import { CreateMaterialDialog } from "./CreateMaterialDialog";
 
 export function SurfaceMaterialList() {
   const [open, setOpen] = useState(false);
@@ -23,6 +24,7 @@ export function SurfaceMaterialList() {
   const filteredMaterials = materials.filter((material) =>
     material.name.toLowerCase().includes(searchQuery.toLowerCase()),
   );
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -33,7 +35,10 @@ export function SurfaceMaterialList() {
       <DialogContent className="sm:max-w-3xl max-w-lg border border-transparent bg-gradient-to-r from-choras-primary from-50% to-choras-secondary bg-clip-border p-0.5">
         <div className="bg-white p-6 rounded-lg space-y-6">
           <DialogHeader>
-            <DialogTitle className="text-xl text-choras-primary">Materials</DialogTitle>
+            <div className="flex justify-between items-center mt-4">
+              <DialogTitle className="text-xl text-choras-primary">Materials</DialogTitle>
+              <CreateMaterialDialog />
+            </div>
             <DialogDescription>List of Material Available</DialogDescription>
           </DialogHeader>
 
