@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.19](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.18...v0.0.19) (2025-10-23)
+
+### Features
+
+- create new material components ([79205fc](https://github.com/ajatdarojat45/frontend-v2/commit/79205fc9fd58e3fd9a0a6bed2c60c95240f75b18))
+- model view option ([bbd10af](https://github.com/ajatdarojat45/frontend-v2/commit/bbd10af932caf0b52de923be8e870292169ffb02))
+- surface visibility toggle ([eb75104](https://github.com/ajatdarojat45/frontend-v2/commit/eb7510432bd1d808ec0905c23eaddc5c29cda6a9))
+
+### [0.0.18](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.17...v0.0.18) (2025-10-23)
+
 ### [0.0.17](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.16...v0.0.17) (2025-10-23)
 
 ### Features
