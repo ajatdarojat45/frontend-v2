@@ -19,13 +19,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import type { SurfaceInfo } from "@/types/material";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, Eye, EyeOff } from "lucide-react";
 import { SurfaceMaterialList } from "./SurfaceMaterialList";
 
 export function SurfacesTab() {
   const dispatch = useDispatch();
   const surfaces = useSurfaces();
   const [showIndividualAssignments, setShowIndividualAssignments] = useState(false);
+  const [hiddenSurfaces, setHiddenSurfaces] = useState<Set<string>>(new Set());
   const {
     data: materials = [],
     isLoading: materialsLoading,
@@ -173,6 +174,26 @@ export function SurfacesTab() {
     return "default";
   };
 
+  const toggleSurfaceVisibility = (surfaceId: string) => {
+    setHiddenSurfaces((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(surfaceId)) {
+        newSet.delete(surfaceId);
+      } else {
+        newSet.add(surfaceId);
+      }
+      return newSet;
+    });
+  };
+
+  useEffect(() => {
+    surfaces.forEach((surface) => {
+      if (surface.mesh) {
+        surface.mesh.visible = !hiddenSurfaces.has(surface.id);
+      }
+    });
+  }, [surfaces, hiddenSurfaces]);
+
   return (
     <div className="text-white">
       <div className="mb-4 flex justify-between items-center">
@@ -187,10 +208,10 @@ export function SurfacesTab() {
           <table className="w-full table-fixed">
             <thead>
               <tr>
-                <th className="px-3 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider w-1/2">
+                <th className="px-3 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider w-1/3">
                   Surface
                 </th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider w-1/2">
+                <th className="px-3 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider w-1/3">
                   Material
                 </th>
               </tr>
@@ -259,9 +280,23 @@ export function SurfacesTab() {
                       className="hover:bg-choras-dark/90 border-t border-gray-700"
                     >
                       <td className="px-3 py-2 text-sm w-1/3">
-                        <div className="font-medium">{getDisplayName(surface, index)}</div>
+                        <div className="flex items-center gap-2">
+                          <div
+                            onClick={() => toggleSurfaceVisibility(surfaceKey)}
+                            className="cursor-pointer text-white hover:text-gray-300 transition-colors flex-shrink-0"
+                          >
+                            {hiddenSurfaces.has(surfaceKey) ? (
+                              <EyeOff className="h-4 w-4" />
+                            ) : (
+                              <Eye className="h-4 w-4" />
+                            )}
+                          </div>
+                          <div className="font-medium truncate">
+                            {getDisplayName(surface, index)}
+                          </div>
+                        </div>
                       </td>
-                      <td className="px-3 py-2 w-2/3">
+                      <td className="px-3 py-2 w-1/3">
                         <Select
                           value={assignedMaterialId?.toString() || "default"}
                           onValueChange={(value) => handleMaterialAssignment(surfaceKey, value)}
