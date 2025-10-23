@@ -15,10 +15,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useGetProjectsSimulationsQuery } from "@/store/projectApi";
-import type { ProjectSimulation } from "@/types/project";
 
 interface ChooseModelProps {
-  onModelSelect: (modelId: number, projectSimulation: ProjectSimulation) => void;
+  onModelSelect: (modelId: number) => void;
   trigger: React.ReactElement;
 }
 
@@ -58,14 +57,20 @@ export function ChooseModel({ onModelSelect, trigger }: ChooseModelProps) {
   }
 
   // Get project simulations for selected group - only show projects that have simulations
-  const projectsInGroup =
-    selectedGroup === "Ungrouped"
-      ? projectsSimulations.filter((ps) => !ps.group && ps.simulations.length > 0)
-      : projectsSimulations.filter((ps) => ps.group === selectedGroup && ps.simulations.length > 0);
+  const projectsInGroup = Array.from(
+    new Map(
+      (selectedGroup === "Ungrouped"
+        ? projectsSimulations.filter((ps) => !ps.group && ps.simulations.length > 0)
+        : projectsSimulations.filter(
+            (ps) => ps.group === selectedGroup && ps.simulations.length > 0,
+          )
+      ).map((ps) => [ps.projectId, { id: ps.projectId, name: ps.projectName }]),
+    ).values(),
+  );
 
-  // Get selected project simulation
-  const selectedProjectSimulation = projectsSimulations.find(
-    (ps) => ps.projectId.toString() === selectedProjectId,
+  // Get all models for the selected project
+  const modelsInProject = projectsSimulations.filter(
+    (ps) => ps.projectId.toString() === selectedProjectId.toString() && ps.simulations.length > 0,
   );
 
   const handleGroupChange = (group: string) => {
@@ -84,8 +89,8 @@ export function ChooseModel({ onModelSelect, trigger }: ChooseModelProps) {
   };
 
   const handleConfirm = () => {
-    if (selectedProjectSimulation && selectedModelId) {
-      onModelSelect(parseInt(selectedModelId), selectedProjectSimulation);
+    if (selectedModelId) {
+      onModelSelect(parseInt(selectedModelId));
       handleOpenChange(false);
     }
   };
@@ -135,8 +140,8 @@ export function ChooseModel({ onModelSelect, trigger }: ChooseModelProps) {
                 </SelectTrigger>
                 <SelectContent>
                   {projectsInGroup.map((projectSim) => (
-                    <SelectItem key={projectSim.projectId} value={projectSim.projectId.toString()}>
-                      {projectSim.projectName} (Model: {projectSim.modelName})
+                    <SelectItem key={projectSim.id} value={projectSim.id.toString()}>
+                      {projectSim.name}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -144,8 +149,8 @@ export function ChooseModel({ onModelSelect, trigger }: ChooseModelProps) {
             </div>
           )}
 
-          {/* Model Select - Only show if project is selected */}
-          {selectedProjectId && selectedProjectSimulation && (
+          {/* Model Select - Only show if project is selected and has models */}
+          {selectedProjectId && modelsInProject.length > 0 && (
             <div className="space-y-2">
               <label className="text-sm font-medium ">Model</label>
               <Select value={selectedModelId} onValueChange={handleModelChange}>
@@ -153,12 +158,11 @@ export function ChooseModel({ onModelSelect, trigger }: ChooseModelProps) {
                   <SelectValue placeholder="Select a model" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem
-                    key={selectedProjectSimulation.modelId}
-                    value={selectedProjectSimulation.modelId.toString()}
-                  >
-                    {selectedProjectSimulation.modelName}
-                  </SelectItem>
+                  {modelsInProject.map((modelSim) => (
+                    <SelectItem key={modelSim.modelId} value={modelSim.modelId.toString()}>
+                      {modelSim.modelName}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>

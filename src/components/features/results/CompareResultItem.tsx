@@ -138,15 +138,11 @@ export function CompareResultItem({
             {model.projectName} {">"} {model.modelName}
           </p>
           <ChooseModel
-            onModelSelect={(model) => {
-              dispatch(
-                updateCompareResult({
-                  modelId: model.id,
-                  sourceId: null,
-                  receiverId: null,
-                  simulationId: null,
-                }),
-              );
+            onModelSelect={(modelId) => {
+              handleUpdate("modelId", modelId);
+              handleUpdate("simulationId", null);
+              handleUpdate("sourceId", null);
+              handleUpdate("receiverId", null);
             }}
             trigger={<p className="shrink underline">choose...</p>}
           />
@@ -160,7 +156,7 @@ export function CompareResultItem({
           <Select value={simulationId?.toString()} onValueChange={handleSimulationIdChange}>
             <SelectTrigger className="bg-choras-dark text-white border-choras-gray [&>svg]:text-choras-gray w-full">
               <SelectValue placeholder="Select simulation">
-                {selectedSimulation ? selectedSimulation.name : "Simulation 1"}
+                {selectedSimulation ? selectedSimulation.name : "Select simulation"}
               </SelectValue>
             </SelectTrigger>
             <SelectContent className="bg-choras-dark border-choras-gray">
