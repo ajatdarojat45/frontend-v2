@@ -5,6 +5,8 @@ import {
   useLazyGetSimulationRunsQuery,
   useCancelSimulationMutation,
   usePatchMeshesMutation,
+  useLazyGetSimulationResultQuery,
+  useLazyGetSimulationsByModelIdQuery,
 } from "@/store/simulationApi";
 import { toast } from "sonner";
 import type { RootState } from "@/store";
@@ -21,6 +23,8 @@ export function useSimulationRunner() {
   const [getSimulationRuns] = useLazyGetSimulationRunsQuery();
   const [cancelSimulation] = useCancelSimulationMutation();
   const [patchMeshes] = usePatchMeshesMutation();
+  const [getSimulationResult] = useLazyGetSimulationResultQuery();
+  const [getSimulationsByModelId] = useLazyGetSimulationsByModelIdQuery();
 
   const stopPolling = useCallback(() => {
     if (pollIntervalRef.current) {
@@ -48,7 +52,7 @@ export function useSimulationRunner() {
   }, [activeSimulation?.id, cancelSimulation, stopPolling]);
 
   const pollProgress = useCallback(async () => {
-    if (!activeSimulation?.id) return;
+    if (!activeSimulation?.id || !currentModelId) return;
 
     try {
       const { data: simulationRuns } = await getSimulationRuns();
@@ -63,6 +67,8 @@ export function useSimulationRunner() {
             setIsRunning(false);
             stopPolling();
             toast.success("Simulation completed successfully!");
+            getSimulationResult(activeSimulation.id);
+            getSimulationsByModelId(currentModelId);
           } else if (currentRun.status === "Error" || currentRun.status === "Failed") {
             setIsRunning(false);
             stopPolling();
@@ -73,7 +79,14 @@ export function useSimulationRunner() {
     } catch (error) {
       console.error("Failed to poll simulation progress:", error);
     }
-  }, [activeSimulation?.id, getSimulationRuns, stopPolling]);
+  }, [
+    activeSimulation?.id,
+    currentModelId,
+    getSimulationRuns,
+    stopPolling,
+    getSimulationResult,
+    getSimulationsByModelId,
+  ]);
 
   const startSimulation = useCallback(async () => {
     if (!activeSimulation?.id || !currentModelId) {
