@@ -11,8 +11,9 @@ import { Loading } from "@/components/ui/loading";
 
 type ImpulseResponsePlayerProps = {
   simulationId: number;
+  color: string;
 };
-export function ImpulseResponsePlayer({ simulationId }: ImpulseResponsePlayerProps) {
+export function ImpulseResponsePlayer({ simulationId, color }: ImpulseResponsePlayerProps) {
   const {
     data: impulseResponse,
     isLoading,
@@ -50,7 +51,7 @@ export function ImpulseResponsePlayer({ simulationId }: ImpulseResponsePlayerPro
     <div className="w-full flex flex-col gap-4">
       <WavesurferPlayer
         height={100}
-        waveColor="darkseagreen"
+        waveColor={color}
         url={audioUrl}
         onReady={(ws) => (wsRef.current = ws)}
       />

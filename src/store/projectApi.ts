@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import type { Project } from "@/types/project";
+import type { Project, ProjectSimulation } from "@/types/project";
 
 // Define a service using a base URL and expected endpoints
 export const projectApi = createApi({
@@ -88,6 +88,11 @@ export const projectApi = createApi({
       // Invalidates all Project-type queries providing the `LIST` id - after all, depending of the sort order,
       invalidatesTags: [{ type: "Projects", id: "LIST" }],
     }),
+
+    // Get all simulation runs
+    getProjectsSimulations: build.query<ProjectSimulation[], void>({
+      query: () => `/projects/simulations`,
+    }),
   }),
 });
 
@@ -101,4 +106,5 @@ export const {
   useDeleteProjectMutation,
   useUpdateProjectsByGroupMutation,
   useDeleteProjectsByGroupMutation,
+  useGetProjectsSimulationsQuery,
 } = projectApi;

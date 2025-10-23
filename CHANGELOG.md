@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.17](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.16...v0.0.17) (2025-10-23)
+
+### Features
+
+- add lazy loading for simulation results and enhance result parameters selector for improved data handling ([6e2be43](https://github.com/ajatdarojat45/frontend-v2/commit/6e2be43f519856d5d3bcb6023cc42c942f661a1b))
+- add modelId to compare results and update related components ([9d747df](https://github.com/ajatdarojat45/frontend-v2/commit/9d747dfcf8b2377fa8545abfa8e98b95b466b626))
+- enhance CompareResult and CompareResultItem components with improved result handling and simulation selection ([0b68b31](https://github.com/ajatdarojat45/frontend-v2/commit/0b68b312dcca36faa90059374d13abd2a87b6709))
+- enhance EditorNav with simulation result query and conditional rendering ([70ce600](https://github.com/ajatdarojat45/frontend-v2/commit/70ce6006ef2106cb068b51503439ad9fc223dcb4))
+- implement ChooseModel component for selecting models in comparison results ([e2a5d58](https://github.com/ajatdarojat45/frontend-v2/commit/e2a5d58e0ee58d1ec1ffd124d229eb70afc300b4))
+- implement CompareResult and CompareResultItem components for managing and displaying comparison results ([75c3c8a](https://github.com/ajatdarojat45/frontend-v2/commit/75c3c8a589b08427a583dd24f3504d930e0c6629))
+- refactor CompareResult and CompareResultItem components to use centralized color constants and improve color handling in ImpulseResponsePlayer ([653cf55](https://github.com/ajatdarojat45/frontend-v2/commit/653cf5503cbb5bf1eb16c4e8f6f977672178e2c5))
+- refactor simulation result handling to use selectors for improved state management and enhance component integration ([7c9cadb](https://github.com/ajatdarojat45/frontend-v2/commit/7c9cadb9196e4395716fc4333d834cba5fa30d38))
+- update CompareResult and CompareResultItem components to use isCurrent prop for improved simulation handling and UI interaction ([146ee15](https://github.com/ajatdarojat45/frontend-v2/commit/146ee154c795fb6e0717c4692129150bb53804a6))
+
+### Bug Fixes
+
+- always make text orient towards user ([387b216](https://github.com/ajatdarojat45/frontend-v2/commit/387b2167764db53e77a63ced1be47d955b38ad70))
+- change run simulation polling rate to 1 seconds ([81b94e1](https://github.com/ajatdarojat45/frontend-v2/commit/81b94e1e5ec4e11915d48fd5defb80c52c63e71d))
+- Results tab not showing up once run simulation completed ([8cd2b74](https://github.com/ajatdarojat45/frontend-v2/commit/8cd2b7441abcc78ec3d98152b3faff6a3ea7d2fc))
+- validation run simulation button when something is not valid ([6aa22b0](https://github.com/ajatdarojat45/frontend-v2/commit/6aa22b0024a9367c1937d4e91647a4b449b2f3d0))
+
 ### [0.0.16](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.15...v0.0.16) (2025-10-20)
 
 ### Features
