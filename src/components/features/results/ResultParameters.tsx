@@ -22,6 +22,21 @@ import { useSelector } from "react-redux";
 type ResultParametersProps = {
   simulationId: number;
 };
+
+const getParameterLabel = (key: keyof Parameters) => {
+  const units = {
+    c80: "dB",
+    d50: "%",
+    edt: "s",
+    spl_t0_freq: "dB",
+    t20: "s",
+    t30: "s",
+    ts: "s",
+  } as const;
+
+  return `${key.toUpperCase()} (${units[key] || ""})`;
+};
+
 export function ResultParameters({ simulationId }: ResultParametersProps) {
   const [selectedParameter, setSelectedParameter] = useState<keyof Parameters>("edt");
   const { data: results, isLoading, error } = useGetSimulationResultQuery(simulationId);
@@ -91,7 +106,7 @@ export function ResultParameters({ simulationId }: ResultParametersProps) {
               title: { text: "Center Frequency (Hz)" },
             },
             yaxis: {
-              title: { text: selectedParameter.toUpperCase() },
+              title: { text: getParameterLabel(selectedParameter) },
             },
             grid: {
               show: true,
