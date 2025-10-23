@@ -10,6 +10,7 @@ import {
 } from "@/store/simulationApi";
 import { toast } from "sonner";
 import type { RootState } from "@/store";
+import { useLazyGetImpulseResponseBySimulationIdQuery } from "@/store/auralizationApi";
 
 export function useSimulationRunner() {
   const [isRunning, setIsRunning] = useState(false);
@@ -25,6 +26,7 @@ export function useSimulationRunner() {
   const [patchMeshes] = usePatchMeshesMutation();
   const [getSimulationResult] = useLazyGetSimulationResultQuery();
   const [getSimulationsByModelId] = useLazyGetSimulationsByModelIdQuery();
+  const [getImpulseResponseBySimulationId] = useLazyGetImpulseResponseBySimulationIdQuery();
 
   const stopPolling = useCallback(() => {
     if (pollIntervalRef.current) {
@@ -69,6 +71,7 @@ export function useSimulationRunner() {
             toast.success("Simulation completed successfully!");
             getSimulationResult(activeSimulation.id);
             getSimulationsByModelId(currentModelId);
+            getImpulseResponseBySimulationId(activeSimulation.id);
           } else if (currentRun.status === "Error" || currentRun.status === "Failed") {
             setIsRunning(false);
             stopPolling();
@@ -86,6 +89,7 @@ export function useSimulationRunner() {
     stopPolling,
     getSimulationResult,
     getSimulationsByModelId,
+    getImpulseResponseBySimulationId,
   ]);
 
   const startSimulation = useCallback(async () => {

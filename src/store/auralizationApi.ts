@@ -48,5 +48,6 @@ export const auralizationApi = createApi({
 export const {
   useGetImpulseResponseBySimulationIdQuery,
   useGetAuralizationsBySimulationIdQuery,
+  useLazyGetImpulseResponseBySimulationIdQuery,
   useUploadAudioFileMutation,
 } = auralizationApi;
