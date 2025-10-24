@@ -74,7 +74,7 @@ export function HomePage() {
           <div key={groupProject.group}>
             <div className="flex items-center">
               <h1 className="inline text-lg font-inter font-light border-b text-choras-dark border-b-choras-dark">
-                {groupProject.group === "NONE" ? "Ungrouped" : groupProject.group}
+                {groupProject.group === "NONE" ? "No group" : groupProject.group}
               </h1>
               <DeleteGroup
                 projectsCount={groupProject.projects.length}
