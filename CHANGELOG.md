@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.20](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.19...v0.0.20) (2025-10-24)
+
+### Features
+
+- add download functionality for convolved sound ([6d0b985](https://github.com/ajatdarojat45/frontend-v2/commit/6d0b985e57ce4bba1334b4817bb74bff773a79d7))
+
 ### [0.0.19](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.18...v0.0.19) (2025-10-23)
 
 ### Features
