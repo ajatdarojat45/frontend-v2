@@ -110,7 +110,7 @@ export function HomePage() {
   }
 
   return (
-    <AppLayout title="Projects" right={<ProjectForm />} sidebar={<WelcomeSidebar />}>
+    <AppLayout title="Projects" sidebar={<WelcomeSidebar />}>
       {content}
     </AppLayout>
   );
