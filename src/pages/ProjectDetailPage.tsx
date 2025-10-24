@@ -128,7 +128,6 @@ export function ProjectDetailPage() {
         )
       }
       sidebar={<WelcomeSidebar />}
-      right={<UploadModel projectId={id} onSuccess={refetch} />}
     >
       {content}
     </AppLayout>
