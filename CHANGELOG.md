@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.23](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.22...v0.0.23) (2025-10-25)
+
+### Features
+
+- update label text in DownloadResult to uppercase ([a42235a](https://github.com/ajatdarojat45/frontend-v2/commit/a42235a65d07558ecb0ec8aeabacfb3eaa453816))
+
 ### [0.0.22](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.21...v0.0.22) (2025-10-25)
 
 ### Features
