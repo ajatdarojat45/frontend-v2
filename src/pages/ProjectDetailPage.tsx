@@ -12,12 +12,46 @@ import modelImg from "@/assets/model.png";
 import { formatDateLong } from "@/helpers/datetime";
 import uploadIcon from "@/assets/upload-icon.png";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
+import { SortPicker } from "@/components/features/SortPicker";
+import { useEffect, useState } from "react";
+import type { Model } from "@/types/model";
 
 export function ProjectDetailPage() {
   const { id } = useParams() as { id: string };
   const { data: project, isLoading, error, refetch } = useGetProjectQuery(id);
+  const [sort, setSort] = useState<string>("ASC");
+  const [models, setModels] = useState<Model[]>();
+
+  // Reusable sorting function for models
+  const sortModels = (models: Model[], sortOption: string) => {
+    const sortedModels = [...models];
+
+    switch (sortOption) {
+      case "ASC":
+        return sortedModels.sort((a, b) => a.name.localeCompare(b.name));
+      case "DESC":
+        return sortedModels.sort((a, b) => b.name.localeCompare(a.name));
+      case "CREATION_DATE":
+        return sortedModels.sort(
+          (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+        );
+      case "LAST_MODIFIED":
+        return sortedModels.sort(
+          (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
+        );
+      default:
+        return sortedModels.sort((a, b) => a.name.localeCompare(b.name));
+    }
+  };
 
   let content: React.ReactNode = null;
+
+  useEffect(() => {
+    if (project?.models) {
+      const sortedModels = sortModels(project.models, sort);
+      setModels(sortedModels);
+    }
+  }, [project, sort]);
 
   if (error) {
     content = (
@@ -39,15 +73,24 @@ export function ProjectDetailPage() {
   } else {
     content = (
       <div className="p-6 space-y-8">
-        {/* Back to projects link */}
-        <Link to="/" className="flex font-inter font-bold text-sm items-center gap-2 text-black/75">
-          <ChevronLeftIcon className="h-4 w-4 text-black/75" />
-          back to projects
-        </Link>
+        {/* Back to projects link and Sort Picker */}
+        <div className="flex justify-between items-center">
+          <Link
+            to="/"
+            className="flex font-inter font-bold text-sm items-center gap-2 text-black/75"
+          >
+            <ChevronLeftIcon className="h-4 w-4 text-black/75" />
+            back to projects
+          </Link>
+          <SortPicker onValueChange={(value) => setSort(value)} value={sort} />
+        </div>
 
         {/* Project Info Section */}
         <div className="flex justify-between items-start font-inter">
           <div className="space-y-6">
+            <h1 className="text-2xl text-choras-secondary font-inter font-bold mb-2">
+              {project.name}
+            </h1>
             <p className="text-xs text-black/50">
               {project.description || "Project description not available"}
             </p>
@@ -88,9 +131,9 @@ export function ProjectDetailPage() {
 
         {/* Models Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {project.models &&
-            project.models.length > 0 &&
-            project.models.map((model) => (
+          {models &&
+            models.length > 0 &&
+            models.map((model) => (
               <Link key={model.id} to={`/editor/${model.id}`}>
                 <ModelCard key={model.id} model={model} projectId={id} />
               </Link>
