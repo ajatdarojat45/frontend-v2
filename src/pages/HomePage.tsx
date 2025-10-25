@@ -14,12 +14,38 @@ import { WelcomeSidebar } from "@/components/features/WelcomeSidebar";
 import { GroupPicker } from "@/components/features/GroupPicker";
 import { DeleteGroup } from "@/components/features/DeleteGroup";
 import { syncGroupsFromProjects } from "@/store/projectSlice";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { SortPicker } from "@/components/features/SortPicker";
+import type { GroupProject, Project } from "@/types/project";
 
 export function HomePage() {
   const { data: projects, isLoading, error } = useGetProjectsQuery();
   const groupProjects = useSelector(selectProjectsByActiveGroup);
   const dispatch = useDispatch();
+  const [sort, setSort] = useState<string>("ASC");
+  const [groupProjectList, setGroupProjectList] = useState<GroupProject[]>([]);
+
+  // Reusable sorting function
+  const sortProjects = (projects: Project[], sortOption: string) => {
+    const sortedProjects = [...projects];
+
+    switch (sortOption) {
+      case "ASC":
+        return sortedProjects.sort((a, b) => a.name.localeCompare(b.name));
+      case "DESC":
+        return sortedProjects.sort((a, b) => b.name.localeCompare(a.name));
+      case "CREATION_DATE":
+        return sortedProjects.sort(
+          (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+        );
+      case "LAST_MODIFIED":
+        return sortedProjects.sort(
+          (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
+        );
+      default:
+        return sortedProjects.sort((a, b) => a.name.localeCompare(b.name));
+    }
+  };
 
   // Sync groups from projects to Redux state when projects load
   useEffect(() => {
@@ -31,6 +57,17 @@ export function HomePage() {
       }
     }
   }, [projects, dispatch]);
+
+  useEffect(() => {
+    if (groupProjects) {
+      const sortedGroupProjects = groupProjects.map((groupProject) => ({
+        ...groupProject,
+        projects: sortProjects(groupProject.projects, sort),
+      }));
+
+      setGroupProjectList(sortedGroupProjects);
+    }
+  }, [groupProjects, sort]);
 
   let content: React.ReactNode = null;
 
@@ -53,6 +90,8 @@ export function HomePage() {
     content = (
       <div className="p-6 h-container relative">
         <div className="fixed right-8 top-20">
+          <SortPicker onValueChange={(value) => setSort(value)} value={sort} />
+          <div className="mr-4"></div>
           <GroupPicker />
         </div>
 
@@ -67,10 +106,12 @@ export function HomePage() {
   } else {
     content = (
       <div className="p-6 relative">
-        <div className="fixed right-8 top-20">
+        <div className="flex fixed right-8 top-20">
+          <SortPicker onValueChange={(value) => setSort(value)} value={sort} />
+          <div className="mr-4"></div>
           <GroupPicker />
         </div>
-        {groupProjects.map((groupProject) => (
+        {groupProjectList.map((groupProject) => (
           <div key={groupProject.group}>
             <div className="flex items-center">
               <h1 className="inline text-lg font-inter font-light border-b text-choras-dark border-b-choras-dark">
