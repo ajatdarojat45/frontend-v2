@@ -11,7 +11,6 @@ import { useParams, Link } from "react-router";
 import modelImg from "@/assets/model.png";
 import { formatDateLong } from "@/helpers/datetime";
 import uploadIcon from "@/assets/upload-icon.png";
-import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { SortPicker } from "@/components/features/SortPicker";
 import { useEffect, useState } from "react";
 import type { Model } from "@/types/model";
@@ -159,19 +158,7 @@ export function ProjectDetailPage() {
   }
 
   return (
-    <AppLayout
-      title={
-        project && (
-          <Breadcrumb
-            items={[
-              { label: project.group || "Ungrouped", href: "/" },
-              { label: project.name, isActive: true },
-            ]}
-          />
-        )
-      }
-      sidebar={<WelcomeSidebar />}
-    >
+    <AppLayout title={"Models"} sidebar={<WelcomeSidebar />}>
       {content}
     </AppLayout>
   );
