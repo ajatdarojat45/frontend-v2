@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.22](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.21...v0.0.22) (2025-10-25)
+
+### Features
+
+- add choras logo SVG files for color and white variants ([ee4cddd](https://github.com/ajatdarojat45/frontend-v2/commit/ee4cddd1b7a1f74a42c806eb6f5bc2b749ca8aa0))
+- add text truncation for breadcrumb items and improve accessibility with title attributes ([0f433aa](https://github.com/ajatdarojat45/frontend-v2/commit/0f433aa38f550e8120e075adbdfd17a7d4b8856f))
+- remove Breadcrumb component from ProjectDetailPage title ([434ce62](https://github.com/ajatdarojat45/frontend-v2/commit/434ce6235359bce485ec716cbd0d885912d0c438))
+- remove projectTag from Breadcrumb in EditorPage ([0ed14cb](https://github.com/ajatdarojat45/frontend-v2/commit/0ed14cb09e639e42b5487b4475cf64632cd4e95e))
+- remove projectTag from Breadcrumb in ResultPage ([11ad1ac](https://github.com/ajatdarojat45/frontend-v2/commit/11ad1aca49a92fbb161697af100faf527e114b07))
+- update AppLayout header to use logo images instead of text ([45b8b94](https://github.com/ajatdarojat45/frontend-v2/commit/45b8b949318595643da122702acd6f4e6a2fe174))
+
 ### [0.0.21](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.20...v0.0.21) (2025-10-25)
 
 ### Features
