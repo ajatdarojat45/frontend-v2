@@ -230,7 +230,7 @@ export function DownloadResult({ simulationIds, mode, triggerLabel }: DownloadRe
                     }
                   />
                   <Label htmlFor={key} className="text-sm">
-                    {key}
+                    {key.toUpperCase()}
                   </Label>
                 </div>
               ))}
