@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.21](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.20...v0.0.21) (2025-10-25)
+
+### Features
+
+- add sorting functionality to HomePage with SortPicker component ([7bf235a](https://github.com/ajatdarojat45/frontend-v2/commit/7bf235ad9d7e32eaed4313d4be9f990e86513f76))
+- add SortPicker component for sorting options ([c07c322](https://github.com/ajatdarojat45/frontend-v2/commit/c07c3224b2f90298b8e72df996c1f03415c215ac))
+- integrate SortPicker for model sorting in ProjectDetailPage ([d4d5827](https://github.com/ajatdarojat45/frontend-v2/commit/d4d582702c0732859510424b4a411a26f50b7d43))
+
 ### [0.0.20](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.19...v0.0.20) (2025-10-24)
 
 ### Features
