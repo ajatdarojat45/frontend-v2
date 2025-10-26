@@ -4,7 +4,7 @@ import { WelcomeSidebar } from "@/components/features/WelcomeSidebar";
 import { Alert, AlertTitle } from "@/components/ui/alert";
 import { AppLayout } from "@/components/ui/app-layout";
 import { Loading } from "@/components/ui/loading";
-import { useGetProjectQuery } from "@/store/projectApi";
+import { projectApi, useGetProjectQuery } from "@/store/projectApi";
 import { AlertCircleIcon, ChevronLeftIcon } from "lucide-react";
 import type React from "react";
 import { useParams, Link } from "react-router";
@@ -14,12 +14,14 @@ import uploadIcon from "@/assets/upload-icon.png";
 import { SortPicker } from "@/components/features/SortPicker";
 import { useEffect, useState } from "react";
 import type { Model } from "@/types/model";
+import { useDispatch } from "react-redux";
 
 export function ProjectDetailPage() {
   const { id } = useParams() as { id: string };
   const { data: project, isLoading, error, refetch } = useGetProjectQuery(id);
   const [sort, setSort] = useState<string>("ASC");
   const [models, setModels] = useState<Model[]>();
+  const dispatch = useDispatch();
 
   // Reusable sorting function for models
   const sortModels = (models: Model[], sortOption: string) => {
@@ -146,14 +148,17 @@ export function ProjectDetailPage() {
             models.length > 0 &&
             models.map((model) => (
               <Link key={model.id} to={`/editor/${model.id}`}>
-                <ModelCard key={model.id} model={model} projectId={id} />
+                <ModelCard key={model.id} model={model} />
               </Link>
             ))}
 
           {/* Upload Model Card - just visual representation */}
           <UploadModel
             projectId={id}
-            onSuccess={refetch}
+            onSuccess={() => {
+              refetch();
+              dispatch(projectApi.util.invalidateTags([{ type: "Projects" }]));
+            }}
             trigger={
               <div className="min-h-[200px] border border-transparent bg-gradient-to-r from-choras-primary to-choras-secondary bg-clip-border p-0.5 rounded-lg">
                 <div className="bg-[#e7e7e7] min-h-[198px] p-4 rounded-lg h-full flex items-center justify-center">
