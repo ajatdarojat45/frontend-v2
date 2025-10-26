@@ -17,6 +17,7 @@ import { useDeleteProjectMutation } from "@/store/projectApi";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { toast } from "sonner";
 import { ProjectForm } from "./ProjectForm";
+import { formatDateLong } from "@/helpers/datetime";
 
 type ProjectCardProps = {
   project: Project;
@@ -95,9 +96,11 @@ export function ProjectCard(props: ProjectCardProps) {
           </CardAction>
         </CardHeader>
         <CardContent className="flex items-end justify-between">
-          <div className="text-black/50 text-xs">
+          <div className="text-black/50 text-xs space-y-1">
             <p>{project.models.length} model</p>
             <p>{simulationCount} simulations</p>
+            <p>Created: {formatDateLong(project.createdAt)}</p>
+            <p>Updated: {formatDateLong(project.updatedAt)}</p>
           </div>
 
           <div className="invisible sm:visible relative w-36 h-24">

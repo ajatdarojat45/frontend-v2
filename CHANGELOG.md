@@ -2,6 +2,58 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.25](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.24...v0.0.25) (2025-10-26)
+
+### Features
+
+- display creation and update dates in ProjectCard component ([d23f9ce](https://github.com/ajatdarojat45/frontend-v2/commit/d23f9cefeffbb10af5156a74e6fd8ca1754dba74))
+- format and display creation and update dates in ModelCard component ([44adeac](https://github.com/ajatdarojat45/frontend-v2/commit/44adeac39fd75c4eaebaa6030d256ebe7fbf4953))
+- implement sorting persistence by updating SortPicker to use local storage ([8357230](https://github.com/ajatdarojat45/frontend-v2/commit/8357230ea987aab012a5f9edb69857483d76edc9))
+- refactor sorting logic to persist selected sort option in local storage ([6af4223](https://github.com/ajatdarojat45/frontend-v2/commit/6af42231be36e61816d456b153c6aaec79a3e509))
+- update SortPicker options to include 'Newest first' instead of 'Creation date' ([ddbf419](https://github.com/ajatdarojat45/frontend-v2/commit/ddbf419839e5c97a7f6d846d48a5477062ed7435))
+
+### Bug Fixes
+
+- update sorting logic for projects to use 'NEWEST_FIRST' instead of 'CREATION_DATE' ([4f82c16](https://github.com/ajatdarojat45/frontend-v2/commit/4f82c16964a132865199f7887cf6be1152707788))
+- update sorting logic to use 'NEWEST_FIRST' for creation date ([3316c8c](https://github.com/ajatdarojat45/frontend-v2/commit/3316c8c66900d1027a9e3455d906c2f6a9d83f4f))
+
+### [0.0.24](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.23...v0.0.24) (2025-10-25)
+
+### Bug Fixes
+
+- correct left positioning in SidebarTabs and update label text for Sources/Receivers ([8b9749f](https://github.com/ajatdarojat45/frontend-v2/commit/8b9749fe6b36a6ee2af9fd2d96910473a3662a8c))
+
+### [0.0.23](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.22...v0.0.23) (2025-10-25)
+
+### Features
+
+- update label text in DownloadResult to uppercase ([a42235a](https://github.com/ajatdarojat45/frontend-v2/commit/a42235a65d07558ecb0ec8aeabacfb3eaa453816))
+
+### [0.0.22](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.21...v0.0.22) (2025-10-25)
+
+### Features
+
+- add choras logo SVG files for color and white variants ([ee4cddd](https://github.com/ajatdarojat45/frontend-v2/commit/ee4cddd1b7a1f74a42c806eb6f5bc2b749ca8aa0))
+- add text truncation for breadcrumb items and improve accessibility with title attributes ([0f433aa](https://github.com/ajatdarojat45/frontend-v2/commit/0f433aa38f550e8120e075adbdfd17a7d4b8856f))
+- remove Breadcrumb component from ProjectDetailPage title ([434ce62](https://github.com/ajatdarojat45/frontend-v2/commit/434ce6235359bce485ec716cbd0d885912d0c438))
+- remove projectTag from Breadcrumb in EditorPage ([0ed14cb](https://github.com/ajatdarojat45/frontend-v2/commit/0ed14cb09e639e42b5487b4475cf64632cd4e95e))
+- remove projectTag from Breadcrumb in ResultPage ([11ad1ac](https://github.com/ajatdarojat45/frontend-v2/commit/11ad1aca49a92fbb161697af100faf527e114b07))
+- update AppLayout header to use logo images instead of text ([45b8b94](https://github.com/ajatdarojat45/frontend-v2/commit/45b8b949318595643da122702acd6f4e6a2fe174))
+
+### [0.0.21](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.20...v0.0.21) (2025-10-25)
+
+### Features
+
+- add sorting functionality to HomePage with SortPicker component ([7bf235a](https://github.com/ajatdarojat45/frontend-v2/commit/7bf235ad9d7e32eaed4313d4be9f990e86513f76))
+- add SortPicker component for sorting options ([c07c322](https://github.com/ajatdarojat45/frontend-v2/commit/c07c3224b2f90298b8e72df996c1f03415c215ac))
+- integrate SortPicker for model sorting in ProjectDetailPage ([d4d5827](https://github.com/ajatdarojat45/frontend-v2/commit/d4d582702c0732859510424b4a411a26f50b7d43))
+
+### [0.0.20](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.19...v0.0.20) (2025-10-24)
+
+### Features
+
+- add download functionality for convolved sound ([6d0b985](https://github.com/ajatdarojat45/frontend-v2/commit/6d0b985e57ce4bba1334b4817bb74bff773a79d7))
+
 ### [0.0.19](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.18...v0.0.19) (2025-10-23)
 
 ### Features

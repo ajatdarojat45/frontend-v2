@@ -7,12 +7,13 @@ import {
   ItemMedia,
   ItemTitle,
 } from "@/components/ui/item";
-import { AudioLinesIcon, LoaderCircleIcon, PlayIcon } from "lucide-react";
+import { AudioLinesIcon, DownloadIcon, LoaderCircleIcon, PlayIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { http } from "@/libs/http";
 import { useState } from "react";
 import { AudioPlayer } from "react-audio-play";
+import { formatFilename } from "@/helpers/file";
 
 type ConvolvedSoundPlayerProps = {
   auralization: Auralization;
@@ -20,68 +21,101 @@ type ConvolvedSoundPlayerProps = {
 };
 export function ConvolvedSoundPlayer({ auralization, simulationId }: ConvolvedSoundPlayerProps) {
   const [loading, setLoading] = useState(false);
+  const [downloadLoading, setDownloadLoading] = useState(false);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
 
-  console.log(auralization, "<<<");
+  const generateAudio = async () => {
+    // Request audio generation
+    const { data } = await http({
+      method: "POST",
+      url: "/auralizations",
+      data: {
+        audioFileId: auralization.id,
+        simulationId,
+      },
+    });
+
+    // Check if audio generation is completed
+    let audioGenerationCompleted = data.status === "Completed";
+
+    // If not completed, poll the status endpoint until it is completed
+    if (!audioGenerationCompleted) {
+      while (true) {
+        const { data: statusData } = await http({
+          method: "GET",
+          url: `/auralizations/${data.id}/status`,
+        });
+
+        if (statusData.status === "Completed") {
+          audioGenerationCompleted = true;
+          break;
+        }
+
+        if (statusData.status === "Failed") {
+          throw new Error("Audio generation failed");
+        }
+
+        // Wait for a short period before checking the status again
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+      }
+    }
+
+    // Fetch the generated audio file
+    const { data: audioData } = await http({
+      method: "GET",
+      url: `/auralizations/${data.id}/wav`,
+      responseType: "arraybuffer",
+    });
+
+    return audioData;
+  };
 
   const handlePlay = async () => {
     try {
       setLoading(true);
 
-      // Request audio generation
-      const { data } = await http({
-        method: "POST",
-        url: "/auralizations",
-        data: {
-          audioFileId: auralization.id,
-          simulationId,
-        },
-      });
+      // Generate the audio data
+      const audioData = await generateAudio();
 
-      // Check if audio generation is completed
-      let audioGenerationCompleted = data.status === "Completed";
+      // Create a Blob from the audio data and generate a URL for it
+      const audioBlob = new Blob([audioData], { type: "audio/wav" });
+      const audioUrl = URL.createObjectURL(audioBlob);
 
-      // If not completed, poll the status endpoint until it is completed
-      if (!audioGenerationCompleted) {
-        while (true) {
-          const { data: statusData } = await http({
-            method: "GET",
-            url: `/auralizations/${data.id}/status`,
-          });
-
-          if (statusData.status === "Completed") {
-            audioGenerationCompleted = true;
-            break;
-          }
-
-          if (statusData.status === "Failed") {
-            throw new Error("Audio generation failed");
-          }
-
-          // Wait for a short period before checking the status again
-          await new Promise((resolve) => setTimeout(resolve, 1000));
-        }
-      }
-
-      if (audioGenerationCompleted) {
-        // Fetch the generated audio file
-        const { data: audioData } = await http({
-          method: "GET",
-          url: `/auralizations/${data.id}/wav`,
-          responseType: "arraybuffer",
-        });
-
-        // Create a Blob from the audio data and generate a URL for it
-        const audioBlob = new Blob([audioData], { type: "audio/wav" });
-        const audioUrl = URL.createObjectURL(audioBlob);
-
-        setAudioUrl(audioUrl);
-      }
+      setAudioUrl(audioUrl);
     } catch (error) {
       toast.error("Failed to play the convolved sound.");
       console.error("Error playing convolved sound:", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDownload = async () => {
+    try {
+      setDownloadLoading(true);
+
+      // Generate the audio data
+      const audioData = await generateAudio();
+
+      // Create a Blob from the audio data and trigger download
+      const audioBlob = new Blob([audioData], { type: "audio/wav" });
+      const downloadUrl = URL.createObjectURL(audioBlob);
+
+      // Create a temporary link element and trigger download
+      const link = document.createElement("a");
+      link.href = downloadUrl;
+      link.download = formatFilename(`convolved-sound-${auralization.name}.wav`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      // Clean up the object URL
+      URL.revokeObjectURL(downloadUrl);
+    } catch (error) {
+      toast.error("Failed to download the convolved sound.");
+      console.error("Error downloading convolved sound:", error);
+    } finally {
+      setDownloadLoading(false);
     }
   };
 
@@ -111,6 +145,14 @@ export function ConvolvedSoundPlayer({ auralization, simulationId }: ConvolvedSo
           </Button>
         </ItemActions>
       )}
+      <Button onClick={handleDownload} disabled={downloadLoading}>
+        {downloadLoading ? (
+          <LoaderCircleIcon className="size-4 animate-spin" />
+        ) : (
+          <DownloadIcon className="size-4" />
+        )}
+        {downloadLoading ? "Processing..." : "Download"}
+      </Button>
     </Item>
   );
 }
