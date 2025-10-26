@@ -36,13 +36,13 @@ export function AppLayout({ title, right, sidebar, children }: AppLayoutProps) {
           minSize={22.8}
           maxSize={50}
           defaultSize={22.8}
-          className="bg-choras-dark border-t border-t-stone-600 z-40 h-container"
+          className="bg-choras-dark border-t border-t-stone-600 z-40"
         >
           {sidebar}
         </ResizablePanel>
         <ResizableHandle withHandle className="bg-choras-dark" />
-        <ResizablePanel className="flex-1 h-container overflow-y-scroll bg-[#dcdcdc]">
-          {children}
+        <ResizablePanel className="bg-[#dcdcdc]">
+          <div className="h-full overflow-auto">{children}</div>
         </ResizablePanel>
       </ResizablePanelGroup>
     </div>
