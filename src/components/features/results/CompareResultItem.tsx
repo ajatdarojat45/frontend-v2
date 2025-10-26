@@ -25,6 +25,7 @@ import { useGetModelQuery } from "@/store/modelApi";
 import { ChooseModel } from "./ChooseModel";
 
 interface CompareResultItemProps {
+  order: number;
   id: string;
   simulationId: number | null;
   sourceId: string | null;
@@ -35,6 +36,7 @@ interface CompareResultItemProps {
 }
 
 export function CompareResultItem({
+  order,
   id,
   simulationId,
   sourceId,
@@ -156,7 +158,12 @@ export function CompareResultItem({
       )}
 
       <div className="flex items-center">
-        <div className={`w-3 h-3 rounded-full`} style={{ backgroundColor: color }} />
+        <div
+          className="font-inter font-bold text-sm w-6 h-6 flex justify-center items-center shrink-0"
+          style={{ borderColor: color, borderWidth: 1, color }}
+        >
+          {order}
+        </div>
         <span className="text-white text-base font-inter font-normal ml-3">Simulation</span>
         <div className="flex-1 ml-8">
           <Select value={simulationId?.toString()} onValueChange={handleSimulationIdChange}>

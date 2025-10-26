@@ -12,7 +12,18 @@ interface CompareResultProps {
   modelId: number;
 }
 
-const colorVariants = Object.values(COLORS);
+const colorVariants = [
+  COLORS.PRIMARY,
+  COLORS.SECONDARY,
+  COLORS.ACCENT,
+  "lightgreen",
+  "silver",
+  "lightpink",
+  "darkorange",
+  "lightyellow",
+  "tomato",
+  "gold",
+];
 
 export function CompareResult({ modelId }: CompareResultProps) {
   const dispatch = useDispatch();
@@ -44,7 +55,8 @@ export function CompareResult({ modelId }: CompareResultProps) {
   }, [dispatch, compareResults.length, activeSimulation]);
 
   const handleAddResult = () => {
-    const newId = (compareResults.length + 1).toString();
+    const lastId = compareResults.length > 0 ? compareResults[compareResults.length - 1].id : "0";
+    const newId = (parseInt(lastId) + 1).toString();
     const newColor = colorVariants[compareResults.length % colorVariants.length];
     dispatch(
       addCompareResult({
@@ -65,6 +77,7 @@ export function CompareResult({ modelId }: CompareResultProps) {
       {compareResults.map((result, idx) => (
         <CompareResultItem
           key={result.id}
+          order={idx + 1}
           id={result.id}
           simulationId={result.simulationId}
           sourceId={result.sourceId}

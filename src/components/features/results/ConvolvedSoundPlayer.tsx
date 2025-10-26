@@ -14,15 +14,26 @@ import { http } from "@/libs/http";
 import { useState } from "react";
 import { AudioPlayer } from "react-audio-play";
 import { formatFilename } from "@/helpers/file";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useSelector } from "react-redux";
+import type { RootState } from "@/store";
 
 type ConvolvedSoundPlayerProps = {
   auralization: Auralization;
-  simulationId: number;
 };
-export function ConvolvedSoundPlayer({ auralization, simulationId }: ConvolvedSoundPlayerProps) {
+export function ConvolvedSoundPlayer({ auralization }: ConvolvedSoundPlayerProps) {
   const [loading, setLoading] = useState(false);
   const [downloadLoading, setDownloadLoading] = useState(false);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
+  const [simulationId, setSimulationId] = useState<string | null>(null);
+
+  const compareResults = useSelector((state: RootState) => state.simulation.compareResults);
 
   const generateAudio = async () => {
     // Request audio generation
@@ -128,6 +139,32 @@ export function ConvolvedSoundPlayer({ auralization, simulationId }: ConvolvedSo
         <ItemTitle>{auralization.name}</ItemTitle>
         {auralization.description && <ItemDescription>{auralization.description}</ItemDescription>}
       </ItemContent>
+
+      <ItemActions className="justify-end">
+        <Select
+          onValueChange={(val) => {
+            setSimulationId(val);
+            setAudioUrl(null);
+          }}
+        >
+          <SelectTrigger>
+            <SelectValue placeholder="Select result" />
+          </SelectTrigger>
+          <SelectContent>
+            {compareResults.map(
+              (result, idx) =>
+                result.simulationId && (
+                  <SelectItem
+                    key={`convolution-option-${result.id}-${result.simulationId}`}
+                    value={result.simulationId.toString()}
+                  >
+                    Result {idx + 1}
+                  </SelectItem>
+                ),
+            )}
+          </SelectContent>
+        </Select>
+      </ItemActions>
       {audioUrl && (
         <ItemActions className="justify-end">
           <AudioPlayer src={audioUrl} className="!p-0 !h-9 !shadow-none w-96" />
@@ -135,7 +172,7 @@ export function ConvolvedSoundPlayer({ auralization, simulationId }: ConvolvedSo
       )}
       {!audioUrl && (
         <ItemActions>
-          <Button onClick={handlePlay} disabled={loading}>
+          <Button onClick={handlePlay} disabled={loading || !simulationId}>
             {loading ? (
               <LoaderCircleIcon className="size-4 animate-spin" />
             ) : (
@@ -145,7 +182,7 @@ export function ConvolvedSoundPlayer({ auralization, simulationId }: ConvolvedSo
           </Button>
         </ItemActions>
       )}
-      <Button onClick={handleDownload} disabled={downloadLoading}>
+      <Button onClick={handleDownload} disabled={downloadLoading || !simulationId}>
         {downloadLoading ? (
           <LoaderCircleIcon className="size-4 animate-spin" />
         ) : (
