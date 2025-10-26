@@ -52,6 +52,18 @@ export function ProjectDetailPage() {
     }
   }, [project, sort]);
 
+  useEffect(() => {
+    const savedSortOption = localStorage.getItem("modelSortOption");
+    if (savedSortOption) {
+      setSort(savedSortOption);
+    }
+  }, []);
+
+  const handleSetSort = (value: string) => {
+    setSort(value);
+    localStorage.setItem("modelSortOption", value);
+  };
+
   if (error) {
     content = (
       <div className="flex flex-col items-center justify-center h-full min-h-[300px]">
@@ -81,7 +93,7 @@ export function ProjectDetailPage() {
             <ChevronLeftIcon className="h-4 w-4 text-black/75" />
             back to projects
           </Link>
-          <SortPicker onValueChange={(value) => setSort(value)} value={sort} />
+          <SortPicker onValueChange={handleSetSort} value={sort} />
         </div>
 
         {/* Project Info Section */}
