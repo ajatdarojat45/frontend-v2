@@ -40,7 +40,7 @@ export function AppLayout({ title, right, sidebar, children }: AppLayoutProps) {
         >
           {sidebar}
         </ResizablePanel>
-        <ResizableHandle withHandle />
+        <ResizableHandle withHandle className="bg-choras-dark" />
         <ResizablePanel className="flex-1 h-container overflow-y-scroll bg-[#dcdcdc]">
           {children}
         </ResizablePanel>
