@@ -10,9 +10,17 @@ import { ReceiverVisualization } from "./ReceiverVisualization";
 import { RunSimulationButton } from "./RunSimulationButton";
 import type { ViewportCanvasProps } from "@/types/modelViewport";
 import { OrbitControls as OrbitControlsType } from "three-stdlib";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export function ViewportCanvas({ modelUrl, modelId }: ViewportCanvasProps) {
   const [cameraType, setCameraType] = useState<"perspective" | "orthographic">("perspective");
+  const [viewMode, setViewMode] = useState<"solid" | "ghosted" | "wireframe">("solid");
   const { loadModelFromUrl, isModelLoaded, isLoading, error, setActiveModel } = useModelLoader();
   const orbitControlsRef = useRef<OrbitControlsType | null>(null);
 
@@ -52,11 +60,24 @@ export function ViewportCanvas({ modelUrl, modelId }: ViewportCanvasProps) {
           </div>
         )}
 
+        <Select
+          value={viewMode}
+          onValueChange={(value) => setViewMode(value as "solid" | "ghosted" | "wireframe")}
+        >
+          <SelectTrigger className="absolute top-2 right-2 z-10 cursor-pointer text-sm w-30 border-choras-primary text-choras-primary [&>svg]:stroke-choras-primary hover:bg-accent">
+            <SelectValue placeholder="View Mode" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="solid">Solid</SelectItem>
+            <SelectItem value="ghosted">Ghosted</SelectItem>
+            <SelectItem value="wireframe">Wireframe</SelectItem>
+          </SelectContent>
+        </Select>
         <Button
           onClick={toggleCameraType}
           variant="outline"
           size="sm"
-          className="absolute top-2 right-2 z-10 cursor-pointer hover:bg-accent"
+          className="absolute top-14 right-2 z-10 cursor-pointer hover:bg-accent"
         >
           <span className="hidden sm:inline">
             {cameraType === "perspective" ? "Perspective" : "Orthographic"}
@@ -119,11 +140,11 @@ export function ViewportCanvas({ modelUrl, modelId }: ViewportCanvasProps) {
             maxDistance={1000}
             zoomSpeed={0.5}
           />
-          <GizmoHelper alignment="top-right" margin={[60, 100]}>
+          <GizmoHelper alignment="top-right" margin={[60, 140]}>
             <GizmoViewport axisColors={["red", "green", "blue"]} labelColor="black" />
           </GizmoHelper>
 
-          {modelId && <ModelRenderer modelId={modelId} />}
+          {modelId && <ModelRenderer modelId={modelId} viewMode={viewMode} />}
           <SourceVisualization orbitControlsRef={orbitControlsRef} />
           <ReceiverVisualization orbitControlsRef={orbitControlsRef} />
         </Canvas>

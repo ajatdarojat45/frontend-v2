@@ -4,6 +4,7 @@ export interface ModelViewerProps {
 
 export interface ModelRendererProps {
   modelId: number;
+  viewMode: "solid" | "ghosted" | "wireframe";
 }
 
 export interface ViewportCanvasProps {
