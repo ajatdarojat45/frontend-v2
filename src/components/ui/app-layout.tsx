@@ -1,6 +1,8 @@
 import type React from "react";
 import { Link } from "react-router";
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "./resizable";
+import chorasLogoColour from "@/assets/choras_logo_colour.svg";
+import chorasLogoWhite from "@/assets/choras_logo_white.svg";
 
 type AppLayoutProps = {
   title: React.ReactNode | string;
@@ -14,12 +16,12 @@ export function AppLayout({ title, right, sidebar, children }: AppLayoutProps) {
     <div className="h-screen flex flex-col">
       {/* Header */}
       <header className="h-16 bg-choras-dark flex justify-between relative items-center">
-        <Link
-          to="/"
-          className="w-sidebar h-16 pl-6 flex flex-1 items-center font-choras uppercase text-white text-[2.5rem]"
-        >
-          CHORAS
-        </Link>
+        <div className="w-sidebar h-16 pl-6 flex flex-1 items-center">
+          <Link to="/" className="group inline-block">
+            <img src={chorasLogoWhite} alt="CHORAS" className="h-10 group-hover:hidden" />
+            <img src={chorasLogoColour} alt="CHORAS" className="h-10 hidden group-hover:block" />
+          </Link>
+        </div>
         {typeof title === "string" ? (
           <h1 className="text-center font-choras text-choras-primary text-2xl flex-2 font-bold">
             {title}

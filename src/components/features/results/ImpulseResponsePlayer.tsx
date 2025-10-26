@@ -1,4 +1,3 @@
-import { formatFilename } from "@/helpers/file";
 import { useGetImpulseResponseBySimulationIdQuery } from "@/store/auralizationApi";
 import { useGetSimulationByIdQuery } from "@/store/simulationApi";
 import WavesurferPlayer from "@wavesurfer/react";
@@ -6,7 +5,6 @@ import { useRef, useMemo } from "react";
 import { AudioPlayer } from "react-audio-play";
 import type WaveSurfer from "wavesurfer.js";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
 import { Loading } from "@/components/ui/loading";
 
 type ImpulseResponsePlayerProps = {
@@ -68,11 +66,6 @@ export function ImpulseResponsePlayer({ simulationId, color }: ImpulseResponsePl
             wsRef.current?.seekTo(0);
           }}
         />
-        <Button asChild className="h-14 rounded-none">
-          <a href={audioUrl} download={formatFilename(`impulse-response-${simulation.name}.wav`)}>
-            Download
-          </a>
-        </Button>
       </div>
     </div>
   );

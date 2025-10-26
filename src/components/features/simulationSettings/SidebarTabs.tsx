@@ -34,7 +34,7 @@ export function SidebarTabs() {
           </TabsContent>
         </div>
 
-        <TabsList className="fixed left-64 md:left-72 lg:left-[var(--width-sidebar)] bottom-0 h-[calc(75%+0.75rem)] w-8 p-0 flex-col rounded-r-xl roundedn-l-none z-10 bg-transparent">
+        <TabsList className="fixed left-[var(--width-sidebar)] bottom-0 h-[calc(75%+0.75rem)] w-8 p-0 flex-col rounded-r-xl roundedn-l-none z-10 bg-transparent">
           <TabsTrigger
             value="sources"
             className="w-full data-[state=active]:bg-choras-dark data-[state=active]:text-choras-primary text-white/50 flex items-center justify-center bg-choras-dark/50 rounded-l-none cursor-pointer pr-2"
@@ -44,7 +44,7 @@ export function SidebarTabs() {
               clipPath: "polygon(0 0, 1% 0, 100% 15%, 100% 85%, 1% 100%, 0 100%)",
             }}
           >
-            Sources/Receiver
+            Sources/Receivers
           </TabsTrigger>
           <TabsTrigger
             value="surfaces"
