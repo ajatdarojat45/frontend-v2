@@ -34,9 +34,9 @@ export function HomePage() {
         return sortedProjects.sort((a, b) => a.name.localeCompare(b.name));
       case "DESC":
         return sortedProjects.sort((a, b) => b.name.localeCompare(a.name));
-      case "CREATION_DATE":
+      case "NEWEST_FIRST":
         return sortedProjects.sort(
-          (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+          (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
         );
       case "LAST_MODIFIED":
         return sortedProjects.sort(
