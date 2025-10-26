@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.25](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.24...v0.0.25) (2025-10-26)
+
+### Features
+
+- display creation and update dates in ProjectCard component ([d23f9ce](https://github.com/ajatdarojat45/frontend-v2/commit/d23f9cefeffbb10af5156a74e6fd8ca1754dba74))
+- format and display creation and update dates in ModelCard component ([44adeac](https://github.com/ajatdarojat45/frontend-v2/commit/44adeac39fd75c4eaebaa6030d256ebe7fbf4953))
+- implement sorting persistence by updating SortPicker to use local storage ([8357230](https://github.com/ajatdarojat45/frontend-v2/commit/8357230ea987aab012a5f9edb69857483d76edc9))
+- refactor sorting logic to persist selected sort option in local storage ([6af4223](https://github.com/ajatdarojat45/frontend-v2/commit/6af42231be36e61816d456b153c6aaec79a3e509))
+- update SortPicker options to include 'Newest first' instead of 'Creation date' ([ddbf419](https://github.com/ajatdarojat45/frontend-v2/commit/ddbf419839e5c97a7f6d846d48a5477062ed7435))
+
+### Bug Fixes
+
+- update sorting logic for projects to use 'NEWEST_FIRST' instead of 'CREATION_DATE' ([4f82c16](https://github.com/ajatdarojat45/frontend-v2/commit/4f82c16964a132865199f7887cf6be1152707788))
+- update sorting logic to use 'NEWEST_FIRST' for creation date ([3316c8c](https://github.com/ajatdarojat45/frontend-v2/commit/3316c8c66900d1027a9e3455d906c2f6a9d83f4f))
+
 ### [0.0.24](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.23...v0.0.24) (2025-10-25)
 
 ### Bug Fixes
