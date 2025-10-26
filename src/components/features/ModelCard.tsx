@@ -15,6 +15,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { formatDateLong } from "@/helpers/datetime";
 
 type ModelCardProps = {
   model: Model;
@@ -70,8 +71,10 @@ export function ModelCard({ model, projectId }: ModelCardProps) {
           </CardAction>
         </CardHeader>
         <CardContent className="flex items-end justify-between">
-          <div className="text-black/50 text-xs">
+          <div className="text-black/50 text-xs space-y-1">
             <p>{simulations?.length || 0} simulations</p>
+            <p>Created: {formatDateLong(model.createdAt)}</p>
+            <p>Updated: {formatDateLong(model.updatedAt)}</p>
           </div>
           <img
             className="w-32 h-24 object-cover rounded-lg"
