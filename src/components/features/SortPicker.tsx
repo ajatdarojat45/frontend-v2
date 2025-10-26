@@ -20,7 +20,7 @@ export function SortPicker({ onValueChange, value }: SortPickerProps) {
       <SelectContent>
         <SelectItem value="ASC">Name: A-Z</SelectItem>
         <SelectItem value="DESC">Name: Z-A</SelectItem>
-        <SelectItem value="CREATION_DATE">Creation date</SelectItem>
+        <SelectItem value="NEWEST_FIRST">Newest first</SelectItem>
         <SelectItem value="LAST_MODIFIED">Last modified</SelectItem>
       </SelectContent>
     </Select>
