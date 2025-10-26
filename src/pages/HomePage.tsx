@@ -69,7 +69,19 @@ export function HomePage() {
     }
   }, [groupProjects, sort]);
 
+  useEffect(() => {
+    const savedSortOption = localStorage.getItem("projectSortOption");
+    if (savedSortOption) {
+      setSort(savedSortOption);
+    }
+  }, []);
+
   let content: React.ReactNode = null;
+
+  const handleSetSort = (value: string) => {
+    setSort(value);
+    localStorage.setItem("projectSortOption", value);
+  };
 
   if (error) {
     content = (
@@ -107,7 +119,7 @@ export function HomePage() {
     content = (
       <div className="p-6 relative">
         <div className="flex fixed right-8 top-20">
-          <SortPicker onValueChange={(value) => setSort(value)} value={sort} />
+          <SortPicker onValueChange={handleSetSort} value={sort} />
           <div className="mr-4"></div>
           <GroupPicker />
         </div>
