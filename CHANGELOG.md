@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.29](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.28...v0.0.29) (2025-10-27)
+
+### Bug Fixes
+
+- Revamp audio upload form with improved file input handling and UI ([ce46a85](https://github.com/ajatdarojat45/frontend-v2/commit/ce46a85f6c85742af7b4ca1d2a2970fcb4e9d605))
+
 ### [0.0.28](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.27...v0.0.28) (2025-10-27)
 
 ### Bug Fixes
