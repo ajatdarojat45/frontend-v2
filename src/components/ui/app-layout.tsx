@@ -3,6 +3,7 @@ import { Link } from "react-router";
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "./resizable";
 import chorasLogoColour from "@/assets/choras_logo_colour.svg";
 import chorasLogoWhite from "@/assets/choras_logo_white.svg";
+import { SIDEBAR_WIDTH } from "@/constants";
 
 type AppLayoutProps = {
   title: React.ReactNode | string;
@@ -12,6 +13,8 @@ type AppLayoutProps = {
 };
 
 export function AppLayout({ title, right, sidebar, children }: AppLayoutProps) {
+  const sidebarMinSize = (SIDEBAR_WIDTH / window.innerWidth) * 100;
+
   return (
     <div className="h-screen flex flex-col">
       {/* Header */}
@@ -33,14 +36,14 @@ export function AppLayout({ title, right, sidebar, children }: AppLayoutProps) {
       </header>
       <ResizablePanelGroup direction="horizontal">
         <ResizablePanel
-          minSize={22.8}
-          maxSize={50}
-          defaultSize={22.8}
+          minSize={sidebarMinSize}
+          maxSize={60}
+          defaultSize={sidebarMinSize}
           className="bg-choras-dark border-t border-t-stone-600 z-40"
         >
           {sidebar}
         </ResizablePanel>
-        <ResizableHandle withHandle className="bg-choras-dark" />
+        <ResizableHandle className="bg-choras-dark" />
         <ResizablePanel className="bg-[#dcdcdc]">
           <div className="h-full overflow-auto">{children}</div>
         </ResizablePanel>
