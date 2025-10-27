@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.32](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.31...v0.0.32) (2025-10-27)
+
+### Features
+
+- Move results tab position to right of side panel; also fix material surfaces width ([95d2d28](https://github.com/ajatdarojat45/frontend-v2/commit/95d2d28d3bf0f209ca6a986e9a90fdbb26d01084))
+
+### Bug Fixes
+
+- add material coefficient chart when hovering in select material ([119ec83](https://github.com/ajatdarojat45/frontend-v2/commit/119ec8332434dd6f58a140d5c8cd9903be146ba2))
+- auto saved setting when first loaded ([0674d48](https://github.com/ajatdarojat45/frontend-v2/commit/0674d48ded1665d296f30cf21ab58f2b479bbd93))
+- cleanup sources and receivers when changing model ([61da153](https://github.com/ajatdarojat45/frontend-v2/commit/61da153ef14cc6c709c9974517011d4de149ddb3))
+- hide simulation button when no simulation available ([ec7924d](https://github.com/ajatdarojat45/frontend-v2/commit/ec7924d9bb85963879dde9edd9f5c6239696d39f))
+- Minimum width side panel ([251e9a1](https://github.com/ajatdarojat45/frontend-v2/commit/251e9a1d103069fd3d9e229cb915dc24d5a6e5e0))
+- refetch/resuming progress bar when reloading/when selecting the running simulation again ([2e7dc61](https://github.com/ajatdarojat45/frontend-v2/commit/2e7dc61f284df74e258c9c8cca0c0b069eb5ca73))
+- Use tailwind utils ([b2a5fa4](https://github.com/ajatdarojat45/frontend-v2/commit/b2a5fa4d022e996ba935033f5b71a860b9b122c6))
+
 ### [0.0.31](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.30...v0.0.31) (2025-10-27)
 
 ### Bug Fixes
