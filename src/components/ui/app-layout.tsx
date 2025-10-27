@@ -45,7 +45,7 @@ export function AppLayout({ title, right, sidebar, children }: AppLayoutProps) {
         </ResizablePanel>
         <ResizableHandle className="bg-choras-dark" />
         <ResizablePanel className="bg-[#dcdcdc]">
-          <div className="h-full overflow-auto">{children}</div>
+          <div className="h-full overflow-auto relative">{children}</div>
         </ResizablePanel>
       </ResizablePanelGroup>
     </div>
