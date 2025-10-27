@@ -55,8 +55,9 @@ export function ResultPage() {
       sidebar={<CompareResult modelId={+modelId} />}
     >
       <EditorNav active="results" modelId={+modelId} simulationId={+simulationId} />
+
       <Tabs defaultValue="parameters" className="mt-8">
-        <TabsList className="mx-auto bg-transparent w-80 p-0 h-8 absolute right-0 top-16 border-0">
+        <TabsList className="bg-transparent absolute bottom-0 h-100 w-8 p-0 flex-col rounded-r-xl roundedn-l-none z-50">
           <TabsTrigger value="parameters" asChild>
             <TrapezoidOutlineTab value="parameters">Parameters</TrapezoidOutlineTab>
           </TabsTrigger>
@@ -64,10 +65,10 @@ export function ResultPage() {
             <TrapezoidOutlineTab value="auralizations">Auralizations</TrapezoidOutlineTab>
           </TabsTrigger>
         </TabsList>
-        <TabsContent value="parameters">
+        <TabsContent value="parameters" className="pl-4">
           <ResultParameters simulationId={+simulationId} />
         </TabsContent>
-        <TabsContent value="auralizations">
+        <TabsContent value="auralizations" className="pl-4">
           <ResultAuralizations simulationId={+simulationId} />
         </TabsContent>
       </Tabs>

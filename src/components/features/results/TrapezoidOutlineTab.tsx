@@ -12,10 +12,14 @@ export function TrapezoidOutlineTab({ value, children, ...restProps }: Trapezoid
       {...restProps}
       value={value}
       className={cn(
-        "relative text-sm font-medium w-full h-8 flex items-center justify-center cursor-pointer transition-colors",
+        "relative text-sm font-medium h-[200px] w-8 flex items-center justify-center cursor-pointer transition-colors",
         "text-black/50 hover:text-black",
         "data-[state=active]:text-black",
       )}
+      style={{
+        writingMode: "vertical-rl",
+        textOrientation: "mixed",
+      }}
     >
       <svg
         className="absolute inset-0 w-full h-full pointer-events-none"
@@ -24,7 +28,7 @@ export function TrapezoidOutlineTab({ value, children, ...restProps }: Trapezoid
       >
         <polygon
           data-state={restProps["data-state"]}
-          points="0,0 100,0 100,1 85,99.5 15,99.5 0,1"
+          points="0,0 1,0 100,15 100,85 1,100 0,100"
           fill="none"
           stroke="currentColor"
           strokeWidth="1"
