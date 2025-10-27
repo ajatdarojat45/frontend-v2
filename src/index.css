@@ -155,3 +155,54 @@
   scrollbar-width: none;
   /* Firefox */
 }
+
+/* Container Query Support for Responsive Cards */
+.card-container {
+  container-type: inline-size;
+}
+
+/* Default untuk semua ukuran - Layout VERTIKAL (gambar atas, teks bawah) */
+.card-responsive-visible {
+  visibility: visible;
+}
+
+.card-responsive-scale {
+  transform: scale(0.8);
+  transform-origin: center;
+}
+
+/* Layout vertikal sebagai default */
+.card-responsive-horizontal {
+  flex-direction: column;
+  align-items: flex-start; /* Rata kiri, bukan center */
+  gap: 1.5rem; /* Gap lebih besar untuk spacing yang cukup */
+}
+
+.card-responsive-order-1 {
+  order: 2; /* Teks di bawah */
+}
+
+.card-responsive-order-2 {
+  order: 1; /* Gambar di atas */
+}
+
+/* Hanya untuk space yang SANGAT lebar - layout horizontal */
+@container (min-width: 350px) {
+  .card-responsive-horizontal {
+    flex-direction: row;
+    align-items: end;
+    justify-content: space-between;
+  }
+
+  .card-responsive-order-1 {
+    order: 1; /* Teks di kiri */
+  }
+
+  .card-responsive-order-2 {
+    order: 2; /* Gambar di kanan */
+  }
+
+  .card-responsive-scale {
+    transform: scale(1);
+  }
+}
