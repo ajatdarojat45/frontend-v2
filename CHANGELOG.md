@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.31](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.30...v0.0.31) (2025-10-27)
+
+### Bug Fixes
+
+- Adjust layout dimensions for improved visual consistency in ProjectDetailPage ([67eb645](https://github.com/ajatdarojat45/frontend-v2/commit/67eb645121da85800ffec19928cf85272bb00fd7))
+
 ### [0.0.30](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.29...v0.0.30) (2025-10-27)
 
 ### Features
