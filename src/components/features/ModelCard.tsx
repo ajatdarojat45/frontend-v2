@@ -19,10 +19,9 @@ import { formatDateLong } from "@/helpers/datetime";
 
 type ModelCardProps = {
   model: Model;
-  projectId: string;
 };
 
-export function ModelCard({ model, projectId }: ModelCardProps) {
+export function ModelCard({ model }: ModelCardProps) {
   const dispatch: AppDispatch = useDispatch();
   const { data: simulations } = useGetSimulationsByModelIdQuery(model.id);
   const [deleteModel] = useDeleteModelMutation();
@@ -30,7 +29,7 @@ export function ModelCard({ model, projectId }: ModelCardProps) {
   const handleDeleteModel = async () => {
     try {
       await deleteModel(model.id).unwrap();
-      dispatch(projectApi.util.invalidateTags([{ type: "Projects", id: projectId }]));
+      dispatch(projectApi.util.invalidateTags([{ type: "Projects" }]));
       toast.success("Model deleted successfully");
     } catch {
       toast.error("Failed to delete model");
