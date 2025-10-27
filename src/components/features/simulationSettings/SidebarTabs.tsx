@@ -6,70 +6,74 @@ import { useSelector, useDispatch } from "react-redux";
 import { setActiveTab } from "@/store/tabSlice";
 import type { RootState } from "@/store";
 
+export function SidebarContent() {
+  const activeTab = useSelector((state: RootState) => state.tab.activeTab);
+
+  return (
+    <Tabs
+      value={activeTab}
+      className="relative h-full w-full overflow-visible"
+      orientation="vertical"
+    >
+      <TabsContent value="surfaces">
+        <SurfacesTab />
+      </TabsContent>
+
+      <TabsContent value="sources">
+        <SourceReceiversTab />
+      </TabsContent>
+
+      <TabsContent value="settings">
+        <SettingTab />
+      </TabsContent>
+    </Tabs>
+  );
+}
+
 export function SidebarTabs() {
   const dispatch = useDispatch();
   const activeTab = useSelector((state: RootState) => state.tab.activeTab);
 
   return (
-    <div className="h-full w-full relative p-0">
-      <Tabs
-        value={activeTab}
-        onValueChange={(value) =>
-          dispatch(setActiveTab(value as "sources" | "surfaces" | "settings"))
-        }
-        className="h-full w-full"
-        orientation="vertical"
-      >
-        <div className="h-full w-full">
-          <TabsContent value="surfaces" className="m-0">
-            <SurfacesTab />
-          </TabsContent>
-
-          <TabsContent value="sources" className="m-0">
-            <SourceReceiversTab />
-          </TabsContent>
-
-          <TabsContent value="settings" className="h-full m-0">
-            <SettingTab />
-          </TabsContent>
-        </div>
-
-        <TabsList className="fixed left-[var(--width-sidebar)] bottom-0 h-[calc(75%+0.75rem)] w-8 p-0 flex-col rounded-r-xl roundedn-l-none z-10 bg-transparent">
-          <TabsTrigger
-            value="sources"
-            className="w-full data-[state=active]:bg-choras-dark data-[state=active]:text-choras-primary text-white/50 flex items-center justify-center bg-choras-dark/50 rounded-l-none cursor-pointer pr-2"
-            style={{
-              writingMode: "vertical-rl",
-              textOrientation: "mixed",
-              clipPath: "polygon(0 0, 1% 0, 100% 15%, 100% 85%, 1% 100%, 0 100%)",
-            }}
-          >
-            Sources/Receivers
-          </TabsTrigger>
-          <TabsTrigger
-            value="surfaces"
-            className="w-full data-[state=active]:bg-choras-dark data-[state=active]:text-choras-primary text-white/50 flex items-center justify-center bg-choras-dark/50 rounded-l-none cursor-pointer pr-2"
-            style={{
-              writingMode: "vertical-rl",
-              textOrientation: "mixed",
-              clipPath: "polygon(0 0, 1% 0, 100% 15%, 100% 85%, 1% 100%, 0 100%)",
-            }}
-          >
-            Surfaces
-          </TabsTrigger>
-          <TabsTrigger
-            value="settings"
-            className="w-full data-[state=active]:bg-choras-dark data-[state=active]:text-choras-primary text-white/50 flex items-center justify-center bg-choras-dark/50 rounded-l-none cursor-pointer pr-2"
-            style={{
-              writingMode: "vertical-rl",
-              textOrientation: "mixed",
-              clipPath: "polygon(0 0, 1% 0, 100% 15%, 100% 85%, 1% 100%, 0 100%)",
-            }}
-          >
-            Settings
-          </TabsTrigger>
-        </TabsList>
-      </Tabs>
-    </div>
+    <Tabs value={activeTab}>
+      <TabsList className="bg-transparent absolute bottom-0 h-[calc(100vh-4rem-174px)] w-8 p-0 flex-col rounded-r-xl roundedn-l-none z-50">
+        <TabsTrigger
+          value="sources"
+          onClick={() => dispatch(setActiveTab("sources"))}
+          className="w-full data-[state=active]:bg-choras-dark data-[state=active]:text-choras-primary text-white/50 flex items-center justify-center bg-choras-dark/50 rounded-l-none cursor-pointer pr-2"
+          style={{
+            writingMode: "vertical-rl",
+            textOrientation: "mixed",
+            clipPath: "polygon(0 0, 1% 0, 100% 15%, 100% 85%, 1% 100%, 0 100%)",
+          }}
+        >
+          Sources/Receivers
+        </TabsTrigger>
+        <TabsTrigger
+          value="surfaces"
+          onClick={() => dispatch(setActiveTab("surfaces"))}
+          className="w-full data-[state=active]:bg-choras-dark data-[state=active]:text-choras-primary text-white/50 flex items-center justify-center bg-choras-dark/50 rounded-l-none cursor-pointer pr-2"
+          style={{
+            writingMode: "vertical-rl",
+            textOrientation: "mixed",
+            clipPath: "polygon(0 0, 1% 0, 100% 15%, 100% 85%, 1% 100%, 0 100%)",
+          }}
+        >
+          Surfaces
+        </TabsTrigger>
+        <TabsTrigger
+          value="settings"
+          onClick={() => dispatch(setActiveTab("settings"))}
+          className="w-full data-[state=active]:bg-choras-dark data-[state=active]:text-choras-primary text-white/50 flex items-center justify-center bg-choras-dark/50 rounded-l-none cursor-pointer pr-2"
+          style={{
+            writingMode: "vertical-rl",
+            textOrientation: "mixed",
+            clipPath: "polygon(0 0, 1% 0, 100% 15%, 100% 85%, 1% 100%, 0 100%)",
+          }}
+        >
+          Settings
+        </TabsTrigger>
+      </TabsList>
+    </Tabs>
   );
 }
