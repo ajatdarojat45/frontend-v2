@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.30](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.29...v0.0.30) (2025-10-27)
+
+### Features
+
+- Add container query support for responsive card layouts ([b0533f4](https://github.com/ajatdarojat45/frontend-v2/commit/b0533f4eac856a7cc96af313597c68b1b7758278))
+
+### Bug Fixes
+
+- Improve layout and styling of ProjectCard component for better responsiveness ([8343f22](https://github.com/ajatdarojat45/frontend-v2/commit/8343f22e7c9f673acbbc90a7ca97594d8106b90d))
+- Refactor ModelCard layout for improved responsiveness and structure ([ee13730](https://github.com/ajatdarojat45/frontend-v2/commit/ee13730009aaf21269dea2fbdb13644df852bb49))
+- Update ProjectDetailPage layout for improved responsiveness and image stacking ([1e9c3f6](https://github.com/ajatdarojat45/frontend-v2/commit/1e9c3f6d08b78ef6fb799496057950a51c030a72))
+
 ### [0.0.29](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.28...v0.0.29) (2025-10-27)
 
 ### Bug Fixes
