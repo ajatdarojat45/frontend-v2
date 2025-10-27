@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useGetSimulationSettingsQuery } from "@/store/simulationSettingsApi";
 import { setOptions, updateValue, clearSettings } from "@/store/simulationSettingsSlice";
@@ -16,6 +16,7 @@ export function SettingTab() {
   );
   const [showGeneralSettings, setShowGeneralSettings] = useState(true);
   const [showExtendedSettings, setShowExtendedSettings] = useState(true);
+  const hasAutoPostedRef = useRef(false);
 
   const { simulation, simulationError, updateSimulationSettings } = useSimulationSettingsApi();
 
@@ -47,6 +48,23 @@ export function SettingTab() {
       });
     }
   }, [simulation?.id, settingsData?.options, dispatch]);
+
+  useEffect(() => {
+    if (
+      simulation?.solverSettings?.simulationSettings &&
+      settingsData?.options &&
+      Object.keys(values).length > 0 &&
+      !hasAutoPostedRef.current
+    ) {
+      console.log("Auto-posting simulation settings after fetch");
+      updateSimulationSettings(values, "Settings Loaded");
+      hasAutoPostedRef.current = true;
+    }
+  }, [simulation?.id, settingsData?.options, values, updateSimulationSettings]);
+
+  useEffect(() => {
+    hasAutoPostedRef.current = false;
+  }, [simulation?.id]);
 
   const handleValueChange = (id: string, value: string | number, isValid: boolean = true) => {
     if (isValid) {
