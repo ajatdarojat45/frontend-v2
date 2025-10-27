@@ -1,7 +1,9 @@
 import type React from "react";
 import { Link } from "react-router";
+import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "./resizable";
 import chorasLogoColour from "@/assets/choras_logo_colour.svg";
 import chorasLogoWhite from "@/assets/choras_logo_white.svg";
+import { SIDEBAR_WIDTH } from "@/constants";
 
 type AppLayoutProps = {
   title: React.ReactNode | string;
@@ -11,6 +13,8 @@ type AppLayoutProps = {
 };
 
 export function AppLayout({ title, right, sidebar, children }: AppLayoutProps) {
+  const sidebarMinSize = (SIDEBAR_WIDTH / window.innerWidth) * 100;
+
   return (
     <div className="h-screen flex flex-col">
       {/* Header */}
@@ -21,7 +25,6 @@ export function AppLayout({ title, right, sidebar, children }: AppLayoutProps) {
             <img src={chorasLogoColour} alt="CHORAS" className="h-10 hidden group-hover:block" />
           </Link>
         </div>
-        <div className="border-b border-b-stone-600 absolute top-16 left-0 w-sidebar z-50" />
         {typeof title === "string" ? (
           <h1 className="text-center font-choras text-choras-primary text-2xl flex-2 font-bold">
             {title}
@@ -31,12 +34,20 @@ export function AppLayout({ title, right, sidebar, children }: AppLayoutProps) {
         )}
         <div className="w-sidebar flex-1 flex justify-end pr-6">{right}</div>
       </header>
-      <main className="flex flex-1">
-        <aside className="w-sidebar bg-choras-dark z-40 h-container">{sidebar}</aside>
-        <div className="flex-1 h-container overflow-y-scroll bg-[#dcdcdc] border-l border-l-stone-600">
-          {children}
-        </div>
-      </main>
+      <ResizablePanelGroup direction="horizontal">
+        <ResizablePanel
+          minSize={sidebarMinSize}
+          maxSize={60}
+          defaultSize={sidebarMinSize}
+          className="bg-choras-dark border-t border-t-stone-600 z-40"
+        >
+          {sidebar}
+        </ResizablePanel>
+        <ResizableHandle className="bg-choras-dark" />
+        <ResizablePanel className="bg-[#dcdcdc]">
+          <div className="h-full overflow-auto relative">{children}</div>
+        </ResizablePanel>
+      </ResizablePanelGroup>
     </div>
   );
 }

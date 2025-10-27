@@ -79,7 +79,7 @@ export function DownloadResult({ simulationIds, mode, triggerLabel }: DownloadRe
       // Build the output in the required format
       const output: Record<string, (string | number)[]> = {
         xlsx: ["true"],
-        SimulationId: simulationIds, // TODO: if comparison panel is added, this should be SimulationIds of compared simulations
+        SimulationId: simulationIds,
         Parameters: [],
         EDC: [],
         Auralization: [],

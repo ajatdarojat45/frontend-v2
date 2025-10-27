@@ -73,7 +73,6 @@ export function ResultAuralizations({ simulationId }: ResultAuralizationsProps) 
       {auralizations.map((auralization) => (
         <ConvolvedSoundPlayer
           key={`${auralization.id}-${simulationId}`}
-          simulationId={simulationId}
           auralization={auralization}
         />
       ))}

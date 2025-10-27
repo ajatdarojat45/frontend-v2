@@ -39,15 +39,8 @@ export function ViewportCanvas({ modelUrl, modelId }: ViewportCanvasProps) {
   };
 
   return (
-    <div
-      className="fixed top-16 left-0 overflow-hidden touch-none"
-      style={{
-        width: "100vw",
-        height: "calc(100vh - 4rem)",
-        zIndex: 1,
-      }}
-    >
-      <div className="ml-auto h-[calc(100vh-4rem)] w-[calc(100vw-16rem)] md:w-[calc(100vw-18rem)] lg:w-[calc(100vw-20rem)] relative">
+    <div className="overflow-hidden relative touch-none h-container">
+      <div className="h-full w-full relative">
         {isLoading(modelId) && (
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20 bg-black bg-opacity-50 text-white px-4 py-2 rounded">
             Loading model...
@@ -151,7 +144,7 @@ export function ViewportCanvas({ modelUrl, modelId }: ViewportCanvasProps) {
       </div>
 
       {/* Selection Info Panel */}
-      <div className="absolute bottom-4 left-[calc(var(--width-sidebar)+3rem)] z-10">
+      <div className="absolute bottom-4 left-12 z-10">
         <GeometrySelectionInfo />
       </div>
 

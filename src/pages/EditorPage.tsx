@@ -7,7 +7,7 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router";
 import { SimulationPicker } from "@/components/features/simulationSettings/SimulationPicker";
-import { SidebarTabs } from "@/components/features/simulationSettings/SidebarTabs";
+import { SidebarContent, SidebarTabs } from "@/components/features/simulationSettings/SidebarTabs";
 import { ModelViewer } from "@/components/features/viewport/ModelViewer";
 import { useGetModelQuery } from "@/store/modelApi";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
@@ -65,8 +65,8 @@ export function EditorPage() {
                 <SimulationPicker modelId={+modelId} simulationId={+simulationId} />
               </div>
               <hr className="border-choras-gray border-0.5" />
-              <div className="flex-1 overflow-auto px-4 scrollbar-hide">
-                <SidebarTabs />
+              <div className="flex-1 px-4 overflow-y-auto scrollbar-hide">
+                <SidebarContent />
               </div>
             </>
           ) : (
@@ -76,6 +76,7 @@ export function EditorPage() {
       }
       right={<CreateSimulation modelId={+modelId} />}
     >
+      <SidebarTabs />
       {simulationId && (
         <EditorNav
           key={`editor-nav-${modelId}-${simulationId}`}
