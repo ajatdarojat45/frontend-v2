@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.26](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.25...v0.0.26) (2025-10-27)
+
+### Features
+
+- Dropdown for convolved sound ([ad00857](https://github.com/ajatdarojat45/frontend-v2/commit/ad00857ac86dbbe531f5a6671df6ef1f3536e013))
+- Make side-panel resizable ([5c592c5](https://github.com/ajatdarojat45/frontend-v2/commit/5c592c5c0ec3c88787e221057b200ffa83f5b0ac))
+
+### Bug Fixes
+
+- Auralization does not update when re-running simulations ([d15330e](https://github.com/ajatdarojat45/frontend-v2/commit/d15330e082b0eb94653e2dd3260a5561fd12536a))
+- Content cannot be scroll after implement resizable pane ([631ad3a](https://github.com/ajatdarojat45/frontend-v2/commit/631ad3a55b0ca5c686e0e5b3b9e590a7ea448612))
+- Refresh needed after addition or deletion model ([4ce0f4e](https://github.com/ajatdarojat45/frontend-v2/commit/4ce0f4e063f47df7cc16f4f3874b95b6b0d8ce2d))
+- Units missing in the results panel ([f37581e](https://github.com/ajatdarojat45/frontend-v2/commit/f37581ece7529661a1bea2aa5176cc79bd933dbe))
+- Viewport width when side-panel is resizing ([7d5c665](https://github.com/ajatdarojat45/frontend-v2/commit/7d5c6650a82457212fdc05e0743bb82f2fbc6795))
+
 ### [0.0.25](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.24...v0.0.25) (2025-10-26)
 
 ### Features
