@@ -3,7 +3,7 @@ import { Link } from "react-router";
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "./resizable";
 import chorasLogoColour from "@/assets/choras_logo_colour.svg";
 import chorasLogoWhite from "@/assets/choras_logo_white.svg";
-import { SIDEBAR_WIDTH } from "@/constants";
+import { useSidebarResize } from "@/hooks/useSidebarResize";
 
 type AppLayoutProps = {
   title: React.ReactNode | string;
@@ -13,7 +13,8 @@ type AppLayoutProps = {
 };
 
 export function AppLayout({ title, right, sidebar, children }: AppLayoutProps) {
-  const sidebarMinSize = (SIDEBAR_WIDTH / window.innerWidth) * 100;
+  const { windowWidth, sidebarMinSize, sidebarDefaultSize, handleSidebarResize } =
+    useSidebarResize();
 
   return (
     <div className="h-screen flex flex-col">
@@ -34,12 +35,14 @@ export function AppLayout({ title, right, sidebar, children }: AppLayoutProps) {
         )}
         <div className="w-sidebar flex-1 flex justify-end pr-6">{right}</div>
       </header>
-      <ResizablePanelGroup direction="horizontal">
+      <ResizablePanelGroup direction="horizontal" key={windowWidth}>
         <ResizablePanel
           minSize={sidebarMinSize}
+          defaultSize={sidebarDefaultSize}
           maxSize={60}
-          defaultSize={sidebarMinSize}
-          className="bg-choras-dark border-t border-t-stone-600 z-40"
+          collapsedSize={sidebarMinSize}
+          onResize={handleSidebarResize}
+          className="bg-choras-dark border-t border-t-stone-600 z-40 min-w-83"
         >
           {sidebar}
         </ResizablePanel>
