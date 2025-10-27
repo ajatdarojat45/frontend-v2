@@ -48,7 +48,7 @@ export function ProjectCard(props: ProjectCardProps) {
   };
 
   return (
-    <Card className="min-h-[192px] border border-transparent bg-gradient-to-r from-choras-primary from-50% to-choras-secondary bg-clip-border p-0.5">
+    <Card className="min-h-[192px] border border-transparent bg-gradient-to-r from-choras-primary from-50% to-choras-secondary bg-clip-border p-0.5 card-container">
       <div className="bg-[#e7e7e7] min-h-[190px] py-6 rounded-lg h-full flex flex-col justify-between">
         <CardHeader className="overflow-hidden relative px-5">
           <CardTitle className="truncate font-inter font-bold text-sm text-choras-secondary">
@@ -95,20 +95,20 @@ export function ProjectCard(props: ProjectCardProps) {
             </DropdownMenu>
           </CardAction>
         </CardHeader>
-        <CardContent className="flex items-end justify-between">
-          <div className="text-black/50 text-xs space-y-1">
+        <CardContent className="flex flex-col card-responsive-horizontal gap-4 pt-4">
+          <div className="text-black/50 text-xs space-y-1 card-responsive-order-1">
             <p>{project.models.length} model</p>
             <p>{simulationCount} simulations</p>
             <p>Created: {formatDateLong(project.createdAt)}</p>
             <p>Updated: {formatDateLong(project.updatedAt)}</p>
           </div>
 
-          <div className="invisible sm:visible relative w-36 h-24">
+          <div className="card-responsive-visible relative max-w-36 w-full aspect-[3/2] card-responsive-order-2 card-responsive-scale">
             {/* Stack of cards based on model length */}
             {Array.from({ length: Math.min(project.models.length, 3) }, (_, index) => (
               <img
                 key={index}
-                className="absolute w-36 h-24 object-cover rounded-lg"
+                className="absolute w-full h-full max-w-36 max-h-24 object-contain rounded-lg bg-white/80"
                 src={modelImg}
                 alt="Model Illustration"
                 style={{

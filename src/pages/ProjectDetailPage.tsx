@@ -103,8 +103,24 @@ export function ProjectDetailPage() {
         </div>
 
         {/* Project Info Section */}
-        <div className="flex justify-between items-start font-inter">
-          <div className="space-y-6">
+        <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-6 font-inter">
+          {/* Stack of model images - Pindah ke atas untuk mobile */}
+          <div className="relative w-48 h-32 flex-shrink-0 lg:order-2 self-start ml-6 lg:ml-0">
+            {Array.from({ length: Math.min(project.models?.length, 3) }, (_, index) => (
+              <img
+                key={index}
+                className="absolute w-32 h-24 rounded-lg bg-white/80"
+                src={modelImg}
+                alt="Model Illustration"
+                style={{
+                  transform: `rotate(${index * 15 - 5}deg) translate(${index * (project.models.length > 2 ? 15 : 30) - 30}px, ${index * -2}px)`,
+                  boxShadow: `0 ${2 + index * 2}px ${4 + index * 2}px rgba(0, 0, 0, 0.2), 0 ${1 + index}px ${2 + index}px rgba(0, 0, 0, 0.1)`,
+                }}
+              />
+            ))}
+          </div>
+
+          <div className="space-y-6 lg:order-1">
             <h1 className="text-2xl text-choras-secondary font-inter font-bold mb-2">
               {project.name}
             </h1>
@@ -125,22 +141,6 @@ export function ProjectDetailPage() {
                 <span>{formatDateLong(project.updatedAt)}</span>
               </div>
             </div>
-          </div>
-
-          {/* Stack of model images */}
-          <div className="relative w-48 h-32">
-            {Array.from({ length: Math.min(project.models?.length, 3) }, (_, index) => (
-              <img
-                key={index}
-                className="absolute w-32 h-24 object-cover rounded-lg"
-                src={modelImg}
-                alt="Model Illustration"
-                style={{
-                  transform: `rotate(${index * 15 - 5}deg) translate(${index * (project.models.length > 2 ? 15 : 30) - 30}px, ${index * -2}px)`,
-                  boxShadow: `0 ${2 + index * 2}px ${4 + index * 2}px rgba(0, 0, 0, 0.2), 0 ${1 + index}px ${2 + index}px rgba(0, 0, 0, 0.1)`,
-                }}
-              />
-            ))}
           </div>
         </div>
 
