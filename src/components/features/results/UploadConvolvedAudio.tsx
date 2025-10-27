@@ -96,53 +96,145 @@ export function UploadConvolvedAudio({ simulationId }: UploadConvolvedAudioProps
             <div className="space-y-4 my-6">
               <FormField
                 control={form.control}
-                name="file"
-                render={({ field, fieldState: _fieldState }) => (
-                  <FormItem>
-                    <FormLabel>File</FormLabel>
-                    <FormControl>
-                      <Input
-                        ref={fileInputRef}
-                        type="file"
-                        accept="audio/*"
-                        onChange={(e) => {
-                          const f =
-                            e.target.files && e.target.files.length > 0
-                              ? e.target.files[0]
-                              : undefined;
-                          field.onChange(f);
-
-                          form.setValue("name", cleanExt(f?.name ?? ""), {
-                            shouldValidate: true,
-                            shouldDirty: true,
-                            shouldTouch: true,
-                          });
-                        }}
-                        disabled={isLoading}
-                      />
-                    </FormControl>
-                    <FormMessage />
-
-                    {field.value && (
-                      <div className="p-3 border rounded-md">
-                        <div className="font-medium">{field.value.name}</div>
-                        <div className="text-xs text-muted-foreground">
-                          {formatBytes(field.value.size)}
-                        </div>
-                      </div>
-                    )}
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
                 name="name"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Name</FormLabel>
                     <FormControl>
                       <Input placeholder="Audio name" {...field} disabled={isLoading} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="file"
+                render={({ field, fieldState }) => (
+                  <FormItem>
+                    <FormLabel>File</FormLabel>
+                    <FormControl>
+                      <div>
+                        <label
+                          htmlFor="audio-file-drop"
+                          className={`relative flex flex-col items-center justify-center h-64 border-2 border-dashed rounded-lg transition-colors cursor-pointer ${
+                            fieldState.error
+                              ? "border-destructive bg-red-50"
+                              : "border-border hover:border-primary/50"
+                          } ${field.value ? "hidden" : ""}`}
+                        >
+                          {/* Audio icon */}
+                          <div className="w-12 h-12 mb-3 flex items-center justify-center bg-muted rounded-md">
+                            <svg
+                              className="w-6 h-6"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"
+                              />
+                            </svg>
+                          </div>
+                          <span
+                            className={`font-medium ${fieldState.error ? "text-destructive" : ""}`}
+                          >
+                            Drop your audio file here
+                          </span>
+                          <span
+                            className={`text-xs text-muted-foreground ${
+                              fieldState.error ? "text-destructive" : ""
+                            }`}
+                          >
+                            or click to select a file (WAV, MP3, etc.)
+                          </span>
+                          <input
+                            ref={fileInputRef}
+                            id="audio-file-drop"
+                            type="file"
+                            accept="audio/*"
+                            className="absolute inset-0 opacity-0 cursor-pointer h-full w-full"
+                            onChange={(e) => {
+                              const f =
+                                e.target.files && e.target.files.length > 0
+                                  ? e.target.files[0]
+                                  : undefined;
+                              field.onChange(f);
+
+                              form.setValue("name", cleanExt(f?.name ?? ""), {
+                                shouldValidate: true,
+                                shouldDirty: true,
+                                shouldTouch: true,
+                              });
+                            }}
+                            disabled={isLoading}
+                          />
+                        </label>
+                        {field.value && (
+                          <div
+                            className={`p-3 border rounded-md h-64 flex flex-col justify-center items-center gap-3 ${
+                              isLoading ? "opacity-50 pointer-events-none" : ""
+                            }`}
+                          >
+                            {/* Audio icon */}
+                            <div className="w-12 h-12 flex items-center justify-center bg-muted rounded-md">
+                              <svg
+                                className="w-6 h-6"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"
+                                />
+                              </svg>
+                            </div>
+
+                            {/* metadata */}
+                            <div className="text-center">
+                              <div className="font-medium">{field.value.name}</div>
+                              <div className="text-xs text-muted-foreground">
+                                {formatBytes(field.value.size)}
+                              </div>
+                            </div>
+
+                            {/* actions row */}
+                            <div className="flex items-center gap-3">
+                              <Button
+                                type="button"
+                                variant="secondary"
+                                onClick={() => fileInputRef.current?.click()}
+                                size="sm"
+                                disabled={isLoading}
+                              >
+                                Change
+                              </Button>
+                              <Button
+                                type="button"
+                                size="sm"
+                                variant="destructive"
+                                onClick={() => {
+                                  // Reset file input value to allow re-uploading the same file if needed
+                                  if (fileInputRef.current?.value) fileInputRef.current.value = "";
+
+                                  // Reset field value
+                                  field.onChange(undefined);
+                                }}
+                                disabled={isLoading}
+                              >
+                                Remove
+                              </Button>
+                            </div>
+                          </div>
+                        )}
+                      </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
