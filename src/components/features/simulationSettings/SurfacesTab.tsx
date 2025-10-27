@@ -19,9 +19,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import type { SurfaceInfo } from "@/types/material";
 import { ChevronRight, Eye, EyeOff } from "lucide-react";
 import { SurfaceMaterialList } from "./SurfaceMaterialList";
+import { AbsorptionCoefficientChart } from "./AbsorptionCoefficientChart";
 
 export function SurfacesTab() {
   const dispatch = useDispatch();
@@ -270,17 +272,31 @@ export function SurfacesTab() {
                           Error loading materials
                         </SelectItem>
                       ) : (
-                        materials.map((material) => (
-                          <SelectItem
-                            key={material.id}
-                            value={material.id.toString()}
-                            className="text-white"
-                          >
-                            <span className="truncate block" title={material.name}>
-                              {material.name}
-                            </span>
-                          </SelectItem>
-                        ))
+                        <TooltipProvider>
+                          {materials.map((material) => (
+                            <Tooltip key={material.id} delayDuration={300}>
+                              <TooltipTrigger asChild>
+                                <SelectItem value={material.id.toString()} className="text-white">
+                                  <span className="truncate block" title={material.name}>
+                                    {material.name}
+                                  </span>
+                                </SelectItem>
+                              </TooltipTrigger>
+                              <TooltipContent
+                                side="right"
+                                className="p-3 bg-choras-dark border-choras-primary"
+                              >
+                                <div className="text-sm mb-2 font-medium text-white">
+                                  {material.name}
+                                </div>
+                                <AbsorptionCoefficientChart
+                                  coefficients={material.absorptionCoefficients}
+                                  size="md"
+                                />
+                              </TooltipContent>
+                            </Tooltip>
+                          ))}
+                        </TooltipProvider>
                       )}
                     </SelectContent>
                   </Select>
@@ -338,17 +354,34 @@ export function SurfacesTab() {
                                 Error loading materials
                               </SelectItem>
                             ) : (
-                              materials.map((material) => (
-                                <SelectItem
-                                  key={material.id}
-                                  value={material.id.toString()}
-                                  className="text-white"
-                                >
-                                  <span className="truncate block" title={material.name}>
-                                    {material.name}
-                                  </span>
-                                </SelectItem>
-                              ))
+                              <TooltipProvider>
+                                {materials.map((material) => (
+                                  <Tooltip key={material.id} delayDuration={300}>
+                                    <TooltipTrigger asChild>
+                                      <SelectItem
+                                        value={material.id.toString()}
+                                        className="text-white"
+                                      >
+                                        <span className="truncate block" title={material.name}>
+                                          {material.name}
+                                        </span>
+                                      </SelectItem>
+                                    </TooltipTrigger>
+                                    <TooltipContent
+                                      side="right"
+                                      className="p-3 bg-choras-dark border-choras-primary"
+                                    >
+                                      <div className="text-sm mb-2 font-medium text-white">
+                                        {material.name}
+                                      </div>
+                                      <AbsorptionCoefficientChart
+                                        coefficients={material.absorptionCoefficients}
+                                        size="md"
+                                      />
+                                    </TooltipContent>
+                                  </Tooltip>
+                                ))}
+                              </TooltipProvider>
                             )}
                           </SelectContent>
                         </Select>
