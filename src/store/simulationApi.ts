@@ -62,6 +62,7 @@ export const simulationApi = createApi({
 
     getSimulationRuns: build.query<SimulationRun[], void>({
       query: () => "/simulations/run",
+      keepUnusedDataFor: 0,
     }),
 
     cancelSimulation: build.mutation<void, { simulationId: number }>({
