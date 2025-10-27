@@ -46,10 +46,6 @@ export function EditorPage() {
           <Breadcrumb
             items={[
               {
-                label: model.projectTag || "Ungrouped",
-                href: `/`,
-              },
-              {
                 label: model.projectName,
                 href: `/projects/${model.projectId}`,
               },
