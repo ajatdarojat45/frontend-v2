@@ -6,10 +6,14 @@ import { useSimulationRunner } from "@/hooks/useSimulationRunner";
 import { useSimulationValidation } from "@/hooks/useSimulationValidation";
 import { useDispatch } from "react-redux";
 import { navigateToTabAndHighlight } from "@/store/tabSlice";
+import { useParams } from "react-router";
+import { useGetSimulationsByModelIdQuery } from "@/store/simulationApi";
 
 export function RunSimulationButton() {
   const { isRunning, progress, startSimulation, cancelAndStop } = useSimulationRunner();
   const { isValid, errors } = useSimulationValidation();
+  const { modelId, simulationId } = useParams() as { modelId: string; simulationId?: string };
+  const { data: simulations } = useGetSimulationsByModelIdQuery(+modelId);
   const dispatch = useDispatch();
 
   const handleClick = () => {
@@ -38,6 +42,10 @@ export function RunSimulationButton() {
     }
     return "Run Simulation";
   };
+
+  if (!simulations || simulations.length === 0 || !simulationId) {
+    return null;
+  }
 
   return (
     <TooltipProvider>
