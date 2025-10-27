@@ -65,7 +65,7 @@ export function EditorPage() {
                 <SimulationPicker modelId={+modelId} simulationId={+simulationId} />
               </div>
               <hr className="border-choras-gray border-0.5" />
-              <div className="flex-1 px-4 overflow-y-auto">
+              <div className="flex-1 px-4 overflow-y-auto scrollbar-hide">
                 <SidebarContent />
               </div>
             </>
