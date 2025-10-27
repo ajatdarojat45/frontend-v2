@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.28](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.27...v0.0.28) (2025-10-27)
+
+### Bug Fixes
+
+- Hide scrollbar browser ([fb30160](https://github.com/ajatdarojat45/frontend-v2/commit/fb30160a84c6f4e9ff56c00e597d5cb70e37d4da))
+- Min & Max width of sidepanel ([d28a14e](https://github.com/ajatdarojat45/frontend-v2/commit/d28a14e7f9936f85b9aa3a29699f61d59bcf4951))
+- Sidebar Tabs position ([ce2243b](https://github.com/ajatdarojat45/frontend-v2/commit/ce2243bfe5ca0eb92aaf75042bbe32fff5913ac6))
+
 ### [0.0.27](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.26...v0.0.27) (2025-10-27)
 
 ### Bug Fixes
