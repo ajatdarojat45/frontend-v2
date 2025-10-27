@@ -35,13 +35,17 @@ export function HomePage() {
       case "DESC":
         return sortedProjects.sort((a, b) => b.name.localeCompare(a.name));
       case "NEWEST_FIRST":
-        return sortedProjects.sort(
-          (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-        );
+        return sortedProjects.sort((a, b) => {
+          const timeDiff = new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+          // If timestamps are the same, sort by ID (higher ID = newer)
+          return timeDiff !== 0 ? timeDiff : b.id - a.id;
+        });
       case "LAST_MODIFIED":
-        return sortedProjects.sort(
-          (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
-        );
+        return sortedProjects.sort((a, b) => {
+          const timeDiff = new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
+          // If timestamps are the same, sort by ID (higher ID = newer)
+          return timeDiff !== 0 ? timeDiff : b.id - a.id;
+        });
       default:
         return sortedProjects.sort((a, b) => a.name.localeCompare(b.name));
     }
