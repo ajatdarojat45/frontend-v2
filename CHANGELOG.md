@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.27](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.26...v0.0.27) (2025-10-27)
+
+### Bug Fixes
+
+- Enhance project sorting by ID for ties in creation and modification dates ([2c2c927](https://github.com/ajatdarojat45/frontend-v2/commit/2c2c927d7a566daedd1a9b3db208e26c2101aace))
+- Improve model sorting by ID for ties in creation and modification dates ([d2f24ea](https://github.com/ajatdarojat45/frontend-v2/commit/d2f24ea81edb8a4805a053826f49855f31f2833e))
+
 ### [0.0.26](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.25...v0.0.26) (2025-10-27)
 
 ### Features
