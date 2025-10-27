@@ -264,6 +264,13 @@ export function SourceReceiversTab() {
     }
   };
 
+  useEffect(() => {
+    return () => {
+      dispatch(removeAllSources());
+      dispatch(removeAllReceivers());
+    };
+  }, [dispatch]);
+
   return (
     <>
       <div className="text-white border-b border-gray-600 pb-4 over">
