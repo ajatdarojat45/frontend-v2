@@ -226,10 +226,10 @@ export function SurfacesTab() {
           <table className="w-full table-fixed">
             <thead>
               <tr>
-                <th className="px-3 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider w-1/3">
+                <th className="px-3 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider w-36">
                   Surface
                 </th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider w-1/3">
+                <th className="px-3 py-2 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
                   Material
                 </th>
               </tr>
