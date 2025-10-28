@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.34](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.33...v0.0.34) (2025-10-28)
+
+### Features
+
+- enhance SurfacesTab with material library and create material dialog functionality ([5322d9e](https://github.com/ajatdarojat45/frontend-v2/commit/5322d9e613cea65dc8eae5d422948259b52ece2d))
+- refactor CreateMaterialDialog to accept props for open state management ([36e88e1](https://github.com/ajatdarojat45/frontend-v2/commit/36e88e1d5aad3df2433a118c535bf824ccb6ecc5))
+- refactor SurfaceMaterialList to accept props for dialog state management ([3c3c4f5](https://github.com/ajatdarojat45/frontend-v2/commit/3c3c4f5bc02e72bf7dbed93e8d5cd6a5b4c37983))
+
 ### [0.0.33](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.32...v0.0.33) (2025-10-28)
 
 ### Features
