@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Download } from "lucide-react";
 import { toast } from "sonner";
 
@@ -25,14 +25,20 @@ type DownloadResultProps = {
   simulationIds: number[];
   mode?: "parameters" | "plots" | "auralizations";
   triggerLabel?: string;
+  allSelected?: boolean;
 };
 
-export function DownloadResult({ simulationIds, mode, triggerLabel }: DownloadResultProps) {
+export function DownloadResult({
+  simulationIds,
+  mode,
+  triggerLabel,
+  allSelected,
+}: DownloadResultProps) {
   const [open, setOpen] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
 
   const allSections = ["parameters", "plots", "auralizations"];
-  const visibleSections = mode ? [mode] : allSections;
+  const visibleSections = useMemo(() => (mode ? [mode] : allSections), [mode]);
 
   const { data: simulationResult, isLoading } = useGetSimulationResultQuery(simulationIds[0], {
     skip: simulationIds.length === 0,
@@ -130,6 +136,8 @@ export function DownloadResult({ simulationIds, mode, triggerLabel }: DownloadRe
   };
 
   const resetSelections = () => {
+    if (allSelected) return;
+
     setParameters(false);
     setPlots(false);
     setAuralizations(false);
@@ -159,7 +167,7 @@ export function DownloadResult({ simulationIds, mode, triggerLabel }: DownloadRe
   };
 
   const enabledFrequencies = useMemo(() => {
-    const defaultFrequencies = [63, 125, 250, 500, 1000, 2000, 4000, 8000];
+    const defaultFrequencies: number[] = [];
 
     if (!simulationResult || !simulationResult.length) return defaultFrequencies;
 
@@ -168,6 +176,43 @@ export function DownloadResult({ simulationIds, mode, triggerLabel }: DownloadRe
 
     return firstResult.frequencies;
   }, [simulationResult]);
+
+  useEffect(() => {
+    if (enabledFrequencies.length === 0) return;
+
+    // If allSelected is true, select all available options
+    if (allSelected) {
+      setParameters(visibleSections.includes("parameters"));
+      setPlots(visibleSections.includes("plots"));
+      setAuralizations(visibleSections.includes("auralizations"));
+
+      setParameterOptions({
+        edt: visibleSections.includes("parameters"),
+        t20: visibleSections.includes("parameters"),
+        t30: visibleSections.includes("parameters"),
+        c80: visibleSections.includes("parameters"),
+        d50: visibleSections.includes("parameters"),
+        ts: visibleSections.includes("parameters"),
+        spl_t0_freq: visibleSections.includes("parameters"),
+      });
+
+      setPlotOptions({
+        "63Hz": visibleSections.includes("plots") && enabledFrequencies.includes(63),
+        "125Hz": visibleSections.includes("plots") && enabledFrequencies.includes(125),
+        "250Hz": visibleSections.includes("plots") && enabledFrequencies.includes(250),
+        "500Hz": visibleSections.includes("plots") && enabledFrequencies.includes(500),
+        "1000Hz": visibleSections.includes("plots") && enabledFrequencies.includes(1000),
+        "2000Hz": visibleSections.includes("plots") && enabledFrequencies.includes(2000),
+        "4000Hz": visibleSections.includes("plots") && enabledFrequencies.includes(4000),
+        "8000Hz": visibleSections.includes("plots") && enabledFrequencies.includes(8000),
+      });
+
+      setAuralizationOptions({
+        wavIR: visibleSections.includes("auralizations"),
+        csvIR: visibleSections.includes("auralizations"),
+      });
+    }
+  }, [enabledFrequencies, visibleSections, allSelected]);
 
   if (isLoading) return <Loading />;
 

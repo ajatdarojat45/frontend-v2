@@ -5,18 +5,31 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useGetSimulationsByModelIdQuery } from "@/store/simulationApi";
+import {
+  useDeleteSimulationMutation,
+  useGetSimulationsByModelIdQuery,
+  useLazyGetSimulationsByModelIdQuery,
+} from "@/store/simulationApi";
 import { useGetSimulationMethodsQuery } from "@/store/simulationSettingsApi";
 import { useNavigate } from "react-router";
 import { Button } from "@/components/ui/button";
 import { formatDate } from "@/helpers/datetime";
-import { CheckCircleIcon, FileText, GithubIcon } from "lucide-react";
+import { CheckCircleIcon, FileText, GithubIcon, EllipsisVerticalIcon } from "lucide-react";
 import type { Simulation } from "@/types/simulation";
 import { useDispatch, useSelector } from "react-redux";
 import { setSelectedMethodType } from "@/store/simulationSettingsSlice";
 import { setActiveSimulation } from "@/store/simulationSlice";
 import type { RootState } from "@/store";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { SimulationForm } from "../SimulationForm";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
+import { toast } from "sonner";
 
 type SimulationPickerProps = {
   modelId: number;
@@ -25,8 +38,12 @@ type SimulationPickerProps = {
 export function SimulationPicker({ modelId, simulationId }: SimulationPickerProps) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [deleteSimulation] = useDeleteSimulationMutation();
   const { data: simulations, isLoading } = useGetSimulationsByModelIdQuery(modelId);
   const { data: methods, isLoading: methodsLoading } = useGetSimulationMethodsQuery();
+  const [getSimulationsByModelId] = useLazyGetSimulationsByModelIdQuery();
+  const [menuOpen, setMenuOpen] = useState(false);
+
   const selectedMethodType = useSelector(
     (state: RootState) => state.simulationSettings.selectedMethodType,
   );
@@ -64,13 +81,33 @@ export function SimulationPicker({ modelId, simulationId }: SimulationPickerProp
 
   const selectedMethod = methods?.find((method) => method.simulationType === selectedMethodType);
 
+  const handleDeleteSimulation = async () => {
+    try {
+      await deleteSimulation({
+        id: activeSimulation!.id,
+        modelId: modelId,
+      }).unwrap();
+
+      if (simulations.length === 1) {
+        await getSimulationsByModelId(modelId).unwrap();
+        navigate(`/editor/${modelId}`, { replace: true });
+      }
+
+      toast.success("Simulation deleted successfully");
+    } catch {
+      toast.error("Failed to delete simulation");
+    } finally {
+      setMenuOpen(false);
+    }
+  };
+
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-3 gap-3 w-full items-center">
         <label htmlFor="simulation" className="font-medium text-white">
           Simulation:
         </label>
-        <div className="col-span-2">
+        <div className="col-span-2 flex">
           <Select onValueChange={handleSimulationChange} value={simulationId?.toString()}>
             <SelectTrigger className="bg-choras-dark text-white border-choras-gray [&>svg]:text-choras-gray w-full">
               <SelectValue>
@@ -86,6 +123,62 @@ export function SimulationPicker({ modelId, simulationId }: SimulationPickerProp
               ))}
             </SelectContent>
           </Select>
+
+          <DropdownMenu open={menuOpen} onOpenChange={setMenuOpen}>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" className="px-2 hover:bg-white/10 ml-2">
+                <EllipsisVerticalIcon className="size-6 text-white" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <SimulationForm
+                modelId={modelId}
+                trigger={
+                  <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                    Create New Simulation
+                  </DropdownMenuItem>
+                }
+                onSuccess={() => setMenuOpen(false)}
+              />
+
+              <SimulationForm
+                modelId={modelId}
+                id={activeSimulation?.id}
+                onSuccess={() => setMenuOpen(false)}
+                defaultValues={
+                  activeSimulation
+                    ? {
+                        name: activeSimulation.name,
+                        description: activeSimulation.description,
+                        status: activeSimulation.status,
+                      }
+                    : undefined
+                }
+                trigger={
+                  <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                    Edit Simulation
+                  </DropdownMenuItem>
+                }
+              />
+
+              <ConfirmDialog
+                title="Delete Simulation"
+                description="Are you sure you want to delete this simulation? This action cannot be undone."
+                onConfirm={handleDeleteSimulation}
+                confirmVariant="destructive"
+                confirmLabel="Delete Simulation"
+                trigger={
+                  <DropdownMenuItem
+                    onSelect={(e) => e.preventDefault()}
+                    onClick={(e) => e.stopPropagation()}
+                    className="text-red-600"
+                  >
+                    Delete Project
+                  </DropdownMenuItem>
+                }
+              />
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
         <label htmlFor="method" className="font-medium text-white">
           Method:

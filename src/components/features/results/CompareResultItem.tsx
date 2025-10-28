@@ -15,7 +15,7 @@ import { useGetSimulationMethodsQuery } from "@/store/simulationSettingsApi";
 import { formatDate } from "@/helpers/datetime";
 import { CheckCircleIcon, X } from "lucide-react";
 import type { Parameters, Simulation } from "@/types/simulation";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { removeCompareResult, updateCompareResult } from "@/store/simulationSlice";
 import { http } from "@/libs/http";
 import { downloadFile, formatFilename } from "@/helpers/file";
@@ -23,6 +23,8 @@ import { toast } from "sonner";
 import { useState } from "react";
 import { useGetModelQuery } from "@/store/modelApi";
 import { ChooseModel } from "./ChooseModel";
+import { selectCompareResults, selectCompareSimulationIds } from "@/store/simulationSelector";
+import { useNavigate } from "react-router";
 
 interface CompareResultItemProps {
   order: number;
@@ -43,14 +45,11 @@ export function CompareResultItem({
   receiverId,
   color,
   modelId,
-  isCurrent,
 }: CompareResultItemProps) {
+  const navigate = useNavigate();
   const [isDownloading, setIsDownloading] = useState(false);
   const dispatch = useDispatch();
   const { data: model } = useGetModelQuery(modelId?.toString(), { skip: !modelId });
-
-  console.log({ modelId });
-
   const { data: simulations } = useGetSimulationsByModelIdQuery(modelId, {
     skip: !modelId,
     refetchOnMountOrArgChange: true,
@@ -60,6 +59,8 @@ export function CompareResultItem({
     skip: !simulationId,
   });
   const [getSimulationResult] = useLazyGetSimulationResultQuery();
+  const simulationIds = useSelector(selectCompareSimulationIds);
+  const compareResults = useSelector(selectCompareResults);
 
   const selectedSimulation = simulations?.find((sim) => sim.id === simulationId);
   const selectedMethod = selectedSimulation
@@ -72,6 +73,12 @@ export function CompareResultItem({
 
   const handleRemove = () => {
     dispatch(removeCompareResult(id));
+
+    if (order === 1) {
+      // Pick the next result to navigate to
+      const result = compareResults[1];
+      navigate(`/editor/${result.modelId}/${result.simulationId}/results`);
+    }
   };
 
   const handleDownload = async () => {
@@ -242,7 +249,7 @@ export function CompareResultItem({
       </div>
 
       <div className="flex space-x-2">
-        {!isCurrent && (
+        {!(order === 1 && simulationIds.length === 1) && (
           <Button onClick={handleRemove} size="icon" variant="destructive">
             <X size={20} />
           </Button>
