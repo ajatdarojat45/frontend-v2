@@ -17,6 +17,7 @@ export function useSimulationRunner() {
   const [progress, setProgress] = useState(0);
   const pollIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const hasCheckedForRunningSimulation = useRef(false);
+  const lastCheckedSimulationId = useRef<number | null>(null);
 
   const activeSimulation = useSelector((state: RootState) => state.simulation.activeSimulation);
   const currentModelId = useSelector((state: RootState) => state.model.currentModelId);
@@ -55,7 +56,7 @@ export function useSimulationRunner() {
   }, [activeSimulation?.id, cancelSimulation, stopPolling]);
 
   const pollProgress = useCallback(async () => {
-    if (!activeSimulation?.id || !currentModelId) return;
+    if (!activeSimulation?.id) return;
 
     try {
       const { data } = await refetchSimulationRuns();
@@ -73,7 +74,7 @@ export function useSimulationRunner() {
             stopPolling();
             toast.success("Simulation completed successfully!");
             getSimulationResult(activeSimulation.id);
-            getSimulationsByModelId(currentModelId);
+            getSimulationsByModelId(activeSimulation.modelId);
             getImpulseResponseBySimulationId(activeSimulation.id);
           } else if (currentRun.status === "Error" || currentRun.status === "Failed") {
             setIsRunning(false);
@@ -91,7 +92,7 @@ export function useSimulationRunner() {
     }
   }, [
     activeSimulation?.id,
-    currentModelId,
+    activeSimulation?.modelId,
     refetchSimulationRuns,
     stopPolling,
     getSimulationResult,
@@ -100,7 +101,9 @@ export function useSimulationRunner() {
   ]);
 
   const startSimulation = useCallback(async () => {
-    if (!activeSimulation?.id || !currentModelId) {
+    const modelId = currentModelId || activeSimulation?.modelId;
+
+    if (!activeSimulation?.id || !modelId) {
       toast.error("No active simulation or model selected");
       return;
     }
@@ -109,7 +112,7 @@ export function useSimulationRunner() {
     setProgress(0);
 
     try {
-      await patchMeshes({ modelId: currentModelId }).unwrap();
+      await patchMeshes({ modelId }).unwrap();
 
       await runSimulation({ simulationId: activeSimulation.id }).unwrap();
       toast.success("Simulation started!");
@@ -123,14 +126,30 @@ export function useSimulationRunner() {
       setIsRunning(false);
       setProgress(0);
     }
-  }, [activeSimulation?.id, currentModelId, patchMeshes, runSimulation, pollProgress]);
+  }, [
+    activeSimulation?.id,
+    activeSimulation?.modelId,
+    currentModelId,
+    patchMeshes,
+    runSimulation,
+    pollProgress,
+  ]);
+
+  useEffect(() => {
+    if (activeSimulation?.id && activeSimulation.id !== lastCheckedSimulationId.current) {
+      refetchSimulationRuns();
+    }
+  }, [activeSimulation?.id, refetchSimulationRuns]);
 
   useEffect(() => {
     if (!activeSimulation?.id || !simulationRuns) {
       return;
     }
 
-    if (hasCheckedForRunningSimulation.current) {
+    if (
+      lastCheckedSimulationId.current === activeSimulation.id &&
+      hasCheckedForRunningSimulation.current
+    ) {
       return;
     }
 
@@ -158,15 +177,18 @@ export function useSimulationRunner() {
     }
 
     hasCheckedForRunningSimulation.current = true;
-  }, [activeSimulation?.id, simulationRuns, isRunning, pollProgress]);
+    lastCheckedSimulationId.current = activeSimulation.id;
+  }, [activeSimulation?.id, simulationRuns, isRunning, pollProgress, refetchSimulationRuns]);
 
   useEffect(() => {
-    hasCheckedForRunningSimulation.current = false;
+    if (activeSimulation?.id !== lastCheckedSimulationId.current) {
+      hasCheckedForRunningSimulation.current = false;
 
-    if (pollIntervalRef.current) {
-      stopPolling();
-      setIsRunning(false);
-      setProgress(0);
+      if (pollIntervalRef.current) {
+        stopPolling();
+        setIsRunning(false);
+        setProgress(0);
+      }
     }
   }, [activeSimulation?.id, stopPolling]);
 
