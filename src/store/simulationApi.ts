@@ -50,6 +50,15 @@ export const simulationApi = createApi({
       ],
     }),
 
+    deleteSimulation: build.mutation<void, { id: number; modelId: number }>({
+      query: ({ id }) => ({
+        url: `/simulations/${id}`,
+        method: "DELETE",
+      }),
+
+      invalidatesTags: (_, __, arg) => [{ type: "SimulationsByModel", id: arg.modelId }],
+    }),
+
     runSimulation: build.mutation<void, { simulationId: number }>({
       query: ({ simulationId }) => ({
         url: "/simulations/run",
@@ -90,6 +99,7 @@ export const {
   useCreateSimulationMutation,
   useGetSimulationByIdQuery,
   useUpdateSimulationMutation,
+  useDeleteSimulationMutation,
   useGetSimulationResultQuery,
   useLazyGetSimulationResultQuery,
   useRunSimulationMutation,

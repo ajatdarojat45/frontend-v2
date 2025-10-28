@@ -5,7 +5,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useGetSimulationsByModelIdQuery } from "@/store/simulationApi";
+import {
+  useDeleteSimulationMutation,
+  useGetSimulationsByModelIdQuery,
+} from "@/store/simulationApi";
 import { useGetSimulationMethodsQuery } from "@/store/simulationSettingsApi";
 import { useNavigate } from "react-router";
 import { Button } from "@/components/ui/button";
@@ -24,6 +27,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { SimulationForm } from "../SimulationForm";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
+import { toast } from "sonner";
 
 type SimulationPickerProps = {
   modelId: number;
@@ -32,6 +37,7 @@ type SimulationPickerProps = {
 export function SimulationPicker({ modelId, simulationId }: SimulationPickerProps) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [deleteSimulation] = useDeleteSimulationMutation();
   const { data: simulations, isLoading } = useGetSimulationsByModelIdQuery(modelId);
   const { data: methods, isLoading: methodsLoading } = useGetSimulationMethodsQuery();
   const selectedMethodType = useSelector(
@@ -70,6 +76,19 @@ export function SimulationPicker({ modelId, simulationId }: SimulationPickerProp
   const activeSimulation = simulations.find((sim) => sim.id === simulationId);
 
   const selectedMethod = methods?.find((method) => method.simulationType === selectedMethodType);
+
+  const handleDeleteSimulation = async () => {
+    try {
+      await deleteSimulation({
+        id: activeSimulation!.id,
+        modelId: modelId,
+      }).unwrap();
+
+      toast.success("Simulation deleted successfully");
+    } catch {
+      toast.error("Failed to delete simulation");
+    }
+  };
 
   return (
     <div className="space-y-4">
@@ -125,6 +144,23 @@ export function SimulationPicker({ modelId, simulationId }: SimulationPickerProp
                 trigger={
                   <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
                     Edit Simulation
+                  </DropdownMenuItem>
+                }
+              />
+
+              <ConfirmDialog
+                title="Delete Simulation"
+                description="Are you sure you want to delete this simulation? This action cannot be undone."
+                onConfirm={handleDeleteSimulation}
+                confirmVariant="destructive"
+                confirmLabel="Delete Simulation"
+                trigger={
+                  <DropdownMenuItem
+                    onSelect={(e) => e.preventDefault()}
+                    onClick={(e) => e.stopPropagation()}
+                    className="text-red-600"
+                  >
+                    Delete Project
                   </DropdownMenuItem>
                 }
               />
