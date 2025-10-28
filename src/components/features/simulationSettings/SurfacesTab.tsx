@@ -163,6 +163,22 @@ export function SurfacesTab() {
     return material?.name || "Unknown Material";
   };
 
+  const isMaterialsMixed = () => {
+    if (surfaces.length === 0) return false;
+
+    // Get material assignment for each surface (undefined for None)
+    const allMaterials = surfaces.map((surface) => {
+      const surfaceKey = surface.id;
+      return materialAssignments[surfaceKey]; // undefined if not assigned (None)
+    });
+
+    // Create set of unique materials (including undefined for None)
+    const uniqueMaterials = new Set(allMaterials);
+
+    // Mixed if there are more than 1 unique material states
+    return uniqueMaterials.size > 1;
+  };
+
   const getDisplayName = (surface: SurfaceInfo, index: number) => {
     if (surface.name && surface.name !== `Surface ${surface.meshId}`) {
       return surface.name;
@@ -172,6 +188,11 @@ export function SurfacesTab() {
 
   const getAssignAllValue = () => {
     if (surfaces.length === 0) return "default";
+
+    // Check if materials are mixed first
+    if (isMaterialsMixed()) {
+      return "mixed";
+    }
 
     const assignedMaterials = surfaces.map((surface) => {
       const surfaceKey = surface.id;
@@ -248,7 +269,7 @@ export function SurfacesTab() {
                     >
                       <ChevronRight size={16} />
                     </span>
-                    Assign All
+                    Assign all
                   </button>
                 </td>
                 <td className="px-3 py-2">
@@ -257,11 +278,18 @@ export function SurfacesTab() {
                       size="sm"
                       className="w-full bg-choras-dark border-choras-gray text-white [&>span]:truncate [&>span]:block [&>span]:max-w-full [&>svg]:text-choras-gray"
                     >
-                      <SelectValue placeholder="Select material for all surfaces" />
+                      {isMaterialsMixed() ? (
+                        <div className="flex items-center text-white">Mixed</div>
+                      ) : (
+                        <SelectValue placeholder="Select material for all surfaces" />
+                      )}
                     </SelectTrigger>
                     <SelectContent className="bg-choras-dark border-choras-gray">
                       <SelectItem value="default" className="text-white">
-                        All Assignment
+                        None
+                      </SelectItem>
+                      <SelectItem value="mixed" className="text-gray-400" disabled hidden>
+                        Mixed
                       </SelectItem>
                       {materialsLoading ? (
                         <SelectItem value="loading" disabled className="text-gray-400">
@@ -343,7 +371,7 @@ export function SurfacesTab() {
                           </SelectTrigger>
                           <SelectContent className="bg-choras-dark border-choras-gray">
                             <SelectItem value="default" className="text-white">
-                              Default
+                              None
                             </SelectItem>
                             {materialsLoading ? (
                               <SelectItem value="loading" disabled className="text-gray-400">
