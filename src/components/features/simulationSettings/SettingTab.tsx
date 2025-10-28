@@ -74,9 +74,14 @@ export function SettingTab() {
     }
   };
 
-  const generalSettingsIds = ["de_c0", "de_ir_length", "sim_len_type"];
-  const generalSettings = options.filter((option) => generalSettingsIds.includes(option.id));
-  const extendedSettings = options.filter((option) => !generalSettingsIds.includes(option.id));
+  const generalSettingsNames = ["simulation length", "impulse response length", "speed of sound"];
+  const generalSettings = options.filter((option) =>
+    generalSettingsNames.some((name) => option.name.toLowerCase().includes(name.toLowerCase())),
+  );
+  const extendedSettings = options.filter(
+    (option) =>
+      !generalSettingsNames.some((name) => option.name.toLowerCase().includes(name.toLowerCase())),
+  );
 
   if (isLoading) {
     return (

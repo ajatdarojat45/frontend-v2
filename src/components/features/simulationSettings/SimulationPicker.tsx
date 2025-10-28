@@ -91,7 +91,7 @@ export function SimulationPicker({ modelId, simulationId }: SimulationPickerProp
           Method:
         </label>
         <div className="col-span-2">
-          <Select value={selectedMethodType} onValueChange={handleMethodChange} disabled>
+          <Select value={selectedMethodType} onValueChange={handleMethodChange}>
             <SelectTrigger className="bg-choras-dark text-white border-choras-gray [&>svg]:text-choras-gray w-full">
               <SelectValue>
                 {selectedMethod ? selectedMethod.label.replace("method", "") : "Select a method"}
@@ -118,10 +118,11 @@ export function SimulationPicker({ modelId, simulationId }: SimulationPickerProp
             selectedMethod?.repositoryURL && window.open(selectedMethod.repositoryURL, "_blank")
           }
           disabled={!selectedMethod?.repositoryURL}
+          className="h-auto whitespace-normal py-2"
         >
           <div className="flex items-center gap-2 justify-center">
-            <GithubIcon size={16} />
-            {selectedMethodType} Repo
+            <GithubIcon size={16} className="flex-shrink-0" />
+            <span className="break-words text-left">{selectedMethodType} Repo</span>
           </div>
         </Button>
         <Button
@@ -131,10 +132,11 @@ export function SimulationPicker({ modelId, simulationId }: SimulationPickerProp
             window.open(selectedMethod.documentationURL, "_blank")
           }
           disabled={!selectedMethod?.documentationURL}
+          className="h-auto whitespace-normal py-2"
         >
           <div className="flex items-center gap-2 justify-center">
-            <FileText size={16} />
-            {selectedMethodType} Docs
+            <FileText size={16} className="flex-shrink-0" />
+            <span className="break-words text-left">{selectedMethodType} Docs</span>
           </div>
         </Button>
       </div>
