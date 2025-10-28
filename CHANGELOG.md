@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.38](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.37...v0.0.38) (2025-10-28)
+
+### Bug Fixes
+
+- make grid visible, add grid info, change axesHelper color ([2079a66](https://github.com/ajatdarojat45/frontend-v2/commit/2079a6631e68b518ac0d34444e52cf20cc7b1df0))
+- make method dropdown available again ([e73c23a](https://github.com/ajatdarojat45/frontend-v2/commit/e73c23a1696bb474bdeab70cfb5c85ab4aa597c9))
+
 ### [0.0.37](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.36...v0.0.37) (2025-10-28)
 
 ### Bug Fixes
