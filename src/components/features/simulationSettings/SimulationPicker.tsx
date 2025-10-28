@@ -104,11 +104,27 @@ export function SimulationPicker({ modelId, simulationId }: SimulationPickerProp
               <SimulationForm
                 modelId={modelId}
                 trigger={
-                  <DropdownMenuItem
-                    onSelect={(e) => e.preventDefault()}
-                    onClick={(e) => e.stopPropagation()}
-                  >
+                  <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
                     Create New Simulation
+                  </DropdownMenuItem>
+                }
+              />
+
+              <SimulationForm
+                modelId={modelId}
+                id={activeSimulation?.id}
+                defaultValues={
+                  activeSimulation
+                    ? {
+                        name: activeSimulation.name,
+                        description: activeSimulation.description,
+                        status: activeSimulation.status,
+                      }
+                    : undefined
+                }
+                trigger={
+                  <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                    Edit Simulation
                   </DropdownMenuItem>
                 }
               />

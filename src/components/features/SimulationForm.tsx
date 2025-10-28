@@ -26,6 +26,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import {
   useCreateSimulationMutation,
+  useUpdateSimulationMutation,
   useLazyGetSimulationsByModelIdQuery,
 } from "@/store/simulationApi";
 import { toast } from "sonner";
@@ -34,6 +35,7 @@ import { useNavigate } from "react-router";
 const SimulationFormSchema = z.object({
   name: z.string().min(3, { message: "Name must be at least 3 characters." }),
   description: z.string().optional(),
+  status: z.string().optional(),
 });
 
 type SimulationFormData = z.infer<typeof SimulationFormSchema>;
@@ -54,11 +56,13 @@ export function SimulationForm({ modelId, id, defaultValues, trigger }: Simulati
       description: "",
     },
   });
-  const [createSimulation, { isLoading }] = useCreateSimulationMutation();
+  const [createSimulation, { isLoading: isCreating }] = useCreateSimulationMutation();
+  const [updateSimulation, { isLoading: isUpdating }] = useUpdateSimulationMutation();
   const [getSimulationsByModelId] = useLazyGetSimulationsByModelIdQuery();
 
+  const isLoading = isCreating || isUpdating;
   const isEdit = Boolean(id);
-  console.log({ isEdit });
+  const label = isEdit ? "Edit" : "Create new";
 
   // Reset form when dialog closes
   useEffect(() => {
@@ -67,25 +71,51 @@ export function SimulationForm({ modelId, id, defaultValues, trigger }: Simulati
     }
   }, [open, form]);
 
+  // Reset form with defaultValues when they change (for edit mode)
+  useEffect(() => {
+    if (defaultValues) {
+      form.reset(defaultValues);
+    }
+  }, [defaultValues, form]);
+
   const handleSubmit = async (data: SimulationFormData) => {
     try {
-      const result = await createSimulation({
-        ...data,
-        modelId,
-        layerIdByMaterialId: {},
-        solverSettings: {
-          simulationSettings: {},
-        },
-      }).unwrap();
+      if (isEdit && id) {
+        await updateSimulation({
+          id,
+          body: {
+            ...data,
+            modelId,
+          },
+        }).unwrap();
+        // Refetch simulations to update the list
+        await getSimulationsByModelId(modelId).unwrap();
+        toast.success("Simulation updated successfully");
+      } else {
+        const result = await createSimulation({
+          ...data,
+          modelId,
+          layerIdByMaterialId: {},
+          solverSettings: {
+            simulationSettings: {},
+          },
+        }).unwrap();
 
-      // Refetch simulations to update the list
-      await getSimulationsByModelId(modelId).unwrap();
+        // Refetch simulations to update the list
+        await getSimulationsByModelId(modelId).unwrap();
 
-      navigate(`/editor/${modelId}/${result.id}`);
-      toast.success("Simulation created successfully");
+        // Navigate to editor for new simulations
+        navigate(`/editor/${modelId}/${result.id}`);
+        toast.success("Simulation created successfully");
+      }
+
       setOpen(false);
     } catch {
-      toast.error("Failed to create simulation");
+      if (isEdit) {
+        toast.error("Failed to update simulation");
+      } else {
+        toast.error("Failed to create simulation");
+      }
     }
   };
 
@@ -97,7 +127,7 @@ export function SimulationForm({ modelId, id, defaultValues, trigger }: Simulati
             variant="secondary"
             className="bg-choras-dark border border-choras-primary text-choras-primary hover:bg-white hover:text-choras-dark cursor-pointer"
           >
-            Create Simulation
+            {label} Simulation
           </Button>
         )}
       </DialogTrigger>
@@ -105,8 +135,12 @@ export function SimulationForm({ modelId, id, defaultValues, trigger }: Simulati
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleSubmit)}>
             <DialogHeader>
-              <DialogTitle>Create Simulation</DialogTitle>
-              <DialogDescription>Create a new simulation for your project.</DialogDescription>
+              <DialogTitle>{label} Simulation</DialogTitle>
+              <DialogDescription>
+                {isEdit
+                  ? "Edit your simulation details."
+                  : "Create a new simulation for your project."}
+              </DialogDescription>
             </DialogHeader>
 
             <div className="space-y-4 my-6">
@@ -150,7 +184,13 @@ export function SimulationForm({ modelId, id, defaultValues, trigger }: Simulati
                 </Button>
               </DialogClose>
               <Button disabled={isLoading} type="submit">
-                {isLoading ? "Creating..." : "Create"}
+                {isLoading
+                  ? isEdit
+                    ? "Updating..."
+                    : "Creating..."
+                  : isEdit
+                    ? "Update"
+                    : "Create"}
               </Button>
             </DialogFooter>
           </form>
