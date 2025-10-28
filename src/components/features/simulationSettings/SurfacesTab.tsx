@@ -350,11 +350,9 @@ export function SurfacesTab() {
                                 </TooltipContent>
                               </Tooltip>
                             ))}
-                            <SelectItem
-                              value="open-library"
-                              className="text-choras-primary italic border-t border-choras-gray mt-1 pt-2"
-                            >
-                              Open material library...
+                            <hr className="border-t border-gray-700 my-1" />
+                            <SelectItem value="open-library" className="text-choras-primary">
+                              Open material library
                             </SelectItem>
                           </TooltipProvider>
                         )}
@@ -441,11 +439,9 @@ export function SurfacesTab() {
                                       </TooltipContent>
                                     </Tooltip>
                                   ))}
-                                  <SelectItem
-                                    value="open-library"
-                                    className="text-choras-primary italic border-t border-choras-gray mt-1 pt-2"
-                                  >
-                                    Open material library...
+                                  <hr className="border-t border-gray-700 my-1" />
+                                  <SelectItem value="open-library" className="text-choras-primary">
+                                    Open material library
                                   </SelectItem>
                                 </TooltipProvider>
                               )}
