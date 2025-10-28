@@ -38,7 +38,7 @@ export function DownloadResult({
   const [isDownloading, setIsDownloading] = useState(false);
 
   const allSections = ["parameters", "plots", "auralizations"];
-  const visibleSections = mode ? [mode] : allSections;
+  const visibleSections = useMemo(() => (mode ? [mode] : allSections), [mode]);
 
   const { data: simulationResult, isLoading } = useGetSimulationResultQuery(simulationIds[0], {
     skip: simulationIds.length === 0,
@@ -136,6 +136,8 @@ export function DownloadResult({
   };
 
   const resetSelections = () => {
+    if (allSelected) return;
+
     setParameters(false);
     setPlots(false);
     setAuralizations(false);
@@ -210,7 +212,7 @@ export function DownloadResult({
         csvIR: visibleSections.includes("auralizations"),
       });
     }
-  }, [allSelected, enabledFrequencies, visibleSections]);
+  }, [enabledFrequencies, visibleSections, allSelected]);
 
   if (isLoading) return <Loading />;
 
