@@ -42,6 +42,9 @@ const simulationSlice = createSlice({
     initializeCompareResults: (state, action) => {
       state.compareResults = action.payload;
     },
+    clearCompareResults: (state) => {
+      state.compareResults = [];
+    },
   },
 });
 
@@ -51,6 +54,7 @@ export const {
   removeCompareResult,
   updateCompareResult,
   initializeCompareResults,
+  clearCompareResults,
 } = simulationSlice.actions;
 
 export const simulationReducer = simulationSlice.reducer;
