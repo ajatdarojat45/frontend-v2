@@ -71,13 +71,6 @@ export function SimulationForm({ modelId, id, defaultValues, trigger }: Simulati
     }
   }, [open, form]);
 
-  // Reset form with defaultValues when they change (for edit mode)
-  useEffect(() => {
-    if (defaultValues) {
-      form.reset(defaultValues);
-    }
-  }, [defaultValues, form]);
-
   const handleSubmit = async (data: SimulationFormData) => {
     try {
       if (isEdit && id) {
@@ -151,7 +144,22 @@ export function SimulationForm({ modelId, id, defaultValues, trigger }: Simulati
                   <FormItem>
                     <FormLabel>Name</FormLabel>
                     <FormControl>
-                      <Input disabled={isLoading} placeholder="Simulation name" {...field} />
+                      <Input
+                        autoComplete="off"
+                        disabled={isLoading}
+                        placeholder="Simulation name"
+                        {...field}
+                        onFocus={(e) => {
+                          // HACK: Prevent auto-selection by moving cursor to end
+                          if (isEdit) {
+                            setTimeout(() => {
+                              const input = e.target;
+                              const length = input.value.length;
+                              input.setSelectionRange(length, length);
+                            }, 10);
+                          }
+                        }}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
