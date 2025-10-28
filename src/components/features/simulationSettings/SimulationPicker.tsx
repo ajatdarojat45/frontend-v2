@@ -8,6 +8,7 @@ import {
 import {
   useDeleteSimulationMutation,
   useGetSimulationsByModelIdQuery,
+  useLazyGetSimulationsByModelIdQuery,
 } from "@/store/simulationApi";
 import { useGetSimulationMethodsQuery } from "@/store/simulationSettingsApi";
 import { useNavigate } from "react-router";
@@ -40,6 +41,8 @@ export function SimulationPicker({ modelId, simulationId }: SimulationPickerProp
   const [deleteSimulation] = useDeleteSimulationMutation();
   const { data: simulations, isLoading } = useGetSimulationsByModelIdQuery(modelId);
   const { data: methods, isLoading: methodsLoading } = useGetSimulationMethodsQuery();
+  const [getSimulationsByModelId] = useLazyGetSimulationsByModelIdQuery();
+
   const selectedMethodType = useSelector(
     (state: RootState) => state.simulationSettings.selectedMethodType,
   );
@@ -83,6 +86,11 @@ export function SimulationPicker({ modelId, simulationId }: SimulationPickerProp
         id: activeSimulation!.id,
         modelId: modelId,
       }).unwrap();
+
+      if (simulations.length === 1) {
+        await getSimulationsByModelId(modelId).unwrap();
+        navigate(`/editor/${modelId}`, { replace: true });
+      }
 
       toast.success("Simulation deleted successfully");
     } catch {
