@@ -127,6 +127,11 @@ export function SurfacesTab() {
   );
 
   const handleMaterialAssignment = async (surfaceKey: string, materialId: string) => {
+    if (materialId === "open-library") {
+      setOpenMaterialLibrary(true);
+      return;
+    }
+
     let updatedAssignments: Record<string, number>;
 
     if (materialId === "default") {
@@ -142,6 +147,11 @@ export function SurfacesTab() {
   };
 
   const handleAssignAllMaterials = async (materialId: string) => {
+    if (materialId === "open-library") {
+      setOpenMaterialLibrary(true);
+      return;
+    }
+
     let updatedAssignments: Record<string, number>;
 
     if (materialId === "default") {
@@ -242,7 +252,7 @@ export function SurfacesTab() {
   return (
     <div className="text-white h-full flex flex-col justify-between">
       <div>
-        <div className="mb-4 flex justify-between items-center">
+        <div className="mb-4 flex justify-between items-center mt-2">
           <h4 className="text-xl text-choras-primary">Surfaces</h4>
           <SurfaceMaterialList
             openMaterialLibrary={openMaterialLibrary}
@@ -340,6 +350,12 @@ export function SurfacesTab() {
                                 </TooltipContent>
                               </Tooltip>
                             ))}
+                            <SelectItem
+                              value="open-library"
+                              className="text-choras-primary italic border-t border-choras-gray mt-1 pt-2"
+                            >
+                              Open material library...
+                            </SelectItem>
                           </TooltipProvider>
                         )}
                       </SelectContent>
@@ -425,6 +441,12 @@ export function SurfacesTab() {
                                       </TooltipContent>
                                     </Tooltip>
                                   ))}
+                                  <SelectItem
+                                    value="open-library"
+                                    className="text-choras-primary italic border-t border-choras-gray mt-1 pt-2"
+                                  >
+                                    Open material library...
+                                  </SelectItem>
                                 </TooltipProvider>
                               )}
                             </SelectContent>
@@ -462,7 +484,7 @@ export function SurfacesTab() {
             onClick={handleOpenCreateMaterialDialog}
           >
             <Plus size={14} />
-            <span className="-ml-1">Create new material</span>
+            <span>Create material</span>
           </Button>
         </div>
       </div>

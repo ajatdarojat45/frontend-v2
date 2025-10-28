@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -8,7 +7,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { EllipsisVertical, Search } from "lucide-react";
+import { Search } from "lucide-react";
 import { useState } from "react";
 import { useGetMaterialsQuery } from "@/store/materialsApi";
 import type { Material } from "@/types/material";
@@ -37,9 +36,9 @@ export function SurfaceMaterialList({
 
   return (
     <Dialog open={openMaterialLibrary} onOpenChange={setOpenMaterialLibrary}>
-      <Button variant="ghost" className="rounded-full hover:bg-gray-600 hover:text-white">
+      {/* <Button variant="ghost" className="rounded-full hover:bg-gray-600 hover:text-white">
         <EllipsisVertical size={20} className="text-white" />
-      </Button>
+      </Button> */}
       <DialogContent className="sm:max-w-3xl max-w-lg border border-transparent bg-gradient-to-r from-choras-primary from-50% to-choras-secondary bg-clip-border p-0.5">
         <div className="bg-white p-6 rounded-lg space-y-6">
           <DialogHeader>
