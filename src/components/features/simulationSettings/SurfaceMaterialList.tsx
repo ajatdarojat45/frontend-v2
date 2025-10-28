@@ -6,7 +6,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { EllipsisVertical, Search } from "lucide-react";
@@ -15,8 +14,19 @@ import { useGetMaterialsQuery } from "@/store/materialsApi";
 import type { Material } from "@/types/material";
 import { CreateMaterialDialog } from "./CreateMaterialDialog";
 
-export function SurfaceMaterialList() {
-  const [open, setOpen] = useState(false);
+type IProps = {
+  openMaterialLibrary: boolean;
+  setOpenMaterialLibrary: (open: boolean) => void;
+  openCreateMaterialDialog: boolean;
+  setOpenCreateMaterialDialog: (open: boolean) => void;
+};
+
+export function SurfaceMaterialList({
+  openMaterialLibrary,
+  setOpenMaterialLibrary,
+  openCreateMaterialDialog,
+  setOpenCreateMaterialDialog,
+}: IProps) {
   const [selectedMaterial, setSelectedMaterial] = useState<Material | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const { data: materials = [], isLoading, error } = useGetMaterialsQuery();
@@ -26,18 +36,19 @@ export function SurfaceMaterialList() {
   );
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button variant="ghost" className="rounded-full hover:bg-gray-600 hover:text-white">
-          <EllipsisVertical size={20} className="text-white" />
-        </Button>
-      </DialogTrigger>
+    <Dialog open={openMaterialLibrary} onOpenChange={setOpenMaterialLibrary}>
+      <Button variant="ghost" className="rounded-full hover:bg-gray-600 hover:text-white">
+        <EllipsisVertical size={20} className="text-white" />
+      </Button>
       <DialogContent className="sm:max-w-3xl max-w-lg border border-transparent bg-gradient-to-r from-choras-primary from-50% to-choras-secondary bg-clip-border p-0.5">
         <div className="bg-white p-6 rounded-lg space-y-6">
           <DialogHeader>
             <div className="flex justify-between items-center mt-4">
               <DialogTitle className="text-xl text-choras-primary">Materials</DialogTitle>
-              <CreateMaterialDialog />
+              <CreateMaterialDialog
+                openCreateMaterialDialog={openCreateMaterialDialog}
+                setOpenCreateMaterialDialog={setOpenCreateMaterialDialog}
+              />
             </div>
             <DialogDescription>List of Material Available</DialogDescription>
           </DialogHeader>
