@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.39](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.38...v0.0.39) (2025-10-28)
+
+### Features
+
+- Add onSuccess callback to SimulationForm and manage menu state in SimulationPicker ([fe81879](https://github.com/ajatdarojat45/frontend-v2/commit/fe8187950fbd1825acb935824e67fb4ed15d3c10))
+- Add trigger label to DownloadResult component ([2dc8b41](https://github.com/ajatdarojat45/frontend-v2/commit/2dc8b41dabf00779cd2553c6368848e716a85ee5))
+- Collapsible Groups ([88f9950](https://github.com/ajatdarojat45/frontend-v2/commit/88f9950adc472beeaa73a802038801c6a731cb51))
+- Create simulation on dropdown 3-dots ([4d0376a](https://github.com/ajatdarojat45/frontend-v2/commit/4d0376aabc4523c249076c4e5606d96f997f4790))
+- Delete simulation from 3-dots ([b973c57](https://github.com/ajatdarojat45/frontend-v2/commit/b973c57e4591d3c0fcb446e549a1ecdd167101d3))
+- Edit simulation from 3-dots ([71642ef](https://github.com/ajatdarojat45/frontend-v2/commit/71642ef9c3c0da6d1bf02aece325c4664df66a2c))
+- Show donwload button below the CompareResult ([444f1cb](https://github.com/ajatdarojat45/frontend-v2/commit/444f1cbe4d454f34d9fa37cdd5c451f2bdb105c3))
+- update ResultPage sidebar with exit button and adjust CompareResult layout ([6744d81](https://github.com/ajatdarojat45/frontend-v2/commit/6744d81b51cd4da5f11e40932f466f6ec2ce772f))
+
+### Bug Fixes
+
+- Memory leaks cause of visibleSections reference is always new ([3ac21e1](https://github.com/ajatdarojat45/frontend-v2/commit/3ac21e18397693b823808707a10c329616487111))
+- Navigate to editor model with no simulation ([3f6cea9](https://github.com/ajatdarojat45/frontend-v2/commit/3f6cea9f3543bdcd0b11e8d66381bbb0c5548781))
+- No group label consistency ([b40861f](https://github.com/ajatdarojat45/frontend-v2/commit/b40861fc76be480896f778df9cc1cddb07f248dd))
+- Reset form with default values in edit mode and prevent auto-selection in input ([f3c4317](https://github.com/ajatdarojat45/frontend-v2/commit/f3c4317000c6f236b53bbab1dd9f342b4ed0ce12))
+- Update button visibility logic in CompareResultItem component ([bb264d7](https://github.com/ajatdarojat45/frontend-v2/commit/bb264d719f32104cae0d038ba9b0bdca28f5d16f))
+- Vertical space when folded ([2fcbeb4](https://github.com/ajatdarojat45/frontend-v2/commit/2fcbeb4c8755ce801e665a1ef60902e225f7371d))
+
 ### [0.0.38](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.37...v0.0.38) (2025-10-28)
 
 ### Bug Fixes
