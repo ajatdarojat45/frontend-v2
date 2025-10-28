@@ -10,7 +10,7 @@ import { useGetSimulationMethodsQuery } from "@/store/simulationSettingsApi";
 import { useNavigate } from "react-router";
 import { Button } from "@/components/ui/button";
 import { formatDate } from "@/helpers/datetime";
-import { CheckCircleIcon, FileText, GithubIcon } from "lucide-react";
+import { CheckCircleIcon, FileText, GithubIcon, EllipsisVerticalIcon } from "lucide-react";
 import type { Simulation } from "@/types/simulation";
 import { useDispatch, useSelector } from "react-redux";
 import { setSelectedMethodType } from "@/store/simulationSettingsSlice";
@@ -70,7 +70,7 @@ export function SimulationPicker({ modelId, simulationId }: SimulationPickerProp
         <label htmlFor="simulation" className="font-medium text-white">
           Simulation:
         </label>
-        <div className="col-span-2">
+        <div className="col-span-2 flex">
           <Select onValueChange={handleSimulationChange} value={simulationId?.toString()}>
             <SelectTrigger className="bg-choras-dark text-white border-choras-gray [&>svg]:text-choras-gray w-full">
               <SelectValue>
@@ -86,6 +86,10 @@ export function SimulationPicker({ modelId, simulationId }: SimulationPickerProp
               ))}
             </SelectContent>
           </Select>
+
+          <Button variant="ghost" size="icon" className="px-2 hover:bg-white/10 ml-2">
+            <EllipsisVerticalIcon className="size-6 text-white" />
+          </Button>
         </div>
         <label htmlFor="method" className="font-medium text-white">
           Method:
