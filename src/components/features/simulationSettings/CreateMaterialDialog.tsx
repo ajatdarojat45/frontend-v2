@@ -78,7 +78,7 @@ export function CreateMaterialDialog({
       <DialogTrigger asChild>
         <Button variant="outline" size="sm" className="flex items-center gap-2">
           <Plus size={16} />
-          Create Material
+          Create material
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-2xl">

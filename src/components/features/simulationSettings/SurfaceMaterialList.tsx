@@ -43,13 +43,13 @@ export function SurfaceMaterialList({
         <div className="bg-white p-6 rounded-lg space-y-6">
           <DialogHeader>
             <div className="flex justify-between items-center mt-4">
-              <DialogTitle className="text-xl text-choras-primary">Materials</DialogTitle>
+              <DialogTitle className="text-xl text-choras-primary">Material library</DialogTitle>
               <CreateMaterialDialog
                 openCreateMaterialDialog={openCreateMaterialDialog}
                 setOpenCreateMaterialDialog={setOpenCreateMaterialDialog}
               />
             </div>
-            <DialogDescription>List of Material Available</DialogDescription>
+            <DialogDescription>Select a material to view its details</DialogDescription>
           </DialogHeader>
 
           <div className="relative">
@@ -122,7 +122,6 @@ export function SurfaceMaterialList({
             <div className="w-full">
               {selectedMaterial ? (
                 <div className="space-y-3">
-                  <h3 className="font-medium text-base">Material Details</h3>
                   <div className="bg-gray-50 p-4 rounded-lg w-full">
                     <h4 className="font-medium text-sm mb-3">{selectedMaterial.name}</h4>
                     <div className="w-full overflow-x-auto">

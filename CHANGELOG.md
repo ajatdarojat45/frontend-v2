@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.36](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.35...v0.0.36) (2025-10-28)
+
+### Bug Fixes
+
+- correct capitalization of "Create material" button text ([1cbf824](https://github.com/ajatdarojat45/frontend-v2/commit/1cbf824c9a39b1f77912de07ccaa670a7d569035))
+- improve UI consistency by updating "Open material library" text and adding separators ([8440c57](https://github.com/ajatdarojat45/frontend-v2/commit/8440c57e3be46055afe59ddde9f3b071c6663114))
+- update dialog titles for clarity in SurfaceMaterialList ([4b2666c](https://github.com/ajatdarojat45/frontend-v2/commit/4b2666c451063369ee9a6dcc0a6394f7ed6b8983))
+
 ### [0.0.35](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.34...v0.0.35) (2025-10-28)
 
 ### Features
