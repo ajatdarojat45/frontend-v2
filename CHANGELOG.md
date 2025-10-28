@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.35](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.34...v0.0.35) (2025-10-28)
+
+### Features
+
+- add functionality to open material library from material assignment options ([36759a7](https://github.com/ajatdarojat45/frontend-v2/commit/36759a719c277aac0c08403ffae30a4e11bf66b0))
+
 ### [0.0.34](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.33...v0.0.34) (2025-10-28)
 
 ### Features
