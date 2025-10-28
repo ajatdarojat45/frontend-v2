@@ -120,7 +120,7 @@ export function SurfaceMaterialList({
           </div>
           <DialogFooter>
             <div className="w-full">
-              {selectedMaterial ? (
+              {selectedMaterial && (
                 <div className="space-y-3">
                   <div className="bg-gray-50 p-4 rounded-lg w-full">
                     <h4 className="font-medium text-sm mb-3">{selectedMaterial.name}</h4>
@@ -151,10 +151,6 @@ export function SurfaceMaterialList({
                       </table>
                     </div>
                   </div>
-                </div>
-              ) : (
-                <div className="text-center text-gray-500 text-sm py-4">
-                  Select a material to view details
                 </div>
               )}
             </div>

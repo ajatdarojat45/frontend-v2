@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.37](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.36...v0.0.37) (2025-10-28)
+
+### Bug Fixes
+
+- simplify conditional rendering for selected material in SurfaceMaterialList ([c8a79d1](https://github.com/ajatdarojat45/frontend-v2/commit/c8a79d1474d492b4d42f5b09f15866aa8d81fee6))
+
 ### [0.0.36](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.35...v0.0.36) (2025-10-28)
 
 ### Bug Fixes
