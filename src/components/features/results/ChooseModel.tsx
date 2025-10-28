@@ -116,7 +116,7 @@ export function ChooseModel({ onModelSelect, trigger }: ChooseModelProps) {
               <SelectContent>
                 {groups.map((group) => (
                   <SelectItem key={group} value={group}>
-                    {group} (
+                    {group === "Ungrouped" ? "No group" : group} (
                     {group === "Ungrouped"
                       ? projectsSimulations.filter((ps) => !ps.group && ps.simulations.length > 0)
                           .length
