@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.40](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.39...v0.0.40) (2025-10-28)
+
+### Bug Fixes
+
+- refetching after reload or loading another simulation ([6c1bece](https://github.com/ajatdarojat45/frontend-v2/commit/6c1bece96f67232994c1d3b1f7f9cc29e74d2deb))
+
 ### [0.0.39](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.38...v0.0.39) (2025-10-28)
 
 ### Features
