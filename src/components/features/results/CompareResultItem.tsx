@@ -143,8 +143,6 @@ export function CompareResultItem({
   const sources = selectedSimulation?.sources || [];
   const receivers = selectedSimulation?.receivers || [];
 
-  console.log(model, "<<<");
-
   return (
     <div className="border-y border-stone-600 p-4 space-y-4 relative">
       {model && (
@@ -180,9 +178,11 @@ export function CompareResultItem({
               </SelectValue>
             </SelectTrigger>
             <SelectContent className="bg-choras-dark border-choras-gray">
-              {simulations?.map((simulation) => (
-                <CustomSelectItem key={simulation.id} simulation={simulation} />
-              ))}
+              {simulations
+                ?.filter((simulation) => simulation.status === "Completed")
+                .map((simulation) => (
+                  <CustomSelectItem key={simulation.id} simulation={simulation} />
+                ))}
             </SelectContent>
           </Select>
         </div>
