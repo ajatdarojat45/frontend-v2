@@ -18,6 +18,7 @@ import { syncGroupsFromProjects } from "@/store/projectSlice";
 import { useEffect, useState } from "react";
 import { SortPicker } from "@/components/features/SortPicker";
 import type { GroupProject, Project } from "@/types/project";
+import { cn } from "@/libs/style";
 
 export function HomePage() {
   const { data: projects, isLoading, error } = useGetProjectsQuery();
@@ -160,7 +161,7 @@ export function HomePage() {
             open={!isGroupCollapsed(groupProject.group)}
             onOpenChange={() => toggleGroupCollapse(groupProject.group)}
           >
-            <div className="flex items-center">
+            <div className="flex items-center pb-4">
               <CollapsibleTrigger className="flex items-center gap-2 hover:opacity-70 transition-opacity">
                 {isGroupCollapsed(groupProject.group) ? (
                   <ChevronRightIcon className="h-4 w-4" />
@@ -177,7 +178,14 @@ export function HomePage() {
               />
             </div>
             <CollapsibleContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 border-b border-b-black/25 mt-5 pb-8 mb-6">
+              <div
+                className={cn(
+                  "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 border-b border-b-black/25 pb-6",
+                  {
+                    "mb-6": !isGroupCollapsed(groupProject.group),
+                  },
+                )}
+              >
                 {groupProject.projects.map((project) => (
                   <Link key={project.id} to={`/projects/${project.id}`}>
                     <ProjectCard project={project} />
