@@ -1,5 +1,5 @@
 import { AppLayout } from "@/components/ui/app-layout";
-import { useParams } from "react-router";
+import { Link, useParams } from "react-router";
 import { ResultAuralizations } from "@/components/features/results/ResultAuralizations";
 import { ResultParameters } from "@/components/features/results/ResultParameters";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -12,6 +12,7 @@ import { setActiveSimulation } from "@/store/simulationSlice";
 import { useEffect } from "react";
 import { useGetSimulationsByModelIdQuery } from "@/store/simulationApi";
 import { useDispatch } from "react-redux";
+import { Button } from "@/components/ui/button";
 
 export function ResultPage() {
   const dispatch = useDispatch();
@@ -52,7 +53,18 @@ export function ResultPage() {
           />
         )
       }
-      sidebar={<CompareResult modelId={+modelId} />}
+      sidebar={
+        <div className="flex flex-col h-container">
+          <CompareResult modelId={+modelId} />
+          <div className="p-4">
+            <Button variant="secondary" className="w-full" asChild>
+              <Link to={`/editor/${modelId}`} replace>
+                Exit Result
+              </Link>
+            </Button>
+          </div>
+        </div>
+      }
     >
       <EditorNav active="results" modelId={+modelId} simulationId={+simulationId} />
 
