@@ -20,7 +20,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setSelectedMethodType } from "@/store/simulationSettingsSlice";
 import { setActiveSimulation } from "@/store/simulationSlice";
 import type { RootState } from "@/store";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -42,6 +42,7 @@ export function SimulationPicker({ modelId, simulationId }: SimulationPickerProp
   const { data: simulations, isLoading } = useGetSimulationsByModelIdQuery(modelId);
   const { data: methods, isLoading: methodsLoading } = useGetSimulationMethodsQuery();
   const [getSimulationsByModelId] = useLazyGetSimulationsByModelIdQuery();
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const selectedMethodType = useSelector(
     (state: RootState) => state.simulationSettings.selectedMethodType,
@@ -95,6 +96,8 @@ export function SimulationPicker({ modelId, simulationId }: SimulationPickerProp
       toast.success("Simulation deleted successfully");
     } catch {
       toast.error("Failed to delete simulation");
+    } finally {
+      setMenuOpen(false);
     }
   };
 
@@ -121,7 +124,7 @@ export function SimulationPicker({ modelId, simulationId }: SimulationPickerProp
             </SelectContent>
           </Select>
 
-          <DropdownMenu>
+          <DropdownMenu open={menuOpen} onOpenChange={setMenuOpen}>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon" className="px-2 hover:bg-white/10 ml-2">
                 <EllipsisVerticalIcon className="size-6 text-white" />
@@ -135,11 +138,13 @@ export function SimulationPicker({ modelId, simulationId }: SimulationPickerProp
                     Create New Simulation
                   </DropdownMenuItem>
                 }
+                onSuccess={() => setMenuOpen(false)}
               />
 
               <SimulationForm
                 modelId={modelId}
                 id={activeSimulation?.id}
+                onSuccess={() => setMenuOpen(false)}
                 defaultValues={
                   activeSimulation
                     ? {

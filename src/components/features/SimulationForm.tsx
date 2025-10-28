@@ -45,8 +45,15 @@ type SimulationFormProps = {
   id?: number;
   defaultValues?: Partial<SimulationFormData>;
   trigger?: React.ReactNode;
+  onSuccess?: () => void;
 };
-export function SimulationForm({ modelId, id, defaultValues, trigger }: SimulationFormProps) {
+export function SimulationForm({
+  modelId,
+  id,
+  defaultValues,
+  trigger,
+  onSuccess,
+}: SimulationFormProps) {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const form = useForm<SimulationFormData>({
@@ -101,6 +108,8 @@ export function SimulationForm({ modelId, id, defaultValues, trigger }: Simulati
         navigate(`/editor/${modelId}/${result.id}`);
         toast.success("Simulation created successfully");
       }
+
+      onSuccess?.();
 
       setOpen(false);
     } catch {
