@@ -31,28 +31,34 @@ import {
 import { toast } from "sonner";
 import { useNavigate } from "react-router";
 
-const CreateSimulationSchema = z.object({
+const SimulationFormSchema = z.object({
   name: z.string().min(3, { message: "Name must be at least 3 characters." }),
   description: z.string().optional(),
 });
 
-type CreateSimulationData = z.infer<typeof CreateSimulationSchema>;
+type SimulationFormData = z.infer<typeof SimulationFormSchema>;
 
-type CreateSimulationProps = {
+type SimulationFormProps = {
   modelId: number;
+  id?: number;
+  defaultValues?: Partial<SimulationFormData>;
+  trigger?: React.ReactNode;
 };
-export function CreateSimulation({ modelId }: CreateSimulationProps) {
+export function SimulationForm({ modelId, id, defaultValues, trigger }: SimulationFormProps) {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
-  const form = useForm<CreateSimulationData>({
-    resolver: zodResolver(CreateSimulationSchema),
-    defaultValues: {
+  const form = useForm<SimulationFormData>({
+    resolver: zodResolver(SimulationFormSchema),
+    defaultValues: defaultValues ?? {
       name: "",
       description: "",
     },
   });
   const [createSimulation, { isLoading }] = useCreateSimulationMutation();
   const [getSimulationsByModelId] = useLazyGetSimulationsByModelIdQuery();
+
+  const isEdit = Boolean(id);
+  console.log({ isEdit });
 
   // Reset form when dialog closes
   useEffect(() => {
@@ -61,7 +67,7 @@ export function CreateSimulation({ modelId }: CreateSimulationProps) {
     }
   }, [open, form]);
 
-  const handleSubmit = async (data: CreateSimulationData) => {
+  const handleSubmit = async (data: SimulationFormData) => {
     try {
       const result = await createSimulation({
         ...data,
@@ -86,12 +92,14 @@ export function CreateSimulation({ modelId }: CreateSimulationProps) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button
-          variant="secondary"
-          className="bg-choras-dark border border-choras-primary text-choras-primary hover:bg-white hover:text-choras-dark cursor-pointer"
-        >
-          Create Simulation
-        </Button>
+        {trigger ?? (
+          <Button
+            variant="secondary"
+            className="bg-choras-dark border border-choras-primary text-choras-primary hover:bg-white hover:text-choras-dark cursor-pointer"
+          >
+            Create Simulation
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent className="max-w-md">
         <Form {...form}>

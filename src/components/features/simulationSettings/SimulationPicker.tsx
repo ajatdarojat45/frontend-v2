@@ -17,6 +17,13 @@ import { setSelectedMethodType } from "@/store/simulationSettingsSlice";
 import { setActiveSimulation } from "@/store/simulationSlice";
 import type { RootState } from "@/store";
 import { useEffect } from "react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { SimulationForm } from "../SimulationForm";
 
 type SimulationPickerProps = {
   modelId: number;
@@ -87,9 +94,26 @@ export function SimulationPicker({ modelId, simulationId }: SimulationPickerProp
             </SelectContent>
           </Select>
 
-          <Button variant="ghost" size="icon" className="px-2 hover:bg-white/10 ml-2">
-            <EllipsisVerticalIcon className="size-6 text-white" />
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" className="px-2 hover:bg-white/10 ml-2">
+                <EllipsisVerticalIcon className="size-6 text-white" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <SimulationForm
+                modelId={modelId}
+                trigger={
+                  <DropdownMenuItem
+                    onSelect={(e) => e.preventDefault()}
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    Create New Simulation
+                  </DropdownMenuItem>
+                }
+              />
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
         <label htmlFor="method" className="font-medium text-white">
           Method:

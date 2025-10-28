@@ -210,7 +210,7 @@ export function DownloadResult({
         csvIR: visibleSections.includes("auralizations"),
       });
     }
-  }, [allSelected, enabledFrequencies]);
+  }, [allSelected, enabledFrequencies, visibleSections]);
 
   if (isLoading) return <Loading />;
 
