@@ -60,7 +60,7 @@ export function ResultPage() {
         <div className="flex flex-col h-container">
           <CompareResult modelId={+modelId} />
           <div className="p-4 w-full gap-3 border-t border-t-stone-600 flex flex-col">
-            <DownloadResult allSelected simulationIds={simulationIds} />
+            <DownloadResult triggerLabel="Download all" allSelected simulationIds={simulationIds} />
             <Button variant="secondary" className="w-full" asChild>
               <Link to={`/editor/${modelId}`} replace>
                 Exit Result
