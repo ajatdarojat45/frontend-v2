@@ -80,6 +80,11 @@ export function useSimulationRunner() {
             setIsRunning(false);
             stopPolling();
             toast.error("Simulation failed!");
+          } else if (currentRun.status === "Cancelled") {
+            setIsRunning(false);
+            setProgress(0);
+            stopPolling();
+            console.log("Simulation was cancelled, stopping polling");
           }
         } else {
           setIsRunning(false);
@@ -164,6 +169,7 @@ export function useSimulationRunner() {
         currentRun.status !== "Completed" &&
         currentRun.status !== "Error" &&
         currentRun.status !== "Failed" &&
+        currentRun.status !== "Cancelled" &&
         currentRun.percentage < 100;
 
       if (isCurrentlyRunning) {
