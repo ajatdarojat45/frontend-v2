@@ -5,7 +5,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useGetSimulationsByModelIdQuery } from "@/store/simulationApi";
+import {
+  useGetSimulationsByModelIdQuery,
+  useUpdateSimulationMutation,
+} from "@/store/simulationApi";
 import { useGetSimulationMethodsQuery } from "@/store/simulationSettingsApi";
 import { useNavigate } from "react-router";
 import { Button } from "@/components/ui/button";
@@ -17,6 +20,7 @@ import { setSelectedMethodType } from "@/store/simulationSettingsSlice";
 import { setActiveSimulation } from "@/store/simulationSlice";
 import type { RootState } from "@/store";
 import { useEffect } from "react";
+import { toast } from "sonner";
 
 type SimulationPickerProps = {
   modelId: number;
@@ -27,12 +31,36 @@ export function SimulationPicker({ modelId, simulationId }: SimulationPickerProp
   const dispatch = useDispatch();
   const { data: simulations, isLoading } = useGetSimulationsByModelIdQuery(modelId);
   const { data: methods, isLoading: methodsLoading } = useGetSimulationMethodsQuery();
+  const [updateSimulation] = useUpdateSimulationMutation();
   const selectedMethodType = useSelector(
     (state: RootState) => state.simulationSettings.selectedMethodType,
   );
 
-  const handleMethodChange = (methodType: string) => {
+  const handleMethodChange = async (methodType: string) => {
     dispatch(setSelectedMethodType(methodType));
+
+    if (simulationId && simulations) {
+      const currentSimulation = simulations.find((sim) => sim.id === simulationId);
+      if (currentSimulation) {
+        try {
+          await updateSimulation({
+            id: simulationId,
+            body: {
+              modelId: currentSimulation.modelId,
+              name: currentSimulation.name,
+              status: currentSimulation.status,
+              hasBeenEdited: currentSimulation.hasBeenEdited,
+              taskType: methodType,
+              solverSettings: currentSimulation.solverSettings,
+            },
+          }).unwrap();
+          toast.success("Method updated");
+        } catch (error) {
+          console.error("Failed to update simulation method:", error);
+          toast.error("Failed to update method");
+        }
+      }
+    }
   };
 
   const handleSimulationChange = (simulationId: string) => {
@@ -91,7 +119,7 @@ export function SimulationPicker({ modelId, simulationId }: SimulationPickerProp
           Method:
         </label>
         <div className="col-span-2">
-          <Select value={selectedMethodType} onValueChange={handleMethodChange} disabled>
+          <Select value={selectedMethodType} onValueChange={handleMethodChange}>
             <SelectTrigger className="bg-choras-dark text-white border-choras-gray [&>svg]:text-choras-gray w-full">
               <SelectValue>
                 {selectedMethod ? selectedMethod.label.replace("method", "") : "Select a method"}
@@ -118,10 +146,11 @@ export function SimulationPicker({ modelId, simulationId }: SimulationPickerProp
             selectedMethod?.repositoryURL && window.open(selectedMethod.repositoryURL, "_blank")
           }
           disabled={!selectedMethod?.repositoryURL}
+          className="h-auto whitespace-normal py-2"
         >
           <div className="flex items-center gap-2 justify-center">
-            <GithubIcon size={16} />
-            {selectedMethodType} Repo
+            <GithubIcon size={16} className="flex-shrink-0" />
+            <span className="break-words text-left">{selectedMethodType} Repo</span>
           </div>
         </Button>
         <Button
@@ -131,10 +160,11 @@ export function SimulationPicker({ modelId, simulationId }: SimulationPickerProp
             window.open(selectedMethod.documentationURL, "_blank")
           }
           disabled={!selectedMethod?.documentationURL}
+          className="h-auto whitespace-normal py-2"
         >
           <div className="flex items-center gap-2 justify-center">
-            <FileText size={16} />
-            {selectedMethodType} Docs
+            <FileText size={16} className="flex-shrink-0" />
+            <span className="break-words text-left">{selectedMethodType} Docs</span>
           </div>
         </Button>
       </div>

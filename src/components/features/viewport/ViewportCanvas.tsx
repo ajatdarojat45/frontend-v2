@@ -8,6 +8,7 @@ import { GeometrySelectionInfo } from "./GeometrySelectionInfo";
 import { SourceVisualization } from "./SourceVisualization";
 import { ReceiverVisualization } from "./ReceiverVisualization";
 import { RunSimulationButton } from "./RunSimulationButton";
+import { CustomAxesHelper } from "./CustomAxesHelper";
 import type { ViewportCanvasProps } from "@/types/modelViewport";
 import { OrbitControls as OrbitControlsType } from "three-stdlib";
 import {
@@ -105,17 +106,17 @@ export function ViewportCanvas({ modelUrl, modelId }: ViewportCanvasProps) {
           <directionalLight position={[-1, 1, 1]} intensity={30} />
           <directionalLight position={[1, 1, -1]} intensity={30} />
           <directionalLight position={[-1, 1, -1]} intensity={20} />
-          <axesHelper args={[50 / 2]} />
+          <CustomAxesHelper size={50 / 2} />
           <Grid
             position={[0, 0, 0]}
             rotation={[Math.PI / 2, 0, 0]}
             args={[50, 50]}
             cellSize={1}
-            cellThickness={0.7}
-            cellColor="#5B6D6D"
+            cellThickness={0.8}
+            cellColor="#6B7D7D"
             sectionSize={5}
-            sectionThickness={1.2}
-            sectionColor="#5B6D6D"
+            sectionThickness={0.8}
+            sectionColor="#7B8D8D"
             infiniteGrid={false}
             fadeDistance={100}
             fadeStrength={1}
@@ -134,13 +135,21 @@ export function ViewportCanvas({ modelUrl, modelId }: ViewportCanvasProps) {
             zoomSpeed={0.5}
           />
           <GizmoHelper alignment="top-right" margin={[60, 140]}>
-            <GizmoViewport axisColors={["red", "green", "blue"]} labelColor="black" />
+            <GizmoViewport axisColors={["#f093fb", "#4ecdc4", "#667eea"]} labelColor="black" />
           </GizmoHelper>
 
           {modelId && <ModelRenderer modelId={modelId} viewMode={viewMode} />}
           <SourceVisualization orbitControlsRef={orbitControlsRef} />
           <ReceiverVisualization orbitControlsRef={orbitControlsRef} />
         </Canvas>
+      </div>
+
+      {/* Grid Info */}
+      <div className="absolute top-[190px] right-2 z-10 text-white text-xs pt-2">
+        <div className="space-y-0.5">
+          <div>Major grid: 5x5m</div>
+          <div>Minor grid: 1x1m</div>
+        </div>
       </div>
 
       {/* Selection Info Panel */}
