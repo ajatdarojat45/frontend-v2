@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.33](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.32...v0.0.33) (2025-10-28)
+
+### Features
+
+- add mixed material detection for surfaces and update UI accordingly ([b7b6917](https://github.com/ajatdarojat45/frontend-v2/commit/b7b6917a13636c5db1c8d199d793b6a7658cc2da))
+
 ### [0.0.32](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.31...v0.0.32) (2025-10-27)
 
 ### Features
