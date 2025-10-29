@@ -5,7 +5,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useGetSimulationsByModelIdQuery } from "@/store/simulationApi";
+import {
+  useGetSimulationsByModelIdQuery,
+  useUpdateSimulationMutation,
+} from "@/store/simulationApi";
 import { useGetSimulationMethodsQuery } from "@/store/simulationSettingsApi";
 import { useNavigate } from "react-router";
 import { Button } from "@/components/ui/button";
@@ -17,6 +20,7 @@ import { setSelectedMethodType } from "@/store/simulationSettingsSlice";
 import { setActiveSimulation } from "@/store/simulationSlice";
 import type { RootState } from "@/store";
 import { useEffect } from "react";
+import { toast } from "sonner";
 
 type SimulationPickerProps = {
   modelId: number;
@@ -27,12 +31,36 @@ export function SimulationPicker({ modelId, simulationId }: SimulationPickerProp
   const dispatch = useDispatch();
   const { data: simulations, isLoading } = useGetSimulationsByModelIdQuery(modelId);
   const { data: methods, isLoading: methodsLoading } = useGetSimulationMethodsQuery();
+  const [updateSimulation] = useUpdateSimulationMutation();
   const selectedMethodType = useSelector(
     (state: RootState) => state.simulationSettings.selectedMethodType,
   );
 
-  const handleMethodChange = (methodType: string) => {
+  const handleMethodChange = async (methodType: string) => {
     dispatch(setSelectedMethodType(methodType));
+
+    if (simulationId && simulations) {
+      const currentSimulation = simulations.find((sim) => sim.id === simulationId);
+      if (currentSimulation) {
+        try {
+          await updateSimulation({
+            id: simulationId,
+            body: {
+              modelId: currentSimulation.modelId,
+              name: currentSimulation.name,
+              status: currentSimulation.status,
+              hasBeenEdited: currentSimulation.hasBeenEdited,
+              taskType: methodType,
+              solverSettings: currentSimulation.solverSettings,
+            },
+          }).unwrap();
+          toast.success("Method updated");
+        } catch (error) {
+          console.error("Failed to update simulation method:", error);
+          toast.error("Failed to update method");
+        }
+      }
+    }
   };
 
   const handleSimulationChange = (simulationId: string) => {
