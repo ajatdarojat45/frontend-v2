@@ -164,6 +164,7 @@ export function RunSimulationButton() {
         {isRunning && (
           <div className="h-20 mr-10 ml-6 flex items-center gap-4 flex-1">
             <span className="text-sm text-white font-bold whitespace-nowrap pl-4">Status:</span>
+            <span className="text-sm text-white whitespace-nowrap pr-5">In progress</span>
             <div className="flex-1 h-2 bg-gray-700/50 rounded-full overflow-hidden">
               <div
                 className="h-full bg-choras-primary transition-all duration-300"
@@ -180,7 +181,7 @@ export function RunSimulationButton() {
       <AlertDialog open={showOverwriteDialog} onOpenChange={setShowOverwriteDialog}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Overwrite Previous Results?</AlertDialogTitle>
+            <AlertDialogTitle>Overwrite previous results?</AlertDialogTitle>
             <AlertDialogDescription>
               This simulation has existing results. Running it again will overwrite the previous
               results. You can also duplicate this simulation to preserve the existing results.
