@@ -110,7 +110,7 @@ export function ResultPlots({ simulationId }: ResultParametersProps) {
             xaxis: {
               type: "numeric",
               title: {
-                text: "Time (seconds)",
+                text: "Time (s)",
               },
               labels: {
                 formatter: function (val) {
@@ -120,7 +120,7 @@ export function ResultPlots({ simulationId }: ResultParametersProps) {
             },
             yaxis: {
               title: {
-                text: "Amplitude",
+                text: "Energy decay curve (dB)",
               },
             },
             legend: {
