@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.43](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.42...v0.0.43) (2025-10-29)
+
+### Features
+
+- add ResultPlots select freqs and download ([a543879](https://github.com/ajatdarojat45/frontend-v2/commit/a5438792398b702865a7d197f6dca714ff8444d8))
+- enhance ResultPlots with new series data selector and update chart configuration ([07d1bdf](https://github.com/ajatdarojat45/frontend-v2/commit/07d1bdf45673bd752fa10e5f511581cda9aa419b))
+- improve selectCompareResultsPlotsSeriesData to handle time steps and prevent extrapolation ([a8ca368](https://github.com/ajatdarojat45/frontend-v2/commit/a8ca3688b2b97633ee2be4fb8286445cd1acf163))
+- update plot axis labels for clarity in ResultPlots component ([d86ead4](https://github.com/ajatdarojat45/frontend-v2/commit/d86ead4e50757e5f406b1c823c26179dac1f155a))
+
 ### [0.0.42](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.41...v0.0.42) (2025-10-29)
 
 ### [0.0.41](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.40...v0.0.41) (2025-10-28)
