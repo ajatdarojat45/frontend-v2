@@ -11,6 +11,7 @@ import { RunSimulationButton } from "./RunSimulationButton";
 import { CustomAxesHelper } from "./CustomAxesHelper";
 import type { ViewportCanvasProps } from "@/types/modelViewport";
 import { OrbitControls as OrbitControlsType } from "three-stdlib";
+import { useSimulationRunnerContext } from "@/contexts/SimulationRunnerContext";
 import {
   Select,
   SelectContent,
@@ -23,6 +24,7 @@ export function ViewportCanvas({ modelUrl, modelId }: ViewportCanvasProps) {
   const [cameraType, setCameraType] = useState<"perspective" | "orthographic">("perspective");
   const [viewMode, setViewMode] = useState<"solid" | "ghosted" | "wireframe">("solid");
   const { loadModelFromUrl, isModelLoaded, isLoading, error, setActiveModel } = useModelLoader();
+  const { isRunning } = useSimulationRunnerContext();
   const orbitControlsRef = useRef<OrbitControlsType | null>(null);
 
   useEffect(() => {
@@ -153,14 +155,16 @@ export function ViewportCanvas({ modelUrl, modelId }: ViewportCanvasProps) {
       </div>
 
       {/* Run Simulation Button */}
-      <div className="absolute bottom-4 left-16 z-10">
+      <div className="absolute bottom-6 left-18 right-18 z-10">
         <RunSimulationButton />
       </div>
 
       {/* Selection Info Panel */}
-      <div className="absolute bottom-4 right-4 z-10">
-        <GeometrySelectionInfo />
-      </div>
+      {!isRunning && (
+        <div className="absolute bottom-4 right-4 z-10">
+          <GeometrySelectionInfo />
+        </div>
+      )}
     </div>
   );
 }

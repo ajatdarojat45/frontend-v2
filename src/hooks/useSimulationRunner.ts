@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useCallback, useRef, useEffect } from "react";
 import { useSelector } from "react-redux";
 import {
   useRunSimulationMutation,
@@ -11,10 +11,10 @@ import {
 import { toast } from "sonner";
 import type { RootState } from "@/store";
 import { useLazyGetImpulseResponseBySimulationIdQuery } from "@/store/auralizationApi";
+import { useSimulationRunnerContext } from "@/contexts/SimulationRunnerContext";
 
 export function useSimulationRunner() {
-  const [isRunning, setIsRunning] = useState(false);
-  const [progress, setProgress] = useState(0);
+  const { isRunning, setIsRunning, progress, setProgress } = useSimulationRunnerContext();
   const pollIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const hasCheckedForRunningSimulation = useRef(false);
   const lastCheckedSimulationId = useRef<number | null>(null);

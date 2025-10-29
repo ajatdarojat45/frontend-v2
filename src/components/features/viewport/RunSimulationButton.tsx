@@ -1,6 +1,5 @@
 import { Play, Square, AlertTriangle, ChartColumn } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { CircularProgress } from "@/components/ui/circular-progress";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useSimulationRunner } from "@/hooks/useSimulationRunner";
 import { useSimulationValidation } from "@/hooks/useSimulationValidation";
@@ -127,20 +126,10 @@ export function RunSimulationButton() {
 
   return (
     <>
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <div className="relative w-[96px] h-[96px] flex items-center justify-center flex-shrink-0">
-              <div
-                className={`absolute inset-0 transition-opacity duration-200 ${isRunning ? "opacity-100" : "opacity-0"}`}
-              >
-                <CircularProgress
-                  progress={progress}
-                  size={96}
-                  strokeWidth={5}
-                  className="text-primary"
-                />
-              </div>
+      <div className={isRunning ? "flex items-center gap-0 bg-choras-dark rounded-full p-2" : ""}>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
               <Button
                 onClick={handleClick}
                 size="icon"
@@ -153,7 +142,7 @@ export function RunSimulationButton() {
                         ? "custom2"
                         : "default"
                 }
-                className="h-20 w-20 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 relative z-10 cursor-pointer"
+                className="h-20 w-20 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 cursor-pointer relative z-10"
                 style={isCompleted ? { backgroundColor: "#f093fb" } : undefined}
               >
                 {isCompleted ? (
@@ -166,13 +155,27 @@ export function RunSimulationButton() {
                   <Play className="h-5 w-5" fill="currentColor" />
                 )}
               </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{getTooltipText()}</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+        {isRunning && (
+          <div className="h-20 mr-10 ml-6 flex items-center gap-4 flex-1">
+            <span className="text-sm text-white font-bold whitespace-nowrap pl-4">Status:</span>
+            <div className="flex-1 h-2 bg-gray-700/50 rounded-full overflow-hidden">
+              <div
+                className="h-full bg-choras-primary transition-all duration-300"
+                style={{ width: `${progress}%` }}
+              />
             </div>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>{getTooltipText()}</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+            <span className="text-sm text-white font-medium whitespace-nowrap">
+              {Math.round(progress)}%
+            </span>
+          </div>
+        )}
+      </div>
 
       <AlertDialog open={showOverwriteDialog} onOpenChange={setShowOverwriteDialog}>
         <AlertDialogContent>
