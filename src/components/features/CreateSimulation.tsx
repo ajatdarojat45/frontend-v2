@@ -30,6 +30,7 @@ import {
 } from "@/store/simulationApi";
 import { toast } from "sonner";
 import { useNavigate } from "react-router";
+import { useInitializeSimulationSettings } from "@/hooks/useInitializeSimulationSettings";
 
 const CreateSimulationSchema = z.object({
   name: z.string().min(3, { message: "Name must be at least 3 characters." }),
@@ -53,6 +54,7 @@ export function CreateSimulation({ modelId }: CreateSimulationProps) {
   });
   const [createSimulation, { isLoading }] = useCreateSimulationMutation();
   const [getSimulationsByModelId] = useLazyGetSimulationsByModelIdQuery();
+  const { initializeSettings } = useInitializeSimulationSettings();
 
   // Reset form when dialog closes
   useEffect(() => {
@@ -72,11 +74,14 @@ export function CreateSimulation({ modelId }: CreateSimulationProps) {
         },
       }).unwrap();
 
-      // Refetch simulations to update the list
+      await initializeSettings(result);
+
       await getSimulationsByModelId(modelId).unwrap();
 
       navigate(`/editor/${modelId}/${result.id}`);
-      toast.success("Simulation created successfully");
+
+      toast.success("Simulation created successfully. Setting initialized");
+
       setOpen(false);
     } catch {
       toast.error("Failed to create simulation");

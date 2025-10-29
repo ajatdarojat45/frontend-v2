@@ -21,7 +21,7 @@ export function useSimulationSettingsApi() {
   const debounceTimeoutRef = useRef<NodeJS.Timeout>(null);
 
   const updateSimulationSettings = useCallback(
-    async (settingsToSave?: SimulationSettingsState["values"]) => {
+    async (settingsToSave?: SimulationSettingsState["values"], successMessage?: string) => {
       if (debounceTimeoutRef.current) {
         clearTimeout(debounceTimeoutRef.current);
       }
@@ -62,7 +62,7 @@ export function useSimulationSettingsApi() {
 
         try {
           await updateSimulation(updatePayload).unwrap();
-          toast.success("Settings saved");
+          toast.success(successMessage || "Settings saved");
         } catch (error) {
           console.error("Failed to update simulation:", error);
           toast.error("Failed to save settings");
