@@ -7,12 +7,9 @@ import { useSimulationValidation } from "@/hooks/useSimulationValidation";
 import { useDuplicateSimulation } from "@/hooks/useDuplicateSimulation";
 import { useDispatch } from "react-redux";
 import { navigateToTabAndHighlight } from "@/store/tabSlice";
+import { setActiveSimulation, setShouldAutoRun } from "@/store/simulationSlice";
 import { useParams, useNavigate } from "react-router";
-import {
-  useGetSimulationsByModelIdQuery,
-  useRunSimulationMutation,
-  usePatchMeshesMutation,
-} from "@/store/simulationApi";
+import { useGetSimulationsByModelIdQuery } from "@/store/simulationApi";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -23,7 +20,9 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
+import type { RootState } from "@/store";
 
 export function RunSimulationButton() {
   const { isRunning, progress, startSimulation, cancelAndStop } = useSimulationRunner();
@@ -34,8 +33,8 @@ export function RunSimulationButton() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [showOverwriteDialog, setShowOverwriteDialog] = useState(false);
-  const [runSimulationMutation] = useRunSimulationMutation();
-  const [patchMeshes] = usePatchMeshesMutation();
+  const shouldAutoRun = useSelector((state: RootState) => state.simulation.shouldAutoRun);
+  const activeSimulation = useSelector((state: RootState) => state.simulation.activeSimulation);
 
   const currentSimulation = simulations?.find((sim) => sim.id === Number(simulationId));
 
@@ -49,6 +48,16 @@ export function RunSimulationButton() {
     new Date(currentSimulation.updatedAt) > new Date(currentSimulation.simulationRun.completedAt);
 
   const isCompleted = isCompletedRun && !editedAfterCompletion;
+
+  useEffect(() => {
+    if (shouldAutoRun && activeSimulation && isValid && !isRunning) {
+      dispatch(setShouldAutoRun(false));
+
+      setTimeout(() => {
+        startSimulation();
+      }, 300);
+    }
+  }, [shouldAutoRun, activeSimulation, isValid, isRunning, dispatch, startSimulation]);
 
   const handleClick = () => {
     if (isCompleted) {
@@ -84,13 +93,15 @@ export function RunSimulationButton() {
 
     try {
       const newSimulation = await duplicateSimulation(currentSimulation, simulations, {
-        navigateToNew: true,
-        successMessage: "Simulation duplicated. Starting run...",
+        navigateToNew: false,
+        successMessage: "Simulation duplicated successfully!",
       });
 
       if (newSimulation) {
-        await patchMeshes({ modelId: +modelId }).unwrap();
-        await runSimulationMutation({ simulationId: newSimulation.id }).unwrap();
+        dispatch(setActiveSimulation(newSimulation));
+        dispatch(setShouldAutoRun(true));
+
+        navigate(`/editor/${modelId}/${newSimulation.id}`);
       }
     } catch (error) {
       console.error("Failed to duplicate and run:", error);
