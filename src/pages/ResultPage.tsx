@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
 import { DownloadResult } from "@/components/features/results/DownloadResult";
 import { selectCompareSimulationIds } from "@/store/simulationSelector";
+import { ResultPlots } from "@/components/features/results/ResultPlots";
 
 export function ResultPage() {
   const dispatch = useDispatch();
@@ -77,12 +78,18 @@ export function ResultPage() {
           <TabsTrigger value="parameters" asChild>
             <TrapezoidOutlineTab value="parameters">Parameters</TrapezoidOutlineTab>
           </TabsTrigger>
+          <TabsTrigger value="plots" asChild>
+            <TrapezoidOutlineTab value="plots">Plots</TrapezoidOutlineTab>
+          </TabsTrigger>
           <TabsTrigger value="auralizations" asChild>
             <TrapezoidOutlineTab value="auralizations">Auralizations</TrapezoidOutlineTab>
           </TabsTrigger>
         </TabsList>
         <TabsContent value="parameters" className="pl-4">
           <ResultParameters simulationId={+simulationId} />
+        </TabsContent>
+        <TabsContent value="plots" className="pl-4">
+          <ResultPlots simulationId={+simulationId} />
         </TabsContent>
         <TabsContent value="auralizations" className="pl-4">
           <ResultAuralizations simulationId={+simulationId} />
