@@ -173,7 +173,19 @@ export const selectCompareResultsPlotsSeriesData = (frequencies: number[]) =>
             let currentTime = 0;
             const maxTime = Math.max(...timeArray);
 
-            while (currentTime <= maxTime) {
+            // Calculate the number of steps needed to cover the full range
+            // Round up to the next 0.02 interval to ensure we include the final time point
+            const finalTime = Math.ceil(maxTime / timeStep) * timeStep;
+            const totalSteps = Math.round(finalTime / timeStep) + 1;
+
+            for (let step = 0; step < totalSteps; step++) {
+              currentTime = step * timeStep;
+
+              // Only include points if we have corresponding data (don't extrapolate beyond original data)
+              if (currentTime > maxTime + timeStep / 2) {
+                break;
+              }
+
               // Find the closest time value in the original data
               let closestIndex = 0;
               let minDifference = Math.abs(timeArray[0] - currentTime);
@@ -187,9 +199,10 @@ export const selectCompareResultsPlotsSeriesData = (frequencies: number[]) =>
               }
 
               // Add the data point
-              coordinatePairs.push([currentTime, roundTo2(dataArray[closestIndex] || 0)]);
-
-              currentTime += timeStep;
+              coordinatePairs.push([
+                Math.round(currentTime * 100) / 100, // Round to 2 decimal places for clean time values
+                roundTo2(dataArray[closestIndex] || 0),
+              ]);
             }
 
             return {
