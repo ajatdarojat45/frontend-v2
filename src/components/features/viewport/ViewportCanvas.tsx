@@ -152,14 +152,14 @@ export function ViewportCanvas({ modelUrl, modelId }: ViewportCanvasProps) {
         </div>
       </div>
 
-      {/* Selection Info Panel */}
-      <div className="absolute bottom-4 left-12 z-10">
-        <GeometrySelectionInfo />
+      {/* Run Simulation Button */}
+      <div className="absolute bottom-4 left-16 z-10">
+        <RunSimulationButton />
       </div>
 
-      {/* Run Simulation Button */}
+      {/* Selection Info Panel */}
       <div className="absolute bottom-4 right-4 z-10">
-        <RunSimulationButton />
+        <GeometrySelectionInfo />
       </div>
     </div>
   );
