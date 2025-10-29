@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -6,17 +5,27 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { EllipsisVertical, Search } from "lucide-react";
+import { Search } from "lucide-react";
 import { useState } from "react";
 import { useGetMaterialsQuery } from "@/store/materialsApi";
 import type { Material } from "@/types/material";
 import { CreateMaterialDialog } from "./CreateMaterialDialog";
 
-export function SurfaceMaterialList() {
-  const [open, setOpen] = useState(false);
+type IProps = {
+  openMaterialLibrary: boolean;
+  setOpenMaterialLibrary: (open: boolean) => void;
+  openCreateMaterialDialog: boolean;
+  setOpenCreateMaterialDialog: (open: boolean) => void;
+};
+
+export function SurfaceMaterialList({
+  openMaterialLibrary,
+  setOpenMaterialLibrary,
+  openCreateMaterialDialog,
+  setOpenCreateMaterialDialog,
+}: IProps) {
   const [selectedMaterial, setSelectedMaterial] = useState<Material | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const { data: materials = [], isLoading, error } = useGetMaterialsQuery();
@@ -26,20 +35,21 @@ export function SurfaceMaterialList() {
   );
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button variant="ghost" className="rounded-full hover:bg-gray-600 hover:text-white">
-          <EllipsisVertical size={20} className="text-white" />
-        </Button>
-      </DialogTrigger>
+    <Dialog open={openMaterialLibrary} onOpenChange={setOpenMaterialLibrary}>
+      {/* <Button variant="ghost" className="rounded-full hover:bg-gray-600 hover:text-white">
+        <EllipsisVertical size={20} className="text-white" />
+      </Button> */}
       <DialogContent className="sm:max-w-3xl max-w-lg border border-transparent bg-gradient-to-r from-choras-primary from-50% to-choras-secondary bg-clip-border p-0.5">
         <div className="bg-white p-6 rounded-lg space-y-6">
           <DialogHeader>
             <div className="flex justify-between items-center mt-4">
-              <DialogTitle className="text-xl text-choras-primary">Materials</DialogTitle>
-              <CreateMaterialDialog />
+              <DialogTitle className="text-xl text-choras-primary">Material library</DialogTitle>
+              <CreateMaterialDialog
+                openCreateMaterialDialog={openCreateMaterialDialog}
+                setOpenCreateMaterialDialog={setOpenCreateMaterialDialog}
+              />
             </div>
-            <DialogDescription>List of Material Available</DialogDescription>
+            <DialogDescription>Select a material to view its details</DialogDescription>
           </DialogHeader>
 
           <div className="relative">
@@ -110,9 +120,8 @@ export function SurfaceMaterialList() {
           </div>
           <DialogFooter>
             <div className="w-full">
-              {selectedMaterial ? (
+              {selectedMaterial && (
                 <div className="space-y-3">
-                  <h3 className="font-medium text-base">Material Details</h3>
                   <div className="bg-gray-50 p-4 rounded-lg w-full">
                     <h4 className="font-medium text-sm mb-3">{selectedMaterial.name}</h4>
                     <div className="w-full overflow-x-auto">
@@ -142,10 +151,6 @@ export function SurfaceMaterialList() {
                       </table>
                     </div>
                   </div>
-                </div>
-              ) : (
-                <div className="text-center text-gray-500 text-sm py-4">
-                  Select a material to view details
                 </div>
               )}
             </div>

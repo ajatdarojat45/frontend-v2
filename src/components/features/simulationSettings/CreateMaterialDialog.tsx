@@ -16,8 +16,15 @@ import { useState } from "react";
 import { useCreateMaterialMutation } from "@/store/materialsApi";
 import { toast } from "sonner";
 
-export function CreateMaterialDialog() {
-  const [open, setOpen] = useState(false);
+type IProps = {
+  openCreateMaterialDialog: boolean;
+  setOpenCreateMaterialDialog: (open: boolean) => void;
+};
+
+export function CreateMaterialDialog({
+  openCreateMaterialDialog,
+  setOpenCreateMaterialDialog,
+}: IProps) {
   const [createMaterial, { isLoading: isCreating }] = useCreateMaterialMutation();
 
   const [formData, setFormData] = useState({
@@ -53,7 +60,7 @@ export function CreateMaterialDialog() {
     try {
       await createMaterial(formData).unwrap();
       toast.success("Material created successfully!");
-      setOpen(false);
+      setOpenCreateMaterialDialog(false);
       setFormData({
         name: "",
         description: "",
@@ -67,11 +74,11 @@ export function CreateMaterialDialog() {
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={openCreateMaterialDialog} onOpenChange={setOpenCreateMaterialDialog}>
       <DialogTrigger asChild>
         <Button variant="outline" size="sm" className="flex items-center gap-2">
           <Plus size={16} />
-          Create Material
+          Create material
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-2xl">

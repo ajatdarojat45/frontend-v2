@@ -2,6 +2,34 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.37](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.36...v0.0.37) (2025-10-28)
+
+### Bug Fixes
+
+- simplify conditional rendering for selected material in SurfaceMaterialList ([c8a79d1](https://github.com/ajatdarojat45/frontend-v2/commit/c8a79d1474d492b4d42f5b09f15866aa8d81fee6))
+
+### [0.0.36](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.35...v0.0.36) (2025-10-28)
+
+### Bug Fixes
+
+- correct capitalization of "Create material" button text ([1cbf824](https://github.com/ajatdarojat45/frontend-v2/commit/1cbf824c9a39b1f77912de07ccaa670a7d569035))
+- improve UI consistency by updating "Open material library" text and adding separators ([8440c57](https://github.com/ajatdarojat45/frontend-v2/commit/8440c57e3be46055afe59ddde9f3b071c6663114))
+- update dialog titles for clarity in SurfaceMaterialList ([4b2666c](https://github.com/ajatdarojat45/frontend-v2/commit/4b2666c451063369ee9a6dcc0a6394f7ed6b8983))
+
+### [0.0.35](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.34...v0.0.35) (2025-10-28)
+
+### Features
+
+- add functionality to open material library from material assignment options ([36759a7](https://github.com/ajatdarojat45/frontend-v2/commit/36759a719c277aac0c08403ffae30a4e11bf66b0))
+
+### [0.0.34](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.33...v0.0.34) (2025-10-28)
+
+### Features
+
+- enhance SurfacesTab with material library and create material dialog functionality ([5322d9e](https://github.com/ajatdarojat45/frontend-v2/commit/5322d9e613cea65dc8eae5d422948259b52ece2d))
+- refactor CreateMaterialDialog to accept props for open state management ([36e88e1](https://github.com/ajatdarojat45/frontend-v2/commit/36e88e1d5aad3df2433a118c535bf824ccb6ecc5))
+- refactor SurfaceMaterialList to accept props for dialog state management ([3c3c4f5](https://github.com/ajatdarojat45/frontend-v2/commit/3c3c4f5bc02e72bf7dbed93e8d5cd6a5b4c37983))
+
 ### [0.0.33](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.32...v0.0.33) (2025-10-28)
 
 ### Features
