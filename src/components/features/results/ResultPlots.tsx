@@ -3,7 +3,10 @@ import { Loading } from "@/components/ui/loading";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useMemo, useState } from "react";
 import { DownloadResult } from "./DownloadResult";
-import { selectCompareSimulationIds } from "@/store/simulationSelector";
+import {
+  selectCompareResultsPlotsSeriesData,
+  selectCompareSimulationIds,
+} from "@/store/simulationSelector";
 import { useSelector } from "react-redux";
 import {
   DropdownMenu,
@@ -13,6 +16,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { ChevronDownIcon } from "lucide-react";
+import Chart from "react-apexcharts";
 
 type ResultParametersProps = {
   simulationId: number;
@@ -22,6 +26,7 @@ export function ResultPlots({ simulationId }: ResultParametersProps) {
   const [selectedFrequencies, setSelectedFrequencies] = useState<number[]>([125]);
   const { data: results, isLoading, error } = useGetSimulationResultQuery(simulationId);
   const compareResultIds = useSelector(selectCompareSimulationIds);
+  const seriesData = useSelector(selectCompareResultsPlotsSeriesData(selectedFrequencies));
 
   const enabledFrequencies = useMemo(() => {
     const defaultFrequencies: number[] = [];
@@ -51,6 +56,8 @@ export function ResultPlots({ simulationId }: ResultParametersProps) {
       </Alert>
     );
   }
+
+  console.log(seriesData, "<<<");
 
   return (
     <div className="h-full w-full p-8 space-y-4">
@@ -90,23 +97,37 @@ export function ResultPlots({ simulationId }: ResultParametersProps) {
         <DownloadResult simulationIds={compareResultIds} mode="plots" />
       </div>
 
-      {/* 
       <div className="border border-black p-2 rounded-sm">
         <Chart
-          type="bar"
+          type="line"
           options={{
+            chart: {
+              type: "line",
+              zoom: {
+                enabled: true,
+              },
+            },
+            xaxis: {
+              type: "numeric",
+              title: {
+                text: "Time (seconds)",
+              },
+              labels: {
+                formatter: function (val) {
+                  return parseFloat(val).toFixed(3) + "s";
+                },
+              },
+            },
+            yaxis: {
+              title: {
+                text: "Amplitude",
+              },
+            },
             legend: {
               show: true,
               showForSingleSeries: true,
               position: "top",
               horizontalAlign: "center",
-            },
-            xaxis: {
-              categories: FREQUENCY_BANDS.map((f) => f.toString()),
-              title: { text: "Center Frequency (Hz)" },
-            },
-            yaxis: {
-              title: { text: getParameterLabel(selectedParameter) },
             },
             grid: {
               show: true,
@@ -123,7 +144,7 @@ export function ResultPlots({ simulationId }: ResultParametersProps) {
           series={seriesData}
           height={500}
         />
-      </div> */}
+      </div>
     </div>
   );
 }
