@@ -150,7 +150,7 @@ export function RunSimulationButton() {
                     : isRunning
                       ? "secondary"
                       : !isValid
-                        ? "destructive"
+                        ? "custom2"
                         : "default"
                 }
                 className="h-20 w-20 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 relative z-10 cursor-pointer"
