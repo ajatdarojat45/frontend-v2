@@ -31,6 +31,7 @@ import {
 import { SimulationForm } from "../SimulationForm";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { toast } from "sonner";
+import { useDuplicateSimulation } from "@/hooks/useDuplicateSimulation";
 
 type SimulationPickerProps = {
   modelId: number;
@@ -43,6 +44,7 @@ export function SimulationPicker({ modelId, simulationId }: SimulationPickerProp
   const { data: simulations, isLoading } = useGetSimulationsByModelIdQuery(modelId);
   const { data: methods, isLoading: methodsLoading } = useGetSimulationMethodsQuery();
   const [getSimulationsByModelId] = useLazyGetSimulationsByModelIdQuery();
+  const { duplicateSimulation } = useDuplicateSimulation();
   const [menuOpen, setMenuOpen] = useState(false);
 
   const [updateSimulation] = useUpdateSimulationMutation();
@@ -126,6 +128,19 @@ export function SimulationPicker({ modelId, simulationId }: SimulationPickerProp
     }
   };
 
+  const handleDuplicateSimulation = async () => {
+    if (!activeSimulation || !simulations) {
+      toast.error("No simulation selected");
+      return;
+    }
+
+    try {
+      await duplicateSimulation(activeSimulation, simulations);
+    } finally {
+      setMenuOpen(false);
+    }
+  };
+
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-3 gap-3 w-full items-center">
@@ -182,6 +197,19 @@ export function SimulationPicker({ modelId, simulationId }: SimulationPickerProp
                 trigger={
                   <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
                     Edit Simulation
+                  </DropdownMenuItem>
+                }
+              />
+
+              <ConfirmDialog
+                title="Duplicate Simulation"
+                description={`Are you sure you want to duplicate "${activeSimulation?.name}"? A new simulation will be created with all the same settings.`}
+                onConfirm={handleDuplicateSimulation}
+                confirmVariant="default"
+                confirmLabel="Duplicate"
+                trigger={
+                  <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                    Duplicate Simulation
                   </DropdownMenuItem>
                 }
               />

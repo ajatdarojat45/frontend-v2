@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 type SimulationState = {
   activeSimulation: Simulation | null;
+  shouldAutoRun: boolean;
   compareResults: {
     id: string;
     modelId: number;
@@ -17,11 +18,15 @@ const simulationSlice = createSlice({
   name: "simulation",
   initialState: {
     activeSimulation: null,
+    shouldAutoRun: false,
     compareResults: [],
   } as SimulationState,
   reducers: {
     setActiveSimulation: (state, action) => {
       state.activeSimulation = action.payload;
+    },
+    setShouldAutoRun: (state, action) => {
+      state.shouldAutoRun = action.payload;
     },
     addCompareResult: (state, action) => {
       state.compareResults.push(action.payload);
@@ -50,6 +55,7 @@ const simulationSlice = createSlice({
 
 export const {
   setActiveSimulation,
+  setShouldAutoRun,
   addCompareResult,
   removeCompareResult,
   updateCompareResult,
