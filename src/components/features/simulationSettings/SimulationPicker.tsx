@@ -97,9 +97,13 @@ export function SimulationPicker({ modelId, simulationId }: SimulationPickerProp
       const currentSimulation = simulations.find((sim) => sim.id === simulationId);
       if (currentSimulation) {
         dispatch(setActiveSimulation(currentSimulation));
+
+        if (currentSimulation.taskType && currentSimulation.taskType !== selectedMethodType) {
+          dispatch(setSelectedMethodType(currentSimulation.taskType));
+        }
       }
     }
-  }, [simulationId, simulations, dispatch]);
+  }, [simulationId, simulations, dispatch, selectedMethodType]);
 
   if (!simulations || simulations.length === 0 || isLoading || methodsLoading) {
     return (
