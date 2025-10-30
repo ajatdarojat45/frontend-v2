@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.41](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.40...v0.0.41) (2025-10-28)
+
+### Features
+
+- add clearCompareResults action to cleanup compare results on unmount ([b8b3a17](https://github.com/ajatdarojat45/frontend-v2/commit/b8b3a174b97c1000f43d0e819029b082bd4a94fc))
+- add clearCompareResults reducer to reset compare results ([4b25a86](https://github.com/ajatdarojat45/frontend-v2/commit/4b25a8683e6a7e2c338669713dbe1e83fe3bd327))
+
+### Bug Fixes
+
+- remove debug log and filter simulations by completed status ([31c47c3](https://github.com/ajatdarojat45/frontend-v2/commit/31c47c3c55bf3fa7cd77c623377595d710fce647))
+
+### [0.0.40](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.39...v0.0.40) (2025-10-28)
+
+### Bug Fixes
+
+- refetching after reload or loading another simulation ([6c1bece](https://github.com/ajatdarojat45/frontend-v2/commit/6c1bece96f67232994c1d3b1f7f9cc29e74d2deb))
+
 ### [0.0.39](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.38...v0.0.39) (2025-10-28)
 
 ### Features

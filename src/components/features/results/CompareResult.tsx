@@ -1,7 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
-import { addCompareResult, initializeCompareResults } from "@/store/simulationSlice";
+import {
+  addCompareResult,
+  clearCompareResults,
+  initializeCompareResults,
+} from "@/store/simulationSlice";
 import type { RootState } from "@/store";
 import { useEffect } from "react";
 import { CompareResultItem } from "./CompareResultItem";
@@ -53,6 +57,12 @@ export function CompareResult({ modelId }: CompareResultProps) {
       );
     }
   }, [dispatch, compareResults.length, activeSimulation]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(clearCompareResults());
+    };
+  }, []);
 
   const handleAddResult = () => {
     const lastId = compareResults.length > 0 ? compareResults[compareResults.length - 1].id : "0";
