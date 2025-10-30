@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.44](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.43...v0.0.44) (2025-10-30)
+
+### Features
+
+- add duplicate simulation ([f86edee](https://github.com/ajatdarojat45/frontend-v2/commit/f86edee58b4d94b558cacbc397e26112ae9d2907))
+- handle duplicate and autorun new simulation ([83b9c07](https://github.com/ajatdarojat45/frontend-v2/commit/83b9c07b387c7c3ddddc74568c2d11585f629c2b))
+
+### Bug Fixes
+
+- adjust SelectTrigger width in SimulationPicker component ([f12372c](https://github.com/ajatdarojat45/frontend-v2/commit/f12372c7193ec06b10550c835d1ab254cbe95900))
+- auto load setting and save to simulation when simulation first create ([a4a5103](https://github.com/ajatdarojat45/frontend-v2/commit/a4a5103d5f8ef1bba5b26196b1f75fc95ae0f1bd))
+- axes and gizmo color ([8ec8cf8](https://github.com/ajatdarojat45/frontend-v2/commit/8ec8cf89ed8f2c95bcecb64c59422ae85641053b))
+- run the simulation duplicate ([2f761d6](https://github.com/ajatdarojat45/frontend-v2/commit/2f761d608f316a5a27f32d67b85d713373477bf3))
+- simulation button when completed ([30571b8](https://github.com/ajatdarojat45/frontend-v2/commit/30571b8b40d4a08f0aed52f050650ae6d8d7d081))
+- update label from 'Delete Project' to 'Delete Simulation' in SimulationPicker component ([8fc6156](https://github.com/ajatdarojat45/frontend-v2/commit/8fc6156ed0ff5ea059ec740d4e7988bd1c64b743))
+- update simulation when changing method ([4de0ffc](https://github.com/ajatdarojat45/frontend-v2/commit/4de0ffc15ab58239878068ccb346e1d8b7e11119))
+
 ### [0.0.43](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.42...v0.0.43) (2025-10-29)
 
 ### Features
