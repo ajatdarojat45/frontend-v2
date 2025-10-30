@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
 import { DownloadResult } from "@/components/features/results/DownloadResult";
 import { selectCompareSimulationIds } from "@/store/simulationSelector";
+import { ResultPlots } from "@/components/features/results/ResultPlots";
 
 export function ResultPage() {
   const dispatch = useDispatch();
@@ -72,17 +73,23 @@ export function ResultPage() {
     >
       <EditorNav active="results" modelId={+modelId} simulationId={+simulationId} />
 
-      <Tabs defaultValue="parameters" className="mt-8">
-        <TabsList className="bg-transparent absolute bottom-0 h-100 w-8 p-0 flex-col rounded-r-xl roundedn-l-none z-50">
+      <Tabs defaultValue="auralizations" className="mt-8">
+        <TabsList className="bg-transparent absolute bottom-0 h-[calc(100vh-4rem-174px)] w-8 p-0 flex-col rounded-r-xl roundedn-l-none z-50">
+          <TabsTrigger value="auralizations" asChild>
+            <TrapezoidOutlineTab value="auralizations">Auralizations</TrapezoidOutlineTab>
+          </TabsTrigger>
           <TabsTrigger value="parameters" asChild>
             <TrapezoidOutlineTab value="parameters">Parameters</TrapezoidOutlineTab>
           </TabsTrigger>
-          <TabsTrigger value="auralizations" asChild>
-            <TrapezoidOutlineTab value="auralizations">Auralizations</TrapezoidOutlineTab>
+          <TabsTrigger value="plots" asChild>
+            <TrapezoidOutlineTab value="plots">Plots</TrapezoidOutlineTab>
           </TabsTrigger>
         </TabsList>
         <TabsContent value="parameters" className="pl-4">
           <ResultParameters simulationId={+simulationId} />
+        </TabsContent>
+        <TabsContent value="plots" className="pl-4">
+          <ResultPlots simulationId={+simulationId} />
         </TabsContent>
         <TabsContent value="auralizations" className="pl-4">
           <ResultAuralizations simulationId={+simulationId} />
