@@ -32,6 +32,7 @@ import { SimulationForm } from "../SimulationForm";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { toast } from "sonner";
 import { useDuplicateSimulation } from "@/hooks/useDuplicateSimulation";
+import { useInitializeSimulationSettings } from "@/hooks/useInitializeSimulationSettings";
 
 type SimulationPickerProps = {
   modelId: number;
@@ -51,6 +52,7 @@ export function SimulationPicker({ modelId, simulationId }: SimulationPickerProp
   const selectedMethodType = useSelector(
     (state: RootState) => state.simulationSettings.selectedMethodType,
   );
+  const { initializeSettings } = useInitializeSimulationSettings();
 
   const handleMethodChange = async (methodType: string) => {
     dispatch(setSelectedMethodType(methodType));
@@ -59,7 +61,7 @@ export function SimulationPicker({ modelId, simulationId }: SimulationPickerProp
       const currentSimulation = simulations.find((sim) => sim.id === simulationId);
       if (currentSimulation) {
         try {
-          await updateSimulation({
+          const updatedSimulation = await updateSimulation({
             id: simulationId,
             body: {
               modelId: currentSimulation.modelId,
@@ -70,7 +72,10 @@ export function SimulationPicker({ modelId, simulationId }: SimulationPickerProp
               solverSettings: currentSimulation.solverSettings,
             },
           }).unwrap();
-          toast.success("Method updated");
+
+          await initializeSettings(updatedSimulation, methodType);
+
+          toast.success("Method updated and settings initialized");
         } catch (error) {
           console.error("Failed to update simulation method:", error);
           toast.error("Failed to update method");
