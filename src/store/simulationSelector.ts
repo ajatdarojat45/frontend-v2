@@ -7,6 +7,27 @@ import type { Parameters } from "@/types/simulation";
 import type { RootState } from "./index";
 import { selectModelIdsByProjectId } from "./projectSelector";
 
+// Helper function to adjust color brightness
+function adjustColorBrightness(hex: string, factor: number): string {
+  // Remove # if present
+  const color = hex.replace("#", "");
+
+  // Parse RGB values
+  const r = parseInt(color.substring(0, 2), 16);
+  const g = parseInt(color.substring(2, 4), 16);
+  const b = parseInt(color.substring(4, 6), 16);
+
+  // Adjust brightness
+  const newR = Math.round(r * factor);
+  const newG = Math.round(g * factor);
+  const newB = Math.round(b * factor);
+
+  // Convert back to hex
+  const toHex = (n: number) => Math.max(0, Math.min(255, n)).toString(16).padStart(2, "0");
+
+  return `#${toHex(newR)}${toHex(newG)}${toHex(newB)}`;
+}
+
 // Selector to get the count of simulations for a given modelId
 export const selectSimulationCountByModelId = (modelId: number) =>
   createSelector(
@@ -205,9 +226,22 @@ export const selectCompareResultsPlotsSeriesData = (frequencies: number[]) =>
               ]);
             }
 
+            // Create a color variation based on frequency
+            // Higher frequencies get darker, lower frequencies get lighter
+            const maxFrequency = Math.max(...filteredReceiverResults.map((r) => r.frequency));
+            const minFrequency = Math.min(...filteredReceiverResults.map((r) => r.frequency));
+            const frequencyRange = maxFrequency - minFrequency;
+
+            let adjustedColor = color;
+            if (frequencyRange > 0) {
+              // Calculate darkness factor (0 = lightest, 1 = darkest)
+              const darknessFactor = (receiverResult.frequency - minFrequency) / frequencyRange;
+              adjustedColor = adjustColorBrightness(color, 1 - darknessFactor * 0.6); // 0.4 to 1.0 brightness range
+            }
+
             return {
               name: `${simulationName} - ${result.label} & ${response.label} (${receiverResult.frequency}Hz)`,
-              color,
+              color: adjustedColor,
               data: coordinatePairs,
               frequency: receiverResult.frequency,
             };
