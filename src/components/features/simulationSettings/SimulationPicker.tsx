@@ -134,7 +134,7 @@ export function SimulationPicker({ modelId, simulationId }: SimulationPickerProp
         </label>
         <div className="col-span-2 flex">
           <Select onValueChange={handleSimulationChange} value={simulationId?.toString()}>
-            <SelectTrigger className="bg-choras-dark text-white border-choras-gray [&>svg]:text-choras-gray w-full">
+            <SelectTrigger className="bg-choras-dark text-white border-choras-gray [&>svg]:text-choras-gray w-[calc(100%-36px)]">
               <SelectValue>
                 {activeSimulation && activeSimulation.completedAt && (
                   <CheckCircleIcon className="inline text-green-600" />
