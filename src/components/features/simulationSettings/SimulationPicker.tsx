@@ -198,7 +198,7 @@ export function SimulationPicker({ modelId, simulationId }: SimulationPickerProp
                     onClick={(e) => e.stopPropagation()}
                     className="text-red-600"
                   >
-                    Delete Project
+                    Delete Simulation
                   </DropdownMenuItem>
                 }
               />
