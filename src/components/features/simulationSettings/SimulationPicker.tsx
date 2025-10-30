@@ -9,6 +9,7 @@ import {
   useDeleteSimulationMutation,
   useGetSimulationsByModelIdQuery,
   useLazyGetSimulationsByModelIdQuery,
+  useUpdateSimulationMutation,
 } from "@/store/simulationApi";
 import { useGetSimulationMethodsQuery } from "@/store/simulationSettingsApi";
 import { useNavigate } from "react-router";
@@ -44,12 +45,36 @@ export function SimulationPicker({ modelId, simulationId }: SimulationPickerProp
   const [getSimulationsByModelId] = useLazyGetSimulationsByModelIdQuery();
   const [menuOpen, setMenuOpen] = useState(false);
 
+  const [updateSimulation] = useUpdateSimulationMutation();
   const selectedMethodType = useSelector(
     (state: RootState) => state.simulationSettings.selectedMethodType,
   );
 
-  const handleMethodChange = (methodType: string) => {
+  const handleMethodChange = async (methodType: string) => {
     dispatch(setSelectedMethodType(methodType));
+
+    if (simulationId && simulations) {
+      const currentSimulation = simulations.find((sim) => sim.id === simulationId);
+      if (currentSimulation) {
+        try {
+          await updateSimulation({
+            id: simulationId,
+            body: {
+              modelId: currentSimulation.modelId,
+              name: currentSimulation.name,
+              status: currentSimulation.status,
+              hasBeenEdited: currentSimulation.hasBeenEdited,
+              taskType: methodType,
+              solverSettings: currentSimulation.solverSettings,
+            },
+          }).unwrap();
+          toast.success("Method updated");
+        } catch (error) {
+          console.error("Failed to update simulation method:", error);
+          toast.error("Failed to update method");
+        }
+      }
+    }
   };
 
   const handleSimulationChange = (simulationId: string) => {
@@ -109,7 +134,7 @@ export function SimulationPicker({ modelId, simulationId }: SimulationPickerProp
         </label>
         <div className="col-span-2 flex">
           <Select onValueChange={handleSimulationChange} value={simulationId?.toString()}>
-            <SelectTrigger className="bg-choras-dark text-white border-choras-gray [&>svg]:text-choras-gray w-full">
+            <SelectTrigger className="bg-choras-dark text-white border-choras-gray [&>svg]:text-choras-gray w-[calc(100%-36px)]">
               <SelectValue>
                 {activeSimulation && activeSimulation.completedAt && (
                   <CheckCircleIcon className="inline text-green-600" />
