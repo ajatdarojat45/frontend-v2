@@ -179,7 +179,7 @@ export function CompareResultItem({
             </SelectTrigger>
             <SelectContent className="bg-choras-dark border-choras-gray">
               {simulations
-                ?.filter((simulation) => simulation.status === "Completed")
+                ?.filter((simulation) => simulation.completedAt !== null)
                 .map((simulation) => (
                   <CustomSelectItem key={simulation.id} simulation={simulation} />
                 ))}

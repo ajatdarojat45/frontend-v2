@@ -61,7 +61,7 @@ export function GeometrySelectionInfo() {
   }
 
   return (
-    <Card className="w-80 border border-choras-gray gap-1">
+    <Card className="w-85 border border-choras-gray gap-1">
       <CardHeader>
         <CardTitle className="text-xs">Selected surface</CardTitle>
       </CardHeader>
