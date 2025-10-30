@@ -12,7 +12,7 @@ export function TrapezoidOutlineTab({ value, children, ...restProps }: Trapezoid
       {...restProps}
       value={value}
       className={cn(
-        "relative text-sm font-medium h-50 w-8 flex items-center justify-center cursor-pointer transition-colors",
+        "relative text-sm font-medium h-full w-8 flex items-center justify-center cursor-pointer transition-colors",
         "text-black/50 hover:text-black",
         "data-[state=active]:text-black",
       )}
