@@ -3,9 +3,10 @@ import { ProjectCard } from "@/components/features/ProjectCard";
 import { Alert, AlertTitle } from "@/components/ui/alert";
 import { AppLayout } from "@/components/ui/app-layout";
 import { Loading } from "@/components/ui/loading";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { useGetProjectsQuery } from "@/store/projectApi";
 import { selectProjectsByActiveGroup } from "@/store/projectSelector";
-import { AlertCircleIcon } from "lucide-react";
+import { AlertCircleIcon, ChevronDownIcon, ChevronRightIcon } from "lucide-react";
 import plusIcon from "@/assets/plus-icon.png";
 import type React from "react";
 import { useSelector, useDispatch } from "react-redux";
@@ -17,6 +18,7 @@ import { syncGroupsFromProjects } from "@/store/projectSlice";
 import { useEffect, useState } from "react";
 import { SortPicker } from "@/components/features/SortPicker";
 import type { GroupProject, Project } from "@/types/project";
+import { cn } from "@/libs/style";
 
 export function HomePage() {
   const { data: projects, isLoading, error } = useGetProjectsQuery();
@@ -24,6 +26,7 @@ export function HomePage() {
   const dispatch = useDispatch();
   const [sort, setSort] = useState<string>("ASC");
   const [groupProjectList, setGroupProjectList] = useState<GroupProject[]>([]);
+  const [collapsedGroups, setCollapsedGroups] = useState<Set<string>>(new Set());
 
   // Reusable sorting function
   const sortProjects = (projects: Project[], sortOption: string) => {
@@ -78,6 +81,16 @@ export function HomePage() {
     if (savedSortOption) {
       setSort(savedSortOption);
     }
+
+    const savedCollapsedGroups = localStorage.getItem("collapsedGroups");
+    if (savedCollapsedGroups) {
+      try {
+        const collapsedArray = JSON.parse(savedCollapsedGroups);
+        setCollapsedGroups(new Set(collapsedArray));
+      } catch (error) {
+        console.error("Failed to parse collapsed groups from localStorage:", error);
+      }
+    }
   }, []);
 
   let content: React.ReactNode = null;
@@ -85,6 +98,21 @@ export function HomePage() {
   const handleSetSort = (value: string) => {
     setSort(value);
     localStorage.setItem("projectSortOption", value);
+  };
+
+  const toggleGroupCollapse = (groupName: string) => {
+    const newCollapsedGroups = new Set(collapsedGroups);
+    if (newCollapsedGroups.has(groupName)) {
+      newCollapsedGroups.delete(groupName);
+    } else {
+      newCollapsedGroups.add(groupName);
+    }
+    setCollapsedGroups(newCollapsedGroups);
+    localStorage.setItem("collapsedGroups", JSON.stringify(Array.from(newCollapsedGroups)));
+  };
+
+  const isGroupCollapsed = (groupName: string) => {
+    return collapsedGroups.has(groupName);
   };
 
   if (error) {
@@ -128,39 +156,59 @@ export function HomePage() {
           <GroupPicker />
         </div>
         {groupProjectList.map((groupProject) => (
-          <div key={groupProject.group}>
-            <div className="flex items-center">
-              <h1 className="inline text-lg font-inter font-light border-b text-choras-dark border-b-choras-dark">
-                {groupProject.group === "NONE" ? "No group" : groupProject.group}
-              </h1>
+          <Collapsible
+            key={groupProject.group}
+            open={!isGroupCollapsed(groupProject.group)}
+            onOpenChange={() => toggleGroupCollapse(groupProject.group)}
+          >
+            <div className="flex items-center pb-4">
+              <CollapsibleTrigger className="flex items-center gap-2 hover:opacity-70 transition-opacity">
+                {isGroupCollapsed(groupProject.group) ? (
+                  <ChevronRightIcon className="h-4 w-4" />
+                ) : (
+                  <ChevronDownIcon className="h-4 w-4" />
+                )}
+                <h1 className="inline text-lg font-inter font-light border-b text-choras-dark border-b-choras-dark">
+                  {groupProject.group === "NONE" ? "No group" : groupProject.group}
+                </h1>
+              </CollapsibleTrigger>
               <DeleteGroup
                 projectsCount={groupProject.projects.length}
                 group={groupProject.group}
               />
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 border-b border-b-black/25 mt-5 pb-8 mb-6">
-              {groupProject.projects.map((project) => (
-                <Link key={project.id} to={`/projects/${project.id}`}>
-                  <ProjectCard project={project} />
-                </Link>
-              ))}
+            <CollapsibleContent>
+              <div
+                className={cn(
+                  "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 border-b border-b-black/25 pb-6",
+                  {
+                    "mb-6": !isGroupCollapsed(groupProject.group),
+                  },
+                )}
+              >
+                {groupProject.projects.map((project) => (
+                  <Link key={project.id} to={`/projects/${project.id}`}>
+                    <ProjectCard project={project} />
+                  </Link>
+                ))}
 
-              <ProjectForm
-                defaultValues={{
-                  name: "",
-                  description: "",
-                  group: groupProject.group === "NONE" ? "" : groupProject.group,
-                }}
-                trigger={
-                  <div className="min-h-[192px] border border-transparent bg-gradient-to-r from-choras-primary from-50% to-choras-secondary bg-clip-border p-0.5 rounded-xl">
-                    <div className="bg-[#e7e7e7] w-full min-h-[190px] py-6 rounded-lg h-full flex-1 flex items-center justify-center">
-                      <img src={plusIcon} alt="Plus" className="w-16 h-16" />
+                <ProjectForm
+                  defaultValues={{
+                    name: "",
+                    description: "",
+                    group: groupProject.group === "NONE" ? "" : groupProject.group,
+                  }}
+                  trigger={
+                    <div className="min-h-[192px] border border-transparent bg-gradient-to-r from-choras-primary from-50% to-choras-secondary bg-clip-border p-0.5 rounded-xl">
+                      <div className="bg-[#e7e7e7] w-full min-h-[190px] py-6 rounded-lg h-full flex-1 flex items-center justify-center">
+                        <img src={plusIcon} alt="Plus" className="w-16 h-16" />
+                      </div>
                     </div>
-                  </div>
-                }
-              />
-            </div>
-          </div>
+                  }
+                />
+              </div>
+            </CollapsibleContent>
+          </Collapsible>
         ))}
       </div>
     );

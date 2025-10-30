@@ -1,5 +1,5 @@
 import { AppLayout } from "@/components/ui/app-layout";
-import { useParams } from "react-router";
+import { Link, useParams } from "react-router";
 import { ResultAuralizations } from "@/components/features/results/ResultAuralizations";
 import { ResultParameters } from "@/components/features/results/ResultParameters";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -11,13 +11,17 @@ import { CompareResult } from "@/components/features/results/CompareResult";
 import { setActiveSimulation } from "@/store/simulationSlice";
 import { useEffect } from "react";
 import { useGetSimulationsByModelIdQuery } from "@/store/simulationApi";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { Button } from "@/components/ui/button";
+import { DownloadResult } from "@/components/features/results/DownloadResult";
+import { selectCompareSimulationIds } from "@/store/simulationSelector";
 
 export function ResultPage() {
   const dispatch = useDispatch();
   const { modelId, simulationId } = useParams() as { modelId: string; simulationId: string };
   const { data: model } = useGetModelQuery(modelId);
   const { data: simulations } = useGetSimulationsByModelIdQuery(+modelId);
+  const simulationIds = useSelector(selectCompareSimulationIds);
 
   // If no simulationId is provided, redirect to the first simulation
   // Once the simulations are created, the effect will run again
@@ -52,7 +56,19 @@ export function ResultPage() {
           />
         )
       }
-      sidebar={<CompareResult modelId={+modelId} />}
+      sidebar={
+        <div className="flex flex-col h-container">
+          <CompareResult modelId={+modelId} />
+          <div className="p-4 w-full gap-3 border-t border-t-stone-600 flex flex-col">
+            <DownloadResult triggerLabel="Download all" allSelected simulationIds={simulationIds} />
+            <Button variant="secondary" className="w-full" asChild>
+              <Link to={`/editor/${modelId}`} replace>
+                Exit Result
+              </Link>
+            </Button>
+          </div>
+        </div>
+      }
     >
       <EditorNav active="results" modelId={+modelId} simulationId={+simulationId} />
 

@@ -1,4 +1,3 @@
-import { CreateSimulation } from "@/components/features/CreateSimulation";
 import { EmptySimulation } from "@/components/features/EmptySimulation";
 import { AppLayout } from "@/components/ui/app-layout";
 import { useGetSimulationsByModelIdQuery } from "@/store/simulationApi";
@@ -74,7 +73,6 @@ export function EditorPage() {
           )}
         </div>
       }
-      right={<CreateSimulation modelId={+modelId} />}
     >
       <SidebarTabs />
       {simulationId && (

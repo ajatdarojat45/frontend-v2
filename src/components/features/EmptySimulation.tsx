@@ -1,4 +1,4 @@
-import { CreateSimulation } from "./CreateSimulation";
+import { SimulationForm } from "./SimulationForm";
 import { LayersIcon } from "lucide-react";
 
 type EmptySimulationProps = {
@@ -18,7 +18,7 @@ export function EmptySimulation({ modelId }: EmptySimulationProps) {
         </p>
 
         <div className="mt-3">
-          <CreateSimulation modelId={modelId} />
+          <SimulationForm modelId={modelId} />
         </div>
       </div>
     </div>
