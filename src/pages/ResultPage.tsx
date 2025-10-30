@@ -74,7 +74,7 @@ export function ResultPage() {
       <EditorNav active="results" modelId={+modelId} simulationId={+simulationId} />
 
       <Tabs defaultValue="parameters" className="mt-8">
-        <TabsList className="bg-transparent absolute bottom-0 h-100 w-8 p-0 flex-col rounded-r-xl roundedn-l-none z-50">
+        <TabsList className="bg-transparent absolute bottom-0 h-[calc(100vh-4rem-174px)] w-8 p-0 flex-col rounded-r-xl roundedn-l-none z-50">
           <TabsTrigger value="parameters" asChild>
             <TrapezoidOutlineTab value="parameters">Parameters</TrapezoidOutlineTab>
           </TabsTrigger>
