@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.45](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.44...v0.0.45) (2025-10-30)
+
+### Bug Fixes
+
+- change active method if theres one ([9bf567e](https://github.com/ajatdarojat45/frontend-v2/commit/9bf567e38e87d29890aa0adcf630771d3897aac8))
+- initialize setting after changing method too ([18facc6](https://github.com/ajatdarojat45/frontend-v2/commit/18facc64b6f608c873ff596949089a4a5b952f28))
+
 ### [0.0.44](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.43...v0.0.44) (2025-10-30)
 
 ### Features
