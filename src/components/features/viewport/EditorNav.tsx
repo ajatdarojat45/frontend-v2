@@ -1,4 +1,5 @@
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useSimulationRunner } from "@/hooks/useSimulationRunner";
 import { useGetSimulationResultQuery } from "@/store/simulationApi";
 import { Link } from "react-router";
 
@@ -10,6 +11,7 @@ type EditorNavProps = {
 
 export function EditorNav({ active, modelId, simulationId }: EditorNavProps) {
   const { data: result } = useGetSimulationResultQuery(simulationId);
+  const { isRunning } = useSimulationRunner();
 
   const hasResult = result && result.length > 0;
 
@@ -29,7 +31,7 @@ export function EditorNav({ active, modelId, simulationId }: EditorNavProps) {
             Geometry
           </Link>
         </TabsTrigger>
-        {hasResult ? (
+        {!isRunning && hasResult ? (
           <TabsTrigger
             value="results"
             className="w-full h-full rounded-tl-none rounded-tr-none data-[state=active]:bg-choras-dark data-[state=active]:text-choras-accent text-choras-accent/50 flex items-center justify-center bg-choras-dark/50 cursor-pointer"
