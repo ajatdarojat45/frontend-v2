@@ -1,8 +1,8 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { SourceReceiversMenu } from "./SourceReceiversMenu";
+import { CoordinateInput } from "./CoordinateInput";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Trash2, Plus } from "lucide-react";
 import type { Source, Receiver } from "@/types/simulation";
 import type { RootState } from "@/store";
@@ -337,51 +337,21 @@ export function SourceReceiversTab() {
                       </div>
                     </div>
                     <div className="flex gap-3">
-                      <div className="relative flex-1">
-                        <span className="absolute left-2 top-1/2 transform -translate-y-1/2 text-xs text-choras-gray pointer-events-none">
-                          X
-                        </span>
-                        <Input
-                          type="number"
-                          step="0.01"
-                          value={source.x}
-                          onChange={(e) =>
-                            handleUpdateSource(source.id, "x", parseFloat(e.target.value) || 0)
-                          }
-                          onClick={(e) => e.stopPropagation()}
-                          className="h-6 text-xs bg-choras-dark border-choras-gray text-white pl-6 pr-2"
-                        />
-                      </div>
-                      <div className="relative flex-1">
-                        <span className="absolute left-2 top-1/2 transform -translate-y-1/2 text-xs text-choras-gray pointer-events-none">
-                          Y
-                        </span>
-                        <Input
-                          type="number"
-                          step="0.01"
-                          value={source.y}
-                          onChange={(e) =>
-                            handleUpdateSource(source.id, "y", parseFloat(e.target.value) || 0)
-                          }
-                          onClick={(e) => e.stopPropagation()}
-                          className="h-6 text-xs bg-choras-dark border-choras-gray text-white pl-6 pr-2"
-                        />
-                      </div>
-                      <div className="relative flex-1">
-                        <span className="absolute left-2 top-1/2 transform -translate-y-1/2 text-xs text-choras-gray pointer-events-none">
-                          Z
-                        </span>
-                        <Input
-                          type="number"
-                          step="0.01"
-                          value={source.z}
-                          onChange={(e) =>
-                            handleUpdateSource(source.id, "z", parseFloat(e.target.value) || 0)
-                          }
-                          onClick={(e) => e.stopPropagation()}
-                          className="h-6 text-xs bg-choras-dark border-choras-gray text-white pl-6 pr-2"
-                        />
-                      </div>
+                      <CoordinateInput
+                        value={source.x}
+                        axis="x"
+                        onChange={(value) => handleUpdateSource(source.id, "x", value)}
+                      />
+                      <CoordinateInput
+                        value={source.y}
+                        axis="y"
+                        onChange={(value) => handleUpdateSource(source.id, "y", value)}
+                      />
+                      <CoordinateInput
+                        value={source.z}
+                        axis="z"
+                        onChange={(value) => handleUpdateSource(source.id, "z", value)}
+                      />
                     </div>
                     {hasValidationError && (
                       <div className="mt-2 text-xs text-red-400 px-1">
@@ -472,51 +442,21 @@ export function SourceReceiversTab() {
                       </div>
                     </div>
                     <div className="flex gap-3">
-                      <div className="relative flex-1">
-                        <span className="absolute left-2 top-1/2 transform -translate-y-1/2 text-xs text-choras-gray pointer-events-none">
-                          X
-                        </span>
-                        <Input
-                          type="number"
-                          step="0.01"
-                          value={receiver.x}
-                          onChange={(e) =>
-                            handleUpdateReceiver(receiver.id, "x", parseFloat(e.target.value) || 0)
-                          }
-                          onClick={(e) => e.stopPropagation()}
-                          className="h-6 text-xs bg-choras-dark border-choras-gray text-white pl-6 pr-2"
-                        />
-                      </div>
-                      <div className="relative flex-1">
-                        <span className="absolute left-2 top-1/2 transform -translate-y-1/2 text-xs text-choras-gray pointer-events-none">
-                          Y
-                        </span>
-                        <Input
-                          type="number"
-                          step="0.01"
-                          value={receiver.y}
-                          onChange={(e) =>
-                            handleUpdateReceiver(receiver.id, "y", parseFloat(e.target.value) || 0)
-                          }
-                          onClick={(e) => e.stopPropagation()}
-                          className="h-6 text-xs bg-choras-dark border-choras-gray text-white pl-6 pr-2"
-                        />
-                      </div>
-                      <div className="relative flex-1">
-                        <span className="absolute left-2 top-1/2 transform -translate-y-1/2 text-xs text-choras-gray pointer-events-none">
-                          Z
-                        </span>
-                        <Input
-                          type="number"
-                          step="0.01"
-                          value={receiver.z}
-                          onChange={(e) =>
-                            handleUpdateReceiver(receiver.id, "z", parseFloat(e.target.value) || 0)
-                          }
-                          onClick={(e) => e.stopPropagation()}
-                          className="h-6 text-xs bg-choras-dark border-choras-gray text-white pl-6 pr-2"
-                        />
-                      </div>
+                      <CoordinateInput
+                        value={receiver.x}
+                        axis="x"
+                        onChange={(value) => handleUpdateReceiver(receiver.id, "x", value)}
+                      />
+                      <CoordinateInput
+                        value={receiver.y}
+                        axis="y"
+                        onChange={(value) => handleUpdateReceiver(receiver.id, "y", value)}
+                      />
+                      <CoordinateInput
+                        value={receiver.z}
+                        axis="z"
+                        onChange={(value) => handleUpdateReceiver(receiver.id, "z", value)}
+                      />
                     </div>
                     {hasValidationError && (
                       <div className="mt-2 text-xs text-red-400 px-1">
