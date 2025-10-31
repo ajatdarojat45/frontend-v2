@@ -36,6 +36,12 @@ export function SourceReceiversTab() {
   const selectedReceiver = useSelector((state: RootState) => state.sourceReceiver.selectedReceiver);
   const highlightedElement = useSelector((state: RootState) => state.tab.highlightedElement);
 
+  const currentModelId = useSelector((state: RootState) => state.model.currentModelId);
+  const currentModel = useSelector((state: RootState) =>
+    currentModelId ? state.model.rhinoFiles[currentModelId] : null,
+  );
+  const modelObject3D = currentModel?.object3D || null;
+
   const { simulation, simulationError, updateSimulationData, updateReceiversData } =
     useSourceReceiverApi();
   const surfaces = useSurfaces();
@@ -49,6 +55,7 @@ export function SourceReceiversTab() {
       surfaces,
       receiver.id,
       "receiver",
+      modelObject3D,
     );
 
     return {
@@ -67,6 +74,7 @@ export function SourceReceiversTab() {
       surfaces,
       source.id,
       "source",
+      modelObject3D,
     );
 
     return {
