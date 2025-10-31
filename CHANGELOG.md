@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.47](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.46...v0.0.47) (2025-10-31)
+
+### Bug Fixes
+
+- remove unused TabsTrigger for auralizations in ResultPage ([8b2e1cd](https://github.com/ajatdarojat45/frontend-v2/commit/8b2e1cdc43db35e2634b30e00d33c57de83f2662))
+- wrap SidebarTabs and EditorNav in a fragment for proper rendering ([4b16d42](https://github.com/ajatdarojat45/frontend-v2/commit/4b16d420aa35ea100d20634b170e78ae4dc689e8))
+
 ### [0.0.46](https://github.com/ajatdarojat45/frontend-v2/compare/v0.0.45...v0.0.46) (2025-10-30)
 
 ### Features
