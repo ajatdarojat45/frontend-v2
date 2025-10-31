@@ -46,7 +46,7 @@ export function CoordinateInput({ value, axis, onChange, onCommit }: CoordinateI
 
   return (
     <div className="relative flex-1">
-      <span className="absolute left-2 top-1/2 transform -translate-y-1/2 text-xs text-choras-gray pointer-events-none uppercase">
+      <span className="absolute left-2 top-1/2 transform -translate-y-[45%] text-sm text-white pointer-events-none uppercase">
         {axis}
       </span>
       <Input
@@ -57,7 +57,7 @@ export function CoordinateInput({ value, axis, onChange, onCommit }: CoordinateI
         onBlur={handleCommit}
         onKeyDown={handleKeyDown}
         onClick={(e) => e.stopPropagation()}
-        className="h-6 text-xs bg-choras-dark border-choras-gray text-white pl-6 pr-2"
+        className="h-6 text-sm bg-choras-dark border-choras-gray text-white pl-5.5 pr-2 py-3"
       />
     </div>
   );

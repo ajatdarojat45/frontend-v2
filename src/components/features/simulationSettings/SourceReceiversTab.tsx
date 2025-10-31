@@ -3,17 +3,17 @@ import { useEffect } from "react";
 import { SourceReceiversMenu } from "./SourceReceiversMenu";
 import { CoordinateInput } from "./CoordinateInput";
 import { Button } from "@/components/ui/button";
-import { Trash2, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import type { Source, Receiver } from "@/types/simulation";
 import type { RootState } from "@/store";
 import {
   addSource,
-  removeSource,
+  // removeSource,
   removeAllSources,
   updateSource,
   updateSourceValidation,
   addReceiver,
-  removeReceiver,
+  // removeReceiver,
   removeAllReceivers,
   updateReceiver,
   updateReceiverValidation,
@@ -149,7 +149,7 @@ export function SourceReceiversTab() {
   }, [receivers, surfaces]);
 
   const handleAddSource = () => {
-    if (sources.length >= 5) return;
+    if (sources.length >= 1) return;
 
     const newSource: Source = {
       id: crypto.randomUUID(),
@@ -168,12 +168,13 @@ export function SourceReceiversTab() {
     updateSimulationData(updatedSources);
   };
 
-  const handleRemoveSource = (id: string) => {
-    dispatch(removeSource(id));
+  // commented out until backend supports multiple sources
+  // const handleRemoveSource = (id: string) => {
+  //   dispatch(removeSource(id));
 
-    const updatedSources = sources.filter((source) => source.id !== id);
-    updateSimulationData(updatedSources);
-  };
+  //   const updatedSources = sources.filter((source) => source.id !== id);
+  //   updateSimulationData(updatedSources);
+  // };
 
   const handleRemoveAllSources = () => {
     dispatch(removeAllSources());
@@ -203,7 +204,7 @@ export function SourceReceiversTab() {
   };
 
   const handleAddReceiver = () => {
-    if (receivers.length >= 5) return;
+    if (receivers.length >= 1) return;
 
     const newReceiver: Receiver = {
       id: crypto.randomUUID(),
@@ -222,12 +223,13 @@ export function SourceReceiversTab() {
     updateReceiversData(updatedReceivers);
   };
 
-  const handleRemoveReceiver = (id: string) => {
-    dispatch(removeReceiver(id));
+  // commented out until backend supports multiple receivers
+  // const handleRemoveReceiver = (id: string) => {
+  //   dispatch(removeReceiver(id));
 
-    const updatedReceivers = receivers.filter((receiver) => receiver.id !== id);
-    updateReceiversData(updatedReceivers);
-  };
+  //   const updatedReceivers = receivers.filter((receiver) => receiver.id !== id);
+  //   updateReceiversData(updatedReceivers);
+  // };
 
   const handleRemoveAllReceivers = () => {
     dispatch(removeAllReceivers());
@@ -309,49 +311,41 @@ export function SourceReceiversTab() {
                           : "hover:bg-gray-700/30"
                     }`}
                   >
-                    <div>
-                      <div className="flex items-center justify-between mb-1 p-1 rounded cursor-pointer transition-colors">
-                        <div className="flex items-center gap-2">
-                          <div
-                            className={`flex items-center justify-center w-6 h-6 bg-cyan-500 text-black rounded-full text-xs font-medium`}
-                          >
-                            {source.orderNumber}
-                          </div>
-                          <span
-                            className={`text-xs ${isSelected ? "text-yellow-200" : "text-gray-300"}`}
-                          >
-                            {source.label}
-                          </span>
-                        </div>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleRemoveSource(source.id);
-                          }}
-                          className="p-1 h-6 w-6 text-choras-gray hover:text-red-400"
-                        >
-                          <Trash2 size={12} />
-                        </Button>
+                    <div className="flex items-center gap-2 py-3">
+                      <div
+                        className={`flex items-center justify-center w-6 h-6 border-2 border-[#667eea] text-[#667eea] rounded-full text-xs font-bold flex-shrink-0`}
+                      >
+                        {source.orderNumber}
                       </div>
-                    </div>
-                    <div className="flex gap-3">
-                      <CoordinateInput
-                        value={source.x}
-                        axis="x"
-                        onChange={(value) => handleUpdateSource(source.id, "x", value)}
-                      />
-                      <CoordinateInput
-                        value={source.y}
-                        axis="y"
-                        onChange={(value) => handleUpdateSource(source.id, "y", value)}
-                      />
-                      <CoordinateInput
-                        value={source.z}
-                        axis="z"
-                        onChange={(value) => handleUpdateSource(source.id, "z", value)}
-                      />
+                      <div className="flex gap-1 flex-1">
+                        <CoordinateInput
+                          value={source.x}
+                          axis="x"
+                          onChange={(value) => handleUpdateSource(source.id, "x", value)}
+                        />
+                        <CoordinateInput
+                          value={source.y}
+                          axis="y"
+                          onChange={(value) => handleUpdateSource(source.id, "y", value)}
+                        />
+                        <CoordinateInput
+                          value={source.z}
+                          axis="z"
+                          onChange={(value) => handleUpdateSource(source.id, "z", value)}
+                        />
+                      </div>
+                      {/* Commented out removal individual button until backend supports multiple sources */}
+                      {/* <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleRemoveSource(source.id);
+                        }}
+                        className="p-1 h-6 w-6 text-choras-gray hover:text-red-400 flex-shrink-0"
+                      >
+                        <Trash2 size={12} />
+                      </Button> */}
                     </div>
                     {hasValidationError && (
                       <div className="mt-2 text-xs text-red-400 px-1">
@@ -365,11 +359,10 @@ export function SourceReceiversTab() {
           )}
         </div>
 
-        {/* Add New Source Button */}
         <div className="mt-3">
           <Button
             onClick={handleAddSource}
-            disabled={sources.length >= 5}
+            disabled={sources.length >= 1}
             size="sm"
             className={`w-full h-8 text-xs cursor-pointer transition-all duration-500 ${
               highlightedElement === "add-source-button"
@@ -379,7 +372,7 @@ export function SourceReceiversTab() {
             variant="outline"
           >
             <Plus size={14} className="mr-1" />
-            Add New Source {sources.length >= 5 && "(Max 5)"}
+            Add New Source {sources.length >= 1 && "(Max 1)"}
           </Button>
         </div>
       </div>
@@ -414,49 +407,41 @@ export function SourceReceiversTab() {
                           : "hover:bg-gray-700/30"
                     }`}
                   >
-                    <div>
-                      <div className="flex items-center justify-between mb-1 p-1 rounded cursor-pointer transition-colors">
-                        <div className="flex items-center gap-2">
-                          <div
-                            className={`flex items-center justify-center w-6 h-6 bg-yellow-500 text-black rounded-full text-xs font-medium`}
-                          >
-                            {receiver.orderNumber}
-                          </div>
-                          <span
-                            className={`text-xs ${isSelected ? "text-yellow-200" : "text-gray-300"}`}
-                          >
-                            {receiver.label}
-                          </span>
-                        </div>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleRemoveReceiver(receiver.id);
-                          }}
-                          className="p-1 h-6 w-6 text-choras-gray hover:text-red-400"
-                        >
-                          <Trash2 size={12} />
-                        </Button>
+                    <div className="flex items-center gap-2 py-3">
+                      <div
+                        className={`flex items-center justify-center w-6 h-6 border-2 border-[#eac766] text-[#eac766] rounded-full text-xs font-bold flex-shrink-0`}
+                      >
+                        {receiver.orderNumber}
                       </div>
-                    </div>
-                    <div className="flex gap-3">
-                      <CoordinateInput
-                        value={receiver.x}
-                        axis="x"
-                        onChange={(value) => handleUpdateReceiver(receiver.id, "x", value)}
-                      />
-                      <CoordinateInput
-                        value={receiver.y}
-                        axis="y"
-                        onChange={(value) => handleUpdateReceiver(receiver.id, "y", value)}
-                      />
-                      <CoordinateInput
-                        value={receiver.z}
-                        axis="z"
-                        onChange={(value) => handleUpdateReceiver(receiver.id, "z", value)}
-                      />
+                      <div className="flex gap-1 flex-1">
+                        <CoordinateInput
+                          value={receiver.x}
+                          axis="x"
+                          onChange={(value) => handleUpdateReceiver(receiver.id, "x", value)}
+                        />
+                        <CoordinateInput
+                          value={receiver.y}
+                          axis="y"
+                          onChange={(value) => handleUpdateReceiver(receiver.id, "y", value)}
+                        />
+                        <CoordinateInput
+                          value={receiver.z}
+                          axis="z"
+                          onChange={(value) => handleUpdateReceiver(receiver.id, "z", value)}
+                        />
+                      </div>
+                      {/* Commented out removal individual button until backend supports multiple receivers */}
+                      {/* <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleRemoveReceiver(receiver.id);
+                        }}
+                        className="p-1 h-6 w-6 text-choras-gray hover:text-red-400 flex-shrink-0"
+                      >
+                        <Trash2 size={12} />
+                      </Button> */}
                     </div>
                     {hasValidationError && (
                       <div className="mt-2 text-xs text-red-400 px-1">
@@ -470,11 +455,10 @@ export function SourceReceiversTab() {
           )}
         </div>
 
-        {/* Add New Receiver Button */}
         <div className="mt-3">
           <Button
             onClick={handleAddReceiver}
-            disabled={receivers.length >= 5}
+            disabled={receivers.length >= 1}
             size="sm"
             className={`w-full h-8 text-xs mb-4 cursor-pointer transition-all duration-500 ${
               highlightedElement === "add-receiver-button"
@@ -484,7 +468,7 @@ export function SourceReceiversTab() {
             variant="outline"
           >
             <Plus size={14} className="mr-1" />
-            Add New Receiver {receivers.length >= 5 && "(Max 5)"}
+            Add New Receiver {receivers.length >= 1 && "(Max 1)"}
           </Button>
         </div>
       </div>
