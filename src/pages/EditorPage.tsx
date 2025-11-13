@@ -11,6 +11,7 @@ import { ModelViewer } from "@/components/features/viewport/ModelViewer";
 import { useGetModelQuery } from "@/store/modelApi";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { EditorNav } from "@/components/features/viewport/EditorNav";
+import AllSettingJson from "@/components/features/simulationSettings/AllSettingJson";
 
 export function EditorPage() {
   const navigate = useNavigate();
@@ -66,6 +67,9 @@ export function EditorPage() {
               <hr className="border-choras-gray border-0.5" />
               <div className="flex-1 px-4 overflow-y-auto scrollbar-hide">
                 <SidebarContent />
+              </div>
+              <div className="w-full p-4">
+                <AllSettingJson />
               </div>
             </>
           ) : (

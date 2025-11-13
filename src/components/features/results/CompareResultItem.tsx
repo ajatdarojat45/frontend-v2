@@ -25,6 +25,7 @@ import { useGetModelQuery } from "@/store/modelApi";
 import { ChooseModel } from "./ChooseModel";
 import { selectCompareResults, selectCompareSimulationIds } from "@/store/simulationSelector";
 import { useNavigate } from "react-router";
+import { useSimulationJsonFormatter } from "@/hooks/useSimulationJsonFormatter";
 
 interface CompareResultItemProps {
   order: number;
@@ -48,6 +49,7 @@ export function CompareResultItem({
 }: CompareResultItemProps) {
   const navigate = useNavigate();
   const [isDownloading, setIsDownloading] = useState(false);
+  const [isDownloadingJsonSettings, setIsDownloadingJsonSettings] = useState(false);
   const dispatch = useDispatch();
   const { data: model } = useGetModelQuery(modelId?.toString(), { skip: !modelId });
   const { data: simulations } = useGetSimulationsByModelIdQuery(modelId, {
@@ -61,6 +63,8 @@ export function CompareResultItem({
   const [getSimulationResult] = useLazyGetSimulationResultQuery();
   const simulationIds = useSelector(selectCompareSimulationIds);
   const compareResults = useSelector(selectCompareResults);
+
+  const { json: simulationJson } = useSimulationJsonFormatter(simulationId);
 
   const selectedSimulation = simulations?.find((sim) => sim.id === simulationId);
   const selectedMethod = selectedSimulation
@@ -78,6 +82,26 @@ export function CompareResultItem({
       // Pick the next result to navigate to
       const result = compareResults[1];
       navigate(`/editor/${result.modelId}/${result.simulationId}/results`);
+    }
+  };
+
+  const handleDownloadJsonSettings = async () => {
+    if (!simulationJson || !simulationId) {
+      toast.error("Simulation data not available");
+      return;
+    }
+
+    try {
+      setIsDownloadingJsonSettings(true);
+      const jsonString = JSON.stringify(simulationJson, null, 2);
+      const blob = new Blob([jsonString], { type: "application/json" });
+      downloadFile(blob, formatFilename(`simulation_${simulationId}_settings.json`));
+      toast.success("JSON settings downloaded successfully");
+    } catch (error) {
+      console.error("Failed to download JSON settings:", error);
+      toast.error("Failed to download JSON settings");
+    } finally {
+      setIsDownloadingJsonSettings(false);
     }
   };
 
@@ -264,6 +288,17 @@ export function CompareResultItem({
           className="flex-1 border-choras-accent text-choras-accent hover:bg-choras-accent hover:text-black"
         >
           {isDownloading ? "Downloading..." : "Download"}
+        </Button>
+      </div>
+      <div>
+        <Button
+          variant={"ghost"}
+          size={"sm"}
+          className="border border-gray-500 text-gray-400 hover:bg-gray-500 w-full"
+          onClick={handleDownloadJsonSettings}
+          disabled={!simulationJson || isDownloadingJsonSettings}
+        >
+          {isDownloadingJsonSettings ? "Downloading..." : "Download JSON Setting"}
         </Button>
       </div>
     </div>
