@@ -7,11 +7,16 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Search } from "lucide-react";
+import { Search, SquarePen } from "lucide-react";
 import { useState } from "react";
-import { useGetMaterialsQuery } from "@/store/materialsApi";
+import {
+  useCreateMaterialMutation,
+  useGetMaterialsQuery,
+  useUpdateMaterialMutation,
+} from "@/store/materialsApi";
 import type { Material } from "@/types/material";
-import { CreateMaterialDialog } from "./CreateMaterialDialog";
+import { MaterialFormDialog } from "./MaterialFormDialog";
+import { toast } from "sonner";
 
 type IProps = {
   openMaterialLibrary: boolean;
@@ -29,10 +34,36 @@ export function SurfaceMaterialList({
   const [selectedMaterial, setSelectedMaterial] = useState<Material | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const { data: materials = [], isLoading, error } = useGetMaterialsQuery();
+  const [selectedMaterialForEdit, setSelectedMaterialForEdit] = useState<Material | null>(null);
+  const [createMaterial, { isLoading: isCreating }] = useCreateMaterialMutation();
+  const [isOpenEditForm, setIsOpenEditForm] = useState(false);
+  const [updateMaterial, { isLoading: isUpdating }] = useUpdateMaterialMutation();
 
   const filteredMaterials = materials.filter((material) =>
     material.name.toLowerCase().includes(searchQuery.toLowerCase()),
   );
+
+  const handleCreate = async (material: Omit<Material, "id" | "createdAt" | "updatedAt">) => {
+    try {
+      await createMaterial(material).unwrap();
+      toast.success("Material created successfully!");
+      setOpenCreateMaterialDialog(false);
+    } catch (error) {
+      toast.error("Failed to create material");
+      console.error("Error creating material:", error);
+    }
+  };
+
+  const handleUpdate = async (material: Omit<Material, "createdAt" | "updatedAt" | "id">) => {
+    try {
+      await updateMaterial({ id: selectedMaterialForEdit?.id as number, ...material }).unwrap();
+      toast.success("Material updated successfully!");
+      setIsOpenEditForm(false);
+    } catch (error) {
+      toast.error("Failed to update material");
+      console.error("Error updating material:", error);
+    }
+  };
 
   return (
     <Dialog open={openMaterialLibrary} onOpenChange={setOpenMaterialLibrary}>
@@ -44,9 +75,24 @@ export function SurfaceMaterialList({
           <DialogHeader>
             <div className="flex justify-between items-center mt-4">
               <DialogTitle className="text-xl text-choras-primary">Material library</DialogTitle>
-              <CreateMaterialDialog
-                openCreateMaterialDialog={openCreateMaterialDialog}
-                setOpenCreateMaterialDialog={setOpenCreateMaterialDialog}
+              <MaterialFormDialog
+                isOpen={openCreateMaterialDialog}
+                onOpen={setOpenCreateMaterialDialog}
+                label={"Create"}
+                description={"Fill in the details to create a new material."}
+                onSubmit={handleCreate}
+                isLoading={isCreating}
+              />
+
+              <MaterialFormDialog
+                isOpen={isOpenEditForm}
+                onOpen={() => setIsOpenEditForm(!isOpenEditForm)}
+                material={selectedMaterialForEdit}
+                label={"Update"}
+                description={"Update the details of the material."}
+                onSubmit={handleUpdate}
+                isLoading={isUpdating}
+                isShownTrigger={false}
               />
             </div>
             <DialogDescription>Select a material to view its details</DialogDescription>
@@ -110,6 +156,14 @@ export function SurfaceMaterialList({
                               </p>
                             )}
                           </div>
+                          <SquarePen
+                            size={16}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSelectedMaterialForEdit(material);
+                              setIsOpenEditForm(true);
+                            }}
+                          />
                         </div>
                       ))}
                     </div>
