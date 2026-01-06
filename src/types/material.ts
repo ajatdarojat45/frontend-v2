@@ -6,7 +6,7 @@ export interface Material {
   absorptionCoefficients: number[];
   description: string;
   id: number;
-  origin: string;
+  origin?: string;
   category: string;
   updatedAt: string;
 }
