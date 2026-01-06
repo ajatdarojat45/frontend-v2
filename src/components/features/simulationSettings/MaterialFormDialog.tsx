@@ -23,6 +23,7 @@ type IProps = {
   label?: string;
   description?: string;
   isLoading?: boolean;
+  isShownTrigger?: boolean;
 };
 
 export function MaterialFormDialog({
@@ -33,6 +34,7 @@ export function MaterialFormDialog({
   description = "Fill in the details to create a new material.",
   isLoading = false,
   onSubmit,
+  isShownTrigger = true,
 }: IProps) {
   const [formData, setFormData] = useState({
     name: "",
@@ -91,12 +93,14 @@ export function MaterialFormDialog({
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpen}>
-      <DialogTrigger asChild>
-        <Button variant="outline" size="sm" className="flex items-center gap-2">
-          <Plus size={16} />
-          Create Material
-        </Button>
-      </DialogTrigger>
+      {isShownTrigger && (
+        <DialogTrigger asChild>
+          <Button variant="outline" size="sm" className="flex items-center gap-2">
+            <Plus size={16} />
+            {label} Material
+          </Button>
+        </DialogTrigger>
+      )}
       <DialogContent className="sm:max-w-2xl">
         <DialogHeader>
           <DialogTitle>{label} Material</DialogTitle>
