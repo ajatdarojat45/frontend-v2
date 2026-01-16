@@ -20,12 +20,13 @@ import { useJsonValidation } from "@/hooks/useJsonValidation";
 import { useJsonBuilder } from "@/hooks/useJsonBuilder";
 import { useJsonPayloadBuilder } from "@/hooks/useJsonPayloadBuilder";
 import { setAssignments } from "@/store/materialAssignmentSlice";
-import { updateValue } from "@/store/simulationSettingsSlice";
+import { updateValue, clearSettings } from "@/store/simulationSettingsSlice";
 import { setSources, setReceivers } from "@/store/sourceReceiverSlice";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { MaterialFormDialog } from "./MaterialFormDialog";
 import type { Material } from "@/types/material";
 import { useCreateMaterialMutation } from "@/store/materialsApi";
+import type { SimulationSettingsState } from "@/types/simulationSettings";
 
 export function FullSettingJsonEditor() {
   const [open, setOpen] = useState(false);
@@ -82,6 +83,23 @@ export function FullSettingJsonEditor() {
       dispatch(setAssignments(simulation.layerIdByMaterialId));
     }
   }, [simulation?.layerIdByMaterialId, dispatch]);
+
+  useEffect(() => {
+    if (simulation?.solverSettings?.simulationSettings && settingsData?.options) {
+      const existingSettings = simulation.solverSettings
+        .simulationSettings as SimulationSettingsState["values"];
+
+      dispatch(clearSettings());
+      dispatch(setOptions(settingsData.options));
+
+      settingsData.options.forEach((option) => {
+        const savedValue = existingSettings[option.id];
+        if (savedValue !== undefined) {
+          dispatch(updateValue({ id: option.id, value: savedValue }));
+        }
+      });
+    }
+  }, [simulation?.id, settingsData?.options, dispatch]);
 
   // Initialize JSON value when dialog opens
   useEffect(() => {
