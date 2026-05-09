@@ -27,6 +27,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { GeometryIssueLayer } from "../GeometryIssueLayer";
 
 export function ViewportCanvas({ modelUrl, modelId }: ViewportCanvasProps) {
   const [cameraType, setCameraType] = useState<"perspective" | "orthographic">("perspective");
@@ -177,6 +178,7 @@ export function ViewportCanvas({ modelUrl, modelId }: ViewportCanvasProps) {
           </GizmoHelper>
 
           {modelId && <ModelRenderer modelId={modelId} viewMode={viewMode} />}
+          <GeometryIssueLayer />
           <SourceVisualization orbitControlsRef={orbitControlsRef} />
           <ReceiverVisualization orbitControlsRef={orbitControlsRef} />
         </Canvas>
