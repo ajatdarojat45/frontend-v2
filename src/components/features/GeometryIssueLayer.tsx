@@ -71,17 +71,24 @@ function IssueRenderer({
 }
 
 export function GeometryIssueLayer() {
-  const { geometryIssues, selectedIssue } = useSelector((state: RootState) => {
+  const { geometryIssues, selectedIssue, expandedIssueGroups } = useSelector((state: RootState) => {
     return state.geometryIssue;
   });
 
   return (
     <>
       {geometryIssues &&
-        Object.entries(geometryIssues).map((el) => {
-          const issues = el[1];
+        Object.entries(geometryIssues).map(([issueType, issues]) => {
+          if (!expandedIssueGroups[issueType]) return null;
+
           return issues.map((issue, index) => {
-            return <IssueRenderer key={index} issue={issue} selectedIssue={selectedIssue} />;
+            return (
+              <IssueRenderer
+                key={`${issueType}-${index}`}
+                issue={issue}
+                selectedIssue={selectedIssue}
+              />
+            );
           });
         })}
     </>

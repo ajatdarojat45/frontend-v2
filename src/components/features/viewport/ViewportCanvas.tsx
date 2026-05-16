@@ -28,6 +28,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { GeometryIssueLayer } from "../GeometryIssueLayer";
+import { useCameraFocusOnIssue } from "@/hooks/useCameraFocusOnIssue";
 
 export function ViewportCanvas({ modelUrl, modelId }: ViewportCanvasProps) {
   const [cameraType, setCameraType] = useState<"perspective" | "orthographic">("perspective");
@@ -40,6 +41,8 @@ export function ViewportCanvas({ modelUrl, modelId }: ViewportCanvasProps) {
   const { loadModelFromUrl, isModelLoaded, isLoading, error, setActiveModel } = useModelLoader();
   const { isRunning } = useSimulationRunnerContext();
   const orbitControlsRef = useRef<OrbitControlsType | null>(null);
+
+  useCameraFocusOnIssue(orbitControlsRef);
 
   useEffect(() => {
     if (modelUrl && modelId) {
