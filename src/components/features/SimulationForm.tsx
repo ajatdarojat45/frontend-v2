@@ -32,6 +32,7 @@ import {
 import { toast } from "sonner";
 import { useNavigate } from "react-router";
 import { useInitializeSimulationSettings } from "@/hooks/useInitializeSimulationSettings";
+import { cn } from "@/libs/style";
 
 const SimulationFormSchema = z.object({
   name: z.string().min(3, { message: "Name must be at least 3 characters." }),
@@ -47,6 +48,7 @@ type SimulationFormProps = {
   defaultValues?: Partial<SimulationFormData>;
   trigger?: React.ReactNode;
   onSuccess?: () => void;
+  className?: string;
 };
 export function SimulationForm({
   modelId,
@@ -54,6 +56,7 @@ export function SimulationForm({
   defaultValues,
   trigger,
   onSuccess,
+  className,
 }: SimulationFormProps) {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
@@ -130,7 +133,10 @@ export function SimulationForm({
         {trigger ?? (
           <Button
             variant="secondary"
-            className="bg-choras-dark border border-choras-primary text-choras-primary hover:bg-white hover:text-choras-dark cursor-pointer"
+            className={cn(
+              "bg-choras-dark border border-choras-primary text-choras-primary hover:bg-white hover:text-choras-dark cursor-pointer",
+              className,
+            )}
           >
             {label} Simulation
           </Button>

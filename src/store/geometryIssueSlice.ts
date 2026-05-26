@@ -11,6 +11,7 @@ export type GeometryIssueElements = {
 };
 
 export type GeometryIssue = {
+  id?: string;
   type: GeometryIssueType;
   points: number[][];
   severity: GeometryIssueSeverity;
@@ -19,7 +20,8 @@ export type GeometryIssue = {
 };
 
 export type GeometryIssueInput = {
-  elements: GeometryIssueElements | GeometryIssueElements[];
+  id: string;
+  elements: GeometryIssueElements[];
   severity: GeometryIssueSeverity;
   label?: string;
   message?: string;
@@ -40,10 +42,6 @@ const initialState: GeometryIssuesState = {
   expandedIssueGroups: {},
 };
 
-const toIssueElements = (elements: GeometryIssueElements | GeometryIssueElements[]) => {
-  return Array.isArray(elements) ? elements : [elements];
-};
-
 const normalizePoints = (points: number[] | number[][]) => {
   return Array.isArray(points[0]) ? (points as number[][]) : [points as number[]];
 };
@@ -53,8 +51,10 @@ const normalizeIssue = (
   severity: GeometryIssueSeverity,
   label?: string,
   message?: string,
+  id?: string,
 ): GeometryIssue => {
   return {
+    id,
     type: issue.type,
     points: normalizePoints(issue.points),
     severity,
@@ -65,8 +65,8 @@ const normalizeIssue = (
 
 const normalizeIssueGroup = (issue: GeometryIssue | GeometryIssueInput): GeometryIssue[] => {
   if ("elements" in issue) {
-    return toIssueElements(issue.elements).map((element) =>
-      normalizeIssue(element, issue.severity, issue.label, issue.message),
+    return issue.elements.map((element) =>
+      normalizeIssue(element, issue.severity, issue.label, issue.message, issue.id),
     );
   }
 
@@ -79,7 +79,7 @@ export const flattenIssuePoints = (
   if (!issue) return [];
 
   if ("elements" in issue) {
-    return toIssueElements(issue.elements).flatMap((element) => normalizePoints(element.points));
+    return issue.elements.flatMap((element) => normalizePoints(element.points));
   }
 
   return issue.points;
@@ -94,13 +94,14 @@ const geometryIssueSlice = createSlice({
     },
     setSelectedIssue: (state, action: PayloadAction<GeometryIssue | GeometryIssueInput>) => {
       if ("elements" in action.payload) {
-        const firstElement = toIssueElements(action.payload.elements)[0];
+        const firstElement = action.payload.elements[0];
         state.selectedIssue = firstElement
           ? normalizeIssue(
               firstElement,
               action.payload.severity,
               action.payload.label,
               action.payload.message,
+              action.payload.id,
             )
           : null;
         return;

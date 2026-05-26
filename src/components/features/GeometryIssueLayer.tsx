@@ -55,8 +55,10 @@ function IssueRenderer({
   selectedIssue: GeometryIssue | null;
 }) {
   const isSelected =
-    selectedIssue?.type === issue.type &&
-    JSON.stringify(selectedIssue?.points) === JSON.stringify(issue.points);
+    selectedIssue?.id && issue.id
+      ? selectedIssue.id === issue.id
+      : selectedIssue?.type === issue.type &&
+        JSON.stringify(selectedIssue?.points) === JSON.stringify(issue.points);
 
   switch (issue.type) {
     case "vertex":

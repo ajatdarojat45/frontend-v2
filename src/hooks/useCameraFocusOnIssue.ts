@@ -73,18 +73,32 @@ export function useCameraFocusOnIssue(orbitControlsRef: React.RefObject<OrbitCon
     points.forEach((p) => center.add(p));
     center.divideScalar(points.length);
 
-    // Calculate bounding box to determine zoom distance
+    // Calculate bounding box to determine adaptive zoom distance
     const box = new THREE.Box3();
     points.forEach((p) => box.expandByPoint(p));
 
     const size = box.getSize(new THREE.Vector3());
-    const maxDim = Math.max(size.x, size.y, size.z);
+    const maxDim = Math.max(size.x, size.y, size.z, 0.001);
     const fov = controls.object instanceof THREE.PerspectiveCamera ? controls.object.fov : 75;
-    const distance = maxDim / (2 * Math.tan((fov * Math.PI) / 360));
+    const fovRad = (fov * Math.PI) / 180;
+    const halfFov = fovRad / 2;
 
-    // Get camera direction (slightly elevated and offset for better view)
-    const cameraDirection = new THREE.Vector3(1, 1, 1).normalize();
-    const targetCameraPos = center.clone().addScaledVector(cameraDirection, distance * 1.5);
+    // Keep tiny issues visible by enforcing a minimum bounding radius.
+    const minRadius = 0.25;
+    const radius = Math.max(maxDim / 2, minRadius);
+    const fitDistance = radius / Math.tan(halfFov);
+
+    const paddingFactor = maxDim < 0.5 ? 4 : maxDim < 2 ? 2.5 : maxDim < 10 ? 1.9 : 1.6;
+    const distance = THREE.MathUtils.clamp(fitDistance * paddingFactor, 1.5, 120);
+
+    // Preserve current camera direction so focus movement feels natural.
+    const cameraDirection = controls.object.position.clone().sub(controls.target);
+    if (cameraDirection.lengthSq() < 1e-8) {
+      cameraDirection.set(1, 1, 1);
+    }
+    cameraDirection.normalize();
+
+    const targetCameraPos = center.clone().addScaledVector(cameraDirection, distance);
 
     animateCamera(targetCameraPos, center);
 
