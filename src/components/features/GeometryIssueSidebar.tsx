@@ -13202,15 +13202,15 @@ export default function GeometryIssueSidebar() {
 
   const getIssueRowClassName = (isSelected: boolean) => {
     const selectedClass =
-      "bg-choras-primary/15 ring-1 ring-choras-primary/35 border-choras-primary/40";
-    const defaultClass = "hover:bg-choras-primary/10 border-transparent";
+      "bg-choras-primary/12 ring-1 ring-choras-primary/35 border-choras-primary/35";
+    const defaultClass = "hover:bg-black/5 border-transparent";
 
     return `rounded-md border border-b border-choras-gray/60 transition-colors cursor-pointer ${isSelected ? selectedClass : defaultClass}`;
   };
 
   const getIssueCellClassName = (isSelected: boolean) => {
-    const selectedClass = "rounded-md bg-choras-primary/15 ring-1 ring-choras-primary/35";
-    const defaultClass = "rounded-md hover:bg-choras-primary/10";
+    const selectedClass = "rounded-md bg-choras-primary/12 ring-1 ring-choras-primary/35";
+    const defaultClass = "rounded-md hover:bg-black/5";
 
     return `pr-3 pl-9 py-2.5 text-sm text-left transition-colors ${isSelected ? selectedClass : defaultClass}`;
   };
@@ -13229,47 +13229,47 @@ export default function GeometryIssueSidebar() {
   const hasExpandedIssueGroups = Object.values(expandedIssueGroups).some(Boolean);
 
   return (
-    <div className="h-container flex flex-col border border-slate-500/40 bg-[#596b6b] p-1">
-      <div className="h-full flex flex-col rounded-md bg-slate-900/35 text-white/80 font-inter p-2">
+    <div className="h-container flex flex-col border border-slate-300 bg-[#DCDCDC] p-1">
+      <div className="h-full flex flex-col rounded-md bg-white/65 text-slate-700 font-inter p-2">
         <div className="min-h-0 flex flex-1 flex-col pr-1">
-          <div className="mb-4 rounded-md border border-slate-300/30 bg-gradient-to-b from-slate-800/85 to-slate-900/80 p-3 shadow-[0_10px_24px_rgba(0,0,0,0.2)]">
-            <div className="mb-3 rounded-md border border-slate-400/30 bg-slate-900/45 px-3 py-2">
+          <div className="mb-4 rounded-md border border-slate-300 bg-gradient-to-b from-white to-slate-100 p-3 shadow-[0_8px_18px_rgba(15,23,42,0.12)]">
+            <div className="mb-3 rounded-md border border-slate-300 bg-white/80 px-3 py-2">
               <h4 className="flex items-center gap-2 text-left text-sm font-semibold uppercase tracking-wide text-choras-primary">
                 Possible Simulation
               </h4>
-              <p className="mt-0.5 text-left text-[11px] text-white/55">
+              <p className="mt-0.5 text-left text-[11px] text-slate-500">
                 Choose algorithm then run a new simulation.
               </p>
             </div>
             <div className="mb-3 grid grid-cols-2 gap-2">
-              <span className="rounded-md border border-white/20 bg-white/10 px-3 py-1.5 text-center text-xs font-semibold tracking-wide text-white/80">
+              <span className="rounded-md border border-slate-300 bg-white px-3 py-1.5 text-center text-xs font-semibold tracking-wide text-slate-600">
                 DE
               </span>
-              <span className="rounded-md border border-white/20 bg-white/10 px-3 py-1.5 text-center text-xs font-semibold tracking-wide text-white/80">
+              <span className="rounded-md border border-slate-300 bg-white px-3 py-1.5 text-center text-xs font-semibold tracking-wide text-slate-600">
                 DG
               </span>
             </div>
-            <div className="rounded-md border border-slate-300/30 bg-gradient-to-b from-slate-950/45 to-slate-900/35 p-2.5">
-              <div className="mb-2 flex items-center justify-between rounded-md border border-white/10 bg-white/5 px-2.5 py-1.5">
-                <span className="text-[11px] font-semibold uppercase tracking-wide text-white/75">
+            <div className="rounded-md border border-slate-300 bg-gradient-to-b from-white to-slate-100 p-2.5">
+              <div className="mb-2 flex items-center justify-between rounded-md border border-slate-300 bg-white/80 px-2.5 py-1.5">
+                <span className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
                   Quick Action
                 </span>
               </div>
               <div className="mx-auto flex w-full max-w-md justify-center">
                 <SimulationForm
                   modelId={Number(modelId)}
-                  className="w-full border-choras-primary/70 bg-choras-primary/15 text-choras-primary hover:bg-choras-primary/25 hover:text-white"
+                  className="w-full border-choras-primary/45 bg-white text-choras-primary hover:bg-choras-primary/10"
                 />
               </div>
             </div>
           </div>
           <div
-            className={`rounded-md border border-slate-300/25 bg-slate-900/60 p-2 ${hasExpandedIssueGroups ? "min-h-0 flex flex-1 flex-col" : ""}`}
+            className={`rounded-md border border-slate-300 bg-white/75 p-2 ${hasExpandedIssueGroups ? "min-h-0 flex flex-1 flex-col" : ""}`}
           >
             {/* title */}
-            <div className="mb-3 mt-1 flex items-center justify-between rounded-md border border-slate-400/25 bg-slate-800/50 px-3 py-2">
+            <div className="mb-3 mt-1 flex items-center justify-between rounded-md border border-slate-300 bg-white px-3 py-2">
               <h4 className="text-lg font-semibold tracking-wide text-choras-primary">Issues</h4>
-              <span className="rounded-md bg-white/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white/75">
+              <span className="rounded-md bg-slate-200 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-slate-600">
                 Geometry
               </span>
             </div>
@@ -13285,7 +13285,7 @@ export default function GeometryIssueSidebar() {
                 <div
                   className={
                     hasExpandedIssueGroups
-                      ? "h-full overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-slate-700/60 scrollbar-track-transparent scrollbar-thumb-rounded-full"
+                      ? "h-full overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-slate-400/80 scrollbar-track-transparent scrollbar-thumb-rounded-full"
                       : "pr-2"
                   }
                 >
@@ -13345,12 +13345,12 @@ export default function GeometryIssueSidebar() {
 
                           return (
                             <Fragment key={issueType}>
-                              <tr className="border-b border-white/10">
+                              <tr className="border-b border-slate-200">
                                 <td colSpan={2} className="px-3 py-2 text-sm text-left">
                                   <button
                                     type="button"
                                     onClick={() => toggleIssueGroup(issueType)}
-                                    className="flex w-full items-center gap-2 rounded-md px-1 py-1 font-medium text-white transition-colors hover:bg-white/5 hover:text-gray-200"
+                                    className="flex w-full items-center gap-2 rounded-md px-1 py-1 font-medium text-slate-700 transition-colors hover:bg-black/5"
                                   >
                                     <span
                                       className={`transform transition-transform ${isExpanded ? "rotate-90" : "rotate-0"}`}
@@ -13358,7 +13358,7 @@ export default function GeometryIssueSidebar() {
                                       <ChevronRight size={16} />
                                     </span>
                                     <span>{formatIssueCategoryLabel(issueType)}</span>
-                                    <span className="ml-auto rounded-full bg-white/10 px-2 py-0.5 text-[10px] font-semibold text-white/80">
+                                    <span className="ml-auto rounded-full bg-slate-200 px-2 py-0.5 text-[10px] font-semibold text-slate-600">
                                       {issueRows.length}
                                     </span>
                                   </button>
@@ -13379,10 +13379,10 @@ export default function GeometryIssueSidebar() {
                                       <td colSpan={2} className={getIssueCellClassName(isSelected)}>
                                         <div className="flex flex-col gap-1.5">
                                           <div className="flex items-center gap-2">
-                                            <span className="shrink-0 text-[11px] font-semibold text-white/45">
+                                            <span className="shrink-0 text-[11px] font-semibold text-slate-500">
                                               #{index + 1}
                                             </span>
-                                            <span className="shrink-0 rounded-full bg-white/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white/80">
+                                            <span className="shrink-0 rounded-full bg-slate-200 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-slate-600">
                                               {issueRow.types.join(" + ")}
                                             </span>
                                             <span
@@ -13392,7 +13392,7 @@ export default function GeometryIssueSidebar() {
                                             </span>
                                           </div>
                                           <span
-                                            className="block truncate font-mono text-xs text-white/70"
+                                            className="block truncate font-mono text-xs text-slate-500"
                                             title={formatIssuePoints(issueRow.points)}
                                           >
                                             {formatIssuePoints(issueRow.points)}
@@ -13401,7 +13401,7 @@ export default function GeometryIssueSidebar() {
                                             {issueRow.elementSummary.map(([elementType, count]) => (
                                               <span
                                                 key={`${issueType}-${index}-${elementType}`}
-                                                className="rounded-full border border-white/15 bg-white/5 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white/65"
+                                                className="rounded-full border border-slate-300 bg-white/80 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-slate-500"
                                               >
                                                 {elementType} x{count}
                                               </span>
@@ -13422,8 +13422,10 @@ export default function GeometryIssueSidebar() {
             </div>
           </div>
         </div>
-        <div className="mt-3 border-t border-slate-300/30 pt-3">
-          <Button className="w-full">Repair</Button>
+        <div className="mt-3 border-t border-slate-300 pt-3">
+          <Button className="w-full border border-choras-primary/40 bg-white text-choras-primary hover:bg-choras-primary/10">
+            Repair
+          </Button>
         </div>
       </div>
     </div>

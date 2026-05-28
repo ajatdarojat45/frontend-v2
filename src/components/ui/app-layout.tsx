@@ -4,26 +4,57 @@ import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "./resizabl
 import chorasLogoColour from "@/assets/choras_logo_colour.svg";
 import chorasLogoWhite from "@/assets/choras_logo_white.svg";
 import { useSidebarResize } from "@/hooks/useSidebarResize";
+import { cn } from "@/libs/style";
+
+type HeaderVariant = "default" | "light";
 
 type AppLayoutProps = {
   title: React.ReactNode | string;
   right?: React.ReactNode;
   sidebar: React.ReactNode;
   children: React.ReactNode;
+  headerVariant?: HeaderVariant;
+  headerClassName?: string;
 };
 
-export function AppLayout({ title, right, sidebar, children }: AppLayoutProps) {
+export function AppLayout({
+  title,
+  right,
+  sidebar,
+  children,
+  headerVariant = "default",
+  headerClassName,
+}: AppLayoutProps) {
   const { windowWidth, sidebarMinSize, sidebarDefaultSize, handleSidebarResize } =
     useSidebarResize();
+  const headerVariantClassName: Record<HeaderVariant, string> = {
+    default: "bg-choras-dark",
+    light: "bg-white border-b border-slate-300",
+  };
+  const isLightHeader = headerVariant === "light";
 
   return (
     <div className="h-screen flex flex-col">
       {/* Header */}
-      <header className="h-16 bg-choras-dark flex justify-between relative items-center">
+      <header
+        className={cn(
+          "h-16 flex justify-between relative items-center",
+          headerVariantClassName[headerVariant],
+          headerClassName,
+        )}
+      >
         <div className="w-sidebar h-16 pl-6 flex flex-1 items-center">
           <Link to="/" className="group inline-block">
-            <img src={chorasLogoWhite} alt="CHORAS" className="h-10 group-hover:hidden" />
-            <img src={chorasLogoColour} alt="CHORAS" className="h-10 hidden group-hover:block" />
+            <img
+              src={chorasLogoWhite}
+              alt="CHORAS"
+              className={cn("h-10", isLightHeader ? "hidden" : "group-hover:hidden")}
+            />
+            <img
+              src={chorasLogoColour}
+              alt="CHORAS"
+              className={cn("h-10", isLightHeader ? "block" : "hidden group-hover:block")}
+            />
           </Link>
         </div>
         {typeof title === "string" ? (

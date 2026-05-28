@@ -18,7 +18,7 @@ export function GeometryIssuePage() {
   }, [model, navigate, modelId]);
 
   return (
-    <AppLayout title="Issue Page" sidebar={<GeometryIssueSidebar />}>
+    <AppLayout title="Issue Page" headerVariant="light" sidebar={<GeometryIssueSidebar />}>
       <div className="h-full w-full">
         <ModelViewer modelId={modelId} />
       </div>
