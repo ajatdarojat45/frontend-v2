@@ -12,6 +12,7 @@ type AppLayoutProps = {
   title: React.ReactNode | string;
   right?: React.ReactNode;
   sidebar: React.ReactNode;
+  rightSidebar?: React.ReactNode;
   children: React.ReactNode;
   headerVariant?: HeaderVariant;
   headerClassName?: string;
@@ -24,6 +25,7 @@ export function AppLayout({
   children,
   headerVariant = "default",
   headerClassName,
+  rightSidebar,
 }: AppLayoutProps) {
   const { windowWidth, sidebarMinSize, sidebarDefaultSize, handleSidebarResize } =
     useSidebarResize();
@@ -81,6 +83,18 @@ export function AppLayout({
         <ResizablePanel className="bg-[#dcdcdc]">
           <div className="h-full overflow-auto relative">{children}</div>
         </ResizablePanel>
+        {rightSidebar && (
+          <ResizablePanel
+            minSize={sidebarMinSize}
+            defaultSize={sidebarDefaultSize}
+            maxSize={60}
+            collapsedSize={sidebarMinSize}
+            onResize={handleSidebarResize}
+            className="bg-choras-dark border-t border-t-stone-600 z-40 min-w-83"
+          >
+            {rightSidebar}
+          </ResizablePanel>
+        )}
       </ResizablePanelGroup>
     </div>
   );

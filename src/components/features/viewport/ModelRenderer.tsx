@@ -17,7 +17,7 @@ type MaterialWithUuid = THREE.Material & { uuid: string };
 
 const HOVER_COLOR = 0x888888;
 
-export function ModelRenderer({ modelId, viewMode }: ModelRendererProps) {
+export function ModelRenderer({ modelId, viewMode, useClone = false }: ModelRendererProps) {
   const { applySurfaceColors } = useApplySurfaceColors();
   const dispatch = useDispatch();
   const selectedSource = useSelector((state: RootState) => state.sourceReceiver.selectedSource);
@@ -43,12 +43,17 @@ export function ModelRenderer({ modelId, viewMode }: ModelRendererProps) {
 
   const modelData = getCurrentModel();
 
+  const object3D = useMemo(() => {
+    if (!modelData?.object3D || currentModelId !== modelId) return null;
+    return useClone ? modelData.object3D.clone() : modelData.object3D;
+  }, [modelData?.object3D, currentModelId, modelId, useClone]);
+
   const edgeOutline = useMemo(() => {
-    if (modelData?.object3D && currentModelId === modelId) {
-      return createEdgeOutlineForObject3D(modelData.object3D, 40);
+    if (object3D && currentModelId === modelId) {
+      return createEdgeOutlineForObject3D(object3D, 40);
     }
     return null;
-  }, [modelData?.object3D, currentModelId, modelId]);
+  }, [object3D, currentModelId, modelId]);
 
   const applyViewMode = useCallback(
     (object: THREE.Object3D) => {
@@ -88,10 +93,10 @@ export function ModelRenderer({ modelId, viewMode }: ModelRendererProps) {
   );
 
   useEffect(() => {
-    if (modelData?.object3D && currentModelId === modelId) {
-      applyViewMode(modelData.object3D);
+    if (object3D && currentModelId === modelId) {
+      applyViewMode(object3D);
 
-      modelData.object3D.traverse((child) => {
+      object3D.traverse((child) => {
         if (child instanceof THREE.Mesh && child.material) {
           const materials = Array.isArray(child.material) ? child.material : [child.material];
           materials.forEach((material) => {
@@ -108,7 +113,7 @@ export function ModelRenderer({ modelId, viewMode }: ModelRendererProps) {
 
       applySurfaceColors();
     }
-  }, [modelData?.object3D, currentModelId, modelId, applyViewMode]);
+  }, [object3D, currentModelId, modelId, applyViewMode]);
 
   const handlePointerDown = useCallback(
     (event: ThreeEvent<PointerEvent>) => {
@@ -332,7 +337,7 @@ export function ModelRenderer({ modelId, viewMode }: ModelRendererProps) {
     }
   }, [dispatch, camera, raycaster, pointer]);
 
-  if (currentModelId !== modelId || !modelData) {
+  if (currentModelId !== modelId || !modelData || !object3D) {
     return null;
   }
 
@@ -350,7 +355,7 @@ export function ModelRenderer({ modelId, viewMode }: ModelRendererProps) {
         <meshBasicMaterial transparent opacity={0} />
       </mesh>
 
-      <primitive object={modelData.object3D} />
+      <primitive object={object3D} />
       {edgeOutline && <primitive object={edgeOutline} />}
     </group>
   );

@@ -33,12 +33,14 @@ export type GeometryIssueInputs = Record<GeometryIssueCategory, GeometryIssueInp
 type GeometryIssuesState = {
   selectedIssue: GeometryIssue | null;
   geometryIssues: GeometryIssues | null;
+  remainingIssues: GeometryIssues | null;
   expandedIssueGroups: Record<string, boolean>;
 };
 
 const initialState: GeometryIssuesState = {
   selectedIssue: null,
   geometryIssues: null,
+  remainingIssues: null,
   expandedIssueGroups: {},
 };
 
@@ -127,6 +129,14 @@ const geometryIssueSlice = createSlice({
         {} as Record<string, boolean>,
       );
     },
+    setRemainingIssues: (state, action: PayloadAction<GeometryIssues | GeometryIssueInputs>) => {
+      const categoryEntries = Object.entries(action.payload);
+
+      state.remainingIssues = categoryEntries.reduce((acc, [category, issues]) => {
+        acc[category as GeometryIssueCategory] = issues.flatMap(normalizeIssueGroup);
+        return acc;
+      }, {} as GeometryIssues);
+    },
     setIssueGroupExpanded: (
       state,
       action: PayloadAction<{ groupKey: string; isExpanded: boolean }>,
@@ -136,6 +146,11 @@ const geometryIssueSlice = createSlice({
   },
 });
 
-export const { clearSelectedIssue, setGeometryIssues, setIssueGroupExpanded, setSelectedIssue } =
-  geometryIssueSlice.actions;
+export const {
+  clearSelectedIssue,
+  setGeometryIssues,
+  setRemainingIssues,
+  setIssueGroupExpanded,
+  setSelectedIssue,
+} = geometryIssueSlice.actions;
 export const geometryIssueReducer = geometryIssueSlice.reducer;

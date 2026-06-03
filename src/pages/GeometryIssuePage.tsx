@@ -20,7 +20,7 @@ export function GeometryIssuePage() {
   return (
     <AppLayout title="Issue Page" headerVariant="light" sidebar={<GeometryIssueSidebar />}>
       <div className="h-full w-full">
-        <ModelViewer modelId={modelId} />
+        <ModelViewer modelId={modelId} showGeometrySelectionInfo={false} />
       </div>
     </AppLayout>
   );

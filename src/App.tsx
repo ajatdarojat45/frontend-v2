@@ -8,6 +8,7 @@ import { ResultPage } from "./pages/ResultPage";
 import { store } from "./store";
 import { SimulationRunnerProvider } from "./contexts/SimulationRunnerContext";
 import { GeometryIssuePage } from "./pages/GeometryIssuePage";
+import { GeometryRepairPage } from "./pages/GeometryRepairPage";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
             <Route path="/editor/:modelId/:simulationId?" element={<EditorPage />} />
             <Route path="/editor/:modelId/:simulationId/results" element={<ResultPage />} />
             <Route path="/issue/:modelId" element={<GeometryIssuePage />} />
+            <Route path="/repair/:modelId" element={<GeometryRepairPage />} />
 
             {/* Not Found */}
             <Route path="*" element={<Navigate to="/" />} />

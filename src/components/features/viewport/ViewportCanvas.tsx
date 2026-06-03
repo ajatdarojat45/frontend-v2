@@ -30,7 +30,13 @@ import {
 import { GeometryIssueLayer } from "../GeometryIssueLayer";
 import { useCameraFocusOnIssue } from "@/hooks/useCameraFocusOnIssue";
 
-export function ViewportCanvas({ modelUrl, modelId }: ViewportCanvasProps) {
+export function ViewportCanvas({
+  modelUrl,
+  modelId,
+  useClone = false,
+  isRepair = false,
+  showGeometrySelectionInfo = true,
+}: ViewportCanvasProps) {
   const [cameraType, setCameraType] = useState<"perspective" | "orthographic">("perspective");
   const [viewMode, setViewMode] = useState<"solid" | "ghosted" | "wireframe">("solid");
   const [gridDialogOpen, setGridDialogOpen] = useState(false);
@@ -180,8 +186,8 @@ export function ViewportCanvas({ modelUrl, modelId }: ViewportCanvasProps) {
             <GizmoViewport axisColors={["#EF7305", "#F4B183", "#FBE5D6"]} labelColor="black" />
           </GizmoHelper>
 
-          {modelId && <ModelRenderer modelId={modelId} viewMode={viewMode} />}
-          <GeometryIssueLayer />
+          {modelId && <ModelRenderer modelId={modelId} viewMode={viewMode} useClone={useClone} />}
+          <GeometryIssueLayer isRepair={isRepair} />
           <SourceVisualization orbitControlsRef={orbitControlsRef} />
           <ReceiverVisualization orbitControlsRef={orbitControlsRef} />
         </Canvas>
@@ -208,7 +214,7 @@ export function ViewportCanvas({ modelUrl, modelId }: ViewportCanvasProps) {
       </div>
 
       {/* Selection Info Panel */}
-      {!isRunning && (
+      {!isRunning && showGeometrySelectionInfo && (
         <div className="absolute bottom-4 right-4 z-10">
           <GeometrySelectionInfo />
         </div>
