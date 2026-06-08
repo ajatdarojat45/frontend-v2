@@ -1,6 +1,7 @@
 import { ChevronRight } from "lucide-react";
 import { Fragment } from "react";
 import type { GeometryIssue, GeometryIssues } from "@/store/geometryIssueSlice";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 type GeometryIssueListProps = {
   issues: GeometryIssues | null;
@@ -38,6 +39,37 @@ const getSeverityClassName = (severity: string) => {
 
 const formatIssueCategoryLabel = (category: string) => {
   return category.replace(/[_-]+/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
+};
+
+const ISSUE_CATEGORY_INFO: Record<string, { description: string; docsUrl: string }> = {
+  duplicate_vertices: {
+    description: "Multiple vertices share the same position, causing redundant geometry data.",
+    docsUrl: "https://choras.readthedocs.io/en/latest/includes/setup/setup_user.html",
+  },
+  non_coplanar_faces: {
+    description: "Face vertices do not lie on the same plane, leading to rendering artifacts.",
+    docsUrl: "https://choras.readthedocs.io/en/latest/includes/setup/setup_user.html",
+  },
+  "T-junctions": {
+    description: "A vertex lies on the edge of another face without being connected, causing gaps.",
+    docsUrl: "https://choras.readthedocs.io/en/latest/includes/setup/setup_user.html",
+  },
+  possible_holes: {
+    description: "Open boundaries detected in the mesh that may indicate missing faces.",
+    docsUrl: "https://choras.readthedocs.io/en/latest/includes/setup/setup_user.html",
+  },
+  boundary_edges: {
+    description: "Edges shared by only one face, indicating an open or incomplete mesh.",
+    docsUrl: "https://choras.readthedocs.io/en/latest/includes/setup/setup_user.html",
+  },
+  degenerate_faces: {
+    description: "Faces with zero area or collinear vertices that cannot be rendered correctly.",
+    docsUrl: "https://choras.readthedocs.io/en/latest/includes/setup/setup_user.html",
+  },
+  intersections: {
+    description: "Faces that intersect each other, creating invalid overlapping geometry.",
+    docsUrl: "https://choras.readthedocs.io/en/latest/includes/setup/setup_user.html",
+  },
 };
 
 const isSameIssue = (current: GeometryIssue | null, target: GeometryIssue) => {
@@ -139,21 +171,46 @@ export function GeometryIssueList({
                       <Fragment key={issueType}>
                         <tr className="border-b border-slate-200">
                           <td colSpan={2} className="px-3 py-2 text-sm text-left">
-                            <button
-                              type="button"
-                              onClick={() => onToggleGroup(issueType)}
-                              className="flex w-full items-center gap-2 rounded-md px-1 py-1 font-medium text-slate-700 transition-colors hover:bg-black/5"
-                            >
-                              <span
-                                className={`transform transition-transform ${isExpanded ? "rotate-90" : "rotate-0"}`}
+                            <div className="flex w-full items-center gap-2">
+                              <button
+                                type="button"
+                                onClick={() => onToggleGroup(issueType)}
+                                className="flex flex-1 items-center gap-2 rounded-md px-1 py-1 font-medium text-slate-700 transition-colors hover:bg-black/5"
                               >
-                                <ChevronRight size={16} />
-                              </span>
-                              <span>{formatIssueCategoryLabel(issueType)}</span>
-                              <span className="ml-auto rounded-full bg-slate-200 px-2 py-0.5 text-[10px] font-semibold text-slate-600">
-                                {issueRows.length}
-                              </span>
-                            </button>
+                                <span
+                                  className={`transform transition-transform ${isExpanded ? "rotate-90" : "rotate-0"}`}
+                                >
+                                  <ChevronRight size={16} />
+                                </span>
+                                <span>{formatIssueCategoryLabel(issueType)}</span>
+                                <span className="ml-auto rounded-full bg-slate-200 px-2 py-0.5 text-[10px] font-semibold text-slate-600">
+                                  {issueRows.length}
+                                </span>
+                              </button>
+                              {ISSUE_CATEGORY_INFO[issueType] && (
+                                <Tooltip>
+                                  <TooltipTrigger asChild>
+                                    <a
+                                      href={ISSUE_CATEGORY_INFO[issueType].docsUrl}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      onClick={(e) => e.stopPropagation()}
+                                      className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-slate-300 bg-white text-[11px] font-bold text-slate-400 hover:border-choras-primary hover:text-choras-primary transition-colors"
+                                    >
+                                      ?
+                                    </a>
+                                  </TooltipTrigger>
+                                  <TooltipContent side="right" className="max-w-56">
+                                    <p className="mb-1">
+                                      {ISSUE_CATEGORY_INFO[issueType].description}
+                                    </p>
+                                    <p className="text-[10px] opacity-70">
+                                      Click to open documentation ↗
+                                    </p>
+                                  </TooltipContent>
+                                </Tooltip>
+                              )}
+                            </div>
                           </td>
                         </tr>
                         {isExpanded &&
