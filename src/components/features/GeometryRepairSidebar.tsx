@@ -7,7 +7,8 @@ import {
   type GeometryIssueInputs,
 } from "@/store/geometryIssueSlice";
 import { useGetModelQuery } from "@/store/modelApi";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
 import type { RootState } from "@/store";
@@ -300,6 +301,8 @@ export default function GeometryRepairSidebar() {
     dispatch(setSelectedIssue(issue));
   };
 
+  const [isRepairSummaryExpanded, setIsRepairSummaryExpanded] = useState(true);
+
   return (
     <div className="h-container flex flex-col border border-slate-300 bg-[#DCDCDC] p-1">
       <div className="h-full flex flex-col rounded-md bg-white/65 text-slate-700 font-inter p-2">
@@ -329,29 +332,39 @@ export default function GeometryRepairSidebar() {
             </div>
           </div>
           <div className="mb-4 rounded-md border border-slate-300 bg-white/75 p-3">
-            <div className="mb-2 rounded-md border border-slate-300 bg-white px-3 py-2">
+            <button
+              onClick={() => setIsRepairSummaryExpanded((prev) => !prev)}
+              className="mb-2 flex w-full items-center justify-between rounded-md border border-slate-300 bg-white px-3 py-2 text-left"
+            >
               <h4 className="text-base font-semibold tracking-wide text-choras-primary">
                 Repair Summary
               </h4>
-            </div>
-            <ul className="space-y-1.5 px-1">
-              {REPAIR_SUMMARY_EXAMPLE.map((item) => (
-                <li key={item.category} className="text-[12px] text-slate-600">
-                  <span className="font-semibold text-slate-700">{item.category}:</span>{" "}
-                  {item.fixed} {item.unit} removed &amp;
-                  <span
-                    className={
-                      item.remaining > 0
-                        ? "text-amber-600 font-semibold"
-                        : "text-green-600 font-semibold"
-                    }
-                  >
-                    {" "}
-                    {item.remaining} remain
-                  </span>
-                </li>
-              ))}
-            </ul>
+              {isRepairSummaryExpanded ? (
+                <ChevronUp className="h-3.5 w-3.5 text-slate-400" />
+              ) : (
+                <ChevronDown className="h-3.5 w-3.5 text-slate-400" />
+              )}
+            </button>
+            {isRepairSummaryExpanded && (
+              <ul className="space-y-1.5 px-1">
+                {REPAIR_SUMMARY_EXAMPLE.map((item) => (
+                  <li key={item.category} className="text-[12px] text-slate-600">
+                    <span className="font-semibold text-slate-700">{item.category}:</span>{" "}
+                    {item.fixed} {item.unit} removed &amp;
+                    <span
+                      className={
+                        item.remaining > 0
+                          ? "text-amber-600 font-semibold"
+                          : "text-green-600 font-semibold"
+                      }
+                    >
+                      {" "}
+                      {item.remaining} remain
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
           <GeometryIssueList
             issues={remainingIssues}
