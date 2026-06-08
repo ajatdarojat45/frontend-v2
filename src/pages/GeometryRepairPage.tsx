@@ -5,11 +5,15 @@ import { AppLayout } from "@/components/ui/app-layout";
 // import { useGetModelQuery } from "@/store/modelApi";
 // import { useEffect } from "react";
 import { useParams } from "react-router";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { clearGeometryIssues, clearRemainingIssues } from "@/store/geometryIssueSlice";
 
 export function GeometryRepairPage() {
   // const navigate = useNavigate();
   const { modelId } = useParams() as { modelId: string };
   // const { data: model } = useGetModelQuery(modelId);
+  const dispatch = useDispatch();
 
   // useEffect(() => {
   //   // Redirect back when the model does not contain geometry data.
@@ -17,6 +21,13 @@ export function GeometryRepairPage() {
   //     navigate(`/editor/${modelId}`);
   //   }
   // }, [model, navigate, modelId]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(clearGeometryIssues());
+      dispatch(clearRemainingIssues());
+    };
+  }, []);
 
   return (
     <AppLayout

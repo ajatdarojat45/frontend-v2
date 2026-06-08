@@ -143,6 +143,12 @@ const geometryIssueSlice = createSlice({
     ) => {
       state.expandedIssueGroups[action.payload.groupKey] = action.payload.isExpanded;
     },
+    clearGeometryIssues: (state) => {
+      state.geometryIssues = null;
+    },
+    clearRemainingIssues: (state) => {
+      state.remainingIssues = null;
+    },
   },
 });
 
@@ -152,5 +158,7 @@ export const {
   setRemainingIssues,
   setIssueGroupExpanded,
   setSelectedIssue,
+  clearRemainingIssues,
+  clearGeometryIssues,
 } = geometryIssueSlice.actions;
 export const geometryIssueReducer = geometryIssueSlice.reducer;
