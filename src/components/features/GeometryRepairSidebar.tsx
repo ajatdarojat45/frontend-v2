@@ -14,6 +14,7 @@ import type { RootState } from "@/store";
 import { SimulationForm } from "./SimulationForm";
 import { Button } from "../ui/button";
 import { GeometryIssueList } from "./GeometryIssueList";
+import { PossibleSimulation } from "./PossibleSimulation";
 
 type RepairSummaryItem = {
   category: string;
@@ -304,22 +305,7 @@ export default function GeometryRepairSidebar() {
       <div className="h-full flex flex-col rounded-md bg-white/65 text-slate-700 font-inter p-2">
         <div className="min-h-0 flex flex-1 flex-col pr-1">
           <div className="mb-4 rounded-md border border-slate-300 bg-gradient-to-b from-white to-slate-100 p-3 shadow-[0_8px_18px_rgba(15,23,42,0.12)]">
-            <div className="mb-3 rounded-md border border-slate-300 bg-white/80 px-3 py-2">
-              <h4 className="flex items-center gap-2 text-left text-sm font-semibold uppercase tracking-wide text-choras-primary">
-                Possible Simulation
-              </h4>
-              <p className="mt-0.5 text-left text-[11px] text-slate-500">
-                Choose algorithm then run a new simulation.
-              </p>
-            </div>
-            <div className="mb-3 grid grid-cols-2 gap-2">
-              <span className="rounded-md border border-slate-300 bg-white px-3 py-1.5 text-center text-xs font-semibold tracking-wide text-slate-600">
-                DE
-              </span>
-              <span className="rounded-md border border-slate-300 bg-white px-3 py-1.5 text-center text-xs font-semibold tracking-wide text-slate-600">
-                DG
-              </span>
-            </div>
+            <PossibleSimulation />
             <div className="rounded-md border border-slate-300 bg-gradient-to-b from-white to-slate-100 p-2.5">
               <div className="mb-2 flex items-center justify-between rounded-md border border-slate-300 bg-white/80 px-2.5 py-1.5">
                 <span className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
