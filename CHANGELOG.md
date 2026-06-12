@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.76](https://github.com/ajatdarojat45/choras-frontend/compare/v0.0.75...v0.0.76) (2026-06-02)
+
+### Features
+
+- add category selection dropdown with material category creation functionality ([c0b8cc6](https://github.com/ajatdarojat45/choras-frontend/commit/c0b8cc6934e92a20dcf877f018a7a818a06f0054))
+- add material reducer to the store configuration ([0e570dc](https://github.com/ajatdarojat45/choras-frontend/commit/0e570dc71e8c7df5b6703f346f3692084731e58a))
+- implement CreateMaterialCategory component with form validation and dialog functionality ([27a7340](https://github.com/ajatdarojat45/choras-frontend/commit/27a73405870a3bef3cb3594a4b8b6717daef5eef))
+- implement material categories slice with localStorage persistence ([3161523](https://github.com/ajatdarojat45/choras-frontend/commit/3161523a8cbafacba1d8076d4154fbae763e926e))
+- synchronize material categories on materials update ([e62eb56](https://github.com/ajatdarojat45/choras-frontend/commit/e62eb56551c1509db5b8560bf466dd2d5a924ec6))
+
 ### [0.0.75](https://github.com/ajatdarojat45/choras-frontend/compare/v0.0.74...v0.0.75) (2026-05-08)
 
 ### [0.0.74](https://github.com/ajatdarojat45/choras-frontend/compare/v0.0.73...v0.0.74) (2026-05-06)
