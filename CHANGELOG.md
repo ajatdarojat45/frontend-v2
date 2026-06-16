@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.77](https://github.com/ajatdarojat45/choras-frontend/compare/v0.0.76...v0.0.77) (2026-06-15)
+
+### Features
+
+- enhance simulation settings validation with refetch functionality ([f3ed3a4](https://github.com/ajatdarojat45/choras-frontend/commit/f3ed3a444a432f80676faaaf313a54f00d6d122c))
+- optimize simulation method handling and improve loading state management ([cac802a](https://github.com/ajatdarojat45/choras-frontend/commit/cac802af080b532cb97941f23ce0d72cafd22193))
+- update handleClick to support async validation of simulation settings ([da0a846](https://github.com/ajatdarojat45/choras-frontend/commit/da0a84667681c1c13092f97f04f82f0c1f3e20fe))
+
 ### [0.0.76](https://github.com/ajatdarojat45/choras-frontend/compare/v0.0.75...v0.0.76) (2026-06-02)
 
 ### Features

@@ -63,7 +63,7 @@ export function RunSimulationButton() {
     }
   }, [shouldAutoRun, activeSimulation, isValid, isRunning, dispatch, startSimulation]);
 
-  const handleClick = () => {
+  const handleClick = async () => {
     if (isCompleted) {
       navigate(`/editor/${modelId}/${simulationId}/results`);
     } else if (isRunning) {
@@ -77,7 +77,7 @@ export function RunSimulationButton() {
         }),
       );
     } else {
-      const simulationSettingsErrors = validateSimulationSettings();
+      const simulationSettingsErrors = await validateSimulationSettings();
 
       if (
         !simulationSettingsErrorsDontShowAgain &&
