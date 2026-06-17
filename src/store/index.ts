@@ -15,6 +15,7 @@ import { simulationSettingsApi } from "./simulationSettingsApi";
 import { simulationSettingsReducer } from "./simulationSettingsSlice";
 import { tabReducer } from "./tabSlice";
 import { materialReducer } from "./materialSlice";
+import { userPreferencesApi } from "./userPreferenceApi";
 
 export const store = configureStore({
   reducer: {
@@ -24,6 +25,7 @@ export const store = configureStore({
     [materialsApi.reducerPath]: materialsApi.reducer,
     [simulationSettingsApi.reducerPath]: simulationSettingsApi.reducer,
     [auralizationApi.reducerPath]: auralizationApi.reducer,
+    [userPreferencesApi.reducerPath]: userPreferencesApi.reducer,
     project: projectReducer,
     simulation: simulationReducer,
     model: modelReducer,
@@ -59,6 +61,7 @@ export const store = configureStore({
       materialsApi.middleware,
       simulationSettingsApi.middleware,
       auralizationApi.middleware,
+      userPreferencesApi.middleware,
     ),
 });
 
