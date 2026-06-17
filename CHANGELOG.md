@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.80](https://github.com/ajatdarojat45/choras-frontend/compare/v0.0.79...v0.0.80) (2026-06-17)
+
+### Features
+
+- add initialization handling for simulation method selection ([f8cc0a8](https://github.com/ajatdarojat45/choras-frontend/commit/f8cc0a8c44536b18e7cad7c4b9e06fcb4655ba9c))
+
 ### [0.0.79](https://github.com/ajatdarojat45/choras-frontend/compare/v0.0.78...v0.0.79) (2026-06-17)
 
 ### Features
