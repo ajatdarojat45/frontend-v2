@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.81](https://github.com/ajatdarojat45/choras-frontend/compare/v0.0.80...v0.0.81) (2026-06-19)
+
+### Features
+
+- add fetchExampleModels function ([204ab95](https://github.com/ajatdarojat45/choras-frontend/commit/204ab952d0c53d107b2ccbe34a81138ce8d4bd3e))
+- render example models list ([bde33c7](https://github.com/ajatdarojat45/choras-frontend/commit/bde33c76e4b01c6c1bf5c7c3c75403d5b60f611b))
+
 ### [0.0.80](https://github.com/ajatdarojat45/choras-frontend/compare/v0.0.79...v0.0.80) (2026-06-17)
 
 ### Features
