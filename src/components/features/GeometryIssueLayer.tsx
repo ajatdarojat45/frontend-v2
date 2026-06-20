@@ -34,15 +34,35 @@ function FaceIssue({ issue, isSelected }: { issue: GeometryIssue; isSelected: bo
   const geometry = new THREE.BufferGeometry();
   const vertices = new Float32Array(issue.points.flat());
   const issueColor = isSelected ? "green" : severityColor[issue.severity];
-
+  const opacity = isSelected ? 0.5 : 0.1;
   geometry.setAttribute("position", new THREE.BufferAttribute(vertices, 3));
 
-  // triangulate sederhana (anggap triangle dulu)
-  geometry.setIndex([0, 1, 2]);
+  // Fan triangulation: works for any n-gon
+  const numVertices = issue.points.length;
+  const indices: number[] = [];
+
+  for (let i = 1; i < numVertices - 1; i++) {
+    indices.push(0, i, i + 1);
+  }
+
+  geometry.setIndex(indices);
+  if (!isSelected) {
+    return null;
+  }
 
   return (
-    <mesh geometry={geometry}>
-      <meshBasicMaterial color={issueColor} transparent opacity={0.4} side={THREE.DoubleSide} />
+    <mesh geometry={geometry} renderOrder={2}>
+      <meshBasicMaterial
+        color={issueColor}
+        transparent
+        opacity={opacity}
+        side={THREE.DoubleSide}
+        depthTest={false}
+        // depthWrite={false}
+        // polygonOffset={true}
+        // polygonOffsetFactor={-1}
+        // polygonOffsetUnits={-1}
+      />
     </mesh>
   );
 }
