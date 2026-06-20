@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import type { Model, ModelDetail } from "@/types/model";
+import type { GeometryIssueInputs } from "@/store/geometryIssueSlice";
 
 export const modelApi = createApi({
   reducerPath: "modelApi",
@@ -37,6 +38,13 @@ export const modelApi = createApi({
       }),
       providesTags: (_, __, modelUrl) => [{ type: "Models", id: `file-${modelUrl}` }],
     }),
+
+    fetchModelIssues: build.query<GeometryIssueInputs, string>({
+      query: (fileUrl) => ({
+        url: fileUrl,
+      }),
+      providesTags: (_, __, fileUrl) => [{ type: "Models", id: `issues-${fileUrl}` }],
+    }),
   }),
 });
 
@@ -44,5 +52,6 @@ export const {
   useDeleteModelMutation,
   useGetModelQuery,
   useFetchModelFileQuery,
+  useFetchModelIssuesQuery,
   useUpdateModelMutation,
 } = modelApi;
