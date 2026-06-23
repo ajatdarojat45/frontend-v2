@@ -10,6 +10,16 @@ export interface Model {
   updatedAt: string;
 }
 
+export interface ModelIssue {
+  id: number;
+  modelId: number;
+  fileUrl: string;
+  issueCount: number;
+  detectionStage: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface ModelDetail {
   hasGeo: boolean;
   id: number;
@@ -20,4 +30,5 @@ export interface ModelDetail {
   projectName: string;
   projectTag: string;
   simulationCount: number;
+  issues: ModelIssue[];
 }
