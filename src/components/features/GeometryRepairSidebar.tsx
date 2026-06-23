@@ -324,6 +324,14 @@ export default function GeometryRepairSidebar() {
               <div className="mx-auto mt-2 flex w-full max-w-md justify-center">
                 <Button
                   variant="outline"
+                  className="w-full border-red-400 bg-white text-choras-primary hover:bg-choras-primary/10"
+                >
+                  Download Fixed Model
+                </Button>
+              </div>
+              <div className="mx-auto mt-2 flex w-full max-w-md justify-center">
+                <Button
+                  variant="outline"
                   className="w-full border-red-400 bg-white text-red-500 hover:bg-red-50 hover:text-red-600"
                 >
                   Undo Repair
