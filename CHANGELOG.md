@@ -2,6 +2,42 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.81](https://github.com/ajatdarojat45/choras-frontend/compare/v0.0.80...v0.0.81) (2026-06-19)
+
+### Features
+
+- add fetchExampleModels function ([204ab95](https://github.com/ajatdarojat45/choras-frontend/commit/204ab952d0c53d107b2ccbe34a81138ce8d4bd3e))
+- render example models list ([bde33c7](https://github.com/ajatdarojat45/choras-frontend/commit/bde33c76e4b01c6c1bf5c7c3c75403d5b60f611b))
+
+### [0.0.80](https://github.com/ajatdarojat45/choras-frontend/compare/v0.0.79...v0.0.80) (2026-06-17)
+
+### Features
+
+- add initialization handling for simulation method selection ([f8cc0a8](https://github.com/ajatdarojat45/choras-frontend/commit/f8cc0a8c44536b18e7cad7c4b9e06fcb4655ba9c))
+
+### [0.0.79](https://github.com/ajatdarojat45/choras-frontend/compare/v0.0.78...v0.0.79) (2026-06-17)
+
+### Features
+
+- add SimulationSettingsErrorDialog component to handle simulation errors ([3e0d9fc](https://github.com/ajatdarojat45/choras-frontend/commit/3e0d9fc45b1852e9016cf9f86e389d2244d2d76e))
+- add UserPreference interface to define user settings structure ([9293a9f](https://github.com/ajatdarojat45/choras-frontend/commit/9293a9f4ce31d5e86f3c962386591882213f720e))
+- add userPreferencesApi to manage user preferences in the store ([08bdeb1](https://github.com/ajatdarojat45/choras-frontend/commit/08bdeb1304a07d034c68b9508f2a483f1d98b4d8))
+- integrate user preferences for simulation settings error handling ([763a976](https://github.com/ajatdarojat45/choras-frontend/commit/763a97638428c268613df97d9f4ed46dd87284d4))
+
+### [0.0.78](https://github.com/ajatdarojat45/choras-frontend/compare/v0.0.77...v0.0.78) (2026-06-17)
+
+### Features
+
+- implement debounce functionality for input changes in CoordinateInput component ([70323a6](https://github.com/ajatdarojat45/choras-frontend/commit/70323a64e2fb4e2464900356740b2f58856807c5))
+
+### [0.0.77](https://github.com/ajatdarojat45/choras-frontend/compare/v0.0.76...v0.0.77) (2026-06-15)
+
+### Features
+
+- enhance simulation settings validation with refetch functionality ([f3ed3a4](https://github.com/ajatdarojat45/choras-frontend/commit/f3ed3a444a432f80676faaaf313a54f00d6d122c))
+- optimize simulation method handling and improve loading state management ([cac802a](https://github.com/ajatdarojat45/choras-frontend/commit/cac802af080b532cb97941f23ce0d72cafd22193))
+- update handleClick to support async validation of simulation settings ([da0a846](https://github.com/ajatdarojat45/choras-frontend/commit/da0a84667681c1c13092f97f04f82f0c1f3e20fe))
+
 ### [0.0.76](https://github.com/ajatdarojat45/choras-frontend/compare/v0.0.75...v0.0.76) (2026-06-02)
 
 ### Features
