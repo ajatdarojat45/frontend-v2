@@ -1,10 +1,12 @@
 import type React from "react";
+import { useState } from "react"; // 1. Import useState
 import { Link } from "react-router";
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "./resizable";
 import chorasLogoColour from "@/assets/choras_logo_colour.svg";
 import chorasLogoWhite from "@/assets/choras_logo_white.svg";
 import { useSidebarResize } from "@/hooks/useSidebarResize";
 import { cn } from "@/libs/style";
+import { PanelLeft, PanelRight } from "lucide-react";
 
 type HeaderVariant = "default" | "light";
 
@@ -16,6 +18,8 @@ type AppLayoutProps = {
   children: React.ReactNode;
   headerVariant?: HeaderVariant;
   headerClassName?: string;
+  showLeftSidebarToggle?: boolean;
+  showRightSidebarToggle?: boolean;
 };
 
 export function AppLayout({
@@ -26,9 +30,16 @@ export function AppLayout({
   headerVariant = "default",
   headerClassName,
   rightSidebar,
+  showLeftSidebarToggle = false,
+  showRightSidebarToggle = false,
 }: AppLayoutProps) {
   const { windowWidth, sidebarMinSize, sidebarDefaultSize, handleSidebarResize } =
     useSidebarResize();
+
+  // 2. Tambahkan state untuk kontrol visibilitas sidebar
+  const [showLeftSidebar, setShowLeftSidebar] = useState(true);
+  const [showRightSidebar, setShowRightSidebar] = useState(true);
+
   const headerVariantClassName: Record<HeaderVariant, string> = {
     default: "bg-choras-dark",
     light: "bg-white border-b border-slate-300",
@@ -45,8 +56,18 @@ export function AppLayout({
           headerClassName,
         )}
       >
-        <div className="w-sidebar h-16 pl-6 flex flex-1 items-center">
-          <Link to="/" className="group inline-block">
+        <div className="w-sidebar h-16 flex flex-1 items-center">
+          {/* 3. Tombol Toggle Sidebar Kiri */}
+          {showLeftSidebarToggle && (
+            <button
+              onClick={() => setShowLeftSidebar(() => !showLeftSidebar)}
+              className="ml-3 transition"
+            >
+              {showLeftSidebar ? <PanelRight /> : <PanelLeft />}
+            </button>
+          )}
+
+          <Link to="/" className="group inline-block ml-6">
             <img
               src={chorasLogoWhite}
               alt="CHORAS"
@@ -66,34 +87,62 @@ export function AppLayout({
         ) : (
           <div className="flex-2">{title}</div>
         )}
-        <div className="w-sidebar flex-1 flex justify-end pr-6">{right}</div>
+        <div className="w-sidebar flex-1 flex justify-end items-center gap-3">
+          {right}
+          {/* 4. Tombol Toggle Sidebar Kanan (Hanya muncul jika prop rightSidebar dikirim) */}
+          {rightSidebar && showRightSidebarToggle && (
+            <button
+              onClick={() => setShowRightSidebar(() => !showRightSidebar)}
+              className="mr-3 transition"
+            >
+              {showRightSidebar ? <PanelLeft /> : <PanelRight />}
+            </button>
+          )}
+        </div>
       </header>
-      <ResizablePanelGroup direction="horizontal" key={windowWidth}>
-        <ResizablePanel
-          minSize={sidebarMinSize}
-          defaultSize={sidebarDefaultSize}
-          maxSize={60}
-          collapsedSize={sidebarMinSize}
-          onResize={handleSidebarResize}
-          className="bg-choras-dark border-t border-t-stone-600 z-40 min-w-83"
-        >
-          {sidebar}
-        </ResizablePanel>
-        <ResizableHandle className="bg-choras-dark" />
+
+      {/* Main Layout dengan Resizable Panels */}
+      <ResizablePanelGroup
+        direction="horizontal"
+        key={`${windowWidth}-${showLeftSidebar}-${showRightSidebar}`}
+      >
+        {/* 5. Conditional Rendering Sidebar Kiri */}
+        {showLeftSidebar && (
+          <>
+            <ResizablePanel
+              minSize={sidebarMinSize}
+              defaultSize={sidebarDefaultSize}
+              maxSize={60}
+              collapsedSize={sidebarMinSize}
+              onResize={handleSidebarResize}
+              className="bg-choras-dark border-t border-t-stone-600 z-40 min-w-83"
+            >
+              {sidebar}
+            </ResizablePanel>
+            <ResizableHandle className="bg-choras-dark" />
+          </>
+        )}
+
+        {/* Konten Utama */}
         <ResizablePanel className="bg-[#dcdcdc]">
           <div className="h-full overflow-auto relative">{children}</div>
         </ResizablePanel>
-        {rightSidebar && (
-          <ResizablePanel
-            minSize={sidebarMinSize}
-            defaultSize={sidebarDefaultSize}
-            maxSize={60}
-            collapsedSize={sidebarMinSize}
-            onResize={handleSidebarResize}
-            className="bg-choras-dark border-t border-t-stone-600 z-40 min-w-83"
-          >
-            {rightSidebar}
-          </ResizablePanel>
+
+        {/* 6. Conditional Rendering Sidebar Kanan */}
+        {rightSidebar && showRightSidebar && (
+          <>
+            <ResizableHandle className="bg-choras-dark" />
+            <ResizablePanel
+              minSize={sidebarMinSize}
+              defaultSize={sidebarDefaultSize}
+              maxSize={60}
+              collapsedSize={sidebarMinSize}
+              onResize={handleSidebarResize}
+              className="bg-choras-dark border-t border-t-stone-600 z-40 min-w-83"
+            >
+              {rightSidebar}
+            </ResizablePanel>
+          </>
         )}
       </ResizablePanelGroup>
     </div>

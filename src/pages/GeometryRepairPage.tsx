@@ -41,6 +41,8 @@ export function GeometryRepairPage() {
         />
       }
       rightSidebar={<GeometryRepairSidebar />}
+      showLeftSidebarToggle={true}
+      showRightSidebarToggle={true}
     >
       <div className="h-full w-full flex">
         <div className="flex-1 h-full">
