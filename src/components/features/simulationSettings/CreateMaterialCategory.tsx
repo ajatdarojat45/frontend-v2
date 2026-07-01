@@ -23,9 +23,12 @@ import {
   FormControl,
   FormMessage,
 } from "@/components/ui/form";
-import { PlusIcon } from "lucide-react";
-import { useDispatch } from "react-redux";
-import { addMaterialCategory } from "@/store/materialSlice";
+import { PlusIcon, Edit } from "lucide-react";
+import {
+  useCreateMaterialCategoryMutation,
+  useUpdateMaterialCategoryMutation,
+} from "@/store/materialCategoryApi";
+import { toast } from "sonner";
 
 const CreateMaterialCategorySchema = z.object({
   name: z.string().min(3, { message: "Name must be at least 3 characters." }),
@@ -34,52 +37,78 @@ const CreateMaterialCategorySchema = z.object({
 type CreateMaterialCategoryData = z.infer<typeof CreateMaterialCategorySchema>;
 
 type CreateMaterialCategoryProps = {
-  onCreate?: (name: string) => void; // Callback when a group is created
+  onSubmit?: (categoryId: number) => void;
+  category?: { id: number; name: string };
 };
-export function CreateMaterialCategory({ onCreate }: CreateMaterialCategoryProps) {
-  // Managing the dialog open state
+export function CreateMaterialCategory({ onSubmit, category }: CreateMaterialCategoryProps) {
   const [open, setOpen] = useState(false);
-  const dispatch = useDispatch();
+  const isEditMode = !!category;
+  const [createMaterialCategory, { isLoading: isCreating }] = useCreateMaterialCategoryMutation();
+  const [updateMaterialCategory, { isLoading: isUpdating }] = useUpdateMaterialCategoryMutation();
+  const isLoading = isCreating || isUpdating;
 
   const form = useForm<CreateMaterialCategoryData>({
     resolver: zodResolver(CreateMaterialCategorySchema),
-    defaultValues: { name: "" },
+    defaultValues: { name: category?.name ?? "" },
   });
 
-  // Reset form when dialog is closed
+  // Reset form when dialog is opened/closed
   useEffect(() => {
-    if (!open) form.reset();
-  }, [open, form]);
+    if (open) {
+      form.reset({ name: category?.name ?? "" });
+    } else {
+      form.reset({ name: "" });
+    }
+  }, [open, form, category]);
 
-  const onSubmit = (data: CreateMaterialCategoryData) => {
-    // Dispatch Redux action to add group (will sync to localStorage automatically)
-    dispatch(addMaterialCategory(data.name));
-    onCreate?.(data.name);
-    setOpen(false);
+  const handleSubmit = async (data: CreateMaterialCategoryData) => {
+    try {
+      if (isEditMode) {
+        const result = await updateMaterialCategory({ id: category.id, ...data }).unwrap();
+        onSubmit?.(result.id);
+        toast.success("Material category updated successfully");
+      } else {
+        const result = await createMaterialCategory(data).unwrap();
+        onSubmit?.(result.id);
+        toast.success("Material category created successfully");
+      }
+      setOpen(false);
+    } catch {
+      toast.error(`Failed to ${isEditMode ? "update" : "create"} Material category`);
+    }
   };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="w-full mt-2">
-          <PlusIcon />
-          Create Category
-        </Button>
+        {isEditMode ? (
+          <Button variant="ghost" size="icon" className="h-6 w-6">
+            <Edit size={12} />
+          </Button>
+        ) : (
+          <Button className="w-full mt-2">
+            <PlusIcon />
+            Create Category
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent className="max-w-md" onKeyDown={(e) => e.stopPropagation()}>
         <Form {...form}>
           <form
             onSubmit={(e) => {
-              // Prevent parent dialog from submitting and closing automatically
               e.stopPropagation();
-
-              // Call the form submit handler
-              form.handleSubmit(onSubmit)(e);
+              form.handleSubmit(handleSubmit)(e);
             }}
           >
             <DialogHeader>
-              <DialogTitle>Create Material Category</DialogTitle>
-              <DialogDescription>Create a new category to organize materials.</DialogDescription>
+              <DialogTitle>
+                {isEditMode ? "Edit Material Category" : "Create Material Category"}
+              </DialogTitle>
+              <DialogDescription>
+                {isEditMode
+                  ? "Update the category name."
+                  : "Create a new category to organize materials."}
+              </DialogDescription>
             </DialogHeader>
 
             <div className="space-y-4 my-6">
@@ -102,7 +131,15 @@ export function CreateMaterialCategory({ onCreate }: CreateMaterialCategoryProps
               <DialogClose asChild>
                 <Button variant="outline">Cancel</Button>
               </DialogClose>
-              <Button type="submit">Create</Button>
+              <Button type="submit" disabled={isLoading}>
+                {!isLoading
+                  ? isEditMode
+                    ? "Update"
+                    : "Create"
+                  : isEditMode
+                    ? "Updating"
+                    : "Creating"}
+              </Button>
             </DialogFooter>
           </form>
         </Form>
