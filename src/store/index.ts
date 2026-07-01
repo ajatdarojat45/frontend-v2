@@ -14,8 +14,8 @@ import { sourceReceiverReducer } from "./sourceReceiverSlice";
 import { simulationSettingsApi } from "./simulationSettingsApi";
 import { simulationSettingsReducer } from "./simulationSettingsSlice";
 import { tabReducer } from "./tabSlice";
-import { materialReducer } from "./materialSlice";
 import { userPreferencesApi } from "./userPreferenceApi";
+import { materialCategoriesApi } from "./materialCategoryApi";
 
 export const store = configureStore({
   reducer: {
@@ -26,6 +26,7 @@ export const store = configureStore({
     [simulationSettingsApi.reducerPath]: simulationSettingsApi.reducer,
     [auralizationApi.reducerPath]: auralizationApi.reducer,
     [userPreferencesApi.reducerPath]: userPreferencesApi.reducer,
+    [materialCategoriesApi.reducerPath]: materialCategoriesApi.reducer,
     project: projectReducer,
     simulation: simulationReducer,
     model: modelReducer,
@@ -34,7 +35,6 @@ export const store = configureStore({
     sourceReceiver: sourceReceiverReducer,
     simulationSettings: simulationSettingsReducer,
     tab: tabReducer,
-    material: materialReducer,
   },
 
   middleware: (getDefaultMiddleware) =>
@@ -62,6 +62,7 @@ export const store = configureStore({
       simulationSettingsApi.middleware,
       auralizationApi.middleware,
       userPreferencesApi.middleware,
+      materialCategoriesApi.middleware,
     ),
 });
 
