@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.87](https://github.com/ajatdarojat45/choras-frontend/compare/v0.0.86...v0.0.87) (2026-07-10)
+
+### Features
+
+- add errorMessage field to SimulationRun interface ([c15f4b3](https://github.com/ajatdarojat45/choras-frontend/commit/c15f4b358105aed4813e14b296771fa5ce063c7d))
+- add simulationId to ModelViewer component and pass it to ViewportCanvas ([cab7cad](https://github.com/ajatdarojat45/choras-frontend/commit/cab7cade90d2faf5a092d5e948d533c878523d46))
+- add simulationId to ModelViewerProps and ViewportCanvasProps interfaces ([ee81074](https://github.com/ajatdarojat45/choras-frontend/commit/ee81074639392b8bdee72635a5d9d6342e6e5c9a))
+- enhance error handling in RunSimulationButton with error message display ([f61387d](https://github.com/ajatdarojat45/choras-frontend/commit/f61387db7b7b5a16a5b320a7012c9f29016f7ef7))
+- pass simulationId to ModelViewer component in EditorPage ([9ef1f12](https://github.com/ajatdarojat45/choras-frontend/commit/9ef1f1270f2b8a1156df5ab7422cd8ebffb0a9a0))
+- persist simulation error message in the progress bar area ([0d9414f](https://github.com/ajatdarojat45/choras-frontend/commit/0d9414f4aa7e9c53f8bc42970fb4d96cbb183854))
+
 ### [0.0.86](https://github.com/ajatdarojat45/choras-frontend/compare/v0.0.85...v0.0.86) (2026-07-09)
 
 ### Bug Fixes
