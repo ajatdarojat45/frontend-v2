@@ -1,4 +1,4 @@
-import { Play, Square, AlertTriangle, ChartColumn } from "lucide-react";
+import { Play, Square, AlertTriangle, ChartColumn, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useSimulationRunner } from "@/hooks/useSimulationRunner";
@@ -58,6 +58,11 @@ export function RunSimulationButton() {
     currentSimulation?.updatedAt &&
     currentSimulation?.simulationRun?.completedAt &&
     new Date(currentSimulation.updatedAt) > new Date(currentSimulation.simulationRun.completedAt);
+
+  const isErrorRun = currentSimulation?.simulationRun?.status === "Error";
+  const errorRunMessage =
+    currentSimulation?.simulationRun?.errorMessage ||
+    "Simulation failed. Please check your settings and try again.";
 
   const isCompleted = isCompletedRun && !editedAfterCompletion;
 
@@ -157,6 +162,9 @@ export function RunSimulationButton() {
     if (isRunning) {
       return `Running Simulation (${Math.round(progress)}%)`;
     }
+    if (isErrorRun) {
+      return "Simulation failed — click to re-run";
+    }
     if (!isValid) {
       return errors.map((error) => error.message).join(", ");
     }
@@ -186,7 +194,11 @@ export function RunSimulationButton() {
   return (
     <>
       <div
-        className={isRunning ? "flex items-center gap-0 bg-choras-dark rounded-full p-2" : "p-2"}
+        className={
+          isRunning || isErrorRun
+            ? "flex items-center gap-0 bg-choras-dark rounded-full p-2"
+            : "p-2"
+        }
       >
         <TooltipProvider>
           <Tooltip>
@@ -233,7 +245,7 @@ export function RunSimulationButton() {
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
-        {isRunning && (
+        {isRunning ? (
           <div className="h-20 mr-10 ml-6 flex items-center gap-4 flex-1">
             <span className="text-sm text-white font-bold whitespace-nowrap pl-4">Status:</span>
             <span className="text-sm text-white whitespace-nowrap pr-5">In progress</span>
@@ -247,7 +259,13 @@ export function RunSimulationButton() {
               {Math.round(progress)}%
             </span>
           </div>
-        )}
+        ) : isErrorRun ? (
+          <div className="h-20 mr-10 ml-6 flex items-center gap-3 flex-1">
+            <span className="text-sm text-white font-bold whitespace-nowrap pl-4">Status:</span>
+            <AlertCircle className="h-4 w-4 text-red-400 shrink-0" />
+            <span className="text-sm text-red-300 flex-1 line-clamp-2">{errorRunMessage}</span>
+          </div>
+        ) : null}
       </div>
 
       <AlertDialog open={showOverwriteDialog} onOpenChange={setShowOverwriteDialog}>
