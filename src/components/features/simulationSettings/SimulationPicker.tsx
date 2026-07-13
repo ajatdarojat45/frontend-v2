@@ -60,6 +60,7 @@ export function SimulationPicker({ modelId, simulationId }: SimulationPickerProp
   const [selectedMethodLocal, setSelectedMethodLocal] = useState<string>("DE");
   const latestMethodRef = useRef<string>("DE");
   const prevSimulationIdRef = useRef<number | undefined>(undefined);
+  const isInitializingMethodRef = useRef(false);
 
   const [updateSimulation] = useUpdateSimulationMutation();
   const selectedMethodType = useSelector(
@@ -73,6 +74,11 @@ export function SimulationPicker({ modelId, simulationId }: SimulationPickerProp
   useEffect(() => {
     dispatch(setSelectedMethodType(selectedMethodLocal));
     latestMethodRef.current = selectedMethodLocal;
+
+    if (isInitializingMethodRef.current) {
+      isInitializingMethodRef.current = false;
+      return;
+    }
 
     const timer = setTimeout(() => {
       handleMethodChange(selectedMethodLocal);
@@ -88,6 +94,7 @@ export function SimulationPicker({ modelId, simulationId }: SimulationPickerProp
         dispatch(setActiveSimulation(currentSimulation));
 
         if (simulationId !== prevSimulationIdRef.current && currentSimulation.simulationMethod) {
+          isInitializingMethodRef.current = true;
           setSelectedMethodLocal(currentSimulation.simulationMethod);
           latestMethodRef.current = currentSimulation.simulationMethod;
         }
