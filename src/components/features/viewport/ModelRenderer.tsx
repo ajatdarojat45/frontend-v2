@@ -30,6 +30,7 @@ export function ModelRenderer({ modelId, viewMode }: ModelRendererProps) {
     highlightedMeshes,
     addHighlightedMesh,
     removeHighlightedMesh,
+    removeHighlightedMeshes,
     selectedGeometries,
     addSelectedGeometry,
     removeSelectedGeometry,
@@ -219,11 +220,9 @@ export function ModelRenderer({ modelId, viewMode }: ModelRendererProps) {
         const mesh = intersection.object as THREE.Mesh;
 
         if (mesh.visible === false) {
-          Object.keys(selectedGeometries).forEach((uuid) => {
-            const geo = selectedGeometries[uuid];
-            removeHighlightedMesh(geo.mesh);
-            restoreOriginalColor(geo.mesh);
-          });
+          const uuidsToClear = Object.keys(selectedGeometries);
+          uuidsToClear.forEach((uuid) => restoreOriginalColor(selectedGeometries[uuid].mesh));
+          removeHighlightedMeshes(uuidsToClear);
           clearSelection();
           return;
         }
@@ -261,11 +260,9 @@ export function ModelRenderer({ modelId, viewMode }: ModelRendererProps) {
           }
         } else {
           // Single select mode - clear previous and select new
-          Object.keys(selectedGeometries).forEach((uuid) => {
-            const geo = selectedGeometries[uuid];
-            removeHighlightedMesh(geo.mesh);
-            restoreOriginalColor(geo.mesh);
-          });
+          const uuidsToClear = Object.keys(selectedGeometries);
+          uuidsToClear.forEach((uuid) => restoreOriginalColor(selectedGeometries[uuid].mesh));
+          removeHighlightedMeshes(uuidsToClear);
           clearSelection();
 
           highlightMesh(mesh, HIGHLIGHT_COLOR);
@@ -285,17 +282,16 @@ export function ModelRenderer({ modelId, viewMode }: ModelRendererProps) {
           });
         }
       } else {
-        Object.keys(selectedGeometries).forEach((uuid) => {
-          const geo = selectedGeometries[uuid];
-          removeHighlightedMesh(geo.mesh);
-          restoreOriginalColor(geo.mesh);
-        });
+        const uuidsToClear = Object.keys(selectedGeometries);
+        uuidsToClear.forEach((uuid) => restoreOriginalColor(selectedGeometries[uuid].mesh));
+        removeHighlightedMeshes(uuidsToClear);
         clearSelection();
       }
     },
     [
       selectedGeometries,
       removeHighlightedMesh,
+      removeHighlightedMeshes,
       restoreOriginalColor,
       highlightMesh,
       addHighlightedMesh,
