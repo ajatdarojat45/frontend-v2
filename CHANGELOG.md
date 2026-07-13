@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.79](https://github.com/ajatdarojat45/choras-frontend/compare/v0.0.78...v0.0.79) (2026-06-17)
+
+### Features
+
+- add SimulationSettingsErrorDialog component to handle simulation errors ([3e0d9fc](https://github.com/ajatdarojat45/choras-frontend/commit/3e0d9fc45b1852e9016cf9f86e389d2244d2d76e))
+- add UserPreference interface to define user settings structure ([9293a9f](https://github.com/ajatdarojat45/choras-frontend/commit/9293a9f4ce31d5e86f3c962386591882213f720e))
+- add userPreferencesApi to manage user preferences in the store ([08bdeb1](https://github.com/ajatdarojat45/choras-frontend/commit/08bdeb1304a07d034c68b9508f2a483f1d98b4d8))
+- integrate user preferences for simulation settings error handling ([763a976](https://github.com/ajatdarojat45/choras-frontend/commit/763a97638428c268613df97d9f4ed46dd87284d4))
+
 ### [0.0.78](https://github.com/ajatdarojat45/choras-frontend/compare/v0.0.77...v0.0.78) (2026-06-17)
 
 ### Features
