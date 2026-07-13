@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.78](https://github.com/ajatdarojat45/choras-frontend/compare/v0.0.77...v0.0.78) (2026-06-17)
+
+### Features
+
+- implement debounce functionality for input changes in CoordinateInput component ([70323a6](https://github.com/ajatdarojat45/choras-frontend/commit/70323a64e2fb4e2464900356740b2f58856807c5))
+
 ### [0.0.77](https://github.com/ajatdarojat45/choras-frontend/compare/v0.0.76...v0.0.77) (2026-06-15)
 
 ### Features
