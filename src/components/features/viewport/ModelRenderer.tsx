@@ -5,6 +5,7 @@ import { useModelLoader } from "@/hooks/useModelLoader";
 import { useGeometrySelection } from "@/hooks/useGeometrySelection";
 import { useMeshHighlight } from "@/hooks/useMeshHighlight";
 import { createEdgeOutlineForObject3D } from "@/helpers/layerProcessor";
+import { meshRegistry } from "@/helpers/meshRegistry";
 import { selectSource, selectReceiver } from "@/store/sourceReceiverSlice";
 import { setActiveTab } from "@/store/tabSlice";
 import type { RootState } from "@/store";
@@ -92,18 +93,27 @@ export function ModelRenderer({ modelId, viewMode }: ModelRendererProps) {
     if (modelData?.object3D && currentModelId === modelId) {
       applyViewMode(modelData.object3D);
 
+      // The mesh registry only needs the current model's meshes; drop any left
+      // over from a previously loaded model, then register this model's meshes
+      // so selection/highlight UUIDs resolve back to live objects.
+      meshRegistry.clear();
+
       modelData.object3D.traverse((child) => {
-        if (child instanceof THREE.Mesh && child.material) {
-          const materials = Array.isArray(child.material) ? child.material : [child.material];
-          materials.forEach((material) => {
-            if (
-              material instanceof THREE.MeshStandardMaterial ||
-              material instanceof THREE.MeshBasicMaterial
-            ) {
-              material.color.setHex(0xffffff);
-              material.needsUpdate = true;
-            }
-          });
+        if (child instanceof THREE.Mesh) {
+          meshRegistry.register(child);
+
+          if (child.material) {
+            const materials = Array.isArray(child.material) ? child.material : [child.material];
+            materials.forEach((material) => {
+              if (
+                material instanceof THREE.MeshStandardMaterial ||
+                material instanceof THREE.MeshBasicMaterial
+              ) {
+                material.color.setHex(0xffffff);
+                material.needsUpdate = true;
+              }
+            });
+          }
         }
       });
 
