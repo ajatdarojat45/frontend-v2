@@ -21,6 +21,19 @@ All notable changes to this project will be documented in this file. See [standa
 - add fetchExampleModels function ([204ab95](https://github.com/ajatdarojat45/choras-frontend/commit/204ab952d0c53d107b2ccbe34a81138ce8d4bd3e))
 - render example models list ([bde33c7](https://github.com/ajatdarojat45/choras-frontend/commit/bde33c76e4b01c6c1bf5c7c3c75403d5b60f611b))
 
+### [0.0.81](https://github.com/dhimashary/CHORAS/compare/v0.0.80...v0.0.81) (2026-07-14)
+
+### Features
+
+- add support for virtualized rendering and geometry selection enhancements ([728a849](https://github.com/dhimashary/CHORAS/commit/728a849d4b511671063eec86fd93657d0804ead5))
+- enhance geometry selection and material assignment functionality ([da26903](https://github.com/dhimashary/CHORAS/commit/da26903ce449fd1e69dbc20739e62135d814eff4))
+- implement lazy loading for material dropdown and group surface management ([c8960b3](https://github.com/dhimashary/CHORAS/commit/c8960b378dad71e9a3c1a957aea0cbb014f97f7b))
+- integrate mesh registry for improved selection and highlighting of current model meshes ([918f720](https://github.com/dhimashary/CHORAS/commit/918f7203c3060ca0e4177b9f0da9398c055f238e))
+
+### Bug Fixes
+
+- Add correct tab title and logo ([#179](https://github.com/dhimashary/CHORAS/issues/179)) ([3c909d1](https://github.com/dhimashary/CHORAS/commit/3c909d1f8faa7458936d23663b6b16467aed66f1)), closes [#180](https://github.com/dhimashary/CHORAS/issues/180)
+
 ### [0.0.80](https://github.com/ajatdarojat45/choras-frontend/compare/v0.0.79...v0.0.80) (2026-06-17)
 
 ### Features
