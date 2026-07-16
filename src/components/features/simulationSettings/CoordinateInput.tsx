@@ -31,7 +31,7 @@ export function CoordinateInput({ value, axis, onChange, onCommit }: CoordinateI
     if (debounceRef.current) clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(() => {
       commitValue(newValue);
-    }, 1000);
+    }, 500);
   };
 
   const commitValue = (val: string) => {
