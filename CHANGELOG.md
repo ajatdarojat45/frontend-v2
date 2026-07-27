@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.86](https://github.com/ajatdarojat45/choras-frontend/compare/v0.0.85...v0.0.86) (2026-07-09)
+
+### Bug Fixes
+
+- improve toast messages for audio file upload and error handling ([d1b91d6](https://github.com/ajatdarojat45/choras-frontend/commit/d1b91d61782c99682cdd1c7f027158ed598a1c52))
+- update toast messages for audio file deletion ([529affa](https://github.com/ajatdarojat45/choras-frontend/commit/529affa39000ec23677d06075ea1f8e2d3972644))
+
 ### [0.0.85](https://github.com/ajatdarojat45/choras-frontend/compare/v0.0.84...v0.0.85) (2026-07-09)
 
 ### Features
