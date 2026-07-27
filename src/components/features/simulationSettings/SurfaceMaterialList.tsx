@@ -18,10 +18,9 @@ import {
 import type { Material } from "@/types/material";
 import { MaterialFormDialog } from "./MaterialFormDialog";
 import { toast } from "sonner";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import type { RootState } from "@/store";
 import { useUpdateSimulationMutation } from "@/store/simulationApi";
-import { syncCategoriesFromMaterials } from "@/store/materialSlice";
 
 type IProps = {
   openMaterialLibrary: boolean;
@@ -54,8 +53,6 @@ export function SurfaceMaterialList({
     material.name.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
-  const dispatch = useDispatch();
-
   useEffect(() => {
     if (openCreateMaterialDialog) {
       setSelectedMaterial(null);
@@ -66,12 +63,9 @@ export function SurfaceMaterialList({
     }
   }, [openCreateMaterialDialog]);
 
-  useEffect(() => {
-    const categories = materials.map((m) => m.category).filter(Boolean);
-    dispatch(syncCategoriesFromMaterials(categories));
-  }, [materials]);
-
-  const handleCreate = async (material: Omit<Material, "id" | "createdAt" | "updatedAt">) => {
+  const handleCreate = async (
+    material: Omit<Material, "id" | "category" | "createdAt" | "updatedAt">,
+  ) => {
     try {
       await createMaterial(material).unwrap();
       toast.success("Material created successfully!");
@@ -83,7 +77,9 @@ export function SurfaceMaterialList({
     }
   };
 
-  const handleUpdate = async (payload: Omit<Material, "createdAt" | "updatedAt" | "id">) => {
+  const handleUpdate = async (
+    payload: Omit<Material, "category" | "createdAt" | "updatedAt" | "id">,
+  ) => {
     try {
       await updateMaterial({ id: material?.id as number, ...payload }).unwrap();
       toast.success("Material edited successfully!");
@@ -94,7 +90,9 @@ export function SurfaceMaterialList({
     }
   };
 
-  const handleCopy = async (payload: Omit<Material, "id" | "createdAt" | "updatedAt">) => {
+  const handleCopy = async (
+    payload: Omit<Material, "id" | "category" | "createdAt" | "updatedAt">,
+  ) => {
     try {
       const newMaterial = await createMaterial(payload).unwrap();
 
@@ -146,7 +144,9 @@ export function SurfaceMaterialList({
     setOpenMaterialForm(true);
   };
 
-  const handleSubmit = async (payload: Omit<Material, "id" | "createdAt" | "updatedAt">) => {
+  const handleSubmit = async (
+    payload: Omit<Material, "id" | "category" | "createdAt" | "updatedAt">,
+  ) => {
     if (materialActionType === "Create") {
       await handleCreate(payload);
     } else if (materialActionType === "Edit") {

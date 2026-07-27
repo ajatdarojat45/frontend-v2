@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.84](https://github.com/ajatdarojat45/choras-frontend/compare/v0.0.83...v0.0.84) (2026-07-01)
+
+### Features
+
+- add categoryId to Material interface ([f9c3cc4](https://github.com/ajatdarojat45/choras-frontend/commit/f9c3cc47504aca97998b52ffca28746df6570866))
+- add MaterialCategory interface ([b197557](https://github.com/ajatdarojat45/choras-frontend/commit/b1975572c2e5d1646d8a2d02d30d3d86c3d03f94))
+- enhance CreateMaterialCategory component with edit functionality and toast notifications ([5fde5ba](https://github.com/ajatdarojat45/choras-frontend/commit/5fde5baee84009a521539941c55266d57debdaf7))
+- implement materialCategoriesApi with CRUD operations ([1dfd66c](https://github.com/ajatdarojat45/choras-frontend/commit/1dfd66ca1aed588d94fc7ab544b26d5a7b837b00))
+- integrate materialCategoriesApi into the Redux store ([629cbe3](https://github.com/ajatdarojat45/choras-frontend/commit/629cbe3c2d30e59f9ff97a0dfc9db09ad86e65ff))
+- refactor SurfaceMaterialList to remove unused dispatch and syncCategoriesFromMaterials ([2855f6b](https://github.com/ajatdarojat45/choras-frontend/commit/2855f6b60c587cd6463c202433faef77cc678b21))
+- remove materialSlice and associated localStorage logic ([3119d12](https://github.com/ajatdarojat45/choras-frontend/commit/3119d120a55dde0d00e178e48495e0fe51437f0e))
+- update createMaterial and updateMaterial mutations to include category in type definitions ([0b08ac0](https://github.com/ajatdarojat45/choras-frontend/commit/0b08ac08803bf14b6bbae553c591bf7b2733cc90))
+- update handleCreateMaterial to exclude category and change category to categoryId in material object ([1fb9716](https://github.com/ajatdarojat45/choras-frontend/commit/1fb9716483a6460437db2004b773b76e9f0129f6))
+- update MaterialFormDialog to use categoryId and integrate materialCategoriesApi ([f5ffaa0](https://github.com/ajatdarojat45/choras-frontend/commit/f5ffaa0cee776c1076016a0c4f198d59ca7c6632))
+
 ### [0.0.83](https://github.com/ajatdarojat45/choras-frontend/compare/v0.0.82...v0.0.83) (2026-06-24)
 
 ### Bug Fixes

@@ -22,15 +22,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { CreateMaterialCategory } from "./CreateMaterialCategory";
-import { useSelector } from "react-redux";
-import type { RootState } from "@/store";
 import { toast } from "sonner";
+import { useGetMaterialCategoriesQuery } from "@/store/materialCategoryApi";
 
 type IProps = {
   isOpen: boolean;
   onOpen: (open: boolean) => void;
-  onSubmit?: (material: Omit<Material, "id" | "createdAt" | "updatedAt">) => void;
-  material?: Omit<Material, "id" | "createdAt" | "updatedAt"> | null;
+  onSubmit?: (material: Omit<Material, "id" | "category" | "createdAt" | "updatedAt">) => void;
+  material?: Omit<Material, "id" | "category" | "createdAt" | "updatedAt"> | null;
   label?: string;
   triggerLabel?: string;
   description?: string;
@@ -58,18 +57,18 @@ export function MaterialFormDialog({
   const [formData, setFormData] = useState({
     name: "",
     description: "",
-    category: "",
+    categoryId: 0,
     absorptionCoefficients: [0.01, 0.04, 0.14, 0.47, 0.88, 0.53, 0.26],
   });
   const [selectOpen, setSelectOpen] = useState(false);
-  const materialCategories = useSelector((state: RootState) => state.material.maerialCategories);
+  const { data: materialCategories } = useGetMaterialCategoriesQuery();
 
   useEffect(() => {
     if (material) {
       setFormData({
         name: material.name,
         description: material.description,
-        category: material.category,
+        categoryId: material.categoryId,
         absorptionCoefficients: material.absorptionCoefficients,
       });
     }
@@ -78,7 +77,7 @@ export function MaterialFormDialog({
       setFormData({
         name: "",
         description: "",
-        category: "",
+        categoryId: 0,
         absorptionCoefficients: [0.01, 0.04, 0.14, 0.47, 0.88, 0.53, 0.26],
       });
     };
@@ -112,11 +111,11 @@ export function MaterialFormDialog({
     }
   };
 
-  const handleCreateMaterialCategory = (name: string) => {
+  const handleCreateMaterialCategory = (categoryId: number) => {
     setSelectOpen(false);
     toast.success(`Category "${name}" selected`);
     setTimeout(() => {
-      setFormData({ ...formData, category: name });
+      setFormData({ ...formData, categoryId: categoryId });
     }, 500);
   };
 
@@ -150,8 +149,8 @@ export function MaterialFormDialog({
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="category-select">Category</Label>
             <Select
-              value={formData.category}
-              onValueChange={(val) => handleInputChange("category", val)}
+              value={String(formData.categoryId)}
+              onValueChange={(val) => handleInputChange("categoryId", val)}
               disabled={isLoading}
               open={selectOpen}
               onOpenChange={setSelectOpen}
@@ -160,12 +159,20 @@ export function MaterialFormDialog({
                 <SelectValue placeholder="Select a category" />
               </SelectTrigger>
               <SelectContent>
-                {materialCategories.map((category) => (
-                  <SelectItem key={category} value={category}>
-                    {category}
-                  </SelectItem>
+                {materialCategories?.map((category) => (
+                  <div key={category.id} className="group relative flex items-center">
+                    <SelectItem value={String(category.id)} className="flex-1 pr-16">
+                      {category.name}
+                    </SelectItem>
+                    <div
+                      className="absolute right-8 z-10 opacity-0 group-hover:opacity-100 transition-opacity"
+                      onPointerDown={(e) => e.stopPropagation()}
+                    >
+                      <CreateMaterialCategory category={category} />
+                    </div>
+                  </div>
                 ))}
-                <CreateMaterialCategory onCreate={handleCreateMaterialCategory} />
+                <CreateMaterialCategory onSubmit={handleCreateMaterialCategory} />
               </SelectContent>
             </Select>
           </div>
@@ -258,7 +265,7 @@ export function MaterialFormDialog({
           <Button
             type="submit"
             onClick={handleSubmit}
-            disabled={isLoading || !formData.name || !formData.category}
+            disabled={isLoading || !formData.name || !formData.categoryId}
           >
             {isLoading ? "Submitting..." : `${label}`}
           </Button>
