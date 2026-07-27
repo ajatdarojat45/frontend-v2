@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.85](https://github.com/ajatdarojat45/choras-frontend/compare/v0.0.84...v0.0.85) (2026-07-09)
+
+### Features
+
+- comment out center line drawing in renderFunction ([22b7481](https://github.com/ajatdarojat45/choras-frontend/commit/22b7481388e5b5e89e8a6d790f6bcd8a26ac7a94))
+
 ### [0.0.84](https://github.com/ajatdarojat45/choras-frontend/compare/v0.0.83...v0.0.84) (2026-07-01)
 
 ### Features
