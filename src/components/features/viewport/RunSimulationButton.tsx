@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux";
 import { navigateToTabAndHighlight } from "@/store/tabSlice";
 import { setActiveSimulation, setShouldAutoRun } from "@/store/simulationSlice";
 import { useParams, useNavigate } from "react-router";
-import { useGetSimulationsByModelIdQuery } from "@/store/simulationApi";
+import { useGetSimulationRunsQuery, useGetSimulationsByModelIdQuery } from "@/store/simulationApi";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -29,6 +29,7 @@ import {
 } from "@/store/userPreferenceApi";
 import type { UserPreference } from "@/types/userPreference";
 import { toast } from "sonner";
+import type { Simulation } from "@/types/simulation";
 
 export function RunSimulationButton() {
   const { isRunning, progress, startSimulation, cancelAndStop } = useSimulationRunner();
@@ -47,8 +48,10 @@ export function RunSimulationButton() {
   const { data: userPreferences } = useGetUserPreferencesQuery();
   const [userPreference, setUserPreference] = useState<UserPreference | null>(null);
   const [updateUserPreference] = useUpdateUserPreferenceMutation();
-
-  const currentSimulation = simulations?.find((sim) => sim.id === Number(simulationId));
+  const [currentSimulation, setCurrentSimulation] = useState<Simulation | null>(null);
+  const [isErrorRun, setIsErrorRun] = useState<boolean>(false);
+  const [errorRunMessage, setErrorRunMessage] = useState<string>("");
+  const { data: simulationsRun } = useGetSimulationRunsQuery();
 
   const isCompletedRun =
     currentSimulation?.simulationRun?.status === "Completed" &&
@@ -59,12 +62,25 @@ export function RunSimulationButton() {
     currentSimulation?.simulationRun?.completedAt &&
     new Date(currentSimulation.updatedAt) > new Date(currentSimulation.simulationRun.completedAt);
 
-  const isErrorRun = currentSimulation?.simulationRun?.status === "Error";
-  const errorRunMessage =
-    currentSimulation?.simulationRun?.errorMessage ||
-    "Simulation failed. Please check your settings and try again.";
-
   const isCompleted = isCompletedRun && !editedAfterCompletion;
+
+  useEffect(() => {
+    const _currentSimulation = simulations?.find((sim) => sim.id === Number(simulationId));
+    setCurrentSimulation(_currentSimulation || null);
+  }, [simulations]);
+
+  useEffect(() => {
+    const sim = simulationsRun?.find((el) => el.simulation.id === currentSimulation?.id);
+    if (sim?.status === "Error") {
+      setIsErrorRun(true);
+      setErrorRunMessage(
+        sim.errorMessage || "Simulation failed. Please check your settings and try again.",
+      );
+    } else {
+      setIsErrorRun(false);
+      setErrorRunMessage("");
+    }
+  }, [simulationsRun, currentSimulation]);
 
   useEffect(() => {
     if (shouldAutoRun && activeSimulation && isValid && !isRunning) {

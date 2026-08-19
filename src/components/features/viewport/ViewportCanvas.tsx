@@ -27,7 +27,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useGetSimulationsByModelIdQuery } from "@/store/simulationApi";
+import { useGetSimulationRunsQuery } from "@/store/simulationApi";
 
 export function ViewportCanvas({ modelUrl, modelId, simulationId }: ViewportCanvasProps) {
   const [cameraType, setCameraType] = useState<"perspective" | "orthographic">("perspective");
@@ -40,8 +40,10 @@ export function ViewportCanvas({ modelUrl, modelId, simulationId }: ViewportCanv
   const { loadModelFromUrl, isModelLoaded, isLoading, error, setActiveModel } = useModelLoader();
   const { isRunning } = useSimulationRunnerContext();
   const orbitControlsRef = useRef<OrbitControlsType | null>(null);
-  const { data: simulations } = useGetSimulationsByModelIdQuery(Number(modelId));
-  const currentSimulation = simulations?.find((sim) => sim.id === Number(simulationId));
+  const { data: simulationsRun } = useGetSimulationRunsQuery();
+  const currentSimulationRun = simulationsRun?.find(
+    (sim) => sim.simulation.id === Number(simulationId),
+  );
 
   useEffect(() => {
     if (modelUrl && modelId) {
@@ -206,7 +208,7 @@ export function ViewportCanvas({ modelUrl, modelId, simulationId }: ViewportCanv
       </div>
 
       {/* Selection Info Panel */}
-      {!isRunning && currentSimulation?.simulationRun?.status !== "Error" && (
+      {!isRunning && currentSimulationRun?.status !== "Error" && (
         <div className="absolute bottom-4 right-4 z-10">
           <GeometrySelectionInfo />
         </div>
