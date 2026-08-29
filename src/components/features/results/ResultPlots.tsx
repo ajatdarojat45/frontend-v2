@@ -1,4 +1,4 @@
-import { useGetSimulationResultQuery } from "@/store/simulationApi";
+import { useGetSimulationResultQuery, useGetVisualizationDataQuery } from "@/store/simulationApi";
 import { Loading } from "@/components/ui/loading";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useEffect, useMemo, useState } from "react";
@@ -17,12 +17,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { ChevronDownIcon } from "lucide-react";
 import Chart from "react-apexcharts";
-
-import energy_decary_curve  from "../../../assets/db/energy_decay_curve.json"
-import signal_spectrum_db from "../../../assets/db/signal_spectrum_db.json"
-import signal_spectrum from "../../../assets/db/signal_spectrum.json"
-import signal_time_domain_db from "../../../assets/db/signal_time_domain_db.json"
-import signal_time_domain from "../../../assets/db/signal_time_domain.json"
+import type { VisualizationType } from "@/types/simulation";
 
 import ChorasDynamicChart from "./ChorasDynamicChart";
 
@@ -35,9 +30,14 @@ export function ResultPlots({ simulationId }: ResultParametersProps) {
   const { data: results, isLoading, error } = useGetSimulationResultQuery(simulationId);
   const compareResultIds = useSelector(selectCompareSimulationIds);
   const seriesData = useSelector(selectCompareResultsPlotsSeriesData(selectedFrequencies));
-  const [chartData, setChartData] = useState<any>(energy_decary_curve);
-  const [activeTab, setActiveData] = useState('edc');
+  const [activeTab, setActiveData] = useState<VisualizationType>('edc');
   const [selectedChannels, setSelectedChannels] = useState<string[]>([]);
+
+  const {
+    data: chartData,
+    isLoading: isChartDataLoading,
+    error: chartDataError,
+  } = useGetVisualizationDataQuery({ simulationId, visualizationType: activeTab });
 
   const getChartTitle = () => {
     switch (activeTab) {
@@ -51,24 +51,6 @@ export function ResultPlots({ simulationId }: ResultParametersProps) {
   };
 
   useEffect(() => {
-    switch (activeTab) {
-      case 'edc': 
-        setChartData(energy_decary_curve) 
-        break;
-      case 'spectrum_db': 
-        setChartData(signal_spectrum_db)
-        break;
-      case 'spectrum': 
-        setChartData(signal_spectrum)
-        break;
-      case 'rir_db': 
-        setChartData(signal_time_domain_db)
-        break;
-      case 'rir': 
-        setChartData(signal_time_domain)
-        break;
-      default: setChartData(energy_decary_curve);
-    }
     // Reset channel selection when chart type changes
     setSelectedChannels([]);
   }, [activeTab]);
@@ -245,13 +227,15 @@ export function ResultPlots({ simulationId }: ResultParametersProps) {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56" align="end">
-                {[
-                  { value: "edc", label: "Energy Decay Curve" },
-                  { value: "spectrum_db", label: "Signal Spectrum (dB)" },
-                  { value: "spectrum", label: "Signal Spectrum (Linear)" },
-                  { value: "rir_db", label: "Room Impulse Response (dB)" },
-                  { value: "rir", label: "Room Impulse Response (Linear)" },
-                ].map((item) => (
+                {(
+                  [
+                    { value: "edc", label: "Energy Decay Curve (dB)" },
+                    { value: "spectrum_db", label: "Signal Spectrum (dB)" },
+                    { value: "spectrum", label: "Signal Spectrum (Linear)" },
+                    { value: "rir_db", label: "Room Impulse Response (dB)" },
+                    { value: "rir", label: "Room Impulse Response (Linear)" },
+                  ] as { value: VisualizationType; label: string }[]
+                ).map((item) => (
                   <DropdownMenuCheckboxItem
                     key={item.value}
                     checked={activeTab === item.value}
@@ -266,11 +250,19 @@ export function ResultPlots({ simulationId }: ResultParametersProps) {
         </div>
 
         <div className="border border-black rounded-sm p-2">
-          <ChorasDynamicChart
-            chartData={chartData}
-            title={getChartTitle()}
-            selectedChannels={selectedChannels.length === 0 ? undefined : selectedChannels}
-          />
+          {isChartDataLoading ? (
+            <Loading className="h-64 justify-center" />
+          ) : chartDataError || !chartData ? (
+            <Alert variant="default">
+              <AlertDescription>No visualization data available</AlertDescription>
+            </Alert>
+          ) : (
+            <ChorasDynamicChart
+              chartData={chartData}
+              title={getChartTitle()}
+              selectedChannels={selectedChannels.length === 0 ? undefined : selectedChannels}
+            />
+          )}
         </div>
       </div>
     </div>
