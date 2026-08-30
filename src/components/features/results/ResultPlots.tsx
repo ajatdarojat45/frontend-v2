@@ -27,17 +27,19 @@ type ResultParametersProps = {
 
 export function ResultPlots({ simulationId }: ResultParametersProps) {
   const [selectedFrequencies, setSelectedFrequencies] = useState<number[]>([125]);
-  const { data: results, isLoading, error } = useGetSimulationResultQuery(simulationId);
   const compareResultIds = useSelector(selectCompareSimulationIds);
+  const activeSimulationId = compareResultIds[0] ?? simulationId;
   const seriesData = useSelector(selectCompareResultsPlotsSeriesData(selectedFrequencies));
   const [activeTab, setActiveData] = useState<VisualizationType>('edc');
   const [selectedChannels, setSelectedChannels] = useState<string[]>([]);
+
+  const { data: results, isLoading, error } = useGetSimulationResultQuery(activeSimulationId);
 
   const {
     data: chartData,
     isLoading: isChartDataLoading,
     error: chartDataError,
-  } = useGetVisualizationDataQuery({ simulationId, visualizationType: activeTab });
+  } = useGetVisualizationDataQuery({ simulationId: activeSimulationId, visualizationType: activeTab });
 
   const getChartTitle = () => {
     switch (activeTab) {
