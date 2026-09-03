@@ -118,6 +118,7 @@ export const {
   useGetSimulationResultQuery,
   useLazyGetSimulationResultQuery,
   useGetVisualizationDataQuery,
+  useLazyGetVisualizationDataQuery,
   useRunSimulationMutation,
   useGetSimulationRunsQuery,
   useLazyGetSimulationRunsQuery,
