@@ -9,15 +9,15 @@ interface ChartDataProps {
   y_limits: [number, number];
   x_scale: "linear" | "log";
   legend?: string[];
+  colors?: string[];
 }
 
 interface ChorasDynamicChartProps {
   chartData: ChartDataProps;
-  title: string;
   selectedChannels?: string[];
 }
 
-const ChorasDynamicChart = ({ chartData, title, selectedChannels }: ChorasDynamicChartProps) => {
+const ChorasDynamicChart = ({ chartData, selectedChannels }: ChorasDynamicChartProps) => {
   // Defensive check jika data dari API belum selesai di-load (loading state)
   if (!chartData || !chartData.y) {
     return <div className="p-4 text-center text-gray-500">Loading chart data...</div>;
@@ -42,19 +42,35 @@ const ChorasDynamicChart = ({ chartData, title, selectedChannels }: ChorasDynami
         type: "scatter",
         mode: "lines",
         name: channelName,
-        line: { width: 1.5 },
+        line: { width: 2, color: chartData.colors?.[originalIndex] },
       };
     });
 
+  const thirdOctaveFrequencies = [
+    20, 25, 31.5, 40, 50, 63, 80, 100, 125, 160, 200, 250, 315, 400, 500, 630, 800, 1000, 1250,
+    1600, 2000, 2500, 3150, 4000,
+  ];
+  const octaveFrequencies = [31.5, 63, 125, 250, 500, 1000, 2000, 4000];
+  const visibleThirdOctaveFrequencies = thirdOctaveFrequencies.filter(
+    (frequency) => frequency >= chartData.x_limits[0] && frequency <= chartData.x_limits[1],
+  );
+  const visibleTickFrequencies = [
+    ...new Set([...octaveFrequencies, ...visibleThirdOctaveFrequencies]),
+  ]
+    .filter((frequency) => frequency >= chartData.x_limits[0] && frequency <= chartData.x_limits[1])
+    .sort((left, right) => left - right);
+
   // 3. Konfigurasi layout yang membaca konfigurasi JSON akustik secara dinamis
   const layout = {
-    title: {
-      text: title,
-      font: { color: "#333", size: 16 },
-    },
     xaxis: {
       title: {
-        text: chartData.xlabel,
+        text: chartData.xlabel || "Time (s)",
+        font: {
+          family: "Inter, sans-serif",
+          size: 14,
+          color: "#373d3f",
+        },
+        standoff: 8,
       },
       type: chartData.x_scale, // Otomatis menyesuaikan 'linear' atau 'log' (misal: log untuk Spectrum)
       // Plotly log axis requires range in log10 units
@@ -64,17 +80,45 @@ const ChorasDynamicChart = ({ chartData, title, selectedChannels }: ChorasDynami
           : chartData.x_limits,
       showgrid: true,
       gridcolor: "#90A4AE",
-      griddash: "dot",
+      griddash: "solid",
+      showline: true,
+      mirror: true,
+      linecolor: "#333",
+      linewidth: 1,
+      zeroline: false,
+      ...(chartData.x_scale === "log"
+        ? {
+            tickmode: "array" as const,
+            tickvals: visibleTickFrequencies,
+            ticktext: visibleTickFrequencies.map((frequency) =>
+              frequency >= 1000 ? `${frequency / 1000}k` : `${frequency}`,
+            ),
+            minor: {
+              ticks: "outside" as const,
+            },
+          }
+        : {}),
     },
     yaxis: {
       title: {
-        text: chartData.ylabel,
+        text: chartData.ylabel || "Signal",
+        font: {
+          family: "Inter, sans-serif",
+          size: 14,
+          color: "#373d3f",
+        },
+        standoff: 8,
       },
       type: "linear", // Sumbu Y tetap linear karena nilai log (dB) sudah dihitung langsung oleh backend
       range: chartData.y_limits, // Batas sumbu Y dinamis (Pascals [-1, 1] atau dB [-85, 5])
       showgrid: true,
       gridcolor: "#90A4AE",
-      griddash: "dot",
+      griddash: "solid",
+      showline: true,
+      mirror: true,
+      linecolor: "#333",
+      linewidth: 1,
+      zeroline: false,
     },
     margin: { t: 50, b: 60, l: 60, r: 20 },
     showlegend: true,
@@ -96,7 +140,7 @@ const ChorasDynamicChart = ({ chartData, title, selectedChannels }: ChorasDynami
   };
 
   return (
-    <div className="w-full h-[400px] p-4">
+    <div className="w-full h-[500px]">
       <Plot
         data={traces}
         layout={layout}
