@@ -1,13 +1,20 @@
-import { useGetSimulationResultQuery, useGetVisualizationDataQuery } from "@/store/simulationApi";
+import {
+  useGetSimulationResultQuery,
+  useLazyGetVisualizationDataQuery,
+} from "@/store/simulationApi";
 import { Loading } from "@/components/ui/loading";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { DownloadResult } from "./DownloadResult";
 import {
   selectCompareResultsPlotsSeriesData,
+  selectCompareResults,
   selectCompareSimulationIds,
 } from "@/store/simulationSelector";
-import { useSelector } from "react-redux";
+import { shallowEqual, useSelector } from "react-redux";
+import { simulationApi } from "@/store/simulationApi";
+import { createSelector } from "@reduxjs/toolkit";
+import type { RootState } from "@/store";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -17,9 +24,25 @@ import {
 import { Button } from "@/components/ui/button";
 import { ChevronDownIcon } from "lucide-react";
 import Chart from "react-apexcharts";
-import type { VisualizationType } from "@/types/simulation";
+import type { VisualizationData, VisualizationType } from "@/types/simulation";
 
 import ChorasDynamicChart from "./ChorasDynamicChart";
+
+const selectComparisonSimulationNames = createSelector(
+  [selectCompareResults, (state: RootState) => state],
+  (compareResults, state) =>
+    Object.fromEntries(
+      compareResults.flatMap(({ simulationId, modelId }) => {
+        if (!simulationId) return [];
+
+        const simulations =
+          simulationApi.endpoints.getSimulationsByModelId.select(modelId)(state).data;
+        const simulation = simulations?.find((item) => item.id === simulationId);
+
+        return simulation ? [[simulationId, simulation.name] as const] : [];
+      }),
+    ),
+);
 
 type ResultParametersProps = {
   simulationId: number;
@@ -28,27 +51,36 @@ type ResultParametersProps = {
 export function ResultPlots({ simulationId }: ResultParametersProps) {
   const [selectedFrequencies, setSelectedFrequencies] = useState<number[]>([125]);
   const compareResultIds = useSelector(selectCompareSimulationIds);
+  const compareResults = useSelector(selectCompareResults);
   const activeSimulationId = compareResultIds[0] ?? simulationId;
   const seriesData = useSelector(selectCompareResultsPlotsSeriesData(selectedFrequencies));
-  const [activeTab, setActiveData] = useState<VisualizationType>('edc');
+  const [activeTab, setActiveData] = useState<VisualizationType>("edc");
   const [selectedChannels, setSelectedChannels] = useState<string[]>([]);
 
   const { data: results, isLoading, error } = useGetSimulationResultQuery(activeSimulationId);
 
-  const {
-    data: chartData,
-    isLoading: isChartDataLoading,
-    error: chartDataError,
-  } = useGetVisualizationDataQuery({ simulationId: activeSimulationId, visualizationType: activeTab });
+  const [loadVisualizationData] = useLazyGetVisualizationDataQuery();
+  const [chartData, setChartData] = useState<VisualizationData | null>(null);
+  const [isChartDataLoading, setIsChartDataLoading] = useState(false);
+  const [chartDataError, setChartDataError] = useState<unknown>(null);
+  const simulationNames = useSelector(selectComparisonSimulationNames, shallowEqual);
+  const simulationNamesRef = useRef(simulationNames);
+  simulationNamesRef.current = simulationNames;
 
   const getChartTitle = () => {
     switch (activeTab) {
-      case 'edc': return 'Energy Decay Curve';
-      case 'spectrum_db': return 'Signal Spectrum (dB)';
-      case 'spectrum': return 'Signal Spectrum (Linear)';
-      case 'rir_db': return 'Room Impulse Response (dB)';
-      case 'rir': return 'Room Impulse Response (Linear)';
-      default: return 'Visualization Plot';
+      case "edc":
+        return "Energy Decay Curve";
+      case "spectrum_db":
+        return "Signal Spectrum (dB)";
+      case "spectrum":
+        return "Signal Spectrum (Linear)";
+      case "rir_db":
+        return "Room Impulse Response (dB)";
+      case "rir":
+        return "Room Impulse Response (Linear)";
+      default:
+        return "Visualization Plot";
     }
   };
 
@@ -56,6 +88,73 @@ export function ResultPlots({ simulationId }: ResultParametersProps) {
     // Reset channel selection when chart type changes
     setSelectedChannels([]);
   }, [activeTab]);
+
+  useEffect(() => {
+    const comparisonEntries = compareResults.filter((compareResult) => compareResult.simulationId);
+    const visualizationSimulationIds = comparisonEntries.length
+      ? comparisonEntries.map((compareResult) => compareResult.simulationId as number)
+      : [simulationId];
+    let isCancelled = false;
+
+    setIsChartDataLoading(true);
+    setChartDataError(null);
+
+    Promise.all(
+      visualizationSimulationIds.map((visualizationSimulationId) =>
+        loadVisualizationData({
+          simulationId: visualizationSimulationId,
+          visualizationType: activeTab,
+        }).unwrap(),
+      ),
+    )
+      .then((visualizationResults) => {
+        if (isCancelled || visualizationResults.length === 0) return;
+
+        const firstResult = visualizationResults[0];
+        const combinedLegend: string[] = [];
+        const combinedY: number[][] = [];
+        const combinedColors: string[] = [];
+
+        visualizationResults.forEach((result: VisualizationData, resultIndex: number) => {
+          const channels = Array.isArray(result.y[0])
+            ? result.y
+            : [result.y as unknown as number[]];
+
+          channels.forEach((values: number[], channelIndex: number) => {
+            const channelName = result.legend?.[channelIndex] ?? `Channel ${channelIndex + 1}`;
+            const simulationId = visualizationSimulationIds[resultIndex];
+            const simulationLabel =
+              simulationNamesRef.current[simulationId] ?? `Simulation ${simulationId}`;
+
+            combinedLegend.push(
+              visualizationResults.length > 1 ? `${simulationLabel} - ${channelName}` : channelName,
+            );
+            combinedY.push(values);
+            combinedColors.push(comparisonEntries[resultIndex]?.color ?? "#EF7305");
+          });
+        });
+
+        setChartData({
+          ...firstResult,
+          y: combinedY,
+          legend: combinedLegend,
+          colors: combinedColors,
+        });
+      })
+      .catch((error: unknown) => {
+        if (!isCancelled) {
+          setChartData(null);
+          setChartDataError(error);
+        }
+      })
+      .finally(() => {
+        if (!isCancelled) setIsChartDataLoading(false);
+      });
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [activeTab, compareResults, loadVisualizationData, simulationId]);
 
   const enabledFrequencies = useMemo(() => {
     const defaultFrequencies: number[] = [];
@@ -128,52 +227,52 @@ export function ResultPlots({ simulationId }: ResultParametersProps) {
         </div>
 
         <div className="border border-black rounded-sm p-2">
-        <Chart
-          type="line"
-          options={{
-            chart: {
-              type: "line",
-              zoom: {
-                enabled: true,
-              },
-            },
-            xaxis: {
-              type: "numeric",
-              title: {
-                text: "Time (s)",
-              },
-              labels: {
-                formatter: function (val) {
-                  return parseFloat(val).toFixed(3) + "s";
+          <Chart
+            type="line"
+            options={{
+              chart: {
+                type: "line",
+                zoom: {
+                  enabled: true,
                 },
               },
-            },
-            yaxis: {
-              title: {
-                text: "Energy decay curve (dB)",
-              },
-            },
-            legend: {
-              show: true,
-              showForSingleSeries: true,
-              position: "top",
-              horizontalAlign: "center",
-            },
-            grid: {
-              show: true,
-              borderColor: "#90A4AE",
-              strokeDashArray: 3,
-              position: "back",
               xaxis: {
-                lines: {
-                  show: true,
+                type: "numeric",
+                title: {
+                  text: "Time (s)",
+                },
+                labels: {
+                  formatter: function (val) {
+                    return parseFloat(val).toFixed(3) + "s";
+                  },
                 },
               },
-            },
-          }}
-          series={seriesData}
-          height={500}
-        />
+              yaxis: {
+                title: {
+                  text: "Energy decay curve (dB)",
+                },
+              },
+              legend: {
+                show: true,
+                showForSingleSeries: true,
+                position: "top",
+                horizontalAlign: "center",
+              },
+              grid: {
+                show: true,
+                borderColor: "#90A4AE",
+                strokeDashArray: 3,
+                position: "back",
+                xaxis: {
+                  lines: {
+                    show: true,
+                  },
+                },
+              },
+            }}
+            series={seriesData}
+            height={500}
+          />
         </div>
       </div>
 
@@ -188,12 +287,12 @@ export function ResultPlots({ simulationId }: ResultParametersProps) {
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="outline"
-                  className="border-black text-black hover:border-black hover:text-black hover:bg-black/5"
+                  className="max-w-64 border-black text-black hover:border-black hover:text-black hover:bg-black/5"
                 >
-                  {selectedChannels.length === 0
-                    ? 'All Channels'
-                    : selectedChannels.join(', ')}
-                  <ChevronDownIcon />
+                  <span className="min-w-0 truncate">
+                    {selectedChannels.length === 0 ? "All Channels" : selectedChannels.join(", ")}
+                  </span>
+                  <ChevronDownIcon className="shrink-0" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56" align="end">
@@ -203,9 +302,8 @@ export function ResultPlots({ simulationId }: ResultParametersProps) {
                     checked={selectedChannels.length === 0 || selectedChannels.includes(channel)}
                     onCheckedChange={(checked) =>
                       setSelectedChannels((prev) => {
-                        const current = prev.length === 0
-                          ? (chartData?.legend ?? []) as string[]
-                          : prev;
+                        const current =
+                          prev.length === 0 ? ((chartData?.legend ?? []) as string[]) : prev;
                         return checked
                           ? [...current, channel]
                           : current.filter((c) => c !== channel);
@@ -261,7 +359,6 @@ export function ResultPlots({ simulationId }: ResultParametersProps) {
           ) : (
             <ChorasDynamicChart
               chartData={chartData}
-              title={getChartTitle()}
               selectedChannels={selectedChannels.length === 0 ? undefined : selectedChannels}
             />
           )}
