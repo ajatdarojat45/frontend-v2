@@ -139,4 +139,5 @@ export interface VisualizationData {
   y_limits: [number, number];
   x_scale: "linear" | "log";
   legend: string[];
+  colors?: string[];
 }
