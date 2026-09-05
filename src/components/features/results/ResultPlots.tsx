@@ -24,7 +24,9 @@ import {
 import { Button } from "@/components/ui/button";
 import { ChevronDownIcon } from "lucide-react";
 import Chart from "react-apexcharts";
+import { plotlyDashForFrequencyBand, shadeForFrequencyBand } from "@/helpers/frequencyBandStyle";
 import type { VisualizationData, VisualizationType } from "@/types/simulation";
+import { CHART_COLORS_VARIANTS } from "@/constants";
 
 import ChorasDynamicChart from "./ChorasDynamicChart";
 
@@ -50,11 +52,13 @@ type ResultParametersProps = {
 
 export function ResultPlots({ simulationId }: ResultParametersProps) {
   const [selectedFrequencies, setSelectedFrequencies] = useState<number[]>([125]);
+  const energyDecayDashStyles = [0, 8, 16, 4, 12, 20];
   const compareResultIds = useSelector(selectCompareSimulationIds);
   const compareResults = useSelector(selectCompareResults);
   const activeSimulationId = compareResultIds[0] ?? simulationId;
   const seriesData = useSelector(selectCompareResultsPlotsSeriesData(selectedFrequencies));
-  const [activeTab, setActiveData] = useState<VisualizationType>("edc");
+  const edcSeriesData = seriesData;
+  const [activeTab, setActiveData] = useState<VisualizationType>("rir_db");
   const [selectedChannels, setSelectedChannels] = useState<string[]>([]);
 
   const { data: results, isLoading, error } = useGetSimulationResultQuery(activeSimulationId);
@@ -66,6 +70,8 @@ export function ResultPlots({ simulationId }: ResultParametersProps) {
   const simulationNames = useSelector(selectComparisonSimulationNames, shallowEqual);
   const simulationNamesRef = useRef(simulationNames);
   simulationNamesRef.current = simulationNames;
+  const chartScale: VisualizationData["x_scale"] =
+    activeTab === "spectrum" || activeTab === "spectrum_db" ? "log" : "linear";
 
   const getChartTitle = () => {
     switch (activeTab) {
@@ -113,12 +119,19 @@ export function ResultPlots({ simulationId }: ResultParametersProps) {
         const firstResult = visualizationResults[0];
         const combinedLegend: string[] = [];
         const combinedY: number[][] = [];
+        const combinedX: number[][] = [];
         const combinedColors: string[] = [];
+        const combinedDashes: string[] = [];
 
         visualizationResults.forEach((result: VisualizationData, resultIndex: number) => {
           const channels = Array.isArray(result.y[0])
             ? result.y
             : [result.y as unknown as number[]];
+          const baseColor =
+            CHART_COLORS_VARIANTS[resultIndex % CHART_COLORS_VARIANTS.length] ??
+            comparisonEntries[resultIndex]?.color ??
+            "#EF7305";
+          const shadeFrequencyBands = activeTab === "edc";
 
           channels.forEach((values: number[], channelIndex: number) => {
             const channelName = result.legend?.[channelIndex] ?? `Channel ${channelIndex + 1}`;
@@ -130,15 +143,37 @@ export function ResultPlots({ simulationId }: ResultParametersProps) {
               visualizationResults.length > 1 ? `${simulationLabel} - ${channelName}` : channelName,
             );
             combinedY.push(values);
-            combinedColors.push(comparisonEntries[resultIndex]?.color ?? "#EF7305");
+            combinedX.push(result.x);
+            combinedColors.push(
+              shadeFrequencyBands
+                ? shadeForFrequencyBand(baseColor, channelIndex, channels.length)
+                : baseColor,
+            );
+            combinedDashes.push(
+              shadeFrequencyBands ? plotlyDashForFrequencyBand(channelIndex) : "solid",
+            );
           });
         });
 
+        const combinedXLimits: [number, number] = [
+          Math.min(...visualizationResults.map((result) => result.x_limits[0])),
+          Math.max(...visualizationResults.map((result) => result.x_limits[1])),
+        ];
+        const combinedYLimits: [number, number] = [
+          Math.min(...visualizationResults.map((result) => result.y_limits[0])),
+          Math.max(...visualizationResults.map((result) => result.y_limits[1])),
+        ];
+
         setChartData({
           ...firstResult,
+          x_scale: chartScale,
+          x_limits: combinedXLimits,
+          y_limits: combinedYLimits,
           y: combinedY,
           legend: combinedLegend,
           colors: combinedColors,
+          lineDashes: combinedDashes,
+          x_values: combinedX,
         });
       })
       .catch((error: unknown) => {
@@ -154,7 +189,7 @@ export function ResultPlots({ simulationId }: ResultParametersProps) {
     return () => {
       isCancelled = true;
     };
-  }, [activeTab, compareResults, loadVisualizationData, simulationId]);
+  }, [activeTab, chartScale, compareResults, loadVisualizationData, simulationId]);
 
   const enabledFrequencies = useMemo(() => {
     const defaultFrequencies: number[] = [];
@@ -252,6 +287,14 @@ export function ResultPlots({ simulationId }: ResultParametersProps) {
                   text: "Energy decay curve (dB)",
                 },
               },
+              stroke: {
+                width: 3,
+                dashArray: edcSeriesData.map((series) => {
+                  const frequencyIndex = selectedFrequencies.indexOf(series.frequency);
+                  return energyDecayDashStyles[frequencyIndex % energyDecayDashStyles.length];
+                }),
+              },
+              colors: edcSeriesData.map((series) => series.color),
               legend: {
                 show: true,
                 showForSingleSeries: true,
@@ -270,7 +313,7 @@ export function ResultPlots({ simulationId }: ResultParametersProps) {
                 },
               },
             }}
-            series={seriesData}
+            series={edcSeriesData}
             height={500}
           />
         </div>
