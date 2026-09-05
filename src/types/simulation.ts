@@ -140,4 +140,6 @@ export interface VisualizationData {
   x_scale: "linear" | "log";
   legend: string[];
   colors?: string[];
+  lineDashes?: string[];
+  x_values?: number[][];
 }
