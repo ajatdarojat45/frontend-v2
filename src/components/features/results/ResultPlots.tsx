@@ -4,13 +4,9 @@ import {
 } from "@/store/simulationApi";
 import { Loading } from "@/components/ui/loading";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { DownloadResult } from "./DownloadResult";
-import {
-  selectCompareResultsPlotsSeriesData,
-  selectCompareResults,
-  selectCompareSimulationIds,
-} from "@/store/simulationSelector";
+import { selectCompareResults, selectCompareSimulationIds } from "@/store/simulationSelector";
 import { shallowEqual, useSelector } from "react-redux";
 import { simulationApi } from "@/store/simulationApi";
 import { createSelector } from "@reduxjs/toolkit";
@@ -23,7 +19,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { ChevronDownIcon } from "lucide-react";
-import Chart from "react-apexcharts";
 import { plotlyDashForFrequencyBand, shadeForFrequencyBand } from "@/helpers/frequencyBandStyle";
 import type { VisualizationData, VisualizationType } from "@/types/simulation";
 import { CHART_COLORS_VARIANTS } from "@/constants";
@@ -51,13 +46,9 @@ type ResultParametersProps = {
 };
 
 export function ResultPlots({ simulationId }: ResultParametersProps) {
-  const [selectedFrequencies, setSelectedFrequencies] = useState<number[]>([125]);
-  const energyDecayDashStyles = [0, 8, 16, 4, 12, 20];
   const compareResultIds = useSelector(selectCompareSimulationIds);
   const compareResults = useSelector(selectCompareResults);
   const activeSimulationId = compareResultIds[0] ?? simulationId;
-  const seriesData = useSelector(selectCompareResultsPlotsSeriesData(selectedFrequencies));
-  const edcSeriesData = seriesData;
   const [activeTab, setActiveData] = useState<VisualizationType>("rir_db");
   const [selectedChannels, setSelectedChannels] = useState<string[]>([]);
 
@@ -191,17 +182,6 @@ export function ResultPlots({ simulationId }: ResultParametersProps) {
     };
   }, [activeTab, chartScale, compareResults, loadVisualizationData, simulationId]);
 
-  const enabledFrequencies = useMemo(() => {
-    const defaultFrequencies: number[] = [];
-
-    if (!results || !results.length) return defaultFrequencies;
-
-    const firstResult = results[0];
-    if (!firstResult.frequencies) return defaultFrequencies;
-
-    return firstResult.frequencies;
-  }, [results]);
-
   if (isLoading) return <Loading className="h-container justify-center" />;
 
   if (error) {
@@ -226,101 +206,6 @@ export function ResultPlots({ simulationId }: ResultParametersProps) {
         <h1 className="text-2xl text-choras-primary font-inter font-bold">Plots</h1>
         <DownloadResult simulationIds={compareResultIds} mode="plots" />
       </div>
-
-      {/* Energy Decay Curve */}
-      <div className="space-y-2">
-        <div className="flex items-center justify-between">
-          <h2 className="text-sm font-semibold text-gray-600">Energy Decay Curve</h2>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="outline"
-                className="border-black text-black hover:border-black hover:text-black hover:bg-black/5"
-              >
-                {selectedFrequencies.map((freq) => `${freq} Hz`).join(", ") || "Select Frequencies"}
-                <ChevronDownIcon />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56" align="end">
-              {enabledFrequencies.map((freq) => (
-                <DropdownMenuCheckboxItem
-                  key={freq}
-                  checked={selectedFrequencies.includes(freq)}
-                  onCheckedChange={(checked) => {
-                    if (checked) {
-                      setSelectedFrequencies((prev) => [...prev, freq]);
-                    } else {
-                      setSelectedFrequencies((prev) => prev.filter((f) => f !== freq));
-                    }
-                  }}
-                >
-                  {freq} Hz
-                </DropdownMenuCheckboxItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-
-        <div className="border border-black rounded-sm p-2">
-          <Chart
-            type="line"
-            options={{
-              chart: {
-                type: "line",
-                zoom: {
-                  enabled: true,
-                },
-              },
-              xaxis: {
-                type: "numeric",
-                title: {
-                  text: "Time (s)",
-                },
-                labels: {
-                  formatter: function (val) {
-                    return parseFloat(val).toFixed(3) + "s";
-                  },
-                },
-              },
-              yaxis: {
-                title: {
-                  text: "Energy decay curve (dB)",
-                },
-              },
-              stroke: {
-                width: 3,
-                dashArray: edcSeriesData.map((series) => {
-                  const frequencyIndex = selectedFrequencies.indexOf(series.frequency);
-                  return energyDecayDashStyles[frequencyIndex % energyDecayDashStyles.length];
-                }),
-              },
-              colors: edcSeriesData.map((series) => series.color),
-              legend: {
-                show: true,
-                showForSingleSeries: true,
-                position: "top",
-                horizontalAlign: "center",
-              },
-              grid: {
-                show: true,
-                borderColor: "#90A4AE",
-                strokeDashArray: 3,
-                position: "back",
-                xaxis: {
-                  lines: {
-                    show: true,
-                  },
-                },
-              },
-            }}
-            series={edcSeriesData}
-            height={500}
-          />
-        </div>
-      </div>
-
-      <hr className="border-black" />
-
       {/* Dynamic Chart */}
       <div className="space-y-2">
         <div className="flex items-center gap-2 justify-between">
