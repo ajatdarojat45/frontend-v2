@@ -11,9 +11,10 @@ import { shallowEqual, useSelector } from "react-redux";
 import { simulationApi } from "@/store/simulationApi";
 import { createSelector } from "@reduxjs/toolkit";
 import type { RootState } from "@/store";
+import { cn } from "@/libs/style";
 import {
   DropdownMenu,
-  DropdownMenuCheckboxItem,
+  DropdownMenuItem,
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -50,7 +51,7 @@ export function ResultPlots({ simulationId }: ResultParametersProps) {
   const compareResults = useSelector(selectCompareResults);
   const activeSimulationId = compareResultIds[0] ?? simulationId;
   const [activeTab, setActiveData] = useState<VisualizationType>("rir_db");
-  const [selectedChannels, setSelectedChannels] = useState<string[]>([]);
+  const [hiddenChannels, setHiddenChannels] = useState<string[]>([]);
 
   const { data: results, isLoading, error } = useGetSimulationResultQuery(activeSimulationId);
 
@@ -82,8 +83,8 @@ export function ResultPlots({ simulationId }: ResultParametersProps) {
   };
 
   useEffect(() => {
-    // Reset channel selection when chart type changes
-    setSelectedChannels([]);
+    // Reset channel visibility when chart type changes
+    setHiddenChannels([]);
   }, [activeTab]);
 
   useEffect(() => {
@@ -218,29 +219,33 @@ export function ResultPlots({ simulationId }: ResultParametersProps) {
                   className="max-w-64 border-black text-black hover:border-black hover:text-black hover:bg-black/5"
                 >
                   <span className="min-w-0 truncate">
-                    {selectedChannels.length === 0 ? "All Channels" : selectedChannels.join(", ")}
+                    {hiddenChannels.length === 0
+                      ? "All Channels"
+                      : `${hiddenChannels.length} hidden`}
                   </span>
                   <ChevronDownIcon className="shrink-0" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56" align="end">
-                {(chartData?.legend ?? []).map((channel: string) => (
-                  <DropdownMenuCheckboxItem
-                    key={channel}
-                    checked={selectedChannels.length === 0 || selectedChannels.includes(channel)}
-                    onCheckedChange={(checked) =>
-                      setSelectedChannels((prev) => {
-                        const current =
-                          prev.length === 0 ? ((chartData?.legend ?? []) as string[]) : prev;
-                        return checked
-                          ? [...current, channel]
-                          : current.filter((c) => c !== channel);
-                      })
-                    }
-                  >
-                    {channel}
-                  </DropdownMenuCheckboxItem>
-                ))}
+                {(chartData?.legend ?? []).map((channel: string) => {
+                  const isChannelHidden = hiddenChannels.includes(channel);
+                  return (
+                    <DropdownMenuItem
+                      key={channel}
+                      className={cn(isChannelHidden && "opacity-40")}
+                      onSelect={(event) => {
+                        event.preventDefault();
+                        setHiddenChannels((prev) =>
+                          prev.includes(channel)
+                            ? prev.filter((c) => c !== channel)
+                            : [...prev, channel],
+                        );
+                      }}
+                    >
+                      {channel}
+                    </DropdownMenuItem>
+                  );
+                })}
               </DropdownMenuContent>
             </DropdownMenu>
 
@@ -264,13 +269,31 @@ export function ResultPlots({ simulationId }: ResultParametersProps) {
                     { value: "rir", label: "Room Impulse Response (Linear)" },
                   ] as { value: VisualizationType; label: string }[]
                 ).map((item) => (
-                  <DropdownMenuCheckboxItem
+                  <DropdownMenuItem
                     key={item.value}
-                    checked={activeTab === item.value}
-                    onCheckedChange={() => setActiveData(item.value)}
+                    className={cn(activeTab === item.value && "font-semibold")}
+                    onSelect={(event) => {
+                      event.preventDefault();
+                      setActiveData(item.value);
+                    }}
                   >
-                    {item.label}
-                  </DropdownMenuCheckboxItem>
+                    {activeTab === item.value && (
+                      <span className="absolute left-2 flex size-3.5 items-center justify-center">
+                        <svg
+                          className="size-4"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="3"
+                        >
+                          <path d="M5 13l4 4L19 7" />
+                        </svg>
+                      </span>
+                    )}
+                    <span className={cn(activeTab === item.value ? "pl-6" : "pl-2")}>
+                      {item.label}
+                    </span>
+                  </DropdownMenuItem>
                 ))}
               </DropdownMenuContent>
             </DropdownMenu>
@@ -287,7 +310,11 @@ export function ResultPlots({ simulationId }: ResultParametersProps) {
           ) : (
             <ChorasDynamicChart
               chartData={chartData}
-              selectedChannels={selectedChannels.length === 0 ? undefined : selectedChannels}
+              selectedChannels={
+                hiddenChannels.length === 0
+                  ? undefined
+                  : (chartData?.legend ?? []).filter((ch) => !hiddenChannels.includes(ch))
+              }
             />
           )}
         </div>
