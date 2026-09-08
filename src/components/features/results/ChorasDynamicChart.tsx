@@ -17,10 +17,21 @@ interface ChartDataProps {
 
 interface ChorasDynamicChartProps {
   chartData: ChartDataProps;
-  selectedChannels?: string[];
+  hiddenChannels?: string[];
+  /**
+   * Dipanggil ketika user mengklik entry di legend chart. Karena chart dibuat
+   * fully controlled (handler mengembalikan `false` agar Plotly tidak menjalankan
+   * toggle default-nya), panggilan balik ini harus meng-update state `hiddenChannels`
+   * di parent sehingga dropdown pada tab tetap sinkron dengan legend.
+   */
+  onToggleChannel?: (channelName: string) => void;
 }
 
-const ChorasDynamicChart = ({ chartData, selectedChannels }: ChorasDynamicChartProps) => {
+const ChorasDynamicChart = ({
+  chartData,
+  hiddenChannels,
+  onToggleChannel,
+}: ChorasDynamicChartProps) => {
   // Defensive check jika data dari API belum selesai di-load (loading state)
   if (!chartData || !chartData.y) {
     return <div className="p-4 text-center text-gray-500">Loading chart data...</div>;
@@ -35,9 +46,12 @@ const ChorasDynamicChart = ({ chartData, selectedChannels }: ChorasDynamicChartP
     (isMultiChannel ? (chartData.y as number[][]).map((_, i) => `Channel ${i + 1}`) : ["Signal"]);
 
   // 2. Transformasi data menjadi array traces Plotly secara dinamis
+  // Channel yang di-hide lewat dropdown TIDAK dihapus dari array traces, karena itu akan
+  // menghilangkan entry-nya dari legend. Sebagai gantinya trace tetap dipertahankan dengan
+  // `visible: "legendonly"` sehingga line tidak digambar di plot, namun entry legend tetap
+  // tampil semi-transparan dan tetap bisa di-toggle kembali (klik pada legend).
   const traces = legendLabels
     .map((channelName, originalIndex) => ({ channelName, originalIndex }))
-    .filter(({ channelName }) => !selectedChannels || selectedChannels.includes(channelName))
     .map(({ channelName, originalIndex }) => {
       return {
         x: chartData.x_values?.[originalIndex] ?? chartData.x,
@@ -45,6 +59,7 @@ const ChorasDynamicChart = ({ chartData, selectedChannels }: ChorasDynamicChartP
         type: "scatter",
         mode: "lines",
         name: channelName,
+        visible: hiddenChannels?.includes(channelName) ? ("legendonly" as const) : true,
         line: {
           width: 2.8,
           color:
@@ -168,6 +183,17 @@ const ChorasDynamicChart = ({ chartData, selectedChannels }: ChorasDynamicChartP
         layout={layout}
         config={config}
         style={{ width: "100%", height: "100%" }}
+        onLegendClick={(event: { curveNumber?: number }) => {
+          // Sync legend → dropdown: klik item legend meng-update state hiddenChannels
+          // di parent. Mengembalikan `false` membuat Plotly melewati toggle internalnya
+          // (lihat clickOrDoubleClick di plotly.js), sehingga visibility trace
+          // sepenuhnya dikendalikan oleh React state.
+          const channelName = legendLabels[event.curveNumber ?? -1];
+          if (channelName && onToggleChannel) {
+            onToggleChannel(channelName);
+          }
+          return false;
+        }}
       />
     </div>
   );
