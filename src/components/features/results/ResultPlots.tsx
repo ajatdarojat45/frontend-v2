@@ -310,11 +310,14 @@ export function ResultPlots({ simulationId }: ResultParametersProps) {
           ) : (
             <ChorasDynamicChart
               chartData={chartData}
-              selectedChannels={
-                hiddenChannels.length === 0
-                  ? undefined
-                  : (chartData?.legend ?? []).filter((ch) => !hiddenChannels.includes(ch))
-              }
+              hiddenChannels={hiddenChannels.length === 0 ? undefined : hiddenChannels}
+              onToggleChannel={(channelName) => {
+                setHiddenChannels((prev) =>
+                  prev.includes(channelName)
+                    ? prev.filter((channel) => channel !== channelName)
+                    : [...prev, channelName],
+                );
+              }}
             />
           )}
         </div>
